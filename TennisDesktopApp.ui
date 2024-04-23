@@ -1,28 +1,101 @@
-<UI version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>TennisDesktopAppClass</class>
- <widget class="QMainWindow" name="TennisDesktopAppClass" >
-  <property name="objectName" >
-   <string notr="true">TennisDesktopAppClass</string>
-  </property>
-  <property name="geometry" >
+ <widget class="QMainWindow" name="TennisDesktopAppClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>616</width>
     <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>TennisDesktopApp</string>
-  </property>  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="label_WelcomeText">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>371</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>17</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>264</x>
+      <y>101</y>
+      <width>173</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Choose your account to proceed</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelLoginPic">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>120</y>
+      <width>121</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="text">
+     <string>Login Image</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>616</width>
+     <height>33</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-   <include location="TennisDesktopApp.qrc"/>
+  <include location="TennisDesktopApp.qrc"/>
  </resources>
  <connections/>
-</UI>
+</ui>

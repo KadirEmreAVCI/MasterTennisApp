@@ -10,7 +10,8 @@ class TennisDesktopApp : public QMainWindow
 public:
     TennisDesktopApp(QWidget *parent = nullptr);
     ~TennisDesktopApp();
-
 private:
+    void InitializeCustomComponents();
     Ui::TennisDesktopAppClass ui;
+    std::string m_sAppName;
 };
