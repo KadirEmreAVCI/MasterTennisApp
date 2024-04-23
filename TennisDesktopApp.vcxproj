@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -100,7 +100,7 @@
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -108,12 +108,18 @@
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="TennisDesktopApp.ui" />
     <QtMoc Include="TennisDesktopApp.h" />
+    <ClCompile Include="src\AppController.cpp" />
+    <ClCompile Include="src\GUIConfigurator.cpp" />
     <ClCompile Include="src\GUIController.cpp" />
     <ClCompile Include="TennisDesktopApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\AppController.h" />
+    <ClInclude Include="inc\GUIConfigurator.h" />
     <ClInclude Include="inc\GUIController.h" />
+    <ClInclude Include="inc\IGUIConfigurator.h" />
+    <ClInclude Include="inc\IGUIController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

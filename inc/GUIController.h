@@ -2,22 +2,26 @@
 #include <memory>
 #include <string>
 #include <QLabel>
+#include "IGUIController.h"
 class TennisDesktopApp;
-class GUIController
-{
+class GUIController : public IGUIController{
 public:
-	static void create(std::string sAppName, std::string sImageFolderLoc);
+	static void create();
 	static GUIController& instance();
 	GUIController(const GUIController&) = delete;
 	GUIController& operator=(const GUIController&) = delete;
-	static std::string getms_sAppName();
-	static void InitializePicture(QLabel* pPicLabel, std::string sPicAddress);
 	
+	// Member functions
+	void BuildGUIComponents() override final;
+
 private:
-	GUIController();
-	static GUIController* ms_pGUIController;
+	GUIController() = default;
+	static GUIController* ms_pGUIController;	
+	
+	// Member variables
 	std::unique_ptr<TennisDesktopApp> m_upTennisDesktopApp;
-	static std::string ms_sAppName;
-	static std::string ms_sImageFolderLoc;
+	
+	// Member functions
+	void InitializePicture(QLabel* pPicLabel, std::string sPicAddress);
 };
 

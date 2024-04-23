@@ -12,7 +12,20 @@ TennisDesktopApp::~TennisDesktopApp()
 
 void TennisDesktopApp::InitializeCustomComponents()
 {
-    ui.label_WelcomeText->setText(QString::fromStdString("Welcome To The " + GUIController::getms_sAppName() + "!"));
-    GUIController::InitializePicture(ui.labelLoginPic, "login_button.png");
+    ui.label_WelcomeText->setText(QString::fromStdString("Welcome To The " + GUIController::instance().getAppName() + "!"));
+    InitializePicture(ui.labelLoginPic, "login_button.png");
+}
+
+void TennisDesktopApp::setImageFolderLoc(std::string sImageFolderLoc)
+{
+    m_sImageFolderLoc = sImageFolderLoc;
+}
+
+void TennisDesktopApp::InitializePicture(QLabel* pPicLabel, std::string sPicAddress)
+{
+    QPixmap pix{ QString::fromStdString(m_sImageFolderLoc + sPicAddress) };
+    const int iHeight = pPicLabel->height();
+    const int iWidth = pPicLabel->width();
+    pPicLabel->setPixmap(pix.scaled(iWidth, iHeight, Qt::KeepAspectRatio));
 }
 
