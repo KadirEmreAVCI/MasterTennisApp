@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     std::cout << "main basladi\n";
-    AppController::create();
-    //GUIController::create();
+    AppController::instance().StartApplication();
     return a.exec();
 }

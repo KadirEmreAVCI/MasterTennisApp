@@ -16,16 +16,11 @@ AppController& AppController::instance()
 }
 AppController::AppController() 
 {
-	std::cout << "AppController::AppController\n";
-	m_pIGUIConfigurator = new GUIConfigurator;
-	if (m_pIGUIConfigurator != nullptr)
-	{
-		m_pIGUIConfigurator->ConfigureGUI();
-	}
-	else
-	{
-		std::cerr << "Error! GUIConfigurator could not be created!";
-	}
+	m_upIGUIConfigurator = std::make_unique<GUIConfigurator>();
+}
+void AppController::StartApplication()
+{
+	m_upIGUIConfigurator->ConfigureGUI();
 }
 std::string AppController::getAppName()
 {

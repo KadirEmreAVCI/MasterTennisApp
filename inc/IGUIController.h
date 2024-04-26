@@ -11,15 +11,15 @@ public:
 	{
 		return m_sAppName;
 	}
-	void setImageFolderLoc(std::string sAppName)
+	void setImageFolderLoc(std::string sImageFolderLoc)
 	{
-		m_sImageFolderLoc = sAppName;
+		m_sImageFolderLoc = sImageFolderLoc;
 	}
 	std::string getImageFolderLoc() const
 	{
 		return m_sImageFolderLoc;
 	}
-private:
+protected:
 	std::string m_sAppName{};
 	std::string m_sImageFolderLoc{};
 };

@@ -106,8 +106,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="TennisDesktopApp.qrc" />
+    <QtUic Include="ProfileDialog.ui" />
     <QtUic Include="TennisDesktopApp.ui" />
     <QtMoc Include="TennisDesktopApp.h" />
+    <ClCompile Include="ProfileDialog.cpp" />
     <ClCompile Include="src\AppController.cpp" />
     <ClCompile Include="src\GUIConfigurator.cpp" />
     <ClCompile Include="src\GUIController.cpp" />
@@ -120,6 +122,7 @@
     <ClInclude Include="inc\GUIController.h" />
     <ClInclude Include="inc\IGUIConfigurator.h" />
     <ClInclude Include="inc\IGUIController.h" />
+    <QtMoc Include="ProfileDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

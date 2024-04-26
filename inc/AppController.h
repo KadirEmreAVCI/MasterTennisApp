@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <string>
 class IGUIConfigurator;
 class AppController{
@@ -9,6 +10,7 @@ public:
 	AppController& operator=(const AppController&) = delete;
 
 	// member functions
+	void StartApplication();
 	std::string getAppName(); 
 	std::string getImageFolderLoc();
 private:
@@ -18,7 +20,7 @@ private:
 	// member functions
 
 	// member variables
-	IGUIConfigurator* m_pIGUIConfigurator{nullptr};
+	std::unique_ptr<IGUIConfigurator> m_upIGUIConfigurator{nullptr};
 	std::string m_sAppName{"Master Tennis App"};
 	std::string m_sImageFolderLoc{"images/"};
 };
