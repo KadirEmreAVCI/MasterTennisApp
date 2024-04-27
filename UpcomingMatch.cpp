@@ -16,6 +16,7 @@ void UpcomingMatch::InitializeCustomComponents()
 {
 	std::cout << "UpcomingMatch::InitializeCustomComponents()\n";
 	InitializeTimer();
+	InitializeCountdown();
 	setTournamentName();
 	setTournamentCategory();
 	setOpponentName();
@@ -24,9 +25,16 @@ void UpcomingMatch::InitializeCustomComponents()
 void UpcomingMatch::InitializeTimer()
 {
 	m_upTimer = std::make_unique<QTimer>(this);
-	connect(m_upTimer.get(), SIGNAL(timeout()), this, SLOT(PrintTime()));
+	connect(m_upTimer.get(), SIGNAL(timeout()), this, SLOT(PrintCountdown()));
 	const unsigned int uiTimeoutDurMs = 1000;
 	m_upTimer->start(uiTimeoutDurMs);
+}
+void UpcomingMatch::InitializeCountdown()
+{
+	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
+	// TODO: sMatchDate string'i database'den elde edilecek.
+	std::string sMatchDate{ "2024-05-23 19:00:00" };
+	m_Countdown.setMatchDate(sMatchDate);
 }
 void UpcomingMatch::setTournamentName()
 {
@@ -44,11 +52,9 @@ void UpcomingMatch::setStage()
 {
 	label_Stage->setText(QString::fromStdString(m_sStage));
 }
-void UpcomingMatch::PrintTime() const
+void UpcomingMatch::PrintCountdown()
 {
-	//std::cout << "UpcomingMatch::PrintTime()\n";
-	QTime currentTime = QTime::currentTime();
-	label_TimeLeft->setText(currentTime.toString("dd : hh : mm : ss"));
+	label_Countdown->setText(m_Countdown.GetCountdown());
 }
 void UpcomingMatch::on_button_DisplayTournament_clicked()
 {

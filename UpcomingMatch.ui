@@ -67,7 +67,7 @@
     </spacer>
    </item>
    <item row="0" column="1" colspan="2">
-    <widget class="QLabel" name="label_TimeLeft">
+    <widget class="QLabel" name="label_Countdown">
      <property name="font">
       <font>
        <pointsize>25</pointsize>
