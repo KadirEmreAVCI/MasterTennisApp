@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AppController.h"
+#include "GUIController.h"
 #include "GUIConfigurator.h"
 AppController* AppController::ms_pAppController = nullptr;
 void AppController::create()
@@ -20,6 +21,7 @@ AppController::AppController()
 }
 void AppController::StartApplication()
 {
+	GUIController::create();
 	m_upIGUIConfigurator->ConfigureGUI();
 }
 std::string AppController::getAppName()

@@ -52,6 +52,9 @@
     <ClCompile Include="ProfileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UpcomingMatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\GUIController.h">
@@ -69,14 +72,23 @@
     <ClInclude Include="inc\IGUIController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\IQTComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ProfileDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="UpcomingMatch.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ProfileDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="UpcomingMatch.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

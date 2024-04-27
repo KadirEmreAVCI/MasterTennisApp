@@ -105,6 +105,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="UpcomingMatch.cpp" />
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="ProfileDialog.ui" />
     <QtUic Include="TennisDesktopApp.ui" />
@@ -115,6 +116,7 @@
     <ClCompile Include="src\GUIController.cpp" />
     <ClCompile Include="TennisDesktopApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\AppController.h" />
@@ -122,6 +124,8 @@
     <ClInclude Include="inc\GUIController.h" />
     <ClInclude Include="inc\IGUIConfigurator.h" />
     <ClInclude Include="inc\IGUIController.h" />
+    <ClInclude Include="inc\IQTComponent.h" />
+    <QtMoc Include="UpcomingMatch.h" />
     <QtMoc Include="ProfileDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

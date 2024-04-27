@@ -2,15 +2,16 @@
 #include <memory>
 #include <QtWidgets/QMainWindow>
 #include "ui_TennisDesktopApp.h"
+#include "IQTComponent.h"
 class ProfileDialog;
-class TennisDesktopApp : public QMainWindow
+class TennisDesktopApp : public QMainWindow, public IQTComponent
 {
     Q_OBJECT
 
 public:
     TennisDesktopApp(QWidget *parent = nullptr);
     ~TennisDesktopApp();
-    void InitializeCustomComponents();
+    void InitializeCustomComponents() override final;
     void setImageFolderLoc(std::string);
 private:
     void InitializePicture(QLabel* pPicLabel, std::string sPicAddress);

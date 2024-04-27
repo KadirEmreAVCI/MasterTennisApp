@@ -6,6 +6,7 @@ TennisDesktopApp::TennisDesktopApp(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    InitializeCustomComponents();
 }
 
 TennisDesktopApp::~TennisDesktopApp()
