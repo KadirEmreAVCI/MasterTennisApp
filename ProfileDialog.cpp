@@ -28,6 +28,7 @@ void ProfileDialog::InitUpcomingMatches()
 		InsertUpcomingMatch("Tournament " + std::to_string(i), "Category " + std::to_string(i), "Opponent " + std::to_string(i), "Stage " + std::to_string(i));
 	}
 	listWidget_UpcomingMatches->setFixedSize(listWidget_UpcomingMatches->sizeHintForColumn(0) + listWidget_UpcomingMatches->frameWidth() * 2, listWidget_UpcomingMatches->sizeHintForRow(0) * listWidget_UpcomingMatches->count() + 2 * listWidget_UpcomingMatches->frameWidth());
+	groupBox_UpcomingMatches->setFixedSize(listWidget_UpcomingMatches->width(), listWidget_UpcomingMatches->height() + 20);
 }
 void ProfileDialog::InsertUpcomingMatch(std::string sTournamentName, std::string sTournamentCategory, std::string sOpponentName, std::string sStage)
 {
