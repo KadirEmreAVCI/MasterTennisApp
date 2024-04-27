@@ -28,7 +28,3 @@ std::string AppController::getAppName()
 {
 	return m_sAppName;
 }
-std::string AppController::getImageFolderLoc()
-{
-	return m_sImageFolderLoc;
-}

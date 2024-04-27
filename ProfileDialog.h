@@ -13,5 +13,9 @@ public:
 	~ProfileDialog();
 	void InitializeCustomComponents() override final;
 private:
+	void InitUpcomingMatches();
 	void InsertUpcomingMatch(std::string sTournamentName, std::string sTournamentCategory, std::string sOpponentName, std::string sStage);
+	void InitStats();
+	void InitStatIcons();
+	void InitializePicture(QLabel* pPicLabel, std::string sPicAddress);
 };

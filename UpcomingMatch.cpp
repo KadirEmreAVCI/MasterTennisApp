@@ -56,6 +56,7 @@ void UpcomingMatch::PrintCountdown()
 {
 	label_Countdown->setText(m_Countdown.GetCountdown());
 }
+// TODO: Gelecek mactan once ayni turnuvada oynanan maclar goruntulenecek. Yine database gerektiriyor.
 void UpcomingMatch::on_button_DisplayTournament_clicked()
 {
 	std::cout << "UpcomingMatch:: button_DisplayTournament()\n";

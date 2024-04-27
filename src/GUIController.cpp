@@ -19,7 +19,6 @@ void GUIController::BuildGUIComponents()
 {
 	std::cout << "GUIController::BuildGUIComponents\n";
 	m_upTennisDesktopApp = std::make_unique<TennisDesktopApp>();
-	m_upTennisDesktopApp->setImageFolderLoc(m_sImageFolderLoc);
 	m_upTennisDesktopApp->InitializeCustomComponents();
 	m_upTennisDesktopApp->show();
 }

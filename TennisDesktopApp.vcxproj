@@ -107,6 +107,7 @@
   <ItemGroup>
     <ClCompile Include="src\Countdown.cpp" />
     <ClCompile Include="UpcomingMatch.cpp" />
+    <QtRcc Include="Resource.qrc" />
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="ProfileDialog.ui" />
     <QtUic Include="TennisDesktopApp.ui" />
@@ -116,7 +117,7 @@
     <ClCompile Include="src\GUIConfigurator.cpp" />
     <ClCompile Include="src\GUIController.cpp" />
     <ClCompile Include="TennisDesktopApp.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>

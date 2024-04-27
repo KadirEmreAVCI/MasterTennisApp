@@ -12,7 +12,6 @@ public:
 	// member functions
 	void StartApplication();
 	std::string getAppName(); 
-	std::string getImageFolderLoc();
 private:
 	AppController();
 	static AppController* ms_pAppController;
@@ -22,6 +21,5 @@ private:
 	// member variables
 	std::unique_ptr<IGUIConfigurator> m_upIGUIConfigurator{nullptr};
 	std::string m_sAppName{"Master Tennis App"};
-	std::string m_sImageFolderLoc{"images/"};
 };
 

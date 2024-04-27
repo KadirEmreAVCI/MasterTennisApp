@@ -1,9 +1,13 @@
 <RCC>
-    <qresource prefix="/TennisDesktopApp"/>
     <qresource prefix="/images">
         <file>images/login_button.png</file>
         <file>images/welcome_img.png</file>
         <file>images/welcome_window_bckgrnd.jpg</file>
+        <file>images/lose.png</file>
         <file>images/win.png</file>
+        <file>images/games.png</file>
+        <file>images/clutchness.png</file>
+        <file>images/trophy.png</file>
+        <file>images/GA.png</file>
     </qresource>
 </RCC>

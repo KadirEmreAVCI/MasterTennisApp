@@ -6,6 +6,5 @@ void GUIConfigurator::ConfigureGUI()
 {
 	std::cout << "GUIConfigurator::ConfigureGUI\n";
 	GUIController::instance().setAppName(AppController::instance().getAppName());
-	GUIController::instance().setImageFolderLoc(AppController::instance().getImageFolderLoc());
 	GUIController::instance().BuildGUIComponents();
 }

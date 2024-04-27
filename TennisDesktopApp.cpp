@@ -8,24 +8,16 @@ TennisDesktopApp::TennisDesktopApp(QWidget *parent)
     ui.setupUi(this);
     InitializeCustomComponents();
 }
-
 TennisDesktopApp::~TennisDesktopApp()
 {}
-
 void TennisDesktopApp::InitializeCustomComponents()
 {
     ui.label_WelcomeText->setText(QString::fromStdString("Welcome To The " + GUIController::instance().getAppName() + "!"));
-    InitializePicture(ui.label_LoginPic, "welcome_img.png");
+    InitializePicture(ui.label_LoginPic, ":/images/images/welcome_img.png");
 }
-
-void TennisDesktopApp::setImageFolderLoc(std::string sImageFolderLoc)
-{
-    m_sImageFolderLoc = sImageFolderLoc;
-}
-
 void TennisDesktopApp::InitializePicture(QLabel* pPicLabel, std::string sPicAddress)
 {
-    QPixmap pix{ QString::fromStdString(m_sImageFolderLoc + sPicAddress) };
+    QPixmap pix{ QString::fromStdString(sPicAddress) };
     const int iHeight = pPicLabel->height();
     const int iWidth = pPicLabel->width();
     pPicLabel->setPixmap(pix.scaled(iWidth, iHeight, Qt::KeepAspectRatio)); 

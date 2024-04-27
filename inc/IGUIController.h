@@ -11,15 +11,6 @@ public:
 	{
 		return m_sAppName;
 	}
-	void setImageFolderLoc(std::string sImageFolderLoc)
-	{
-		m_sImageFolderLoc = sImageFolderLoc;
-	}
-	std::string getImageFolderLoc() const
-	{
-		return m_sImageFolderLoc;
-	}
 protected:
 	std::string m_sAppName{};
-	std::string m_sImageFolderLoc{};
 };

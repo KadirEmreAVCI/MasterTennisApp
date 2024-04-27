@@ -14,10 +14,31 @@
    <string>UpcomingMatch</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="2">
-    <widget class="QPushButton" name="button_DisplayTournament">
+   <item row="1" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="QLabel" name="label_Countdown">
+     <property name="font">
+      <font>
+       <pointsize>25</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Display Tournament</string>
+      <string>dd : hh : mm : ss</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -53,31 +74,10 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLabel" name="label_Countdown">
-     <property name="font">
-      <font>
-       <pointsize>25</pointsize>
-      </font>
-     </property>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="button_DisplayTournament">
      <property name="text">
-      <string>dd : hh : mm : ss</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
+      <string>Display Tournament</string>
      </property>
     </widget>
    </item>
