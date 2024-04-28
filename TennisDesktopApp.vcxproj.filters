@@ -61,7 +61,10 @@
     <ClCompile Include="src\Countdown.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SetScore.cpp">
+    <ClCompile Include="src\SetScore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Match.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,7 +90,10 @@
     <ClInclude Include="inc\Countdown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SetScore.h">
+    <ClInclude Include="inc\SetScore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Match.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
