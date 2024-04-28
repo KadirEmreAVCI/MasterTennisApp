@@ -55,7 +55,7 @@ void ProfileDialog::InitStatIcons()
 void ProfileDialog::InitializePicture(QLabel* pPicLabel, std::string sPicAddress)
 {
 	QPixmap pix{ QString::fromStdString(sPicAddress) };
-	const int iHeight = pPicLabel->height() * 2;
-	const int iWidth = pPicLabel->width() * 2;
+	const int iHeight = pPicLabel->height() * 1.5;
+	const int iWidth = pPicLabel->width() * 1.5;
 	pPicLabel->setPixmap(pix.scaled(iWidth, iHeight, Qt::KeepAspectRatio));
 }

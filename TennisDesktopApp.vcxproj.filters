@@ -32,7 +32,7 @@
     <QtMoc Include="TennisDesktopApp.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="TennisDesktopApp.cpp">
+    <ClCompile Include="src\TennisDesktopApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <QtRcc Include="Resource.qrc">
@@ -52,13 +52,16 @@
     <ClCompile Include="src\GUIConfigurator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProfileDialog.cpp">
+    <ClCompile Include="src\ProfileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UpcomingMatch.cpp">
+    <ClCompile Include="src\UpcomingMatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Countdown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SetScore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,6 +85,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Countdown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SetScore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

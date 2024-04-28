@@ -105,18 +105,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SetScore.cpp" />
     <ClCompile Include="src\Countdown.cpp" />
-    <ClCompile Include="UpcomingMatch.cpp" />
+    <ClCompile Include="src\UpcomingMatch.cpp" />
     <QtRcc Include="Resource.qrc" />
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="ProfileDialog.ui" />
     <QtUic Include="TennisDesktopApp.ui" />
     <QtMoc Include="TennisDesktopApp.h" />
-    <ClCompile Include="ProfileDialog.cpp" />
+    <ClCompile Include="src\ProfileDialog.cpp" />
     <ClCompile Include="src\AppController.cpp" />
     <ClCompile Include="src\GUIConfigurator.cpp" />
     <ClCompile Include="src\GUIController.cpp" />
-    <ClCompile Include="TennisDesktopApp.cpp" />
+    <ClCompile Include="src\TennisDesktopApp.cpp" />
     <ClCompile Include="src\main.cpp" />
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
@@ -128,6 +129,7 @@
     <ClInclude Include="inc\IGUIConfigurator.h" />
     <ClInclude Include="inc\IGUIController.h" />
     <ClInclude Include="inc\IQTComponent.h" />
+    <ClInclude Include="SetScore.h" />
     <QtMoc Include="UpcomingMatch.h" />
     <QtMoc Include="ProfileDialog.h" />
   </ItemGroup>
