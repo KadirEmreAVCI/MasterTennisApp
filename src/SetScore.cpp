@@ -1,8 +1,12 @@
 #include "SetScore.h"
-SetScore::SetScore(std::pair<unsigned int, std::optional<unsigned int> > HomeScore, std::pair<unsigned int, std::optional<unsigned int> > AwayScore)
+SetScore::SetScore(unsigned uiMinGameNeededToWin) : m_uiMinGameNeededToWin{ uiMinGameNeededToWin }
 {
-	m_HomeScore = HomeScore;
-	AwayScore = AwayScore;
+
+}
+SetScore::SetScore(std::pair<unsigned int, std::optional<unsigned int> > HomeScore, std::pair<unsigned int, std::optional<unsigned int> > AwayScore, unsigned uiMinGameNeededToWin)
+	: m_HomeScore{ HomeScore }, m_AwayScore{ AwayScore }, m_uiMinGameNeededToWin{ uiMinGameNeededToWin }
+{
+	
 }
 std::pair<unsigned int, std::optional<unsigned int> > SetScore::getHomeScore()const
 {
@@ -27,4 +31,17 @@ SetWinner SetScore::WinnerOfTheSet()const
 bool SetScore::IsTiebreakPlayed()const
 {
 	return m_HomeScore.second.has_value() && m_AwayScore.second.has_value();
+}
+void SetScore::Walkover(MatchStatus eMatchStatus)
+{
+	if (eMatchStatus == MatchStatus::eWO_W)
+	{
+		setHomeScore(std::make_pair(m_uiMinGameNeededToWin, 0));
+		setAwayScore(std::make_pair(0, 0));
+	}
+	else if (eMatchStatus == MatchStatus::eWO_L)
+	{
+		setHomeScore(std::make_pair(0, 0));
+		setAwayScore(std::make_pair(m_uiMinGameNeededToWin, 0));
+	}
 }

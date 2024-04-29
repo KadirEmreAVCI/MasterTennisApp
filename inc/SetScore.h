@@ -1,21 +1,30 @@
 #pragma once
 #include <utility>
 #include <optional>
+enum class MatchStatus {
+	ePlayed = 0,
+	eWO_W = 1,
+	eWO_L = 2,
+	eBYE = 3
+};
 enum class SetWinner {
 	eHome = 1, 
 	eAway = 2
 };
 class SetScore{
 public:
-	SetScore(std::pair<unsigned int, std::optional<unsigned int> > HomeScore, std::pair<unsigned int, std::optional<unsigned int> > AwayScore);
-	std::pair<unsigned int, std::optional<unsigned int> > getHomeScore()const;
-	std::pair<unsigned int, std::optional<unsigned int> > getAwayScore()const;
-	void setHomeScore(std::pair<unsigned int, std::optional<unsigned int> > HomeScore);
-	void setAwayScore(std::pair<unsigned int, std::optional<unsigned int> > AwayScore);
+	SetScore(unsigned uiMinGameNeededToWin = 6);
+	SetScore(std::pair<unsigned, std::optional<unsigned> > HomeScore, std::pair<unsigned, std::optional<unsigned> > AwayScore, unsigned uiMinGameNeededToWin = 6);
+	std::pair<unsigned, std::optional<unsigned> > getHomeScore()const;
+	std::pair<unsigned, std::optional<unsigned> > getAwayScore()const;
+	void setHomeScore(std::pair<unsigned, std::optional<unsigned> > HomeScore);
+	void setAwayScore(std::pair<unsigned, std::optional<unsigned> > AwayScore);	
 	SetWinner WinnerOfTheSet()const;
 	bool IsTiebreakPlayed()const;
+	void Walkover(MatchStatus);
 private:
-	std::pair<unsigned int, std::optional<unsigned int> > m_HomeScore;
-	std::pair<unsigned int, std::optional<unsigned int> > m_AwayScore;
+	unsigned int m_uiMinGameNeededToWin{};
+	std::pair<unsigned, std::optional<unsigned> > m_HomeScore;
+	std::pair<unsigned, std::optional<unsigned> > m_AwayScore;
 };
 

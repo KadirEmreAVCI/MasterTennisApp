@@ -1,7 +1,16 @@
 #include "Match.h"
-Match::Match(MatchStatus eMatchStatus, MaxSetInMatch eMaxSetInMatch) : m_eMatchStatus{ eMatchStatus }, m_uiMaxSet { static_cast<unsigned int>(eMaxSetInMatch)}
+Match::Match(MatchStatus eMatchStatus, std::pair<std::string, std::optional<std::string> > sAwayName, unsigned uiMaxSetInMatch, unsigned uiMinGameToWinSet) : m_eMatchStatus{ eMatchStatus }, m_sAwayName{ sAwayName },  m_uiMaxSet { uiMaxSetInMatch }, m_uiMinGameToWinSet{ uiMinGameToWinSet }
 {
 	InitSets();
+	if (eMatchStatus == eWO_W || eMatchStatus == eWO_L)
+	{
+		for (unsigned uiSetIdx{}; uiSetIdx < GetMinSetNeededToWin(); ++uiSetIdx)
+		{
+			SetScore ss{ m_uiMinGameToWinSet };
+			ss.Walkover(eMatchStatus);
+			setSetScore(uiSetIdx, ss);
+		}
+	}
 }
 std::pair<unsigned int, unsigned int> Match::getMatchScore()const
 {
@@ -14,20 +23,30 @@ void Match::InitSets()
 		m_vecSetScore.push_back(std::optional<SetScore>());
 	}
 }
-void Match::UpdateMatchScore(const SetScore& ss)
+void Match::IncrementMatchScore(const SetScore& ss)
 {
 	if (ss.WinnerOfTheSet() == SetWinner::eHome)
 		++m_uiHomeScore;
 	else
 		++m_uiAwayScore;
 }
+void Match::DecrementMatchScore(unsigned uiSetIdx)
+{
+	if (IsSetPlayed(uiSetIdx))
+	{
+		if (m_vecSetScore[uiSetIdx].value().WinnerOfTheSet() == SetWinner::eHome)
+			--m_uiHomeScore;
+		else
+			--m_uiAwayScore;
+	}
+}
 bool Match::IsSetPlayed(unsigned int uiSetIdx)const
 {
 	return m_vecSetScore[uiSetIdx].has_value();
 }
-void Match::ClearSetScore(unsigned int uiSetIdx)
+unsigned Match::GetMinSetNeededToWin()const
 {
-	m_vecSetScore[uiSetIdx].reset();
+	return (m_uiMaxSet + 1) / 2;
 }
 SetScore Match::getSetScore(unsigned int uiSetIdx)const
 {
@@ -40,16 +59,24 @@ void Match::setSetScore(unsigned int uiSetIdx, const SetScore& ss)
 {
 	if (uiSetIdx < m_uiMaxSet) {
 		if (IsSetPlayed(uiSetIdx))
-			ClearSetScore(uiSetIdx);	
+			DecrementMatchScore(uiSetIdx);
 		m_vecSetScore[uiSetIdx] = std::make_optional(ss);
-		UpdateMatchScore(ss);
+		IncrementMatchScore(ss);
 	}
 	else
 		std::cerr << "Match::setSetScore::Error! Out of index!\n";
 }
-std::pair<std::string, std::optional<std::string> > Match::getHomeName()const
+void Match::setAwayName(std::pair<std::string, std::optional<std::string> > sAwayName)
 {
-	return m_sHomeName;
+	m_sAwayName = sAwayName;
+}
+MatchWinner Match::WinnerOfTheMatch()const
+{
+	return (getMatchStatus() == eWO_W || getMatchStatus() == eBYE || (getMatchStatus() == ePlayed) && m_uiHomeScore > m_uiAwayScore) ? MatchWinner::eHome : MatchWinner::eAway;
+}
+MatchStatus Match::getMatchStatus()const
+{
+	return m_eMatchStatus;
 }
 std::pair<std::string, std::optional<std::string> > Match::getAwayName()const
 {
