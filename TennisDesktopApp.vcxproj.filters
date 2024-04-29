@@ -64,7 +64,7 @@
     <ClCompile Include="src\SetScore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Match.cpp">
+    <ClCompile Include="src\Match.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

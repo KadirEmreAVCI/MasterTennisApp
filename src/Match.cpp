@@ -14,9 +14,24 @@ void Match::InitSets()
 		m_vecSetScore.push_back(std::optional<SetScore>());
 	}
 }
+void Match::UpdateMatchScore(const SetScore& ss)
+{
+	if (ss.WinnerOfTheSet() == SetWinner::eHome)
+		++m_uiHomeScore;
+	else
+		++m_uiAwayScore;
+}
+bool Match::IsSetPlayed(unsigned int uiSetIdx)const
+{
+	return m_vecSetScore[uiSetIdx].has_value();
+}
+void Match::ClearSetScore(unsigned int uiSetIdx)
+{
+	m_vecSetScore[uiSetIdx].reset();
+}
 SetScore Match::getSetScore(unsigned int uiSetIdx)const
 {
-	if (uiSetIdx < m_uiMaxSet) 
+	if (uiSetIdx < m_uiMaxSet)
 		return m_vecSetScore[uiSetIdx].value_or(SetScore{std::make_pair(99, 0), std::make_pair(99, 0)});
 	else
 		std::cerr << "Match::getSetScore::Error! Out of index!\n";
@@ -24,13 +39,10 @@ SetScore Match::getSetScore(unsigned int uiSetIdx)const
 void Match::setSetScore(unsigned int uiSetIdx, const SetScore& ss)
 {
 	if (uiSetIdx < m_uiMaxSet) {
-		if (m_vecSetScore[uiSetIdx].has_value())
-			m_vecSetScore[uiSetIdx].reset();
+		if (IsSetPlayed(uiSetIdx))
+			ClearSetScore(uiSetIdx);	
 		m_vecSetScore[uiSetIdx] = std::make_optional(ss);
-		if (ss.getHomeScore().first > ss.getAwayScore().first)
-			++m_uiHomeScore;
-		else
-			++m_uiAwayScore;
+		UpdateMatchScore(ss);
 	}
 	else
 		std::cerr << "Match::setSetScore::Error! Out of index!\n";

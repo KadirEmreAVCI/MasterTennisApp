@@ -33,8 +33,12 @@ public:
 	// TODO: setHomeName ve setAwayName fonksiyonlari yazilacak.
 	void setHomeName(std::pair<std::string, std::optional<std::string> >);
 	void setAwayName(std::pair<std::string, std::optional<std::string> >);
+
 private:
 	void InitSets();
+	void UpdateMatchScore(const SetScore& ss);
+	bool IsSetPlayed(unsigned int uiSetIdx)const;
+	void ClearSetScore(unsigned int uiSetIdx);
 	const unsigned int m_uiMaxSet;
 	// TODO: m_eMatchStatus get ve set fonksiyonlari yazilabilir
 	const MatchStatus m_eMatchStatus{ePlayed};

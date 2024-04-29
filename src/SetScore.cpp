@@ -20,3 +20,11 @@ void SetScore::setAwayScore(std::pair<unsigned int, std::optional<unsigned int> 
 {
 	m_AwayScore = Score;
 }
+SetWinner SetScore::WinnerOfTheSet()const
+{
+	return m_HomeScore.first > m_AwayScore.first ? SetWinner::eHome : SetWinner::eAway;
+}
+bool SetScore::IsTiebreakPlayed()const
+{
+	return m_HomeScore.second.has_value() && m_AwayScore.second.has_value();
+}

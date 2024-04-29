@@ -105,7 +105,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Match.cpp" />
+    <ClCompile Include="src\Match.cpp" />
     <ClCompile Include="src\SetScore.cpp" />
     <ClCompile Include="src\Countdown.cpp" />
     <ClCompile Include="src\UpcomingMatch.cpp" />
