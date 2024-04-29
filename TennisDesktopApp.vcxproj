@@ -106,7 +106,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Match.cpp" />
-    <ClCompile Include="src\SetScore.cpp" />
+    <ClCompile Include="src\Set.cpp" />
     <ClCompile Include="src\Countdown.cpp" />
     <ClCompile Include="src\UpcomingMatch.cpp" />
     <QtRcc Include="Resource.qrc" />
@@ -130,7 +130,7 @@
     <ClInclude Include="inc\IGUIConfigurator.h" />
     <ClInclude Include="inc\IGUIController.h" />
     <ClInclude Include="inc\IQTComponent.h" />
-    <ClInclude Include="inc\SetScore.h" />
+    <ClInclude Include="inc\Set.h" />
     <ClInclude Include="inc\Match.h" />
     <QtMoc Include="UpcomingMatch.h" />
     <QtMoc Include="ProfileDialog.h" />

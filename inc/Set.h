@@ -11,10 +11,10 @@ enum class SetWinner {
 	eHome = 1, 
 	eAway = 2
 };
-class SetScore{
+class Set{
 public:
-	SetScore(unsigned uiMinGameNeededToWin = 6);
-	SetScore(std::pair<unsigned, std::optional<unsigned> > HomeScore, std::pair<unsigned, std::optional<unsigned> > AwayScore, unsigned uiMinGameNeededToWin = 6);
+	Set(unsigned uiMinGameNeededToWin = 6);
+	Set(std::pair<unsigned, std::optional<unsigned> > HomeScore, std::pair<unsigned, std::optional<unsigned> > AwayScore, unsigned uiMinGameNeededToWin = 6);
 	std::pair<unsigned, std::optional<unsigned> > getHomeScore()const;
 	std::pair<unsigned, std::optional<unsigned> > getAwayScore()const;
 	void setHomeScore(std::pair<unsigned, std::optional<unsigned> > HomeScore);

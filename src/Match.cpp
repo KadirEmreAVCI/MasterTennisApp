@@ -6,7 +6,7 @@ Match::Match(MatchStatus eMatchStatus, std::pair<std::string, std::optional<std:
 	{
 		for (unsigned uiSetIdx{}; uiSetIdx < GetMinSetNeededToWin(); ++uiSetIdx)
 		{
-			SetScore ss{ m_uiMinGameToWinSet };
+			Set ss{ m_uiMinGameToWinSet };
 			ss.Walkover(eMatchStatus);
 			setSetScore(uiSetIdx, ss);
 		}
@@ -20,10 +20,10 @@ void Match::InitSets()
 {
 	for (int iSetIdx{}; iSetIdx < m_uiMaxSet; ++iSetIdx)
 	{
-		m_vecSetScore.push_back(std::optional<SetScore>());
+		m_vecSetScore.push_back(std::optional<Set>());
 	}
 }
-void Match::IncrementMatchScore(const SetScore& ss)
+void Match::IncrementMatchScore(const Set& ss)
 {
 	if (ss.WinnerOfTheSet() == SetWinner::eHome)
 		++m_uiHomeScore;
@@ -48,14 +48,14 @@ unsigned Match::GetMinSetNeededToWin()const
 {
 	return (m_uiMaxSet + 1) / 2;
 }
-SetScore Match::getSetScore(unsigned int uiSetIdx)const
+Set Match::getSetScore(unsigned int uiSetIdx)const
 {
 	if (uiSetIdx < m_uiMaxSet)
-		return m_vecSetScore[uiSetIdx].value_or(SetScore{std::make_pair(99, 0), std::make_pair(99, 0)});
+		return m_vecSetScore[uiSetIdx].value_or(Set{std::make_pair(99, 0), std::make_pair(99, 0)});
 	else
 		std::cerr << "Match::getSetScore::Error! Out of index!\n";
 }
-void Match::setSetScore(unsigned int uiSetIdx, const SetScore& ss)
+void Match::setSetScore(unsigned int uiSetIdx, const Set& ss)
 {
 	if (uiSetIdx < m_uiMaxSet) {
 		if (IsSetPlayed(uiSetIdx))
