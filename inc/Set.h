@@ -2,10 +2,11 @@
 #include <utility>
 #include <optional>
 enum class MatchStatus {
-	ePlayed = 0,
-	eWO_W = 1,
-	eWO_L = 2,
-	eBYE = 3
+	eUpcoming,
+	ePlayed,
+	eWO_W,
+	eWO_L,
+	eBYE
 };
 enum class SetWinner {
 	eHome = 1, 

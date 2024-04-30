@@ -109,6 +109,7 @@
     <ClCompile Include="src\Set.cpp" />
     <ClCompile Include="src\Countdown.cpp" />
     <ClCompile Include="src\UpcomingMatch.cpp" />
+    <ClCompile Include="Tournament.cpp" />
     <QtRcc Include="Resource.qrc" />
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="ProfileDialog.ui" />
@@ -130,8 +131,10 @@
     <ClInclude Include="inc\IGUIConfigurator.h" />
     <ClInclude Include="inc\IGUIController.h" />
     <ClInclude Include="inc\IQTComponent.h" />
+    <ClInclude Include="inc\Period.h" />
     <ClInclude Include="inc\Set.h" />
     <ClInclude Include="inc\Match.h" />
+    <ClInclude Include="Tournament.h" />
     <QtMoc Include="UpcomingMatch.h" />
     <QtMoc Include="ProfileDialog.h" />
   </ItemGroup>
