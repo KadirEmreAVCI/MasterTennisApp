@@ -4,6 +4,7 @@
 #include <optional>
 #include <utility>
 #include <string>
+#include <QDateTime>
 #include "Set.h"
 enum class MatchWinner {
 	eHome = 1,
@@ -22,6 +23,8 @@ public:
 	MatchStatus GetMatchStatus()const;
 	void SetMatchStatus(MatchStatus);
 	std::string GetStage()const;
+	QDateTime GetMatchDate()const;
+	void SetMatchDate(const QDateTime&);
 private:
 	void InitSets();
 	void Walkover();
@@ -37,6 +40,6 @@ private:
 	unsigned m_uiAwayScore{};
 	std::vector<std::optional<Set> > m_vecSetScore;
 	std::pair<std::string, std::optional<std::string> > m_sAwayName;
-	// TODO: Match Date isimli veri elemani eklenecek(QDate).
+	QDateTime m_MatchDate;
 };
 

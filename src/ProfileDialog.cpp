@@ -1,14 +1,18 @@
 #include <iostream>
-#include "ProfileDialog.h"
-#include "UpcomingMatch.h"
 #include <QListWidget>
 #include <Qlabel>
+#include <QVBoxLayout>
+#include "ProfileDialog.h"
+#include "UpcomingMatch.h"
+#include "HomePage.h"
+#include "StatisticsPage.h"
+#include "AchievementsPage.h"
+#include "HistoryPage.h"
 ProfileDialog::ProfileDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	setupUi(this);
 	InitializeCustomComponents();
-	
 }
 
 ProfileDialog::~ProfileDialog()
@@ -17,45 +21,18 @@ ProfileDialog::~ProfileDialog()
 void ProfileDialog::InitializeCustomComponents()
 {
 	std::cout << "ProfileDialog::InitializeCustomComponents\n";
-	InitUpcomingMatches();
-	InitStats();
+	m_upTabWidget = std::make_unique<QTabWidget>();
+	m_upTabWidget->addTab(new HomePage(), QString("Home"));
+	m_upTabWidget->addTab(new StatisticsPage(), QString("Statistics"));
+	m_upTabWidget->addTab(new AchievementsPage(), QString("Achievements"));
+	m_upTabWidget->addTab(new HistoryPage(), QString("History"));
+	m_MainLayout = std::make_unique<QVBoxLayout>();
+	m_MainLayout->addWidget(m_upTabWidget.get());
+	setLayout(m_MainLayout.get());
 }
-void ProfileDialog::InitUpcomingMatches()
+void ProfileDialog::InitHomePage()
 {
-	// TODO: Dongunun kac kez donecegi upcoming mac sayisina bagli olacak.
-	for (int i = 0; i < 3; ++i)
-	{
-		InsertUpcomingMatch("Tournament " + std::to_string(i), "Category " + std::to_string(i), "Opponent " + std::to_string(i), "Stage " + std::to_string(i));
-	}
-	listWidget_UpcomingMatches->setFixedSize(listWidget_UpcomingMatches->sizeHintForColumn(0) + listWidget_UpcomingMatches->frameWidth() * 2, listWidget_UpcomingMatches->sizeHintForRow(0) * listWidget_UpcomingMatches->count() + 2 * listWidget_UpcomingMatches->frameWidth());
-	groupBox_UpcomingMatches->setFixedSize(listWidget_UpcomingMatches->width(), listWidget_UpcomingMatches->height() + 20);
-}
-void ProfileDialog::InsertUpcomingMatch(std::string sTournamentName, std::string sTournamentCategory, std::string sOpponentName, std::string sStage)
-{
-	auto item = new QListWidgetItem(listWidget_UpcomingMatches);
-	auto upcomingMatch = new UpcomingMatch(this, sTournamentName, sTournamentCategory, sOpponentName, sStage);
-	item->setSizeHint(QSize(upcomingMatch->width(), upcomingMatch->height()));
-	listWidget_UpcomingMatches->addItem(item);
-	listWidget_UpcomingMatches->setItemWidget(item, upcomingMatch);
-}
-void ProfileDialog::InitStats()
-{
-	InitStatIcons();
-	// TODO: Databaseden statler ile ilgili bilgiler okunacak ve buna gore deðerler ilklendirilecek.
-}
-void ProfileDialog::InitStatIcons()
-{
-	InitializePicture(label_IconWin, ":images/images/win.png");
-	InitializePicture(label_IconLose, ":images/images/lose.png");
-	InitializePicture(label_IconGame, ":images/images/games.png");
-	InitializePicture(label_IconClutchness, ":images/images/clutchness.png");
-	InitializePicture(label_IconTrophies, ":images/images/trophy.png");
-	InitializePicture(label_IconGA, ":images/images/GA.png");
-}
-void ProfileDialog::InitializePicture(QLabel* pPicLabel, std::string sPicAddress)
-{
-	QPixmap pix{ QString::fromStdString(sPicAddress) };
-	const int iHeight = pPicLabel->height() * 1.5;
-	const int iWidth = pPicLabel->width() * 1.5;
-	pPicLabel->setPixmap(pix.scaled(iWidth, iHeight, Qt::KeepAspectRatio));
+	////auto HomePageTab = ;
+	//tabWidget_Profile->mainLa
+	//	//addTab(new HomePage(), QString("Home").arg(tabWidget_Profile->count() + 1));
 }

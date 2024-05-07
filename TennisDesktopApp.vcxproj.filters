@@ -29,7 +29,7 @@
     <QtUic Include="TennisDesktopApp.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="TennisDesktopApp.h">
+    <QtMoc Include="inc\TennisDesktopApp.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClCompile Include="src\TennisDesktopApp.cpp">
@@ -67,7 +67,25 @@
     <ClCompile Include="src\Match.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tournament.cpp">
+    <ClCompile Include="src\Tournament.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HomePage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StatisticsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AchievementsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HistoryPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SQLiteDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AddTournamentDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,18 +117,39 @@
     <ClInclude Include="inc\Match.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tournament.h">
+    <ClInclude Include="inc\Tournament.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Period.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\SQLiteDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\IDatabase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="ProfileDialog.h">
+    <QtMoc Include="inc\ProfileDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="UpcomingMatch.h">
+    <QtMoc Include="inc\UpcomingMatch.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\HomePage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\StatisticsPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\AchievementsPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\HistoryPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\AddTournamentDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -119,6 +158,21 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="UpcomingMatch.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="HomePage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="StatisticsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AchievementsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="HistoryPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AddTournamentDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

@@ -1,16 +1,15 @@
 #pragma once
 #include <string>
-#include <QDialog>
+#include <QWidget>
+#include "ui_HomePage.h"
 #include "IQTComponent.h"
-#include "ui_ProfileDialog.h"
-class UpcomingMatch;
-class ProfileDialog : public QDialog, public Ui::ProfileDialogClass, public IQTComponent
+class HomePage : public QWidget, public IQTComponent
 {
 	Q_OBJECT
 
 public:
-	ProfileDialog(QWidget *parent = nullptr);
-	~ProfileDialog();
+	HomePage(QWidget *parent = nullptr);
+	~HomePage();
 	void InitializeCustomComponents() override final;
 private:
 	void InitUpcomingMatches();
@@ -18,4 +17,5 @@ private:
 	void InitStats();
 	void InitStatIcons();
 	void InitializePicture(QLabel* pPicLabel, std::string sPicAddress);
+	Ui::HomePageClass ui;
 };

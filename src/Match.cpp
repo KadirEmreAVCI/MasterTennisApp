@@ -98,3 +98,11 @@ std::pair<std::string, std::optional<std::string> > Match::getAwayName()const
 {
 	return m_sAwayName;
 }
+QDateTime Match::GetMatchDate()const
+{
+	return m_MatchDate;
+}
+void Match::SetMatchDate(const QDateTime& MatchDate)
+{
+	m_MatchDate = MatchDate;
+}
