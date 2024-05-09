@@ -48,12 +48,42 @@ void SQLiteDB::SetTableContent(QTableView* tv, std::string sTableName)
 }
 void SQLiteDB::SetTableContentByColumn(QTableView* tv, std::string sTableName, std::string sColumnNames)
 {
-	QSqlQuery qry;
-	qry.prepare("SELECT " + QString::fromStdString(sColumnNames) + " FROM " + QString::fromStdString(sTableName));
-	qry.exec();
-	QSqlQueryModel* modal = new QSqlQueryModel();
-	modal->setQuery(qry);
-	tv->setModel(modal);
+	if (OpenConn())
+	{
+		QSqlQuery qry;
+		qry.prepare("SELECT " + QString::fromStdString(sColumnNames) + " FROM " + QString::fromStdString(sTableName));
+		qry.exec();
+		QSqlQueryModel* modal = new QSqlQueryModel();
+		modal->setQuery(qry);
+		tv->setModel(modal);
+		CloseConn();
+	}	
+}
+bool SQLiteDB::InsertRowToTable(std::string sTableName, std::string sColumnNames, std::string sValues)
+{
+	if (OpenConn())
+	{
+		QSqlQuery qry;
+		QString sQry = "INSERT INTO " + QString::fromStdString(sTableName) + " (" + QString::fromStdString(sColumnNames) + ") VALUES (" + QString::fromStdString(sValues) + ")";
+		std::cout << "query: " << sQry.toStdString() << "\n";
+		qry.prepare(sQry);
+		if (qry.exec())
+		{
+			std::cout << "Data inserted successfully to the table: " << sTableName << "\n";
+			return true;
+		}
+		else
+		{
+			std::cout << "Data insertion to the table: " << sTableName << " failed!\n";
+			std::cout << "query: " << qry.lastQuery().toStdString() << "\n";
+			return false;
+		}
+		CloseConn();
+	}
+	else
+	{
+		return false;
+	}
 }
 QSqlDatabase* SQLiteDB::GetDatabase()const
 {

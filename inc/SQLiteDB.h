@@ -14,6 +14,7 @@ public:
 	bool IsOpen() override final;
 	void SetTableContent(QTableView*, std::string sTableName) override final;
 	void SetTableContentByColumn(QTableView*, std::string sTableName, std::string sColumnNames) override final;
+	bool InsertRowToTable(std::string sTableName, std::string sColumnNames, std::string sValues) override final;
 	QSqlDatabase* GetDatabase()const;
 private:
 	SQLiteDB();

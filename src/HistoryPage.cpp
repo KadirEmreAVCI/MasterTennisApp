@@ -14,15 +14,13 @@ HistoryPage::~HistoryPage()
 
 void HistoryPage::InitializeCustomComponents()
 {
-	if (SQLiteDB::instance().OpenConn())
-	{
-		SQLiteDB::instance().SetTableContentByColumn(ui.tableView_Tournaments, "Tournament", "Name,Type,Category,TotalCategory,Season,Participant,Completion,Progress");
-		SQLiteDB::instance().CloseConn();
-	}
+	std::string sTable = "Tournament";
+	std::string sColumns{"Name,Type,Teammate,Category,TotalCategory,Season,Participant,Completion,Progress"};
+	SQLiteDB::instance().SetTableContentByColumn(ui.tableView_Tournaments, sTable, sColumns);
 }
 void HistoryPage::on_AddButton_clicked()
 {
-	std::cout << "Continue button clicked\n";
+	std::cout << "Add button clicked\n";
 	m_upAddTournamentDialog = std::make_unique<AddTournamentDialog>(this);
 	m_upAddTournamentDialog->setModal(true);
 	m_upAddTournamentDialog->exec();
