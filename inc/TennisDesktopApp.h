@@ -11,7 +11,7 @@ class TennisDesktopApp : public QMainWindow, public IQTComponent
 public:
     TennisDesktopApp(QWidget *parent = nullptr);
     ~TennisDesktopApp();
-    void InitializeCustomComponents() override final;
+    void InitCustomComponents() override final;
 private:
     void InitializePicture(QLabel* pPicLabel, std::string sPicAddress);
     Ui::TennisDesktopAppClass ui;

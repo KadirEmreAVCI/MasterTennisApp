@@ -12,13 +12,13 @@ ProfileDialog::ProfileDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	setupUi(this);
-	InitializeCustomComponents();
+	InitCustomComponents();
 }
 
 ProfileDialog::~ProfileDialog()
 {}
 
-void ProfileDialog::InitializeCustomComponents()
+void ProfileDialog::InitCustomComponents()
 {
 	std::cout << "ProfileDialog::InitializeCustomComponents\n";
 	m_upTabWidget = std::make_unique<QTabWidget>();

@@ -9,7 +9,7 @@ AchievementsPage::AchievementsPage(QWidget *parent)
 AchievementsPage::~AchievementsPage()
 {}
 
-void AchievementsPage::InitializeCustomComponents()
+void AchievementsPage::InitCustomComponents()
 {
 
 }

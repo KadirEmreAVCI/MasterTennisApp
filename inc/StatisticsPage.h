@@ -10,7 +10,7 @@ class StatisticsPage : public QWidget, public IQTComponent
 public:
 	StatisticsPage(QWidget *parent = nullptr);
 	~StatisticsPage();
-	void InitializeCustomComponents() override final;
+	void InitCustomComponents() override final;
 private:
 	Ui::StatisticsPageClass ui;
 };

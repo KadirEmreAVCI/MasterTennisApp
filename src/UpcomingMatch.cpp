@@ -6,13 +6,13 @@ UpcomingMatch::UpcomingMatch(QWidget *parent, std::string sTournamentName, std::
 	: QWidget(parent), m_sTournamentName{ sTournamentName }, m_sTournamentCategory{ sTournamentCategory }, m_sOpponentName{ sOpponentName }, m_sStage{ sStage }
 {
 	setupUi(this);
-	InitializeCustomComponents();
+	InitCustomComponents();
 }
 
 UpcomingMatch::~UpcomingMatch()
 {}
 
-void UpcomingMatch::InitializeCustomComponents()
+void UpcomingMatch::InitCustomComponents()
 {
 	std::cout << "UpcomingMatch::InitializeCustomComponents()\n";
 	InitializeTimer();

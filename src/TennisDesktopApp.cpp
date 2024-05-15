@@ -6,11 +6,11 @@ TennisDesktopApp::TennisDesktopApp(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-    InitializeCustomComponents();
+    InitCustomComponents();
 }
 TennisDesktopApp::~TennisDesktopApp()
 {}
-void TennisDesktopApp::InitializeCustomComponents()
+void TennisDesktopApp::InitCustomComponents()
 {
     ui.label_WelcomeText->setText(QString::fromStdString("Welcome To The " + GUIController::instance().getAppName() + "!"));
     InitializePicture(ui.label_LoginPic, ":/images/images/welcome_img.png");

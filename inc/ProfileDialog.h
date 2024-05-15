@@ -14,7 +14,7 @@ class ProfileDialog : public QDialog, public Ui::ProfileDialogClass, public IQTC
 public:
 	ProfileDialog(QWidget *parent = nullptr);
 	~ProfileDialog();
-	void InitializeCustomComponents() override final;
+	void InitCustomComponents() override final;
 	std::unique_ptr<QVBoxLayout> m_MainLayout{};
 	std::unique_ptr<QTabWidget> m_upTabWidget{};
 private:

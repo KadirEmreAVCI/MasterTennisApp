@@ -5,12 +5,12 @@ HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	InitializeCustomComponents();
+	InitCustomComponents();
 }
 
 HomePage::~HomePage()
 {}
-void HomePage::InitializeCustomComponents()
+void HomePage::InitCustomComponents()
 {
 	std::cout << "ProfileDialog::InitializeCustomComponents\n";
 	InitUpcomingMatches();

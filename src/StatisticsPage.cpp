@@ -9,7 +9,7 @@ StatisticsPage::StatisticsPage(QWidget *parent)
 StatisticsPage::~StatisticsPage()
 {}
 
-void StatisticsPage::InitializeCustomComponents()
+void StatisticsPage::InitCustomComponents()
 {
 
 }

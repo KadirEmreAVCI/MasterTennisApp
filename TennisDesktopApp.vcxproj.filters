@@ -88,6 +88,12 @@
     <ClCompile Include="src\AddTournamentDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CreateTournamentDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DatabaseController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\GUIController.h">
@@ -120,13 +126,13 @@
     <ClInclude Include="inc\Tournament.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Period.h">
+    <ClInclude Include="inc\Season.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\SQLiteDB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\IDatabase.h">
+    <ClInclude Include="inc\DatabaseController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -152,6 +158,9 @@
     <QtMoc Include="inc\AddTournamentDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="CreateTournamentDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ProfileDialog.ui">
@@ -173,6 +182,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AddTournamentDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="CreateTournamentDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

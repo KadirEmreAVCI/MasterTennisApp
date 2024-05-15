@@ -10,7 +10,7 @@ class HomePage : public QWidget, public IQTComponent
 public:
 	HomePage(QWidget *parent = nullptr);
 	~HomePage();
-	void InitializeCustomComponents() override final;
+	void InitCustomComponents() override final;
 private:
 	void InitUpcomingMatches();
 	void InsertUpcomingMatch(std::string sTournamentName, std::string sTournamentCategory, std::string sOpponentName, std::string sStage);

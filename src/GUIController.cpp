@@ -19,7 +19,7 @@ void GUIController::BuildGUIComponents()
 {
 	std::cout << "GUIController::BuildGUIComponents\n";
 	m_upTennisDesktopApp = std::make_unique<TennisDesktopApp>();
-	m_upTennisDesktopApp->InitializeCustomComponents();
+	m_upTennisDesktopApp->InitCustomComponents();
 	m_upTennisDesktopApp->show();
 }
 

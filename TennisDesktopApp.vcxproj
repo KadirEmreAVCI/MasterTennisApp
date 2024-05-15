@@ -105,6 +105,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CreateTournamentDialog.cpp" />
+    <ClCompile Include="src\DatabaseController.cpp" />
     <ClCompile Include="src\AddTournamentDialog.cpp" />
     <ClCompile Include="src\SQLiteDB.cpp" />
     <ClCompile Include="src\HistoryPage.cpp" />
@@ -120,6 +122,7 @@
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="AchievementsPage.ui" />
     <QtUic Include="AddTournamentDialog.ui" />
+    <QtUic Include="CreateTournamentDialog.ui" />
     <QtUic Include="HistoryPage.ui" />
     <QtUic Include="HomePage.ui" />
     <QtUic Include="ProfileDialog.ui" />
@@ -136,7 +139,8 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="inc\AddTournamentDialog.h" />
-    <ClInclude Include="inc\IDatabase.h" />
+    <QtMoc Include="CreateTournamentDialog.h" />
+    <ClInclude Include="inc\DatabaseController.h" />
     <ClInclude Include="inc\SQLiteDB.h" />
     <QtMoc Include="inc\StatisticsPage.h" />
     <QtMoc Include="inc\HomePage.h" />
@@ -149,7 +153,7 @@
     <ClInclude Include="inc\IGUIConfigurator.h" />
     <ClInclude Include="inc\IGUIController.h" />
     <ClInclude Include="inc\IQTComponent.h" />
-    <ClInclude Include="inc\Period.h" />
+    <ClInclude Include="inc\Season.h" />
     <ClInclude Include="inc\Set.h" />
     <ClInclude Include="inc\Match.h" />
     <ClInclude Include="inc\Tournament.h" />

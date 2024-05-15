@@ -10,7 +10,7 @@ class AchievementsPage : public QWidget, public IQTComponent
 public:
 	AchievementsPage(QWidget *parent = nullptr);
 	~AchievementsPage();
-	void InitializeCustomComponents() override final;
+	void InitCustomComponents() override final;
 private:
 	Ui::AchievementsPageClass ui;
 };
