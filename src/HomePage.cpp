@@ -41,17 +41,11 @@ void HomePage::InitStats()
 }
 void HomePage::InitStatIcons()
 {
-	InitializePicture(ui.label_IconWin, ":images/images/win.png");
-	InitializePicture(ui.label_IconLose, ":images/images/lose.png");
-	InitializePicture(ui.label_IconGame, ":images/images/games.png");
-	InitializePicture(ui.label_IconClutchness, ":images/images/clutchness.png");
-	InitializePicture(ui.label_IconTrophies, ":images/images/trophy.png");
-	InitializePicture(ui.label_IconGA, ":images/images/GA.png");
-}
-void HomePage::InitializePicture(QLabel* pPicLabel, std::string sPicAddress)
-{
-	QPixmap pix{ QString::fromStdString(sPicAddress) };
-	const int iHeight = pPicLabel->height() * 1.5;
-	const int iWidth = pPicLabel->width() * 1.5;
-	pPicLabel->setPixmap(pix.scaled(iWidth, iHeight, Qt::KeepAspectRatio));
+	const float fScale{ 1.5f };
+	InitPicture(ui.label_IconWin, ":images/images/win.png", fScale);
+	InitPicture(ui.label_IconLose, ":images/images/lose.png", fScale);
+	InitPicture(ui.label_IconGame, ":images/images/games.png", fScale);
+	InitPicture(ui.label_IconClutchness, ":images/images/clutchness.png", fScale);
+	InitPicture(ui.label_IconTrophies, ":images/images/trophy.png", fScale);
+	InitPicture(ui.label_IconGA, ":images/images/GA.png", fScale);
 }

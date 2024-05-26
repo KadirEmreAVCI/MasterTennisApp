@@ -1,16 +1,38 @@
 #include "Tournament.h"
-
-Tournament::Tournament(std::string sOrganizationName, std::string sType, std::string sCategory, std::string sSeason, unsigned uiParticipant, bool blCompleted, std::string sProgress)
-	: m_sOrganizationName{ sOrganizationName }, m_sType{ sType }, m_sCategory{ sCategory }, m_sSeason{ sSeason }, m_uiParticipant{ uiParticipant }, m_blCompleted{ blCompleted }, m_sProgress{ sProgress } {}
-
-std::string Tournament::GetOrganizationName()const
+#include "Organization.h"
+Tournament::Tournament()
 {
-	return m_sOrganizationName;
+	
 }
 
-void Tournament::SetOrganizationName(std::string sName)
+unsigned Tournament::GetID()const
 {
-	m_sOrganizationName = sName;
+	return m_uiID;
+}
+
+void Tournament::SetID(unsigned uiID)
+{
+	m_uiID = uiID;
+}
+
+unsigned Tournament::GetOrgID()const
+{
+	return m_uiOrgID;
+}
+
+void Tournament::SetOrgID(unsigned uiOrgID)
+{
+	m_uiOrgID = uiOrgID;
+}
+
+std::string Tournament::GetOrgName()const
+{
+	return m_sOrgName;
+}
+
+void Tournament::SetOrgName(std::string sName)
+{
+	m_sOrgName = sName;
 }
 
 std::string Tournament::GetType()const
@@ -25,7 +47,7 @@ void Tournament::SetType(std::string sType)
 
 std::string Tournament::GetTeammate()const
 {
-	return m_sTeammate;
+	return m_sTeammate.value_or("None");
 }
 
 void Tournament::SetTeammate(std::string sTeammate)
@@ -75,11 +97,7 @@ void Tournament::SetCompleted(bool blCompleted)
 
 std::string Tournament::GetProgress()const
 {
+	// TODO: Son maca gore set edilecek.
 	return m_sProgress;
-}
-
-void Tournament::SetProgress(std::string sProgress)
-{
-	m_sProgress = sProgress;
 }
 

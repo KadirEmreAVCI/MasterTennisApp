@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1103</width>
-    <height>697</height>
+    <width>1003</width>
+    <height>514</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>History</string>
@@ -16,13 +22,62 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>5</x>
+     <x>0</x>
      <y>10</y>
-     <width>1101</width>
-     <height>681</height>
+     <width>1001</width>
+     <height>501</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTableWidget" name="tableWidget">
+      <column>
+       <property name="text">
+        <string/>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Organization</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Season</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Category</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Teammate</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Participant</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Completion</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Progress</string>
+       </property>
+      </column>
+     </widget>
+    </item>
     <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -67,50 +122,6 @@
        </spacer>
       </item>
      </layout>
-    </item>
-    <item row="0" column="0">
-     <widget class="QTableWidget" name="tableWidget">
-      <column>
-       <property name="text">
-        <string>Organization</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Type</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Teammate</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Category</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Season</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Participant</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Completion</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Progress</string>
-       </property>
-      </column>
-     </widget>
     </item>
    </layout>
   </widget>

@@ -105,9 +105,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CreateTournamentDialog.cpp" />
+    <ClCompile Include="src\CreateTournamentDialog.cpp" />
+    <ClCompile Include="src\Organization.cpp" />
     <ClCompile Include="src\DatabaseController.cpp" />
-    <ClCompile Include="src\AddTournamentDialog.cpp" />
+    <ClCompile Include="src\AddEditTournamentDialog.cpp" />
     <ClCompile Include="src\SQLiteDB.cpp" />
     <ClCompile Include="src\HistoryPage.cpp" />
     <ClCompile Include="src\AchievementsPage.cpp" />
@@ -121,7 +122,7 @@
     <QtRcc Include="Resource.qrc" />
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="AchievementsPage.ui" />
-    <QtUic Include="AddTournamentDialog.ui" />
+    <QtUic Include="AddEditTournamentDialog.ui" />
     <QtUic Include="CreateTournamentDialog.ui" />
     <QtUic Include="HistoryPage.ui" />
     <QtUic Include="HomePage.ui" />
@@ -138,16 +139,17 @@
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="inc\AddTournamentDialog.h" />
-    <QtMoc Include="CreateTournamentDialog.h" />
-    <ClInclude Include="inc\DatabaseController.h" />
+    <ClInclude Include="inc\Organization.h" />
+    <QtMoc Include="inc\AddEditTournamentDialog.h" />
+    <QtMoc Include="inc\CreateTournamentDialog.h" />
+    <QtMoc Include="inc\DatabaseController.h" />
     <ClInclude Include="inc\SQLiteDB.h" />
     <QtMoc Include="inc\StatisticsPage.h" />
     <QtMoc Include="inc\HomePage.h" />
     <QtMoc Include="inc\AchievementsPage.h" />
     <QtMoc Include="inc\HistoryPage.h" />
     <ClInclude Include="inc\Countdown.h" />
-    <ClInclude Include="inc\AppController.h" />
+    <QtMoc Include="inc\AppController.h" />
     <ClInclude Include="inc\GUIConfigurator.h" />
     <ClInclude Include="inc\GUIController.h" />
     <ClInclude Include="inc\IGUIConfigurator.h" />

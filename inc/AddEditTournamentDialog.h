@@ -1,23 +1,35 @@
 #pragma once
+#include <string>
 #include <QDialog>
-#include "ui_AddTournamentDialog.h"
+#include "ui_AddEditTournamentDialog.h"
 #include "IQTComponent.h"
-class AddTournamentDialog : public QDialog, public IQTComponent
+#include <Tournament.h>
+enum class DialogMode {
+	eAddDialog,
+	eEditDialog
+};
+class AddEditTournamentDialog : public QDialog, public IQTComponent
 {
 	Q_OBJECT
 
 public:
-	AddTournamentDialog(QWidget *parent = nullptr);
-	~AddTournamentDialog();
+	AddEditTournamentDialog(QWidget *parent = nullptr);
+	~AddEditTournamentDialog();
 	void InitCustomComponents() override final;
+	void InitDialogWithTournament(const Tournament& t);
+	void SetDialogMode(DialogMode mode, const Tournament& t = {});
 private:
 	Ui::AddTournamentDialogClass ui;
-	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sYear, m_sSeason, m_sParticipant, m_sCompletion, m_sProgress;
+	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sYear, m_sSeason, m_sParticipant, m_sCompletion;
+	unsigned m_uiTournamentID{};
+	void ClearDialog();
 	void DeactivateOptions();
 	void ActivateOptions();
 	void SetOrganizationAlternatives();
 	void SetCategoryAlternatives(std::string sOrgName);
-	void SetStageAlternatives(std::string sOrgName);
+	bool MandatoryFieldsFilled()const;
+	void InitComboBox(QComboBox* pComboBox, const QString& sVal);
+	DialogMode m_DialogMode;
 private slots:
 	void on_CancelButton_clicked();
 	void on_SaveButton_clicked();
@@ -28,4 +40,6 @@ private slots:
 	void on_comboBox_Season_currentTextChanged(const QString& season);
 	void on_checkBox_Completion_stateChanged(int);
 	void on_comboBox_OrganizationName_currentTextChanged(const QString& org);
+public slots:
+	void UpdateOrganizations();
 };

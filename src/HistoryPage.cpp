@@ -1,17 +1,26 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <QMessageBox>
 #include "HistoryPage.h"
-#include "AddTournamentDialog.h"
+#include "AddEditTournamentDialog.h"
 #include "CreateTournamentDialog.h"
-#include "DatabaseController.h"
-#include "Tournament.h"
+#include "AppController.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
+	std::cout << "HistoryPage::HistoryPage AddEditTournamentDialog constructed successfully\n";
+	m_upCreateTournamentDialog = std::make_unique<CreateTournamentDialog>(this);
+	std::cout << "HistoryPage::HistoryPage CreateTournamentDialog constructed successfully\n";
 	InitCustomComponents();
+	std::cout << "HistoryPage::HistoryPage custom components constructed successfully\n";
+	QObject::connect(&AppController::instance(), &AppController::TournamentAdded, this, &HistoryPage::UpdateTournaments);
+	QObject::connect(&AppController::instance(), &AppController::TournamentsDeleted, this, &HistoryPage::UpdateTournaments);
+	QObject::connect(&AppController::instance(), &AppController::TournamentEdited, this, &HistoryPage::UpdateTournaments);
 }
 
 HistoryPage::~HistoryPage()
@@ -20,55 +29,136 @@ HistoryPage::~HistoryPage()
 void HistoryPage::InitCustomComponents()
 {
 	LoadTournamentData();
-	
 }
 
 void HistoryPage::LoadTournamentData()
 {
-	std::vector<Tournament> vecTournament = DatabaseController::instance().GetTournaments();
-	unsigned int uiRowIdx{};
-	std::for_each(vecTournament.cbegin(), vecTournament.cend(), [&](const auto& tournament) {
-		ui.tableWidget->insertRow(uiRowIdx);
-		QTableWidgetItem* const name = new QTableWidgetItem;
-		name->setText(QString::fromStdString(tournament.GetOrganizationName()));
-		ui.tableWidget->setItem(uiRowIdx, 0, name);
-		QTableWidgetItem* const type = new QTableWidgetItem;
-		type->setText(QString::fromStdString(tournament.GetType()));
-		ui.tableWidget->setItem(uiRowIdx, 1, type);
-		QTableWidgetItem* const teammate = new QTableWidgetItem;
-		teammate->setText(QString::fromStdString(tournament.GetTeammate()));
-		ui.tableWidget->setItem(uiRowIdx, 2, teammate);
-		QTableWidgetItem* const category = new QTableWidgetItem;
-		category->setText(QString::fromStdString(tournament.GetCategory()));
-		ui.tableWidget->setItem(uiRowIdx, 3, category);
-		QTableWidgetItem* const season = new QTableWidgetItem;
-		season->setText(QString::fromStdString(tournament.GetSeason()));
-		ui.tableWidget->setItem(uiRowIdx, 4, season);
-		QTableWidgetItem* const participant = new QTableWidgetItem;
-		participant->setText(QString::fromStdString(std::to_string(tournament.GetParticipant())));
-		ui.tableWidget->setItem(uiRowIdx, 5, participant);
-		QTableWidgetItem* const completed = new QTableWidgetItem;
-		completed->setText(QString::fromStdString(std::to_string(tournament.GetCompleted())));
-		ui.tableWidget->setItem(uiRowIdx, 6, completed);
-		QTableWidgetItem* const progress = new QTableWidgetItem;
-		progress->setText(QString::fromStdString(tournament.GetProgress()));
-		ui.tableWidget->setItem(uiRowIdx, 7, progress);
-		++uiRowIdx;
-	});
-	std::cout << "HistoryPage::LoadTournamentData Tournaments loaded successfully from database\n";
+	std::cout << "HistoryPage::LoadTournamentData\n";
+	m_vecTournament = AppController::instance().GetTournaments();
+	std::cout << "HistoryPage::LoadTournamentData m_vecTournament.size() = " << m_vecTournament.size() << '\n';
+	if (!m_vecTournament.empty())
+	{
+		unsigned int uiRowIdx{};
+		std::for_each(m_vecTournament.cbegin(), m_vecTournament.cend(), [&](const auto& tournament) {
+			ui.tableWidget->insertRow(uiRowIdx);
+			InsertTournament2Table(tournament, uiRowIdx);
+			++uiRowIdx;
+		});
+		ui.tableWidget->resizeColumnsToContents();
+	}
+	else
+	{
+		std::cout << "HistoryPage::LoadTournamentData m_vecTournament is empty!\n";
+	}
+}
+
+void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
+{
+	unsigned uiColumnIdx{};
+	QTableWidgetItem* pCheckBox = new QTableWidgetItem();
+	pCheckBox->setCheckState(Qt::Unchecked);
+	ui.tableWidget->setItem(uiRowIdx, uiColumnIdx++, pCheckBox);
+	InsertValue2Cell(QString::fromStdString(t.GetOrgName()), uiRowIdx, uiColumnIdx++);
+	InsertValue2Cell(QString::fromStdString(t.GetSeason()), uiRowIdx, uiColumnIdx++);
+	InsertValue2Cell(QString::fromStdString(t.GetCategory()), uiRowIdx, uiColumnIdx++);
+	InsertValue2Cell(QString::fromStdString(t.GetType()), uiRowIdx, uiColumnIdx++);
+	InsertValue2Cell(QString::fromStdString(t.GetTeammate()), uiRowIdx, uiColumnIdx++);
+	InsertValue2Cell(QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
+	InsertCompletionPic2Cell(t.GetCompleted(), uiRowIdx, uiColumnIdx++);
+	InsertValue2Cell(QString::fromStdString(t.GetProgress()), uiRowIdx, uiColumnIdx++);
+}
+
+void HistoryPage::InsertValue2Cell(QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
+{
+	QTableWidgetItem* const pVal = new QTableWidgetItem;
+	pVal->setText(sVal);
+	ui.tableWidget->setItem(uiRowIdx, uiColumnIdx++, pVal);
+}
+
+void HistoryPage::InsertCompletionPic2Cell(bool blCompletion, unsigned uiRowIdx, unsigned uiColumnIdx)
+{
+	const float fCompletionScale{ 0.04f };
+	QLabel* pCompletionLabel = new QLabel;
+	std::string sPicAddress = blCompletion ? ":images/images/win.png" : ":images/images/lose.png";
+	InitPicture(pCompletionLabel, sPicAddress, fCompletionScale);
+	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx++, pCompletionLabel);
+}
+
+std::vector<unsigned> HistoryPage::FindSelectedRows()const
+{
+	std::vector<unsigned> vecCheckedTournamentIDs;
+	const unsigned int uiCheckBoxColumnIdx{0};
+	for (unsigned uiRow{}; uiRow < ui.tableWidget->rowCount(); ++uiRow)
+	{
+		QTableWidgetItem* pCheckBox = ui.tableWidget->item(uiRow, uiCheckBoxColumnIdx); 
+		if (pCheckBox && pCheckBox->checkState() == Qt::Checked) {
+			vecCheckedTournamentIDs.push_back(uiRow);
+			pCheckBox->setCheckState(Qt::Unchecked);
+		}
+	}
+	return vecCheckedTournamentIDs;
+}
+
+std::vector<Tournament> HistoryPage::FindSelectedTournaments()const
+{
+	std::vector<unsigned> vecSelectedTournamentRows = FindSelectedRows();
+	std::vector<Tournament> vecSelectedTournament;
+	for (size_t idx{}; idx < vecSelectedTournamentRows.size(); ++idx)
+	{
+		vecSelectedTournament.push_back(m_vecTournament[vecSelectedTournamentRows[idx]]);
+	}
+	return vecSelectedTournament;
 }
 
 void HistoryPage::on_AddButton_clicked()
 {
-	std::cout << "HistoryPage::Add button clicked\n";
-	m_upAddTournamentDialog = std::make_unique<AddTournamentDialog>(this);
-	m_upAddTournamentDialog->setModal(true);
-	m_upAddTournamentDialog->exec();
+	m_upAddEditTournamentDialog->setModal(true);
+	m_upAddEditTournamentDialog->SetDialogMode(DialogMode::eAddDialog);
+	m_upAddEditTournamentDialog->exec();
 }
 void HistoryPage::on_CreateButton_clicked()
 {
-	std::cout << "HistoryPage::Create button clicked\n";
-	m_upCreateTournamentDialog = std::make_unique<CreateTournamentDialog>(this);
 	m_upCreateTournamentDialog->setModal(true);
 	m_upCreateTournamentDialog->exec();
+}
+
+void HistoryPage::on_DeleteButton_clicked()
+{
+	auto vecSelectedTournament = FindSelectedTournaments();
+	if (vecSelectedTournament.empty())
+	{
+		QMessageBox::warning(this, "Warning", "Select tournament(s) first.");
+	}
+	else
+	{
+		AppController::instance().DeleteTournaments(vecSelectedTournament);
+		QMessageBox::information(this, "Information", "Tournament(s) deleted successfully");
+	}
+}
+
+void HistoryPage::on_EditButton_clicked()
+{
+	auto vecSelectedTournament = FindSelectedTournaments();
+	if (vecSelectedTournament.empty())
+	{
+		QMessageBox::warning(this, "Warning", "Select a tournament first.");
+	}
+	else if (vecSelectedTournament.size() == 1)
+	{
+		m_upAddEditTournamentDialog->setModal(true);
+		m_upAddEditTournamentDialog->SetDialogMode(DialogMode::eEditDialog, vecSelectedTournament.front());
+		m_upAddEditTournamentDialog->exec();
+	}
+	else
+	{
+		QMessageBox::critical(this, "Error", "Only one tournament can be edited at once.");
+	}
+}
+
+void HistoryPage::UpdateTournaments()
+{
+	std::cout << "HistoryPage::UpdateTournaments!!!!!!!!!!!!!!!\n";
+	ui.tableWidget->clearContents();
+	ui.tableWidget->setRowCount(0);
+	LoadTournamentData();
 }

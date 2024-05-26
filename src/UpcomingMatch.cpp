@@ -33,7 +33,7 @@ void UpcomingMatch::InitializeCountdown()
 {
 	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
 	// TODO: sMatchDate string'i database'den elde edilecek.
-	std::string sMatchDate{ "2024-05-23 19:00:00" };
+	std::string sMatchDate{ "2024-06-23 19:00:00" };
 	m_Countdown.setMatchDate(sMatchDate);
 }
 void UpcomingMatch::setTournamentName()

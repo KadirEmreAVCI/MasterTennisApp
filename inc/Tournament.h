@@ -1,12 +1,18 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <vector>
-#include "Match.h"
+#include <optional>
+class Organization;
 class Tournament{
 public:
-	Tournament(std::string sOrganizationName = "", std::string sType = "", std::string sCategory = "", std::string sSeason = "", unsigned uiParticipant = 0, bool blCompleted = false, std::string sProgress = "");
-	std::string GetOrganizationName()const;
-	void SetOrganizationName(std::string);
+	Tournament();
+	unsigned GetID()const;
+	void SetID(unsigned);
+	unsigned GetOrgID()const;
+	void SetOrgID(unsigned);
+	std::string GetOrgName()const;
+	void SetOrgName(std::string);
 	std::string GetType()const;
 	void SetType(std::string);
 	std::string GetTeammate()const;
@@ -20,27 +26,30 @@ public:
 	bool GetCompleted()const;
 	void SetCompleted(bool);
 	std::string GetProgress()const;
-	void SetProgress(std::string);
 	friend std::ostream& operator<<(std::ostream& os, const Tournament& t)
 	{
-		os << "(Organization Name: " << t.m_sOrganizationName <<
-			", Type: " << t.m_sType <<
-			", Teammate: " << t.m_sTeammate <<
-			", Category: " << t.m_sCategory <<
-			", Season: " << t.m_sSeason <<
-			", Participant: " << t.m_uiParticipant << std::boolalpha <<
-			", Completed: " << t.m_blCompleted <<
-			", Progress: " << t.m_sProgress;
+		os << "\tID: " << t.m_uiID <<
+			", ORG ID: " << t.m_uiOrgID <<
+			", ORG NAME: " << t.m_sOrgName <<
+			", TYPE: " << t.m_sType <<
+			", TEAMMATE: " << t.m_sTeammate.value_or("NA") <<
+			", CATEGORY: " << t.m_sCategory <<
+			", SEASON: " << t.m_sSeason <<
+			", PARTICIPANT: " << t.m_uiParticipant << std::boolalpha <<
+			", COMPLETED: " << t.m_blCompleted <<
+			", PROGRESS: " << t.m_sProgress;
 		return os;
 	}
 private:
-	std::string m_sOrganizationName;
-	std::string m_sType; std::string m_sTeammate;
+	unsigned m_uiID{};
+	unsigned m_uiOrgID;
+	std::string m_sOrgName;
+	std::string m_sType; 
+	std::optional<std::string> m_sTeammate;
 	std::string m_sCategory;
 	std::string m_sSeason;
 	unsigned m_uiParticipant;
 	bool m_blCompleted{ false };
-	std::string m_sProgress;
-	std::vector<Match> m_vecMatch;
+	std::string m_sProgress; 
 };
 

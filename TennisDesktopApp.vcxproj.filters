@@ -85,21 +85,21 @@
     <ClCompile Include="src\SQLiteDB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AddTournamentDialog.cpp">
+    <ClCompile Include="src\AddEditTournamentDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CreateTournamentDialog.cpp">
+    <ClCompile Include="src\CreateTournamentDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\DatabaseController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Organization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\GUIController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\AppController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\GUIConfigurator.h">
@@ -132,7 +132,7 @@
     <ClInclude Include="inc\SQLiteDB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\DatabaseController.h">
+    <ClInclude Include="inc\Organization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,10 +155,16 @@
     <QtMoc Include="inc\HistoryPage.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="inc\AddTournamentDialog.h">
+    <QtMoc Include="inc\AddEditTournamentDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="CreateTournamentDialog.h">
+    <QtMoc Include="inc\CreateTournamentDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\DatabaseController.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="inc\AppController.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -181,7 +187,7 @@
     <QtUic Include="HistoryPage.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="AddTournamentDialog.ui">
+    <QtUic Include="AddEditTournamentDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="CreateTournamentDialog.ui">

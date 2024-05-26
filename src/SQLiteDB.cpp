@@ -65,32 +65,7 @@ unsigned SQLiteDB::GetRowSize(const std::string& sTable) const
 	return uiRowCount;
 }
 
-unsigned SQLiteDB::GetColumnSize(const std::string& sTable) const
-{
-	return 0;
-}
-
-void SQLiteDB::SetTableContent(QTableView* tv, const std::string& sTable)
-{
-	QSqlQuery qry;
-	qry.exec("SELECT * FROM " + QString::fromStdString(sTable));
-	QSqlQueryModel* modal = new QSqlQueryModel();
-	modal->setQuery(qry);
-	tv->setModel(modal);
-}
-void SQLiteDB::SetTableContentByColumn(QTableView* tv, const std::string& sTable, const std::string& sColumnNames)
-{
-	if (OpenConn())
-	{
-		QSqlQuery qry;
-		qry.exec("SELECT " + QString::fromStdString(sColumnNames) + " FROM " + QString::fromStdString(sTable));
-		QSqlQueryModel* modal = new QSqlQueryModel();
-		modal->setQuery(qry);
-		tv->setModel(modal);
-	}	
-	CloseConn();
-}
-bool SQLiteDB::InsertRowToTable(const std::string& sTable, const std::string& sColumnNames, const std::string& sValues)
+bool SQLiteDB::InsertItem2Table(const std::string& sTable, const std::string& sColumnNames, const std::string& sValues)const
 {
 	bool blRowInsertion{ false };
 	if (OpenConn())
@@ -109,7 +84,69 @@ bool SQLiteDB::InsertRowToTable(const std::string& sTable, const std::string& sC
 	CloseConn();
 	return blRowInsertion;
 }
-std::vector<std::string> SQLiteDB::GetColumn(const std::string& sTable, const std::string& sColumn)
+bool SQLiteDB::EditItemInTable(const std::string& sTable, const QMap<QString, QVariant>& columnValues, unsigned uiID)const
+{
+	std::cout << "SQLiteDB::EditItemInTable uiID = " << uiID << '\n';
+	bool blEdition = false;
+	if (OpenConn())
+	{
+		QStringList setClauses;
+		QMapIterator<QString, QVariant> i(columnValues);
+		while (i.hasNext()) {
+			i.next();
+			setClauses << QString("%1 = :%2").arg(i.key()).arg(i.key());
+		}
+		QString queryString = QString("UPDATE %1 SET %2 WHERE ID = %3")
+			.arg(QString::fromStdString(sTable))
+			.arg(setClauses.join(", "))
+			.arg(uiID);
+
+		QSqlQuery qry;
+		qry.prepare(queryString);
+
+		// Bind the values
+		i.toFront();
+		while (i.hasNext()) {
+			i.next();
+			qry.bindValue(QString(":%1").arg(i.key()), i.value());
+		}
+		
+		std::cout << "\nSQLiteDB::EditItemInTable query:" << qry.lastQuery().toStdString() << "\n\n";
+
+		if (qry.exec())
+		{
+			blEdition = true;
+			std::cout << "Data edited successfully in table: " << sTable << "\n";
+		}
+		else
+		{
+			std::cout << "Data edition failed in table: " << sTable << " query: " << qry.lastQuery().toStdString() << "\n";
+		}
+	}
+	CloseConn();
+	return blEdition;
+
+}
+bool SQLiteDB::DeleteItemFromTable(const std::string& sTable, std::string sColumn, std::string sVal) const
+{
+	bool blDeletion = false;
+	if (OpenConn())
+	{
+		QSqlQuery qry;
+		if (qry.exec("DELETE FROM " + QString::fromStdString(sTable) + " WHERE " + QString::fromStdString(sColumn) + " = " + QString::fromStdString(sVal)))
+		{
+			blDeletion = true;
+			std::cout << "Data deleted successfully from table: " << sTable << "\n";
+		}
+		else
+		{
+			std::cout << "Data deletion failed from table: " << sTable << " query: " << qry.lastQuery().toStdString() << "\n";
+		}
+	}
+	CloseConn();
+	return blDeletion;
+}
+std::vector<std::string> SQLiteDB::GetColumn(const std::string& sTable, const std::string& sColumn)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
@@ -139,7 +176,7 @@ std::vector<std::string> SQLiteDB::GetColumn(const std::string& sTable, const st
 	CloseConn();
 	return vecColumn;
 }
-std::vector<std::string> SQLiteDB::GetColumnWithCond(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond)
+std::vector<std::string> SQLiteDB::GetColumnWithCond(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
@@ -168,7 +205,7 @@ std::vector<std::string> SQLiteDB::GetColumnWithCond(const std::string& sTable, 
 	return vecColumn;
 }
 
-std::string SQLiteDB::GetValue(const std::string& sTable, const std::string& sColumn, unsigned uiRowIdx)
+std::string SQLiteDB::GetValue(const std::string& sTable, const std::string& sColumn, unsigned uiRowIdx)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
@@ -179,7 +216,7 @@ std::string SQLiteDB::GetValue(const std::string& sTable, const std::string& sCo
 	return vecColumn[uiRowIdx];
 }
 
-std::string SQLiteDB::GetValueWithCond(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond, unsigned uiRowIdx)
+std::string SQLiteDB::GetValueWithCond(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond, unsigned uiRowIdx)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
@@ -188,9 +225,4 @@ std::string SQLiteDB::GetValueWithCond(const std::string& sTable, const std::str
 	}
 	CloseConn();
 	return vecColumn[uiRowIdx];
-}
-
-QSqlDatabase* SQLiteDB::GetDatabase()const
-{
-	return &m_SqlDatabase;
 }
