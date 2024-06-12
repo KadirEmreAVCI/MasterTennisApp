@@ -1,47 +1,78 @@
+#include <sstream>
 #include "Set.h"
-Set::Set(unsigned uiMinGameNeededToWin) : m_uiMinGameNeededToWin{ uiMinGameNeededToWin }
-{
-
-}
-Set::Set(std::pair<unsigned int, std::optional<unsigned int> > HomeScore, std::pair<unsigned int, std::optional<unsigned int> > AwayScore, unsigned uiMinGameNeededToWin)
-	: m_HomeScore{ HomeScore }, m_AwayScore{ AwayScore }, m_uiMinGameNeededToWin{ uiMinGameNeededToWin }
+Set::Set(bool blSuperTB, const Score& MajorScore, std::optional<Score> optTBScore, unsigned uiGameToWinSet, unsigned uiPointToWinSetTB, unsigned uiPointToWinSuperTB)
+	: m_blSuperTB{ blSuperTB }, m_MajorScore{ MajorScore }, m_optTBScore{ optTBScore }, m_uiGameToWinSet{ uiGameToWinSet }, m_uiPointToWinSetTB{ uiPointToWinSetTB }, m_uiPointToWinSuperTB{ uiPointToWinSuperTB }
 {
 	
 }
-std::pair<unsigned int, std::optional<unsigned int> > Set::getHomeScore()const
+Score Set::GetMajorScore()const
 {
-	return m_HomeScore;
+	return m_MajorScore;
 }
-std::pair<unsigned int, std::optional<unsigned int> > Set::getAwayScore()const
+void Set::SetSetScore(const Score& ss, std::optional<Score> ts)
 {
-	return m_AwayScore;
+	m_MajorScore = ss;
+	m_optTBScore = ts;
 }
-void Set::setHomeScore(std::pair<unsigned int, std::optional<unsigned int> > Score)
+Score Set::GetTBScore()const
 {
-	m_HomeScore = Score;
+	return m_optTBScore.value_or(Score(0,0));
 }
-void Set::setAwayScore(std::pair<unsigned int, std::optional<unsigned int> > Score)
+void Set::SetTBScore(const Score& score)
 {
-	m_AwayScore = Score;
+	m_optTBScore = score;
 }
-SetWinner Set::WinnerOfTheSet()const
+void Set::Clear()
 {
-	return m_HomeScore.first > m_AwayScore.first ? SetWinner::eHome : SetWinner::eAway;
+	m_MajorScore.Clear();
+	if(m_optTBScore.has_value())
+		m_optTBScore.value().Clear();
 }
-bool Set::IsTiebreakPlayed()const
+Winner Set::GetWinner()const
 {
-	return m_HomeScore.second.has_value() && m_AwayScore.second.has_value();
+	return m_MajorScore.GetWinner();
 }
-void Set::Walkover(MatchStatus eMatchStatus)
+bool Set::IsValid()const
 {
-	if (eMatchStatus == MatchStatus::eWO_W)
+	bool blValid = false;
+	if (IsSuperTB())
 	{
-		setHomeScore(std::make_pair(m_uiMinGameNeededToWin, 0));
-		setAwayScore(std::make_pair(0, 0));
+		blValid = (m_MajorScore.GetHomeScore() >= m_uiPointToWinSuperTB || m_MajorScore.GetAwayScore() >= m_uiPointToWinSuperTB) 
+				&& m_MajorScore.GetDiff() >= 2 
+				&& !IsSetTBPlayed();
 	}
-	else if (eMatchStatus == MatchStatus::eWO_L)
+	else
 	{
-		setHomeScore(std::make_pair(0, 0));
-		setAwayScore(std::make_pair(m_uiMinGameNeededToWin, 0));
+		if (IsSetTBPlayed())
+		{
+			blValid = (m_MajorScore == Score(m_uiGameToWinSet, m_uiGameToWinSet + 1) || m_MajorScore == Score(m_uiGameToWinSet + 1, m_uiGameToWinSet))
+					&& ((m_optTBScore.value().GetHomeScore() >= m_uiPointToWinSetTB || m_optTBScore.value().GetAwayScore() >= m_uiPointToWinSetTB) && m_optTBScore.value().GetDiff() >= 2);
+		}
+		else
+		{
+			blValid = ((m_MajorScore.GetHomeScore() == m_uiGameToWinSet || m_MajorScore.GetHomeScore() == m_uiGameToWinSet + 1) || (m_MajorScore.GetAwayScore() == m_uiGameToWinSet || m_MajorScore.GetAwayScore() == m_uiGameToWinSet + 1))
+					&& m_MajorScore.GetDiff() >= 2;
+		}
 	}
+	return blValid;
+}
+bool Set::IsSuperTB()const
+{
+	return m_blSuperTB;
+}
+void Set::SetSuperTB(bool blSuperTB)
+{
+	m_blSuperTB = blSuperTB;
+}
+std::string Set::ToString()const
+{
+	std::ostringstream oss;
+	oss << m_MajorScore.ToString();
+	if(IsSetTBPlayed())
+		oss << "(" << m_optTBScore.value().ToString() << ")";
+	return oss.str();
+}
+bool Set::IsSetTBPlayed()const
+{
+	return m_optTBScore.has_value();
 }

@@ -78,9 +78,10 @@ void AppController::AddNewOrganization(const Organization& org)
 		std::cout << "AppController::AddNewOrganization failed\n";
 	}
 }
-void AppController::AddNewTournament(Tournament t)
+bool AppController::AddNewTournament(Tournament t)
 {
-	if (DatabaseController::instance().AddNewTournament(t))
+	const bool blTournamentAdded = DatabaseController::instance().AddNewTournament(t);
+	if (blTournamentAdded)
 	{
 		LoadTournaments();
 		emit TournamentAdded();
@@ -89,6 +90,7 @@ void AppController::AddNewTournament(Tournament t)
 	{
 		std::cout << "AppController::AddNewTournament failed\n";
 	}
+	return blTournamentAdded;
 }
 void AppController::DeleteTournaments(std::vector<Tournament> vecTournament)
 {
@@ -102,9 +104,10 @@ void AppController::DeleteTournaments(std::vector<Tournament> vecTournament)
 		std::cout << "AppController::DeleteTournaments failed\n";
 	}
 }
-void AppController::EditTournament(Tournament t)
+bool AppController::EditTournament(Tournament t)
 {
-	if (DatabaseController::instance().EditTournament(t))
+	const bool blTournamentEdited = DatabaseController::instance().EditTournament(t);
+	if (blTournamentEdited)
 	{
 		LoadTournaments();
 		emit TournamentEdited();
@@ -113,6 +116,21 @@ void AppController::EditTournament(Tournament t)
 	{
 		std::cout << "AppController::EditTournament failed\n";
 	}
+	return blTournamentEdited;
+}
+bool AppController::AddNewMatch(const Match& m)
+{
+	const bool blNewMatchAdded = DatabaseController::instance().AddNewMatch(m);
+	if (blNewMatchAdded)
+	{
+		/*LoadMatches();
+		emit MatchAdded();*/
+	}
+	else
+	{
+		std::cout << "AppController::AddNewMatch failed\n";
+	}
+	return blNewMatchAdded;
 }
 const Organization& AppController::GetOrg(const std::string& sOrg)const
 {

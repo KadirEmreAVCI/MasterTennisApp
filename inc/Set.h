@@ -1,31 +1,37 @@
 #pragma once
+#include <iostream>
 #include <utility>
 #include <optional>
-enum class MatchStatus {
-	eUpcoming,
-	ePlayed,
-	eWO_W,
-	eWO_L,
-	eBYE
-};
-enum class SetWinner {
-	eHome = 1, 
-	eAway = 2
-};
+#include "Score.h"
+#include "Config.h"
+
 class Set{
 public:
-	Set(unsigned uiMinGameNeededToWin = 6);
-	Set(std::pair<unsigned, std::optional<unsigned> > HomeScore, std::pair<unsigned, std::optional<unsigned> > AwayScore, unsigned uiMinGameNeededToWin = 6);
-	std::pair<unsigned, std::optional<unsigned> > getHomeScore()const;
-	std::pair<unsigned, std::optional<unsigned> > getAwayScore()const;
-	void setHomeScore(std::pair<unsigned, std::optional<unsigned> > HomeScore);
-	void setAwayScore(std::pair<unsigned, std::optional<unsigned> > AwayScore);	
-	SetWinner WinnerOfTheSet()const;
-	bool IsTiebreakPlayed()const;
-	void Walkover(MatchStatus);
+	Set(bool blSuperTB, const Score& MajorScore = (0,0), std::optional<Score> TBScore = std::nullopt, unsigned uiGameToWinSet = 6, unsigned uiPointToWinSetTB = 7, unsigned uiPointToWinSuperTB = 10);
+	Score GetMajorScore()const;
+	void SetSetScore(const Score& ss, std::optional<Score> ts = std::nullopt);
+	Score GetTBScore()const;
+	void SetTBScore(const Score&);
+	void Clear();
+	Winner GetWinner()const;
+	bool IsValid()const;
+	bool IsSuperTB()const;
+	void SetSuperTB(bool blSuperTB);
+	std::string ToString()const;
+	friend std::ostream& operator<<(std::ostream& os, const Set& s)
+	{
+		os << s.m_MajorScore;
+		if (s.IsSetTBPlayed())
+			os << "(" << s.m_optTBScore.value() << ")";
+		return os;
+	}
 private:
-	unsigned int m_uiMinGameNeededToWin{};
-	std::pair<unsigned, std::optional<unsigned> > m_HomeScore;
-	std::pair<unsigned, std::optional<unsigned> > m_AwayScore;
+	bool IsSetTBPlayed()const;
+	unsigned m_uiGameToWinSet;
+	unsigned m_uiPointToWinSetTB;
+	unsigned m_uiPointToWinSuperTB;
+	Score m_MajorScore = (0,0);
+	std::optional<Score> m_optTBScore = (0,0);
+	bool m_blSuperTB{false};
 };
 

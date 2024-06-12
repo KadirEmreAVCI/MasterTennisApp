@@ -1,108 +1,92 @@
 #include "Match.h"
-Match::Match(MatchStatus eMatchStatus, std::string sStage, std::pair<std::string, std::optional<std::string> > sAwayName, unsigned uiMaxSetInMatch, unsigned uiMinGameToWinSet) : m_eMatchStatus{ eMatchStatus }, m_sStage{ sStage }, m_sAwayName { sAwayName }, m_uiMaxSet{ uiMaxSetInMatch }, m_uiMinGameToWinSet{ uiMinGameToWinSet }
+unsigned Match::GetID()const
 {
-	InitSets();
-	if (eMatchStatus == eWO_W || eMatchStatus == eWO_L)
-	{
-		Walkover();
-	}
+	return m_uiID;
 }
-std::pair<unsigned int, unsigned int> Match::getScore()const
+void Match::SetID(unsigned uiID)
 {
-	return std::make_pair(m_uiHomeScore, m_uiAwayScore);
+	m_uiID = uiID;
 }
-void Match::InitSets()
+unsigned Match::GetTournamentID()const
 {
-	for (int iSetIdx{}; iSetIdx < m_uiMaxSet; ++iSetIdx)
-	{
-		m_vecSetScore.push_back(std::optional<Set>());
-	}
+	return m_uiTournamentID;
 }
-void Match::Walkover()
+void Match::SetTournamentID(unsigned uiTournamentID)
 {
-	for (unsigned uiSetIdx{}; uiSetIdx < GetMinSetNeededToWin(); ++uiSetIdx)
-	{
-		Set ss{ m_uiMinGameToWinSet };
-		ss.Walkover(m_eMatchStatus);
-		AddSet(uiSetIdx, ss);
-	}
+	m_uiTournamentID = uiTournamentID;
 }
-void Match::IncrementScore(const Set& ss)
+std::string Match::GetStatu()const
 {
-	if (ss.WinnerOfTheSet() == SetWinner::eHome)
-		++m_uiHomeScore;
-	else
-		++m_uiAwayScore;
+	return m_sStatu;
 }
-void Match::DecrementScore(unsigned uiSetIdx)
+void Match::SetStatu(const std::string& sStatu)
 {
-	if (IsSetPlayed(uiSetIdx))
-	{
-		if (m_vecSetScore[uiSetIdx].value().WinnerOfTheSet() == SetWinner::eHome)
-			--m_uiHomeScore;
-		else
-			--m_uiAwayScore;
-	}
-}
-bool Match::IsSetPlayed(unsigned int uiSetIdx)const
-{
-	return m_vecSetScore[uiSetIdx].has_value();
-}
-unsigned Match::GetMinSetNeededToWin()const
-{
-	return (m_uiMaxSet + 1) / 2;
-}
-Set Match::GetSet(unsigned int uiSetIdx)const
-{
-	if (uiSetIdx < m_uiMaxSet)
-		return m_vecSetScore[uiSetIdx].value_or(Set{std::make_pair(99, 0), std::make_pair(99, 0)});
-	else
-		std::cerr << "Match::getSetScore::Error! Out of index!\n";
-}
-void Match::AddSet(unsigned int uiSetIdx, const Set& ss)
-{
-	if (uiSetIdx < m_uiMaxSet) {
-		if (IsSetPlayed(uiSetIdx))
-			DecrementScore(uiSetIdx);
-		m_vecSetScore[uiSetIdx] = std::make_optional(ss);
-		IncrementScore(ss);
-	}
-	else
-		std::cerr << "Match::setSetScore::Error! Out of index!\n";
-}
-void Match::setAwayName(std::pair<std::string, std::optional<std::string> > sAwayName)
-{
-	m_sAwayName = sAwayName;
-}
-MatchWinner Match::WinnerOfTheMatch()const
-{
-	return (GetMatchStatus() == eWO_W || GetMatchStatus() == eBYE || (GetMatchStatus() == ePlayed) && m_uiHomeScore > m_uiAwayScore) ? MatchWinner::eHome : MatchWinner::eAway;
-}
-MatchStatus Match::GetMatchStatus()const
-{
-	return m_eMatchStatus;
-}
-void Match::SetMatchStatus(MatchStatus eMatchStatus)
-{
-	m_eMatchStatus = eMatchStatus;
-	if (eMatchStatus == eWO_W || eMatchStatus == eWO_L)
-	{
-		Walkover();
-	}
+	m_sStatu = sStatu;
 }
 std::string Match::GetStage()const
 {
 	return m_sStage;
 }
-std::pair<std::string, std::optional<std::string> > Match::getAwayName()const
+void Match::SetStage(const std::string& sStage)
 {
-	return m_sAwayName;
+	m_sStage = sStage;
 }
-QDateTime Match::GetMatchDate()const
+std::string Match::GetOpponent1()const
 {
-	return m_MatchDate;
+	return m_sOpponent1;
 }
-void Match::SetMatchDate(const QDateTime& MatchDate)
+std::string Match::GetOpponent2()const
 {
-	m_MatchDate = MatchDate;
+	return m_soptOpponent2.value_or("");
+}
+void Match::SetOpponent1(const std::string& sOpponent1)
+{
+	m_sOpponent1 = sOpponent1;
+}
+void Match::SetOpponent2(std::optional<std::string> soptOpponent2)
+{
+	m_soptOpponent2 = soptOpponent2;
+}
+QDate Match::GetDate()const
+{
+	return m_Date;
+}
+void Match::SetDate(const QDate& date)
+{
+	m_Date = date;
+}
+QTime Match::GetTime()const
+{
+	return m_Time;
+}
+void Match::SetTime(const QTime& time)
+{
+	m_Time = time;
+}
+Score Match::GetScore()const
+{
+	return m_Score;
+}
+void Match::SetScore(const Score& s)
+{
+	m_Score = s;
+}
+std::vector<Set> Match::GetSets()const
+{
+	return m_vecSet;
+}
+void Match::SetSets(std::vector<Set> vecSet)
+{
+	m_vecSet = vecSet;
+}
+std::string Match::SetsToString()const
+{
+	std::ostringstream oss;
+	std::copy(m_vecSet.cbegin(), m_vecSet.cend(), std::ostream_iterator<Set>(oss, ","));
+	std::string sSets = oss.str();
+	if (!sSets.empty())
+	{
+		sSets.erase(sSets.size() - 1);
+	}
+	return sSets;
 }

@@ -1,0 +1,89 @@
+#include "SetScoreWidget.h"
+
+SetScoreWidget::SetScoreWidget(unsigned uiSetIdx, const Set& set, QWidget *parent): QWidget(parent)
+{
+	ui.setupUi(this);
+	ui.label_Set->clear();
+	QString sSetIdx = QString::fromStdString(std::to_string(uiSetIdx));
+	if (set.IsSuperTB())
+	{
+		ui.label_Set->setText("SUPER TB");
+	}
+	else
+	{
+		ui.label_Set->setText("SET " + sSetIdx);
+	}
+	SetSet(set);
+	EnableTiebreak(false);
+}
+SetScoreWidget::~SetScoreWidget()
+{
+
+}
+void SetScoreWidget::SetEnabled(bool blEnabled)
+{
+	ui.spinBox_HomeScore->setEnabled(blEnabled);
+	ui.spinBox_AwayScore->setEnabled(blEnabled);
+	ui.spinBox_HomeTiebreakScore->setEnabled(blEnabled);
+	ui.spinBox_AwayTiebreakScore->setEnabled(blEnabled);
+	ui.ClearButton->setEnabled(blEnabled);
+	ui.checkBox_Tiebreak->setEnabled(blEnabled);
+}
+void SetScoreWidget::SetSet(const Set& set)
+{
+	SetMajorScore(set.GetMajorScore());
+	m_blSuperTB = set.IsSuperTB();
+	if (!m_blSuperTB)
+	{
+		SetTBScore(set.GetTBScore());
+	}
+	else
+	{
+		SetTBScore(Score(0, 0));
+	}
+}
+Set SetScoreWidget::GetSet()const
+{
+	Set s(m_blSuperTB, Score(ui.spinBox_HomeScore->value(), ui.spinBox_AwayScore->value()));
+	const Score TBScore(ui.spinBox_HomeTiebreakScore->value(), ui.spinBox_AwayTiebreakScore->value());
+	if (TBScore != Score(0, 0))
+		s.SetTBScore	(TBScore);
+
+	return s;
+}
+void SetScoreWidget::EnableTiebreak(bool blTiebreak)
+{
+	ui.spinBox_AwayTiebreakScore->setEnabled(blTiebreak);
+	ui.spinBox_HomeTiebreakScore->setEnabled(blTiebreak);
+	if (false == blTiebreak)
+	{
+		SetTBScore((0,0));
+	}
+}
+void SetScoreWidget::SetMajorScore(const Score& score)
+{
+	ui.spinBox_HomeScore->setValue(score.GetHomeScore());
+	ui.spinBox_AwayScore->setValue(score.GetAwayScore());
+}
+void SetScoreWidget::SetTBScore(const Score& score)
+{
+	ui.spinBox_HomeTiebreakScore->setValue(score.GetHomeScore());
+	ui.spinBox_AwayTiebreakScore->setValue(score.GetAwayScore());
+}
+void SetScoreWidget::on_ClearButton_clicked()
+{
+	ui.checkBox_Tiebreak->setChecked(false);
+	m_blSuperTB = false;
+	SetSet(Set(m_blSuperTB, Score(0,0), Score(0,0)));
+}
+void SetScoreWidget::on_checkBox_Tiebreak_checkStateChanged(Qt::CheckState state)
+{
+	if (state == Qt::Checked)
+	{
+		EnableTiebreak(true);
+	}
+	else
+	{
+		EnableTiebreak(false);
+	}
+}

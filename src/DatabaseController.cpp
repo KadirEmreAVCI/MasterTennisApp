@@ -16,16 +16,6 @@ DatabaseController& DatabaseController::instance()
 	return obj;
 }
 
-std::vector<Tournament> DatabaseController::GetTournaments(unsigned uiOrgID) const
-{
-	std::vector<Tournament> vecAllTournaments = GetTournaments();
-	std::vector<Tournament> vecTournaments;
-	std::copy_if(vecAllTournaments.cbegin(), vecAllTournaments.cend(), std::back_inserter(vecTournaments), [uiOrgID](const auto& t) {
-		return t.GetOrgID() == uiOrgID;
-		});
-	return vecTournaments;
-}
-
 std::vector<Tournament> DatabaseController::GetTournaments() const
 {
 	SQLiteDB& db = SQLiteDB::instance();
@@ -46,7 +36,11 @@ std::vector<Tournament> DatabaseController::GetTournaments() const
 			t.SetTeammate(db.GetValueWithCond(m_sTournamentTable, "Teammate", "ID", std::to_string(t.GetID())));
 			t.SetParticipant(stoi(db.GetValueWithCond(m_sTournamentTable, "Participant", "ID", std::to_string(t.GetID()))));
 			t.SetCompleted(stoi(db.GetValueWithCond(m_sTournamentTable, "Completion", "ID", std::to_string(t.GetID()))));
+			t.Set3rdPlaceGameAvailable(stoi(db.GetValueWithCond(m_sTournamentTable, "ThirdPlaceGameAvailable", "ID", std::to_string(t.GetID()))));
+			t.SetSetsBestOf(stoi(db.GetValueWithCond(m_sTournamentTable, "SetsBestOf", "ID", std::to_string(t.GetID()))));
+			t.SetGamesToWin(stoi(db.GetValueWithCond(m_sTournamentTable, "GamesToWin", "ID", std::to_string(t.GetID()))));
 			std::cout << t << '\n';
+			std::vector<std::string> vec = t.GetStages();
 			});
 	}
 	std::cout << "\n";
@@ -66,7 +60,6 @@ std::vector<Organization> DatabaseController::GetOrganizations()const
 		std::for_each(vecOrg.begin(), vecOrg.end(), [&](auto& org) {
 			org.SetID(stoi(db.GetValue(m_sOrganizationTable, "ID", uiRowIdx)));
 			org.SetName(db.GetValueWithCond(m_sOrganizationTable, "Name", "ID", std::to_string(org.GetID())));
-			org.SetType(db.GetValueWithCond(m_sOrganizationTable, "Type", "ID", std::to_string(org.GetID())));
 			org.SetCategories(GetCategories(org.GetID()));
 			std::cout << org << "\n";
 			++uiRowIdx;
@@ -133,14 +126,18 @@ std::vector<std::string> DatabaseController::ExtractCategories(std::string sCate
 
 bool DatabaseController::AddNewTournament(const Tournament& t)const
 {
-	std::string sColumns{ "OrganizationID,Season,Category,Type,Teammate,Participant,Completion" };
+	std::string sColumns{ "OrganizationID,Season,Category,Type,Teammate,Participant,Completion,ThirdPlaceGameAvailable,SetsBestOf,GamesToWin" };
 	std::string sValues{	"'" + std::to_string(GetOrgID(t.GetOrgName())) +
 							"','" + t.GetSeason() +
 							"','" + t.GetCategory() +
 							"','" + t.GetType() + 
 							"','" + t.GetTeammate() + 
 							"','" + std::to_string(t.GetParticipant()) + 
-							"','" + std::to_string(t.GetCompleted()) + "'"};
+							"','" + std::to_string(t.GetCompleted()) +
+							"','" + std::to_string(t.Get3rdPlaceGameAvailable()) +
+							"','" + std::to_string(t.GetSetsBestOf()) +
+							"','" + std::to_string(t.GetGamesToWin()) +
+							"'"};
 	std::cout << "DatabaseController::AddNewTournament t = " << t << "\n";
 	const bool blTournamentAddition = SQLiteDB::instance().InsertItem2Table(m_sTournamentTable, sColumns, sValues);
 	return blTournamentAddition;
@@ -148,9 +145,8 @@ bool DatabaseController::AddNewTournament(const Tournament& t)const
 
 bool DatabaseController::AddNewOrganization(const Organization& org)
 {
-	std::string sColumns{ "Name,Type,Categories" };
+	std::string sColumns{ "Name,Categories" };
 	std::string sValues{ "'" + org.GetName() + 
-						"','" + org.GetType() + 
 						"','" + Serialize(org.GetCategories()) + "'"};
 	std::cout << "DatabaseController::AddNewOrganization org = " << org << "\n";
 	const bool blOrgAddition = SQLiteDB::instance().InsertItem2Table("Organization", sColumns, sValues);
@@ -169,6 +165,9 @@ bool DatabaseController::EditTournament(const Tournament& t)const
 	columnValues["Teammate"] = QString::fromStdString(t.GetTeammate());
 	columnValues["Participant"] = QString::fromStdString(std::to_string(t.GetParticipant()));
 	columnValues["Completion"] = QString::fromStdString(std::to_string(t.GetCompleted()));
+	columnValues["ThirdPlaceGameAvailable"] = QString::fromStdString(std::to_string(t.Get3rdPlaceGameAvailable()));
+	columnValues["SetsBestOf"] = QString::fromStdString(std::to_string(t.GetSetsBestOf()));
+	columnValues["GamesToWin"] = QString::fromStdString(std::to_string(t.GetGamesToWin()));
 	const bool blTournamentEdition = SQLiteDB::instance().EditItemInTable(m_sTournamentTable, columnValues, t.GetID());
 	return blTournamentEdition;
 }
@@ -181,7 +180,24 @@ bool DatabaseController::DeleteTournaments(std::vector<Tournament> vecTournament
 	});
 	return blDeletion;
 }
-
+bool DatabaseController::AddNewMatch(const Match& m)const
+{
+	std::cout << "DatabaseController::AddNewMatch Match Score = " << m.GetScore().ToString() << "\n";
+	std::string sColumns{ "TournamentID,Statu,Stage,Opponent1,Opponent2,Date,Time,Score,Sets" };
+	std::string sValues{ "'" + std::to_string(m.GetTournamentID()) +
+							"','" + m.GetStatu() +
+							"','" + m.GetStage() +
+							"','" + m.GetOpponent1() +
+							"','" + m.GetOpponent2() +
+							"','" + m.GetDate().toString().toStdString() +
+							"','" + m.GetTime().toString().toStdString() + 
+							"','" + m.GetScore().ToString() +
+							"','" + m.SetsToString() +
+							"'" };
+	std::cout << "DatabaseController::AddNewMatch m = " << m << "\n";
+	const bool blMatchAddition = SQLiteDB::instance().InsertItem2Table(m_sMatchTable, sColumns, sValues);
+	return blMatchAddition;
+}
 void DatabaseController::InitOrgMap()
 {
 	std::vector<unsigned> vecOrgID = GetOrganizationIDs();

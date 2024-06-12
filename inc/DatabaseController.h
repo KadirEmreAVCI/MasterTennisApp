@@ -3,8 +3,9 @@
 #include <string>
 #include <map>
 #include <QObject>
-#include "Tournament.h"
 #include "Organization.h"
+#include "Tournament.h"
+#include "Match.h"
 
 class DatabaseController : public QObject{
 	Q_OBJECT
@@ -15,8 +16,6 @@ public:
 	
 	DatabaseController& operator=(const DatabaseController&) = delete;
 	
-	std::vector<Tournament> GetTournaments(unsigned uiOrgID) const;
-
 	std::vector<Organization> GetOrganizations()const;
 
 	std::vector<Tournament> GetTournaments() const;
@@ -37,6 +36,8 @@ public:
 
 	bool DeleteTournaments(std::vector<Tournament>)const;
 
+	bool AddNewMatch(const Match&)const;
+
 private:
 	DatabaseController();
 
@@ -56,9 +57,8 @@ private:
 	std::vector<std::string> ExtractCategories(std::string sCategoryList)const;
 
 	std::map<std::string, unsigned> m_mapOrg;
-
+	const std::string m_sMatchTable = "Match";
 	const std::string m_sTournamentTable = "Tournament";
-
 	const std::string m_sOrganizationTable = "Organization";
 };
 

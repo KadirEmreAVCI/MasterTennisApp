@@ -1,45 +1,57 @@
 #pragma once
-#include <iostream>
 #include <vector>
-#include <optional>
-#include <utility>
 #include <string>
-#include <QDateTime>
+#include <QDate>
+#include <QTime>
 #include "Set.h"
-enum class MatchWinner {
-	eHome = 1,
-	eAway = 2
-};
-class Match {
+#include "Score.h"
+class Match{
 public:
-	using enum MatchStatus;
-	Match(MatchStatus eMatchStatus, std::string sStage, std::pair<std::string, std::optional<std::string> > sAwayName, unsigned uiMaxSetInMatch = 3, unsigned uiMinGameToWinSet = 6);
-	std::pair<unsigned, unsigned> getScore()const;
-	Set GetSet(unsigned uiSetIdx)const;
-	void AddSet(unsigned uiSetIdx, const Set&);
-	std::pair<std::string, std::optional<std::string> > getAwayName()const;
-	void setAwayName(std::pair<std::string, std::optional<std::string> >);
-	MatchWinner WinnerOfTheMatch()const;
-	MatchStatus GetMatchStatus()const;
-	void SetMatchStatus(MatchStatus);
+	unsigned GetID()const;
+	void SetID(unsigned uiID);
+	unsigned GetTournamentID()const;
+	void SetTournamentID(unsigned uiTournamentID);
+	std::string GetStatu()const;
+	void SetStatu(const std::string& sStatu);
 	std::string GetStage()const;
-	QDateTime GetMatchDate()const;
-	void SetMatchDate(const QDateTime&);
+	void SetStage(const std::string& sStage);
+	std::string GetOpponent1()const;
+	std::string GetOpponent2()const;
+	void SetOpponent1(const std::string&);
+	void SetOpponent2(std::optional<std::string> = std::nullopt);
+	QDate GetDate()const;
+	void SetDate(const QDate& date);
+	QTime GetTime()const;
+	void SetTime(const QTime& time);
+	Score GetScore()const;
+	void SetScore(const Score& s);
+	std::vector<Set> GetSets()const;
+	void SetSets(std::vector<Set>);
+	std::string SetsToString()const;
+	friend std::ostream& operator<<(std::ostream& os, const Match& m)
+	{
+		os << "\tID: " << m.m_uiID <<
+			", TOURNAMENT ID: " << m.m_uiTournamentID <<
+			", STATU: " << m.m_sStatu <<
+			", STAGE: " << m.m_sStage <<
+			", OPPONENT 1: " << m.m_sOpponent1 <<
+			", OPPONENT 2: " << m.m_soptOpponent2.value_or("NA") <<
+			", DATE: " << m.m_Date.toString().toStdString() <<
+			", TIME: " << m.m_Time.toString().toStdString() <<
+			", SCORE: " << m.m_Score.ToString() <<
+			", SETS: " << m.SetsToString();
+		return os;
+	}
 private:
-	void InitSets();
-	void Walkover();
-	void IncrementScore(const Set& ss);
-	void DecrementScore(unsigned uiSetIdx);
-	bool IsSetPlayed(unsigned uiSetIdx)const;
-	unsigned GetMinSetNeededToWin()const;
-	unsigned m_uiMaxSet;
-	unsigned m_uiMinGameToWinSet;
-	MatchStatus m_eMatchStatus{ePlayed};
-	const std::string m_sStage;
-	unsigned m_uiHomeScore{};
-	unsigned m_uiAwayScore{};
-	std::vector<std::optional<Set> > m_vecSetScore;
-	std::pair<std::string, std::optional<std::string> > m_sAwayName;
-	QDateTime m_MatchDate;
+	unsigned m_uiID;
+	unsigned m_uiTournamentID;
+	std::string m_sStatu{};
+	std::string m_sStage{};
+	std::string m_sOpponent1{};
+	std::optional<std::string> m_soptOpponent2{};
+	QDate m_Date{};
+	QTime m_Time{};
+	Score m_Score{};
+	std::vector<Set> m_vecSet{};
 };
 

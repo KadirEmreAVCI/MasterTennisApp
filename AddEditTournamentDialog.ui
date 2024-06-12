@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>774</width>
-    <height>287</height>
+    <width>406</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,431 +15,40 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_OrganizationName">
-         <property name="text">
-          <string>Select Organization:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_OrganizationName">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <widget class="QLabel" name="label_OrganizationName">
+       <property name="text">
+        <string>Select Organization:</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_Type">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Single">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Single</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Double">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Double</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <widget class="QComboBox" name="comboBox_OrganizationName">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
-       <item>
-        <widget class="QLabel" name="label_Teammate">
-         <property name="text">
-          <string>Teammate:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_Teammate"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_Category">
-         <property name="text">
-          <string>Category:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_Category">
-         <item>
-          <property name="text">
-           <string/>
-          </property>
-         </item>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_13">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLabel" name="label_Year">
-           <property name="text">
-            <string>Year:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_Year">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <item>
-            <property name="text">
-             <string/>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2024</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2023</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2022</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2021</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2020</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2019</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2018</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2017</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2016</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2015</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2014</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2013</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2012</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2011</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2010</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2009</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2008</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2007</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2006</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2005</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2004</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2003</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2002</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2001</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2000</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1999</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1998</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1997</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1996</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1995</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1994</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1993</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1992</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1991</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1990</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_Season">
-           <property name="text">
-            <string>Season:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_Season">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <item>
-            <property name="text">
-             <string/>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Winter</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Spring</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Summer</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Fall</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QLabel" name="label_Participant">
-         <property name="text">
-          <string>Participant:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_Participant">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QLabel" name="label_Completion">
-         <property name="text">
-          <string>Tournament Completed:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_Completion">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <spacer name="horizontalSpacer_8">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="1" rowspan="3">
     <layout class="QVBoxLayout" name="_2">
      <property name="spacing">
       <number>6</number>
@@ -470,6 +79,544 @@
         <size>
          <width>20</width>
          <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_Type">
+       <property name="text">
+        <string>Type:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_Single">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Single</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_Double">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Double</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_10">
+     <item>
+      <widget class="QLabel" name="label_Teammate">
+       <property name="text">
+        <string>Teammate:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_Teammate"/>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_Category">
+       <property name="text">
+        <string>Category:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_Category">
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_13">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_Year">
+         <property name="text">
+          <string>Year:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_Year">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2024</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2023</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2022</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2021</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2020</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2019</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2018</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2017</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2016</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2015</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2014</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2013</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2012</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2011</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2010</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2009</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2008</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2007</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2006</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2005</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2004</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2003</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2002</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2001</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2000</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1999</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1998</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1997</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1996</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1995</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1994</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1993</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1992</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1991</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1990</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_Season">
+         <property name="text">
+          <string>Season:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_Season">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Winter</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Spring</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Summer</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Fall</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QLabel" name="label_Participant">
+       <property name="text">
+        <string>Participant:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_Participant"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>10</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="label_3rdPlaceGameAvailable">
+       <property name="text">
+        <string>3rd Place Game Available:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_3rdPlaceGameAvailable">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="7" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="label_Completion">
+       <property name="text">
+        <string>Tournament Completed:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_Completion">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_SetsBestOf">
+       <property name="text">
+        <string>Best Of (Set):</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_SetsBestOf">
+       <item>
+        <property name="text">
+         <string/>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Best Of 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Best Of 3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Best Of 5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Best Of 7</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_7">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="9" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_11">
+     <item>
+      <widget class="QLabel" name="label_GamesToWin">
+       <property name="text">
+        <string>Games Needed To Win:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_GamesToWin"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>

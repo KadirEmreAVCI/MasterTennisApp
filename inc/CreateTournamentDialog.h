@@ -16,9 +16,7 @@ private:
 	bool MandatoryFieldsFilled()const;
 	std::vector<std::string> Deserialize(std::string str)const;
 	Ui::CreateTournamentDialogClass ui;
-	QString m_sType;
 private slots:
 	void on_SaveButton_clicked();
 	void on_CancelButton_clicked();
-	void on_comboBox_Type_currentTextChanged(const QString& arg);
 };

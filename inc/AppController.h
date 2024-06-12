@@ -5,6 +5,8 @@
 #include <QObject>
 #include "Organization.h"
 #include "Tournament.h"
+#include "Match.h"
+
 class GUIConfigurator;
 class AppController : public QObject {
 	Q_OBJECT
@@ -22,9 +24,10 @@ public:
 	std::vector<std::string> GetOrgNames()const;
 	std::vector<std::string> GetCategories(const std::string& sOrg) const;
 	void AddNewOrganization(const Organization& org);
-	void AddNewTournament(Tournament t);
+	bool AddNewTournament(Tournament t);
 	void DeleteTournaments(std::vector<Tournament> vecTournament);
-	void EditTournament(Tournament t);
+	bool EditTournament(Tournament t);
+	bool AddNewMatch(const Match& m);
 private:
 	AppController();
 	static AppController* ms_pAppController;

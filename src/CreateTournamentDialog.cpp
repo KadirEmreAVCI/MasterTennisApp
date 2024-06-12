@@ -15,7 +15,7 @@ CreateTournamentDialog::~CreateTournamentDialog()
 
 void CreateTournamentDialog::InitCustomComponents()
 {
-	m_sType = "Tournament";
+
 }
 
 bool CreateTournamentDialog::MandatoryFieldsFilled()const
@@ -40,7 +40,6 @@ void CreateTournamentDialog::on_SaveButton_clicked()
 	{
 		Organization org;
 		org.SetName(ui.lineEdit_OrganizationName->text().toStdString());
-		org.SetType(m_sType.toStdString());
 		org.SetCategories(Deserialize(ui.lineEdit_Categories->text().toStdString()));
 		AppController::instance().AddNewOrganization(org);
 		QMessageBox::information(this, "Information", "New organization is added successfully");
@@ -56,10 +55,5 @@ void CreateTournamentDialog::on_SaveButton_clicked()
 void CreateTournamentDialog::on_CancelButton_clicked()
 {
 	close();
-}
-
-void CreateTournamentDialog::on_comboBox_Type_currentTextChanged(const QString& arg)
-{
-	m_sType = arg;
 }
 

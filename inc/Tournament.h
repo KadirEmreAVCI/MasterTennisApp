@@ -25,6 +25,13 @@ public:
 	void SetParticipant(unsigned);
 	bool GetCompleted()const;
 	void SetCompleted(bool);
+	bool Get3rdPlaceGameAvailable()const;
+	void Set3rdPlaceGameAvailable(bool bl3rdPlaceGameAvailable);
+	unsigned GetSetsBestOf()const;
+	void SetSetsBestOf(unsigned uiBestOfSets);
+	unsigned GetGamesToWin()const;
+	void SetGamesToWin(unsigned);
+	std::vector<std::string> GetStages()const;
 	std::string GetProgress()const;
 	friend std::ostream& operator<<(std::ostream& os, const Tournament& t)
 	{
@@ -37,19 +44,26 @@ public:
 			", SEASON: " << t.m_sSeason <<
 			", PARTICIPANT: " << t.m_uiParticipant << std::boolalpha <<
 			", COMPLETED: " << t.m_blCompleted <<
+			", 3RD PLACE GAME AVAILABLE: " << std::boolalpha << t.m_bl3rdPlaceGameAvailable <<
+			", BEST OF(SET): " << t.m_uiBestOfSets <<
+			", GAMES TO WIN: " << t.m_uiGamesToWin << 
 			", PROGRESS: " << t.m_sProgress;
 		return os;
 	}
 private:
 	unsigned m_uiID{};
-	unsigned m_uiOrgID;
+	unsigned m_uiOrgID{};
 	std::string m_sOrgName;
-	std::string m_sType; 
-	std::optional<std::string> m_sTeammate;
-	std::string m_sCategory;
-	std::string m_sSeason;
-	unsigned m_uiParticipant;
+	std::string m_sType{};
+	std::optional<std::string> m_sTeammate{};
+	std::string m_sCategory{};
+	std::string m_sSeason{};
+	unsigned m_uiParticipant{};
 	bool m_blCompleted{ false };
-	std::string m_sProgress; 
+	bool m_bl3rdPlaceGameAvailable{};
+	std::string m_sProgress{};
+	unsigned m_uiBestOfSets{};
+	unsigned m_uiGamesToWin{6};
+	static std::vector<std::string> ms_vecPlayoffStages;
 };
 

@@ -12,7 +12,7 @@ AddEditTournamentDialog::AddEditTournamentDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	QObject::connect(&AppController::instance(), &AppController::OrganizationAdded, this, &AddEditTournamentDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::OrganizationAdded, this, &AddEditTournamentDialog::UpdateOrganizationOptions);
 	m_sType = "Single";
 	InitCustomComponents();
 }
@@ -23,7 +23,7 @@ AddEditTournamentDialog::~AddEditTournamentDialog()
 void AddEditTournamentDialog::InitCustomComponents()
 {
 	ClearDialog();
-	SetOrganizationAlternatives();
+	SetComboBoxAlternatives(ui.comboBox_OrganizationName, AppController::instance().GetOrgNames());
 }
 void AddEditTournamentDialog::ClearDialog()
 {
@@ -31,13 +31,16 @@ void AddEditTournamentDialog::ClearDialog()
 	m_sCategory = "";
 	m_sYear = "";
 	m_sSeason = "";
+	m_uiSetsBestOf = 0;
 	on_radioButton_Single_clicked();
 	InitComboBox(ui.comboBox_OrganizationName, "");
 	InitComboBox(ui.comboBox_Category, "");
 	InitComboBox(ui.comboBox_Year, "");
 	InitComboBox(ui.comboBox_Season, "");
-	ui.lineEdit_Participant->setText("");
+	ui.spinBox_Participant->setValue(0);
 	ui.checkBox_Completion->setChecked(Qt::Unchecked);
+	ui.checkBox_3rdPlaceGameAvailable->setChecked(Qt::Unchecked);
+	ui.spinBox_GamesToWin->setValue(0);
 	DeactivateOptions();
 }
 void AddEditTournamentDialog::DeactivateOptions()
@@ -48,8 +51,11 @@ void AddEditTournamentDialog::DeactivateOptions()
 	ui.comboBox_Category->setEnabled(false);
 	ui.comboBox_Year->setEnabled(false);
 	ui.comboBox_Season->setEnabled(false);
-	ui.lineEdit_Participant->setEnabled(false);
+	ui.comboBox_SetsBestOf->setEnabled(false);
+	ui.spinBox_Participant->setEnabled(false);
 	ui.checkBox_Completion->setEnabled(false);
+	ui.checkBox_3rdPlaceGameAvailable->setEnabled(false);
+	ui.spinBox_GamesToWin->setEnabled(false);
 }
 void AddEditTournamentDialog::ActivateOptions()
 {
@@ -59,30 +65,11 @@ void AddEditTournamentDialog::ActivateOptions()
 	ui.comboBox_Category->setEnabled(true);
 	ui.comboBox_Year->setEnabled(true);
 	ui.comboBox_Season->setEnabled(true);
-	ui.lineEdit_Participant->setEnabled(true);
+	ui.comboBox_SetsBestOf->setEnabled(true);
+	ui.spinBox_Participant->setEnabled(true);
 	ui.checkBox_Completion->setEnabled(true);
-}
-
-void AddEditTournamentDialog::SetOrganizationAlternatives()
-{
-	ui.comboBox_OrganizationName->clear();
-	ui.comboBox_OrganizationName->addItem("");
-	const auto& vecOrgName = AppController::instance().GetOrgNames();
-	for (const auto& sOrgName : vecOrgName)
-	{
-		ui.comboBox_OrganizationName->addItem(QString::fromStdString(sOrgName));
-	}
-}
-
-void AddEditTournamentDialog::SetCategoryAlternatives(std::string sOrgName)
-{
-	ui.comboBox_Category->clear();
-	ui.comboBox_Category->addItem("");
-	const auto& vecCategory = AppController::instance().GetCategories(sOrgName);
-	for (const auto& sCategory : vecCategory)
-	{
-		ui.comboBox_Category->addItem(QString::fromStdString(sCategory));
-	}
+	ui.checkBox_3rdPlaceGameAvailable->setEnabled(true);
+	ui.spinBox_GamesToWin->setEnabled(true);
 }
 
 bool AddEditTournamentDialog::MandatoryFieldsFilled()const
@@ -93,7 +80,14 @@ bool AddEditTournamentDialog::MandatoryFieldsFilled()const
 		&& m_sCategory != "" 
 		&& m_sYear != "" 
 		&& m_sSeason != "" 
-		&& ui.lineEdit_Participant->text() != "";
+		&& m_uiSetsBestOf != 0
+		&& ui.spinBox_Participant->value() != 0
+		&& ui.spinBox_GamesToWin->value() != 0;
+}
+
+bool AddEditTournamentDialog::MaxParticipantExceeded(unsigned uiParticipant)const
+{
+	return (uiParticipant > m_uiMaxParticipant);
 }
 
 void AddEditTournamentDialog::InitDialogWithTournament(const Tournament& t)
@@ -103,6 +97,8 @@ void AddEditTournamentDialog::InitDialogWithTournament(const Tournament& t)
 	InitComboBox(ui.comboBox_OrganizationName, m_sOrgName);
 	m_sCategory = QString::fromStdString(t.GetCategory());
 	InitComboBox(ui.comboBox_Category, m_sCategory);
+	m_uiSetsBestOf = t.GetSetsBestOf();
+	InitSetsBestOfComboBox(m_uiSetsBestOf);
 	std::string sMixSeason = t.GetSeason();
 	size_t pos = sMixSeason.find(' ');
 	if (pos != std::string::npos)
@@ -113,8 +109,10 @@ void AddEditTournamentDialog::InitDialogWithTournament(const Tournament& t)
 		InitComboBox(ui.comboBox_Season, m_sSeason);
 	}
 	ui.checkBox_Completion->setChecked(t.GetCompleted());
+	ui.checkBox_3rdPlaceGameAvailable->setChecked(t.Get3rdPlaceGameAvailable());
 	ui.lineEdit_Teammate->setText(QString::fromStdString(t.GetTeammate()));
-	ui.lineEdit_Participant->setText(QString::fromStdString(std::to_string(t.GetParticipant())));
+	ui.spinBox_Participant->setValue(t.GetParticipant());
+	ui.spinBox_GamesToWin->setValue(t.GetGamesToWin());
 	m_sType = QString::fromStdString(t.GetType());
 	if (m_sType == "Single")
 	{
@@ -149,16 +147,21 @@ void AddEditTournamentDialog::SetDialogMode(DialogMode mode, const Tournament& t
 	}
 }
 
-void AddEditTournamentDialog::InitComboBox(QComboBox* pComboBox, const QString& sVal)
+void AddEditTournamentDialog::InitSetsBestOfComboBox(unsigned uiSetsBestOf)
 {
-	const size_t idx = pComboBox->findText(sVal);
-	if (idx != -1) { // Check if the item was found
-		pComboBox->setCurrentIndex(idx);
-	}
+	QString sSetsBestOf{ "" };
+	if (uiSetsBestOf == 1)
+		sSetsBestOf = "Best Of 1";
+	else if (uiSetsBestOf == 3)
+		sSetsBestOf = "Best Of 3";
+	else if (uiSetsBestOf == 5)
+		sSetsBestOf = "Best Of 5";
+	else if (uiSetsBestOf == 7)
+		sSetsBestOf = "Best Of 7";
 	else
-	{
-		pComboBox->setCurrentIndex(0);
-	}
+		std::cout << "AddEditTournamentDialog::InitSetsBestOfComboBox Unknown SetsBestOf!\n";
+	
+	InitComboBox(ui.comboBox_SetsBestOf, sSetsBestOf);
 }
 
 void AddEditTournamentDialog::on_CancelButton_clicked()
@@ -170,33 +173,43 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 {
 	if (MandatoryFieldsFilled())
 	{
-		close();
-		Tournament t;
-		t.SetID(m_uiTournamentID);
-		t.SetOrgName(m_sOrgName.toStdString());
-		t.SetSeason((m_sYear + " " + m_sSeason).toStdString());
-		t.SetCategory(m_sCategory.toStdString());
-		t.SetType(m_sType.toStdString());
-		m_sTeammate = ui.radioButton_Double->isChecked() ? ui.lineEdit_Teammate->text() : "";
-		t.SetTeammate(m_sTeammate.toStdString());
-		m_sParticipant = ui.lineEdit_Participant->text();
-		t.SetParticipant(stoi(m_sParticipant.toStdString()));
-		t.SetCompleted(ui.checkBox_Completion->isChecked());
-		if (m_DialogMode == DialogMode::eAddDialog)
+		if (!MaxParticipantExceeded(ui.spinBox_Participant->value()))
 		{
-			AppController::instance().AddNewTournament(t);
-			QMessageBox::information(this, "Information", "New tournament is added successfully");
-		}
-		else if (m_DialogMode == DialogMode::eEditDialog)
-		{
-			AppController::instance().EditTournament(t);
-			QMessageBox::information(this, "Information", "Tournament edited successfully");
+			close();
+			Tournament t;
+			t.SetID(m_uiTournamentID);
+			t.SetOrgName(m_sOrgName.toStdString());
+			t.SetSeason((m_sYear + " " + m_sSeason).toStdString());
+			t.SetCategory(m_sCategory.toStdString());
+			t.SetType(m_sType.toStdString());
+			m_sTeammate = ui.radioButton_Double->isChecked() ? ui.lineEdit_Teammate->text() : "";
+			t.SetTeammate(m_sTeammate.toStdString());
+			t.SetParticipant(ui.spinBox_Participant->value());
+			t.SetCompleted(ui.checkBox_Completion->isChecked());
+			t.Set3rdPlaceGameAvailable(ui.checkBox_3rdPlaceGameAvailable->isChecked());
+			t.SetSetsBestOf(m_uiSetsBestOf);
+			t.SetGamesToWin(ui.spinBox_GamesToWin->value());
+			if (m_DialogMode == DialogMode::eAddDialog)
+			{
+				if(AppController::instance().AddNewTournament(t))
+					QMessageBox::information(this, "Information", "New tournament is added successfully");
+			}
+			else if (m_DialogMode == DialogMode::eEditDialog)
+			{
+				if(AppController::instance().EditTournament(t))
+					QMessageBox::information(this, "Information", "Tournament edited successfully");
+			}
+			else
+			{
+				std::cout << "AddTournamentDialog::on_SaveButton_clicked unknown DialogMode!\n";
+			}
+			ClearDialog();
 		}
 		else
 		{
-			std::cout << "AddTournamentDialog::on_SaveButton_clicked unknown DialogMode!\n";
+			std::string sMessage = "Cannot exceed max number of participant(" + std::to_string(m_uiMaxParticipant) + ")";
+			QMessageBox::critical(this, "Error", QString::fromStdString(sMessage));
 		}
-		ClearDialog();
 	}
 	else
 	{
@@ -234,17 +247,6 @@ void AddEditTournamentDialog::on_comboBox_Season_currentTextChanged(const QStrin
 {
 	m_sSeason = season;
 }
-void AddEditTournamentDialog::on_checkBox_Completion_stateChanged(int arg)
-{
-	if (arg == 0)
-	{
-		m_sCompletion = "0";
-	}
-	else
-	{
-		m_sCompletion = "1";
-	}
-}
 void AddEditTournamentDialog::on_comboBox_OrganizationName_currentTextChanged(const QString& org)
 {
 	m_sOrgName = org;
@@ -255,10 +257,23 @@ void AddEditTournamentDialog::on_comboBox_OrganizationName_currentTextChanged(co
 	else
 	{
 		ActivateOptions();
-		SetCategoryAlternatives(org.toStdString());
+		SetComboBoxAlternatives(ui.comboBox_Category, AppController::instance().GetCategories(org.toStdString()));
 	}
 }
-void AddEditTournamentDialog::UpdateOrganizations()
+void AddEditTournamentDialog::on_comboBox_SetsBestOf_currentTextChanged(const QString& setsbestof)
+{
+	if (setsbestof == "Best Of 1")
+		m_uiSetsBestOf = 1;
+	else if (setsbestof == "Best Of 3")
+		m_uiSetsBestOf = 3;
+	else if (setsbestof == "Best Of 5")
+		m_uiSetsBestOf = 5;
+	else if (setsbestof == "Best Of 7")
+		m_uiSetsBestOf = 7;
+	else
+		std::cout << "AddEditTournamentDialog::on_comboBox_SetsBestOf_currentTextChanged Unknown SetsBestOf\n";
+}
+void AddEditTournamentDialog::UpdateOrganizationOptions()
 {
 	InitCustomComponents();
 }

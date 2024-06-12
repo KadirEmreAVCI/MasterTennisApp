@@ -20,14 +20,6 @@ void Organization::SetName(const std::string& sName)
 {
 	m_sName = sName;
 }
-std::string Organization::GetType()const
-{
-	return m_sType;
-}
-void Organization::SetType(const std::string& sType)
-{
-	m_sType = sType;
-}
 std::vector<std::string> Organization::GetCategories()const
 {
 	return m_vecCategories;

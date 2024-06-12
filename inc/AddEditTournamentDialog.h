@@ -4,10 +4,6 @@
 #include "ui_AddEditTournamentDialog.h"
 #include "IQTComponent.h"
 #include <Tournament.h>
-enum class DialogMode {
-	eAddDialog,
-	eEditDialog
-};
 class AddEditTournamentDialog : public QDialog, public IQTComponent
 {
 	Q_OBJECT
@@ -20,16 +16,16 @@ public:
 	void SetDialogMode(DialogMode mode, const Tournament& t = {});
 private:
 	Ui::AddTournamentDialogClass ui;
-	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sYear, m_sSeason, m_sParticipant, m_sCompletion;
-	unsigned m_uiTournamentID{};
+	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sYear, m_sSeason;
+	unsigned m_uiTournamentID{}, m_uiSetsBestOf{};
 	void ClearDialog();
 	void DeactivateOptions();
 	void ActivateOptions();
-	void SetOrganizationAlternatives();
-	void SetCategoryAlternatives(std::string sOrgName);
 	bool MandatoryFieldsFilled()const;
-	void InitComboBox(QComboBox* pComboBox, const QString& sVal);
+	bool MaxParticipantExceeded(unsigned uiParticipant)const;
+	void InitSetsBestOfComboBox(unsigned);
 	DialogMode m_DialogMode;
+	const unsigned m_uiMaxParticipant{ 128 };
 private slots:
 	void on_CancelButton_clicked();
 	void on_SaveButton_clicked();
@@ -38,8 +34,8 @@ private slots:
 	void on_comboBox_Category_currentTextChanged(const QString& category);
 	void on_comboBox_Year_currentTextChanged(const QString& year);
 	void on_comboBox_Season_currentTextChanged(const QString& season);
-	void on_checkBox_Completion_stateChanged(int);
 	void on_comboBox_OrganizationName_currentTextChanged(const QString& org);
+	void on_comboBox_SetsBestOf_currentTextChanged(const QString& setsbestof);
 public slots:
-	void UpdateOrganizations();
+	void UpdateOrganizationOptions();
 };

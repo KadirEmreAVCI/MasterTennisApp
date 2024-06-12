@@ -1,9 +1,13 @@
+#include <cmath>
+#include <iterator>
 #include "Tournament.h"
 #include "Organization.h"
 Tournament::Tournament()
 {
 	
 }
+
+std::vector<std::string> Tournament::ms_vecPlayoffStages{"Final", "Semi-Final", "Quarter Final", "Final 16", "Final 32", "Final 64"};
 
 unsigned Tournament::GetID()const
 {
@@ -93,6 +97,62 @@ bool Tournament::GetCompleted()const
 void Tournament::SetCompleted(bool blCompleted)
 {
 	m_blCompleted = blCompleted;
+}
+
+bool Tournament::Get3rdPlaceGameAvailable()const
+{
+	return m_bl3rdPlaceGameAvailable;
+}
+
+void Tournament::Set3rdPlaceGameAvailable(bool bl3rdPlaceGameAvailable)
+{
+	m_bl3rdPlaceGameAvailable = bl3rdPlaceGameAvailable;
+}
+
+unsigned Tournament::GetSetsBestOf()const
+{
+	return m_uiBestOfSets;
+}
+
+void Tournament::SetSetsBestOf(unsigned uiBestOfSets)
+{
+	m_uiBestOfSets = uiBestOfSets;
+}
+unsigned Tournament::GetGamesToWin()const
+{
+	return m_uiGamesToWin;
+}
+void Tournament::SetGamesToWin(unsigned uiGamesToWin)
+{
+	m_uiGamesToWin = uiGamesToWin;
+}
+/*  
+	GetStages function adds all possible stages for the tournament. 
+	If there are more than 4 players in the tournament, group stage option will be available, else there will be only playoff stages.
+	Supports up to 128 players. 
+*/
+std::vector<std::string> Tournament::GetStages()const
+{
+	unsigned int uiParticipant = m_uiParticipant;
+	int iStageNum = (log2(uiParticipant) == floor(log2(uiParticipant))) ? log2(uiParticipant) : floor(log2(uiParticipant)) + 1;
+	std::cout << "Tournament::GetStages iStageNum = " << iStageNum << '\n';
+	std::vector<std::string> vecStages;
+	if (iStageNum > 2)
+	{
+		vecStages.push_back("Group Stage");
+		--iStageNum;
+	}
+	for (int iStageIdx{ iStageNum - 1 }; iStageIdx >= 0; --iStageIdx)
+	{
+		vecStages.push_back(ms_vecPlayoffStages.at(iStageIdx));
+		--iStageNum;
+	}
+	if (Get3rdPlaceGameAvailable())
+	{
+		vecStages.push_back("3rd Place Game");
+	}
+	std::copy(vecStages.cbegin(), vecStages.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
+	return vecStages;
 }
 
 std::string Tournament::GetProgress()const
