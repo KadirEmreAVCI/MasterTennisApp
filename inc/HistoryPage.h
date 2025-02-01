@@ -20,6 +20,7 @@ private:
 	void AddTournament();
 	void AddMatch();
 	void LoadTournamentData();
+	void SetColumnsOfTable();
 	void InsertTournament2Table(const Tournament& t, unsigned uiRowIdx);
 	void InsertValue2Cell(QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx);
 	void InsertCompletionPic2Cell(bool blCompletion, unsigned uiRowIdx, unsigned uiColumnIdx);
@@ -32,11 +33,14 @@ private:
 	std::unique_ptr<AddEditMatchDialog> m_upAddEditMatchDialog{ nullptr };
 	std::unique_ptr<CreateTournamentDialog> m_upCreateTournamentDialog{ nullptr };
 	std::vector<Tournament> m_vecTournament;
+	std::vector<std::string> m_vecTournamentColumnNames{"", "Organization", "Season", "Category", "Type", "Teammate", "Participant", "Completion", "Progress"};
+	std::vector<std::string> m_vecMatchColumnNames{ "", "Statu", "Stage", "Score", "Sets", "Opponent 1", "Opponent 2", "Date", "Time" };
+	std::string m_sTable{"Tournament"};
 private slots:
 	void on_AddButton_clicked();
-	void on_CreateButton_clicked();
 	void on_DeleteButton_clicked();
 	void on_EditButton_clicked();
+	void on_comboBox_DisplayedTable_currentTextChanged(const QString& table);
 public slots:	
 	void UpdateTournaments();
 };

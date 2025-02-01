@@ -50,11 +50,11 @@
       </size>
      </property>
      <property name="title">
-      <string>Away</string>
+      <string>Tiebreak</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QSpinBox" name="spinBox_AwayScore">
+       <widget class="QSpinBox" name="spinBox_HomeTiebreakScore">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -101,7 +101,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Home</string>
+      <string>Major</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -120,7 +120,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox_HomeTiebreakScore">
+       <widget class="QSpinBox" name="spinBox_AwayScore">
         <property name="minimumSize">
          <size>
           <width>0</width>

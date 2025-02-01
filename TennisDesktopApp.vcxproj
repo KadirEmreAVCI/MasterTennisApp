@@ -61,12 +61,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)</IntDir>
+    <OutDir>
+    </OutDir>
+    <IntDir>
+    </IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -123,7 +125,6 @@
     <ClCompile Include="src\Countdown.cpp" />
     <ClCompile Include="src\UpcomingMatch.cpp" />
     <ClCompile Include="src\Tournament.cpp" />
-    <ClCompile Include="src\StatisticsPage.cpp" />
     <QtRcc Include="Resource.qrc" />
     <QtRcc Include="TennisDesktopApp.qrc" />
     <QtUic Include="AchievementsPage.ui" />
@@ -136,7 +137,6 @@
     <QtUic Include="Calendar.ui" />
     <QtUic Include="ProfileDialog.ui" />
     <QtUic Include="SetScoreWidget.ui" />
-    <QtUic Include="StatisticsPage.ui" />
     <QtUic Include="TennisDesktopApp.ui" />
     <QtMoc Include="inc\TennisDesktopApp.h" />
     <ClCompile Include="src\ProfileDialog.cpp" />
@@ -160,7 +160,6 @@
     <QtMoc Include="inc\CreateTournamentDialog.h" />
     <QtMoc Include="inc\DatabaseController.h" />
     <ClInclude Include="inc\SQLiteDB.h" />
-    <QtMoc Include="inc\StatisticsPage.h" />
     <QtMoc Include="inc\HomePage.h" />
     <QtMoc Include="inc\AchievementsPage.h" />
     <QtMoc Include="inc\HistoryPage.h" />

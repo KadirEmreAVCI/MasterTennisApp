@@ -5,7 +5,6 @@
 #include "ProfileDialog.h"
 #include "UpcomingMatch.h"
 #include "HomePage.h"
-#include "StatisticsPage.h"
 #include "AchievementsPage.h"
 #include "HistoryPage.h"
 ProfileDialog::ProfileDialog(QWidget *parent)
@@ -24,8 +23,6 @@ void ProfileDialog::InitCustomComponents()
 	m_upTabWidget = std::make_unique<QTabWidget>();
 	m_upTabWidget->addTab(new HomePage(), QString("Home"));
 	std::cout << "ProfileDialog::InitCustomComponents HomePage constructed succesfully\n";
-	m_upTabWidget->addTab(new StatisticsPage(), QString("Statistics"));
-	std::cout << "ProfileDialog::InitCustomComponents StatisticsPage constructed succesfully\n";
 	m_upTabWidget->addTab(new AchievementsPage(), QString("Achievements"));
 	std::cout << "ProfileDialog::InitCustomComponents AchievementsPage constructed succesfully\n";
 	m_upTabWidget->addTab(new HistoryPage(), QString("History"));

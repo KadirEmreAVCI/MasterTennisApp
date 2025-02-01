@@ -26,6 +26,7 @@ HistoryPage::HistoryPage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::TournamentAdded, this, &HistoryPage::UpdateTournaments);
 	QObject::connect(&AppController::instance(), &AppController::TournamentsDeleted, this, &HistoryPage::UpdateTournaments);
 	QObject::connect(&AppController::instance(), &AppController::TournamentEdited, this, &HistoryPage::UpdateTournaments);
+	QObject::connect(&*m_upAddDialog, &AddDialog::AddOrganizationRequest, this, &HistoryPage::AddOrganization);
 	QObject::connect(&*m_upAddDialog, &AddDialog::AddTournamentRequest, this, &HistoryPage::AddTournament);
 	QObject::connect(&*m_upAddDialog, &AddDialog::AddMatchRequest, this, &HistoryPage::AddMatch);
 }
@@ -35,12 +36,13 @@ HistoryPage::~HistoryPage()
 
 void HistoryPage::InitCustomComponents()
 {
-	LoadTournamentData();
+	on_comboBox_DisplayedTable_currentTextChanged(QString::fromStdString(m_sTable));
 }
 
 void HistoryPage::AddOrganization()
 {
-
+	m_upCreateTournamentDialog->setModal(true);
+	m_upCreateTournamentDialog->exec();
 }
 void HistoryPage::AddMatch()
 {
@@ -74,12 +76,33 @@ void HistoryPage::AddTournament()
 	m_upAddEditTournamentDialog->SetDialogMode(DialogMode::eAddDialog);
 	m_upAddEditTournamentDialog->exec();
 }
-
+void HistoryPage::SetColumnsOfTable()
+{
+	ui.tableWidget->setColumnCount(0);
+	unsigned uiColumnIdx = 0;
+	if (m_sTable == "Tournament")
+	{
+		ui.tableWidget->setColumnCount(m_vecTournamentColumnNames.size());
+		for (const auto& sColumnName : m_vecTournamentColumnNames)
+		{
+			ui.tableWidget->setHorizontalHeaderItem(uiColumnIdx, new QTableWidgetItem(QString::fromStdString(sColumnName)));
+			++uiColumnIdx;
+		}
+	}
+	else if (m_sTable == "Match")
+	{
+		ui.tableWidget->setColumnCount(m_vecMatchColumnNames.size());
+		for (const auto& sColumnName : m_vecMatchColumnNames)
+		{
+			ui.tableWidget->setHorizontalHeaderItem(uiColumnIdx, new QTableWidgetItem(QString::fromStdString(sColumnName)));
+			++uiColumnIdx;
+		}
+	}
+}
 void HistoryPage::LoadTournamentData()
 {
 	std::cout << "HistoryPage::LoadTournamentData\n";
 	m_vecTournament = AppController::instance().GetTournaments();
-	//std::cout << "HistoryPage::LoadTournamentData m_vecTournament.size() = " << m_vecTournament.size() << '\n';
 	if (!m_vecTournament.empty())
 	{
 		unsigned int uiRowIdx{};
@@ -95,7 +118,6 @@ void HistoryPage::LoadTournamentData()
 		std::cout << "HistoryPage::LoadTournamentData m_vecTournament is empty!\n";
 	}
 }
-
 void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
 {
 	unsigned uiColumnIdx{};
@@ -111,14 +133,12 @@ void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
 	InsertCompletionPic2Cell(t.GetCompleted(), uiRowIdx, uiColumnIdx++);
 	InsertValue2Cell(QString::fromStdString(t.GetProgress()), uiRowIdx, uiColumnIdx++);
 }
-
 void HistoryPage::InsertValue2Cell(QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
 	QTableWidgetItem* const pVal = new QTableWidgetItem;
 	pVal->setText(sVal);
 	ui.tableWidget->setItem(uiRowIdx, uiColumnIdx++, pVal);
 }
-
 void HistoryPage::InsertCompletionPic2Cell(bool blCompletion, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
 	const float fCompletionScale{ 0.04f };
@@ -127,7 +147,6 @@ void HistoryPage::InsertCompletionPic2Cell(bool blCompletion, unsigned uiRowIdx,
 	InitPicture(pCompletionLabel, sPicAddress, fCompletionScale);
 	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx++, pCompletionLabel);
 }
-
 std::vector<unsigned> HistoryPage::FindSelectedRows()const
 {
 	std::vector<unsigned> vecCheckedTournamentIDs;
@@ -141,7 +160,6 @@ std::vector<unsigned> HistoryPage::FindSelectedRows()const
 	}
 	return vecCheckedTournamentIDs;
 }
-
 void HistoryPage::ClearSelectedRows()
 {
 	const unsigned int uiCheckBoxColumnIdx{ 0 };
@@ -153,7 +171,6 @@ void HistoryPage::ClearSelectedRows()
 		}
 	}
 }
-
 std::vector<Tournament> HistoryPage::FindSelectedTournaments()const
 {
 	std::vector<unsigned> vecSelectedTournamentRows = FindSelectedRows();
@@ -164,17 +181,11 @@ std::vector<Tournament> HistoryPage::FindSelectedTournaments()const
 	}
 	return vecSelectedTournament;
 }
-
 void HistoryPage::on_AddButton_clicked()
 {
 	m_upAddDialog->setModal(true);
 	m_upAddDialog->exec();
 	ClearSelectedRows();
-}
-void HistoryPage::on_CreateButton_clicked()
-{
-	m_upCreateTournamentDialog->setModal(true);
-	m_upCreateTournamentDialog->exec();
 }
 
 void HistoryPage::on_DeleteButton_clicked()
@@ -211,11 +222,26 @@ void HistoryPage::on_EditButton_clicked()
 	}
 	ClearSelectedRows();
 }
-
+void HistoryPage::on_comboBox_DisplayedTable_currentTextChanged(const QString& table)
+{
+	m_sTable = table.toStdString();
+	SetColumnsOfTable();
+	if (m_sTable == "Tournament")
+	{
+		LoadTournamentData();
+	}
+	else if (m_sTable == "Match")
+	{
+		// TODO
+	}
+}
 void HistoryPage::UpdateTournaments()
 {
 	std::cout << "HistoryPage::UpdateTournaments!!!!!!!!!!!!!!!\n";
-	ui.tableWidget->clearContents();
-	ui.tableWidget->setRowCount(0);
-	LoadTournamentData();
+	if (m_sTable == "Tournament")
+	{
+		ui.tableWidget->clearContents();
+		ui.tableWidget->setRowCount(0);
+		LoadTournamentData();
+	}
 }
