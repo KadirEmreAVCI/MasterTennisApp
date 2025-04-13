@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+***************************************************************************************************
+ Copyright (C) 2023 The Qt Company Ltd.
+ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+***************************************************************************************************
+-->
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CD1C9775-4632-4302-BB34-70F4F947AAFE}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.22621.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtInstall>6.7.0_msvc2019_64</QtInstall>
+    <QtModules>core;gui;widgets;sql</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>6.7.0_msvc2019_64</QtInstall>
+    <QtModules>core;gui;widgets;sql</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutDir>
+    </OutDir>
+    <IntDir>
+    </IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)inc;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)inc;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ProfileDialog.cpp" />
+    <ClCompile Include="src\AddEditProfileDialog.cpp" />
+    <ClCompile Include="src\Profile.cpp" />
+    <ClCompile Include="src\ProfileWidget.cpp" />
+    <ClCompile Include="src\ProfileSelectionDialog.cpp" />
+    <ClCompile Include="src\AddEditOrganizationDialog.cpp" />
+    <ClCompile Include="src\OrganizationDialog.cpp" />
+    <ClCompile Include="src\NoUpcomingMatch.cpp" />
+    <ClCompile Include="src\AddEditDialog.cpp" />
+    <ClCompile Include="src\MatchesDialog.cpp" />
+    <ClCompile Include="src\Match.cpp" />
+    <ClCompile Include="src\Calendar.cpp" />
+    <ClCompile Include="src\Score.cpp" />
+    <ClCompile Include="src\SetScoreWidget.cpp" />
+    <ClCompile Include="src\AddEditMatchDialog.cpp" />
+    <ClCompile Include="src\Organization.cpp" />
+    <ClCompile Include="src\DatabaseController.cpp" />
+    <ClCompile Include="src\AddEditTournamentDialog.cpp" />
+    <ClCompile Include="src\SQLiteDB.cpp" />
+    <ClCompile Include="src\HistoryPage.cpp" />
+    <ClCompile Include="src\AchievementsPage.cpp" />
+    <ClCompile Include="src\HomePage.cpp" />
+    <ClCompile Include="src\Set.cpp" />
+    <ClCompile Include="src\Countdown.cpp" />
+    <ClCompile Include="src\StatController.cpp" />
+    <ClCompile Include="src\TableWidgetUser.cpp" />
+    <ClCompile Include="src\DBItem.cpp" />
+    <ClCompile Include="src\UpcomingMatch.cpp" />
+    <ClCompile Include="src\Tournament.cpp" />
+    <QtRcc Include="Resource.qrc" />
+    <QtUic Include="AchievementsPage.ui" />
+    <QtUic Include="AddDialog.ui" />
+    <QtUic Include="AddEditMatchDialog.ui" />
+    <QtUic Include="AddEditOrganizationDialog.ui" />
+    <QtUic Include="AddEditProfileDialog.ui" />
+    <QtUic Include="AddEditTournamentDialog.ui" />
+    <QtUic Include="HistoryPage.ui" />
+    <QtUic Include="HomePage.ui" />
+    <QtUic Include="Calendar.ui" />
+    <QtUic Include="MatchesDialog.ui" />
+    <QtUic Include="NoUpcomingMatch.ui" />
+    <QtUic Include="OrganizationDialog.ui" />
+    <QtUic Include="ProfileDialog.ui" />
+    <QtUic Include="ProfileSelectionDialog.ui" />
+    <QtUic Include="ProfileWidget.ui" />
+    <QtUic Include="SetScoreWidget.ui" />
+    <QtUic Include="TennisDesktopApp.ui" />
+    <QtMoc Include="inc\TennisDesktopApp.h" />
+    <ClCompile Include="src\AppController.cpp" />
+    <ClCompile Include="src\TennisDesktopApp.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <QtUic Include="UpcomingMatch.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="inc\ProfileDialog.h" />
+    <QtMoc Include="inc\AddEditProfileDialog.h" />
+    <ClInclude Include="inc\Profile.h" />
+    <QtMoc Include="inc\ProfileWidget.h" />
+    <QtMoc Include="inc\ProfileSelectionDialog.h" />
+    <QtMoc Include="inc\AddEditOrganizationDialog.h" />
+    <ClInclude Include="inc\AddEditDialog.h" />
+    <ClInclude Include="inc\Match.h" />
+    <QtMoc Include="inc\OrganizationDialog.h" />
+    <QtMoc Include="inc\NoUpcomingMatch.h" />
+    <QtMoc Include="inc\Calendar.h" />
+    <QtMoc Include="inc\MatchesDialog.h" />
+    <ClInclude Include="inc\Score.h" />
+    <QtMoc Include="inc\SetScoreWidget.h" />
+    <QtMoc Include="inc\AddEditMatchDialog.h" />
+    <ClInclude Include="inc\Organization.h" />
+    <QtMoc Include="inc\AddEditTournamentDialog.h" />
+    <QtMoc Include="inc\DatabaseController.h" />
+    <ClInclude Include="inc\SQLiteDB.h" />
+    <QtMoc Include="inc\HomePage.h" />
+    <QtMoc Include="inc\AchievementsPage.h" />
+    <QtMoc Include="inc\HistoryPage.h" />
+    <QtMoc Include="inc\Countdown.h" />
+    <QtMoc Include="inc\AppController.h" />
+    <ClInclude Include="inc\IQTComponent.h" />
+    <ClInclude Include="inc\Set.h" />
+    <QtMoc Include="inc\StatController.h" />
+    <ClInclude Include="inc\TableWidgetUser.h" />
+    <ClInclude Include="inc\DBItem.h" />
+    <ClInclude Include="inc\Tournament.h" />
+    <QtMoc Include="inc\UpcomingMatch.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,23 @@
+#pragma once
+#include <QDialog>
+#include "ui_ProfileSelectionDialog.h"
+#include "AddEditProfileDialog.h"
+#include "Profile.h"
+
+class ProfileSelectionDialog : public QDialog
+{
+	Q_OBJECT
+
+public:
+	ProfileSelectionDialog(QWidget* parent = nullptr);
+	~ProfileSelectionDialog();
+private:
+	void InsertProfile(const Profile& profile);
+	void OpenAddDialog();
+	Ui::ProfileSelectionDialogClass ui;
+	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };
+public slots:
+	void UpdateProfiles(const std::vector<Profile>& vecProfile);
+private slots:
+	void on_NewProfileButton_clicked();
+};

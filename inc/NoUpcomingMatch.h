@@ -1,0 +1,16 @@
+#pragma once
+
+#include <QWidget>
+#include "ui_NoUpcomingMatch.h"
+
+class NoUpcomingMatch : public QWidget
+{
+	Q_OBJECT
+
+public:
+	NoUpcomingMatch(QWidget *parent = nullptr);
+	~NoUpcomingMatch();
+
+private:
+	Ui::NoUpcomingMatchClass ui;
+};

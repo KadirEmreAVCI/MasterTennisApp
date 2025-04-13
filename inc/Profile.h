@@ -1,0 +1,53 @@
+#pragma once
+#include <string>
+#include <vector>
+#include "DBItem.h"
+#include "Organization.h"
+enum class Gender
+{
+	Male,
+	Female
+};
+class Profile : public DBItem {
+public:
+	Profile();
+	unsigned int GetID()const;
+	void SetID(unsigned int);
+	std::string GetFullName()const;
+	void SetFullName(const std::string&);
+	std::string GetPPAddr()const;
+	void SetPPAddr(const std::string&);
+	Gender GetGender()const;
+	void SetGender(Gender);
+	std::vector<Organization> GetParticipatedOrgs()const;
+	void SetParticipatedOrgs(const std::vector<Organization>&);
+	static QString GetProfileImageRootDestDir();
+	static void SetProfileImageRootDestDir(const QString& sProfileImageRootDestDir);
+	void DeletePreviousPP()const;
+	friend bool operator==(const Profile& lhs, const Profile& rhs)
+	{
+		return	lhs.m_uiID == rhs.m_uiID &&
+			lhs.m_sFullName == rhs.m_sFullName &&
+			lhs.m_sPPAddr == rhs.m_sPPAddr &&
+			lhs.m_Gender == rhs.m_Gender;
+	}
+	friend std::ostream& operator<<(std::ostream& os, const Profile& p)
+	{
+		os << "\tID: " << p.m_uiID <<
+			", NAME & SURNAME: " << p.m_sFullName <<
+			", GENDER: " << ((p.m_Gender == Gender::Male) ? "Male" : "Female") <<
+			", PP ADDRESS: " << p.m_sPPAddr;
+		return os;
+	}
+	virtual bool InsertToDB()const override;
+	virtual bool EditInDB()const override;
+	virtual void LoadFromDB(unsigned ID)override;
+	virtual bool DeleteFromDB()const override;
+private:
+	static QString ms_sProfileImageRootDestDir;
+	std::string m_sFullName{};
+	std::string m_sPPAddr{};
+	Gender m_Gender{};
+	std::vector<Organization> m_vecParticipatedOrg;
+};
+
