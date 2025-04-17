@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include "OrganizationDialog.h"
 #include "AppController.h"
-
+#include "Config.h"
 
 OrganizationDialog::OrganizationDialog(QWidget *parent)
 	: QDialog(parent)
@@ -58,8 +58,8 @@ void OrganizationDialog::InsertOrg2Table(const Organization& org, unsigned uiRow
 	}
 	InsertValue2Cell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
 	InsertValue2Cell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(":images/images/DeleteButton.png", 0.4f, &OrganizationDialog::DeleteOrganization, true, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(":images/images/EditButton.png", 0.4f, &OrganizationDialog::EditOrganization, true, uiRowIdx, uiColumnIdx++);
+	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &OrganizationDialog::DeleteOrganization, true, uiRowIdx, uiColumnIdx++);
+	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &OrganizationDialog::EditOrganization, true, uiRowIdx, uiColumnIdx++);
 }
 std::string OrganizationDialog::Serialize(const std::vector<std::string>& vecDeserialized)const
 {

@@ -6,6 +6,7 @@
 #include "NoUpcomingMatch.h"
 #include "StatController.h"
 #include "AppController.h"
+#include "Config.h"
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
@@ -44,7 +45,7 @@ void HomePage::UpdateUpcomingMatches()
 		InsertUpcomingMatch((iterOrg->GetOrgPictureAddr() != "") ? iterOrg->GetOrgPictureAddr() : "default_org.png", rootTournament, m);
 	}
 	FillWithNoUpcomingMatches();
-	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 25, UpcomingMatch{}.height() * 3 + 10);
+	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 25, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
 	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 30, ui.listWidget_UpcomingMatches->height() + 50);
 }
 std::vector<Match> HomePage::FindUpcomingMatches()const
@@ -104,7 +105,7 @@ void HomePage::DeleteUpcomingMatches()
 void HomePage::FillWithNoUpcomingMatches()
 {
 	const auto& vecUpcomingMatches = FindUpcomingMatches();
-	const int iNoUpcomingMatch = 3 - vecUpcomingMatches.size();
+	const int iNoUpcomingMatch = g_uiMaxUpcomingMatch - vecUpcomingMatches.size();
 	for (int i = 0; i < iNoUpcomingMatch; ++i)
 	{
 		InsertNoUpcomingMatch();

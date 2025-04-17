@@ -1,6 +1,7 @@
 #include <iostream>
 #include <QTimer>
 #include <QDateTime>
+#include "Config.h"
 #include "Organization.h"
 #include "UpcomingMatch.h"
 #include "MatchesDialog.h"
@@ -18,6 +19,7 @@ UpcomingMatch::~UpcomingMatch()
 
 void UpcomingMatch::InitCustomComponents()
 {
+	setFixedSize(g_uiUpcomingMatchWidth, g_uiUpcomingMatchHeight);
 	InitializeTimer();
 	InitializeCountdown();
 	FillUpcomingMatchButton();
@@ -40,13 +42,13 @@ void UpcomingMatch::SetOrganizationImage()
 }
 void UpcomingMatch::FillUpcomingMatchButton()
 {
-	UpcomingMatchButton->setFixedSize(400, 100);
+	UpcomingMatchButton->setFixedSize(g_uiUpcomingMatchWidth - 200, g_uiUpcomingMatchHeight - 20);
 
 	QWidget* container = new QWidget(UpcomingMatchButton);
 	QVBoxLayout* layout = new QVBoxLayout(container);
 	layout->setContentsMargins(5, 5, 5, 5);
 
-	QLabel* TournamentNameLabel = new QLabel(QString::fromStdString(m_Tournament.GetName()));
+	QLabel* TournamentNameLabel = new QLabel(QString::fromStdString(m_Tournament.GetOrgName() + ", " + m_Tournament.GetType() + ", " + m_Tournament.GetCategory()));
 
 	QLabel* StageLabel = new QLabel(QString::fromStdString(m_Match.GetStage()));
 	std::string sOpponent = m_Match.GetOpponent1();

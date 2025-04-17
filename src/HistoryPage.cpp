@@ -7,6 +7,8 @@
 #include "AddEditTournamentDialog.h"
 #include "MatchesDialog.h"
 #include "AppController.h"
+#include "Config.h"
+
 HistoryPage::HistoryPage(QWidget *parent)
 	: QWidget(parent)
 {
@@ -74,8 +76,8 @@ void HistoryPage::InsertTournament2Table(const Organization& rootOrg, const Tour
 	InsertValue2Cell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
 	InsertTrophyPic(t, uiRowIdx, uiColumnIdx++);
 	InsertButton2Cell(std::string(" Match History "), &HistoryPage::ShowMatches, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(":images/images/DeleteButton.png", 0.4f, &HistoryPage::DeleteTournament, (t.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(":images/images/EditButton.png", 0.4f, &HistoryPage::EditTournament, (t.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
+	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &HistoryPage::DeleteTournament, (t.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
+	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &HistoryPage::EditTournament, (t.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
 	InsertButtonWithImage2Cell((t.IsLocked()) ? ":images/images/lock.png" : ":images/images/unlock.png", 0.04f, &HistoryPage::LockUnlockTournament, true, uiRowIdx, uiColumnIdx++);
 }
 void HistoryPage::InsertButton2Cell(const std::string& sButtonText, auto func, unsigned uiRowIdx, unsigned uiColumnIdx)

@@ -10,7 +10,7 @@ class GUIConfigurator;
 class TennisDesktopApp;
 class AppController : public QObject {
 	Q_OBJECT
-public:
+public: 
 	static void create();
 	static AppController& instance();
 	AppController(const AppController&) = delete;

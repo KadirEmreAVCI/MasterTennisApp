@@ -55,9 +55,9 @@ void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, con
 void AddEditMatchDialog::InitDialog()
 {
 	ClearDialog();
-	InitButtonWithPicture(ui.DateButton, ":images/images/calendar.png", 0.04f);
-	InitButtonWithPicture(ui.AddSetButton, ":images/images/plus.png", 0.04f);
-	InitButtonWithPicture(ui.RemoveSetButton, ":images/images/minus.png", 0.04f);
+	InitButtonWithPicture(ui.DateButton, ":images/images/calendar.png", 0.8f);
+	InitButtonWithPicture(ui.AddSetButton, ":images/images/plus.png", 0.8f);
+	InitButtonWithPicture(ui.RemoveSetButton, ":images/images/minus.png", 0.8f);
 	SetComboBoxAlternatives(ui.comboBox_Statu, m_vecStatuAlternatives);
 	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetStages());
 	ui.lineEdit__Opponent1->setEnabled(true);

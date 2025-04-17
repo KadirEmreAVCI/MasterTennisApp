@@ -3,6 +3,7 @@
 #include "ProfileSelectionDialog.h"
 #include "AppController.h"
 #include "AddEditProfileDialog.h"
+#include "Config.h"
 
 ProfileWidget::ProfileWidget(QWidget *parent)
 	: QWidget(parent)
@@ -57,8 +58,8 @@ QLabel* ProfileWidget::CreatePPLabel()const
 }
 void ProfileWidget::InitCustomComponents()
 {
-    InitButtonWithPicture(ui.DeleteButton, ":images/images/DeleteButton.png", 0.4f);
-    InitButtonWithPicture(ui.EditButton, ":images/images/EditButton.png", 0.4f);
+    InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
+    InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
 }
 void ProfileWidget::OpenEditDialog(const Profile& selectedProfile)
 {

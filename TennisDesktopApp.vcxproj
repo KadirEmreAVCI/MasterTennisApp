@@ -163,6 +163,7 @@
   <ItemGroup>
     <QtMoc Include="inc\ProfileDialog.h" />
     <QtMoc Include="inc\AddEditProfileDialog.h" />
+    <ClInclude Include="inc\Config.h" />
     <ClInclude Include="inc\Profile.h" />
     <QtMoc Include="inc\ProfileWidget.h" />
     <QtMoc Include="inc\ProfileSelectionDialog.h" />

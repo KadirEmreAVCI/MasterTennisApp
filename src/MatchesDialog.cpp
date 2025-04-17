@@ -3,6 +3,7 @@
 #include "AppController.h"
 #include "AddEditMatchDialog.h"
 #include "MatchesDialog.h"
+#include "Config.h"
 
 MatchesDialog::MatchesDialog(QWidget *parent)
 	: QDialog(parent)
@@ -76,8 +77,8 @@ void MatchesDialog::InsertMatch2Table(const Match& m, unsigned uiRowIdx)
 	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
 	InsertValue2Cell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
 	InsertValue2Cell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(":images/images/DeleteButton.png", 0.4f, &MatchesDialog::DeleteMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(":images/images/EditButton.png", 0.4f, &MatchesDialog::EditMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
+	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &MatchesDialog::DeleteMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
+	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &MatchesDialog::EditMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
 }
 void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 {

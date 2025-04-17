@@ -3,10 +3,7 @@
         <file>images/games.png</file>
         <file>images/clutchness.png</file>
         <file>images/trophy.png</file>
-        <file>images/calendar.png</file>
         <file>images/hourglass.png</file>
-        <file>images/plus.png</file>
-        <file>images/minus.png</file>
         <file>images/lose2.png</file>
         <file>images/win2.png</file>
         <file>images/CrossButton.png</file>
@@ -24,5 +21,8 @@
         <file>images/home_page.png</file>
         <file>images/welcome2.png</file>
         <file>images/Warning.png</file>
+        <file>images/calendar.png</file>
+        <file>images/minus.png</file>
+        <file>images/plus.png</file>
     </qresource>
 </RCC>
