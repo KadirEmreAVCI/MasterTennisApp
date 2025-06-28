@@ -80,6 +80,7 @@
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)inc;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -136,6 +137,7 @@
     <ClCompile Include="src\DBItem.cpp" />
     <ClCompile Include="src\UpcomingMatch.cpp" />
     <ClCompile Include="src\Tournament.cpp" />
+    <ClCompile Include="test\example_test.cpp" />
     <QtRcc Include="Resource.qrc" />
     <QtUic Include="AchievementsPage.ui" />
     <QtUic Include="AddDialog.ui" />

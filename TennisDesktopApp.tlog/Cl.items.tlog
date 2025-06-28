@@ -1,4 +1,3 @@
-C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\ProfileToolbarWidget.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\ProfileToolbarWidget.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\ProfileDialog.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\ProfileDialog.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\AddEditProfileDialog.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\AddEditProfileDialog.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\Profile.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\Profile.obj
@@ -28,13 +27,13 @@ C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\TableWidgetUser.c
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\DBItem.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\DBItem.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\UpcomingMatch.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\UpcomingMatch.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\Tournament.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\Tournament.obj
+C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\test\example_test.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\example_test.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\AppController.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\AppController.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\TennisDesktopApp.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\TennisDesktopApp.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\src\main.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\main.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\rcc\qrc_Resource.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\qrc_Resource.obj
-C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\rcc\qrc_TennisDesktopApp.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\qrc_TennisDesktopApp.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_TennisDesktopApp.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_TennisDesktopApp.obj
-C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_ProfileToolbarWidget.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_ProfileToolbarWidget.obj
+C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_ProfileDialog.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_ProfileDialog.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_AddEditProfileDialog.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_AddEditProfileDialog.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_ProfileWidget.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_ProfileWidget.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_ProfileSelectionDialog.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_ProfileSelectionDialog.obj
@@ -54,4 +53,3 @@ C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_Countdown.cpp
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_AppController.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_AppController.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_StatController.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_StatController.obj
 C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_UpcomingMatch.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_UpcomingMatch.obj
-C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc\moc_ProfileDialog.cpp;C:\Users\User\Workspaces\VisualStudio2022\TennisDesktopApp\moc_ProfileDialog.obj
