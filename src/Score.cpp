@@ -35,10 +35,10 @@ Outcome Score::GetOutcome()const
 	else
 		return Outcome::Tied;
 }
-unsigned Score::GetDiff()const
-{
-	return std::abs(static_cast<int>(m_Score.first) - static_cast<int>(m_Score.second));
-}
+//unsigned Score::GetDiff()const
+//{
+//	return std::abs(static_cast<int>(m_Score.first) - static_cast<int>(m_Score.second));
+//}
 std::string Score::ToString()const
 {
 	std::ostringstream oss{};

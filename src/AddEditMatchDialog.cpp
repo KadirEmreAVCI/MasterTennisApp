@@ -266,7 +266,7 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		m.SetOpponent1(ui.lineEdit__Opponent1->text().toStdString());
 		if (m_RootTournament.IsDoubleTournament())
 			m.SetOpponent2(ui.lineEdit__Opponent2->text().toStdString());
-		m.SetScore(CollectMatchScore());
+		//m.SetScore(CollectMatchScore());
 		m.SetSets(GetSets());
 		if (!m.IsMatchValid())
 		{

@@ -79,7 +79,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)inc;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)test/inc;$(SolutionDir)inc;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -107,6 +108,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="test\src\MatchTest.cpp" />
     <ClCompile Include="src\ProfileDialog.cpp" />
     <ClCompile Include="src\AddEditProfileDialog.cpp" />
     <ClCompile Include="src\Profile.cpp" />
@@ -161,6 +163,7 @@
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="test\inc\MatchTest.h" />
     <QtMoc Include="inc\ProfileDialog.h" />
     <QtMoc Include="inc\AddEditProfileDialog.h" />
     <ClInclude Include="inc\Config.h" />

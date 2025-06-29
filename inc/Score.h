@@ -16,7 +16,6 @@ public:
 	unsigned GetAwayScore()const;
 	void Clear();
 	Outcome GetOutcome()const;
-	unsigned GetDiff()const;
 	std::string ToString()const;
 	static Score FromString(const std::string&);
 	friend bool operator==(const Score& lhs, const Score& rhs)
