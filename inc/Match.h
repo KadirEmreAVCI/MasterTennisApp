@@ -8,7 +8,7 @@
 #include "DBItem.h"
 class Match : public DBItem {
 public:
-	Match();
+	Match(unsigned uiID = 0, unsigned uiTournamentID = 0, const std::string& sStatu = "", const std::string& sStage = "", const std::string& sOpponent1 = "", const std::string& sOpponent2 = "", const QDate& rDate = QDate{}, const QTime& rTime = {}, const std::vector<Set>& vecSet = {});
 	unsigned GetID()const;
 	void SetID(unsigned uiID);
 	unsigned GetTournamentID()const;
@@ -26,7 +26,6 @@ public:
 	QTime GetTime()const;
 	void SetTime(const QTime& time);
 	Score GetScore()const;
-	void SetScore(const Score& s);
 	std::vector<Set> GetSets()const;
 	Outcome GetOutcome()const;
 	void SetSets(std::vector<Set>);
@@ -65,8 +64,8 @@ public:
 	virtual bool EditInDB()const override;
 	virtual void LoadFromDB(unsigned ID)override;
 private:
+	void SetScore();
 	unsigned m_uiTournamentID{};
-	std::string m_sTournamentName;
 	std::string m_sStatu{};
 	std::string m_sStage{};
 	std::string m_sOpponent1{};

@@ -1,7 +1,26 @@
+#include <algorithm>
 #include "Match.h"
-Match::Match():DBItem("Match", "TournamentID,Statu,Stage,Opponent1,Opponent2,Date,Time,Score,Sets")
+Match::Match(unsigned uiID,
+	unsigned uiTournamentID,
+	const std::string& sStatu,
+	const std::string& sStage,
+	const std::string& sOpponent1,
+	const std::string& sOpponent2,
+	const QDate& rDate,
+	const QTime& rTime,
+	const std::vector<Set>& vecSet)
+	:
+	m_uiTournamentID{ uiTournamentID },
+	m_sStatu{ sStatu },
+	m_sStage{ sStage },
+	m_sOpponent1{ sOpponent1 },
+	m_soptOpponent2{ sOpponent2 },
+	m_Date{ rDate },
+	m_Time{ rTime },
+	DBItem("Match", "TournamentID,Statu,Stage,Opponent1,Opponent2,Date,Time,Score,Sets")
 {
-
+	SetID(uiID);
+	SetSets(vecSet);
 }
 unsigned Match::GetID()const
 {
@@ -75,9 +94,10 @@ Score Match::GetScore()const
 {
 	return m_Score;
 }
-void Match::SetScore(const Score& s)
+void Match::SetScore()
 {
-	m_Score = s;
+	m_Score.SetScore(std::make_pair<unsigned, unsigned>(std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::HomeWin; }), 
+														std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::AwayWin; })));
 }
 std::vector<Set> Match::GetSets()const
 {
@@ -86,6 +106,7 @@ std::vector<Set> Match::GetSets()const
 void Match::SetSets(std::vector<Set> vecSet)
 {
 	m_vecSet = vecSet;
+	SetScore();
 }
 std::string Match::SetsToString()const
 {
@@ -115,7 +136,11 @@ bool Match::IsUpcomingMatch()const
 }
 bool Match::IsMatchValid()const
 {
-	return (IsUpcomingMatch() && m_Score == Score(0, 0)) || (!IsUpcomingMatch() && GetOutcome() != Outcome::Tied);
+	const bool blUpcomingMatchValid = IsUpcomingMatch() && GetScore() == Score(0, 0) && (m_vecSet.empty() || std::all_of(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {
+		return s == Set{ Score(0, 0), Score(0, 0) }; }));
+	const bool blCompletedMatchValid = !IsUpcomingMatch() && (GetOutcome() != Outcome::Tied) && std::all_of(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {
+		return s.GetOutcome() != Outcome::Tied; });
+	return blUpcomingMatchValid || blCompletedMatchValid;
 }
 bool Match::IsEarlier(const Match& other)const
 {
@@ -162,6 +187,5 @@ void Match::LoadFromDB(unsigned ID)
 	SetOpponent2(db.GetValueWithCond(m_sDBTable, "Opponent2", "ID", std::to_string(m_uiID)));
 	SetDate(QDate::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Date", "ID", std::to_string(m_uiID)))));
 	SetTime(QTime::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Time", "ID", std::to_string(m_uiID)))));
-	SetScore(Score::FromString(db.GetValueWithCond(m_sDBTable, "Score", "ID", std::to_string(m_uiID))));
 	SetSets(SetsFromString(db.GetValueWithCond(m_sDBTable, "Sets", "ID", std::to_string(m_uiID))));
 }

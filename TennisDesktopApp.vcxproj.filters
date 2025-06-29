@@ -130,7 +130,7 @@
     <ClCompile Include="src\ProfileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test\example_test.cpp">
+    <ClCompile Include="test\src\MatchTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -169,6 +169,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\inc\MatchTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

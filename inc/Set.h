@@ -18,8 +18,7 @@ public:
 	static Set FromString(const std::string&);
 	friend bool operator==(const Set& lhs, const Set& rhs)
 	{
-		return	lhs.m_MajorScore == rhs.m_MajorScore &&
-				lhs.GetTBScore() == rhs.GetTBScore();
+		return	lhs.m_MajorScore == rhs.m_MajorScore && lhs.GetTBScore() == rhs.GetTBScore();
 	}
 	friend std::ostream& operator<<(std::ostream& os, const Set& s)
 	{
