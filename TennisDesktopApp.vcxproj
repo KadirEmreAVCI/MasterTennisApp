@@ -108,6 +108,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="test\src\ScoreTest.cpp" />
     <ClCompile Include="test\src\MatchTest.cpp" />
     <ClCompile Include="src\ProfileDialog.cpp" />
     <ClCompile Include="src\AddEditProfileDialog.cpp" />
@@ -163,6 +164,7 @@
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="test\inc\ScoreTest.h" />
     <ClInclude Include="test\inc\MatchTest.h" />
     <QtMoc Include="inc\ProfileDialog.h" />
     <QtMoc Include="inc\AddEditProfileDialog.h" />

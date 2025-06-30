@@ -20,8 +20,7 @@ public:
 	static Score FromString(const std::string&);
 	friend bool operator==(const Score& lhs, const Score& rhs)
 	{
-		return	lhs.GetHomeScore() == rhs.GetHomeScore() &&
-				rhs.GetAwayScore() == rhs.GetAwayScore();
+		return (lhs.GetHomeScore() == rhs.GetHomeScore()) && (lhs.GetAwayScore() == rhs.GetAwayScore());
 	}
 	friend std::ostream& operator<<(std::ostream& os, const Score& s)
 	{

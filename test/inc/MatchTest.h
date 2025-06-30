@@ -8,7 +8,7 @@
 // Project Headers
 #include "Match.h"
 
-class MatchTestFixture : public testing::Test {
+class MatchTest : public testing::Test {
 protected:
 	void SetUp()
 	{

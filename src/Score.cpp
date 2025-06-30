@@ -35,10 +35,6 @@ Outcome Score::GetOutcome()const
 	else
 		return Outcome::Tied;
 }
-//unsigned Score::GetDiff()const
-//{
-//	return std::abs(static_cast<int>(m_Score.first) - static_cast<int>(m_Score.second));
-//}
 std::string Score::ToString()const
 {
 	std::ostringstream oss{};
@@ -55,5 +51,6 @@ Score Score::FromString(const std::string& sScore)
 	else
 	{
 		std::cerr << "Error! Illegal string to convert Score!\n";
+		return Score{};
 	}
 }

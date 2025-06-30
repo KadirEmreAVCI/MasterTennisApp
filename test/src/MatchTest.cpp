@@ -6,7 +6,7 @@
 #include "MatchTest.h"
 
 // TODO: SetSets çaðýrýldýðýnda SetScore fonksiyonunun doðru çalýþýp çalýþmadýðýna dair test yazýlacak.
-TEST_F(MatchTestFixture, GetMatchOutcomesCorrectly)
+TEST_F(MatchTest, GetMatchOutcomesCorrectly)
 {
 	using enum Outcome;
 	const std::vector vecTestOutput{ HomeWin, HomeWin, AwayWin, AwayWin, HomeWin, HomeWin, HomeWin, HomeWin, AwayWin, HomeWin, AwayWin, Tied, Tied, HomeWin, AwayWin, Tied, AwayWin, Tied };
@@ -15,7 +15,7 @@ TEST_F(MatchTestFixture, GetMatchOutcomesCorrectly)
 		EXPECT_EQ(m_vecMatch[idx].GetOutcome(), vecTestOutput[idx]);
 	}
 }
-TEST_F(MatchTestFixture, SortMatchesByStartTime)
+TEST_F(MatchTest, SortMatchesByStartTime)
 {
 	const std::vector<unsigned> vecTestOutput{ 13, 6, 0, 7, 4, 1, 9, 3, 2, 5, 8, 10, 12, 11, 14, 15, 16, 17 };
 	std::sort(m_vecMatch.begin(), m_vecMatch.end(), [](const Match& m1, const Match& m2) {
@@ -26,7 +26,7 @@ TEST_F(MatchTestFixture, SortMatchesByStartTime)
 		EXPECT_EQ(m_vecMatch[idx].GetID(), vecTestOutput[idx]);
 	}
 }
-TEST_F(MatchTestFixture, DetectUpcomingMatches)
+TEST_F(MatchTest, DetectUpcomingMatches)
 {
 	const std::vector<bool> vecTestOutput = { false, false, false, false, false, false, false, false, false, false, false, true, true, false, true, true, true, true };
 	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
@@ -34,7 +34,7 @@ TEST_F(MatchTestFixture, DetectUpcomingMatches)
 		EXPECT_EQ(m_vecMatch[idx].IsUpcomingMatch(), vecTestOutput[idx]);
 	}
 }
-TEST_F(MatchTestFixture, DetectInvalidMatches)
+TEST_F(MatchTest, DetectInvalidMatches)
 {
 	const std::vector<bool> vecTestOutput = { true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, false, true, false };
 	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)

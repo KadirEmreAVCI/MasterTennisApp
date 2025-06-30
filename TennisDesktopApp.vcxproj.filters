@@ -133,6 +133,9 @@
     <ClCompile Include="test\src\MatchTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test\src\ScoreTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\IQTComponent.h">
@@ -172,6 +175,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="test\inc\MatchTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\inc\ScoreTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
