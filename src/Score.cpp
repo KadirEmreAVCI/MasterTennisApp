@@ -9,10 +9,6 @@ std::pair<unsigned, unsigned> Score::GetScore()const
 {
 	return m_Score;
 }
-void Score::SetScore(std::pair<unsigned, unsigned> score)
-{
-	m_Score = score;
-}
 unsigned Score::GetHomeScore()const
 {
 	return m_Score.first;
@@ -20,11 +16,6 @@ unsigned Score::GetHomeScore()const
 unsigned Score::GetAwayScore()const
 {
 	return m_Score.second;
-}
-void Score::Clear()
-{
-	m_Score.first = 0;
-	m_Score.second = 0;
 }
 Outcome Score::GetOutcome()const
 {

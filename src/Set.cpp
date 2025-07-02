@@ -10,18 +10,9 @@ Score Set::GetMajorScore()const
 {
 	return m_MajorScore;
 }
-void Set::SetSetScore(const Score& ss, std::optional<Score> ts)
-{
-	m_MajorScore = ss;
-	m_optTBScore = ts;
-}
 Score Set::GetTBScore()const
 {
 	return m_optTBScore.value_or(Score(0,0));
-}
-void Set::SetTBScore(const Score& score)
-{
-	m_optTBScore = score;
 }
 Outcome Set::GetOutcome()const
 {

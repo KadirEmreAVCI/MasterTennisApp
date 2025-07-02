@@ -11,10 +11,8 @@ class Score
 public:
 	explicit Score(unsigned uiHomeScore = 0, unsigned uiAwayScore = 0);
 	std::pair<unsigned, unsigned> GetScore()const;
-	void SetScore(std::pair<unsigned, unsigned>);
 	unsigned GetHomeScore()const;
 	unsigned GetAwayScore()const;
-	void Clear();
 	Outcome GetOutcome()const;
 	std::string ToString()const;
 	static Score FromString(const std::string&);

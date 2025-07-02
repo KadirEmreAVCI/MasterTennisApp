@@ -8,9 +8,7 @@ class Set{
 public:
 	explicit Set(const Score& MajorScore = Score(0,0), std::optional<Score> TBScore = std::nullopt);
 	Score GetMajorScore()const;
-	void SetSetScore(const Score& ss, std::optional<Score> ts = std::nullopt);
 	Score GetTBScore()const;
-	void SetTBScore(const Score&);
 	Outcome GetOutcome()const;
 	bool IsSetTBPlayed()const;
 	bool IsValid()const;

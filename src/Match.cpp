@@ -68,8 +68,8 @@ Score Match::GetScore()const
 }
 void Match::SetScore()
 {
-	m_Score.SetScore(std::make_pair<unsigned, unsigned>(std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::HomeWin; }), 
-														std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::AwayWin; })));
+	m_Score = Score(std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::HomeWin; }), 
+					std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::AwayWin; }));
 }
 std::vector<Set> Match::GetSets()const
 {

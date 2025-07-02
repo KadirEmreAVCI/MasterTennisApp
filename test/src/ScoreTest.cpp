@@ -26,13 +26,6 @@ TEST_F(ScoreTest, GetAwayScoreCorrectly)
 		EXPECT_EQ(m_vecScore[idx].GetAwayScore(), vecTestOutput[idx]);
 	}
 }
-TEST_F(ScoreTest, ClearScores)
-{
-	std::for_each(m_vecScore.begin(), m_vecScore.end(), [this](Score& s) {
-		s.Clear();
-		EXPECT_EQ(s, Score(0, 0));
-		});
-}
 TEST_F(ScoreTest, ScoreToString)
 {
 	const std::vector vecTestOutput{ "0-0", "1-1", "2-1", "2-0", "1-5" };
