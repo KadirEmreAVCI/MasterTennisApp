@@ -5,7 +5,7 @@ Match::Match(unsigned uiID,
 	const std::string& sStatu,
 	const std::string& sStage,
 	const std::string& sOpponent1,
-	const std::string& sOpponent2,
+	const std::optional<std::string>& soptOpponent2,
 	const QDate& rDate,
 	const QTime& rTime,
 	const std::vector<Set>& vecSet)
@@ -14,7 +14,7 @@ Match::Match(unsigned uiID,
 	m_sStatu{ sStatu },
 	m_sStage{ sStage },
 	m_sOpponent1{ sOpponent1 },
-	m_soptOpponent2{ sOpponent2 },
+	m_soptOpponent2{ soptOpponent2 },
 	m_Date{ rDate },
 	m_Time{ rTime },
 	DBItem("Match", "TournamentID,Statu,Stage,Opponent1,Opponent2,Date,Time,Score,Sets")
@@ -34,17 +34,9 @@ unsigned Match::GetTournamentID()const
 {
 	return m_uiTournamentID;
 }
-void Match::SetTournamentID(unsigned uiTournamentID)
-{
-	m_uiTournamentID = uiTournamentID;
-}
 std::string Match::GetStatu()const
 {
 	return m_sStatu;
-}
-void Match::SetStatu(const std::string& sStatu)
-{
-	m_sStatu = sStatu;
 }
 Outcome Match::GetOutcome()const
 {
@@ -54,10 +46,6 @@ std::string Match::GetStage()const
 {
 	return m_sStage;
 }
-void Match::SetStage(const std::string& sStage)
-{
-	m_sStage = sStage;
-}
 std::string Match::GetOpponent1()const
 {
 	return m_sOpponent1;
@@ -66,29 +54,13 @@ std::string Match::GetOpponent2()const
 {
 	return m_soptOpponent2.value_or("-");
 }
-void Match::SetOpponent1(const std::string& sOpponent1)
-{
-	m_sOpponent1 = sOpponent1;
-}
-void Match::SetOpponent2(std::optional<std::string> soptOpponent2)
-{
-	m_soptOpponent2 = soptOpponent2;
-}
 QDate Match::GetDate()const
 {
 	return m_Date;
 }
-void Match::SetDate(const QDate& date)
-{
-	m_Date = date;
-}
 QTime Match::GetTime()const
 {
 	return m_Time;
-}
-void Match::SetTime(const QTime& time)
-{
-	m_Time = time;
 }
 Score Match::GetScore()const
 {
@@ -179,13 +151,13 @@ bool Match::EditInDB()const
 void Match::LoadFromDB(unsigned ID)
 {
 	const SQLiteDB& db = SQLiteDB::instance();
-	SetID(stoi(db.GetValue(m_sDBTable, "ID", ID)));
-	SetTournamentID(stoi(db.GetValueWithCond(m_sDBTable, "TournamentID", "ID", std::to_string(m_uiID))));
-	SetStatu(db.GetValueWithCond(m_sDBTable, "Statu", "ID", std::to_string(m_uiID)));
-	SetStage(db.GetValueWithCond(m_sDBTable, "Stage", "ID", std::to_string(m_uiID)));
-	SetOpponent1(db.GetValueWithCond(m_sDBTable, "Opponent1", "ID", std::to_string(m_uiID)));
-	SetOpponent2(db.GetValueWithCond(m_sDBTable, "Opponent2", "ID", std::to_string(m_uiID)));
-	SetDate(QDate::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Date", "ID", std::to_string(m_uiID)))));
-	SetTime(QTime::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Time", "ID", std::to_string(m_uiID)))));
+	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
+	m_uiTournamentID = stoi(db.GetValueWithCond(m_sDBTable, "TournamentID", "ID", std::to_string(m_uiID)));
+	m_sStatu = db.GetValueWithCond(m_sDBTable, "Statu", "ID", std::to_string(m_uiID));
+	m_sStage = db.GetValueWithCond(m_sDBTable, "Stage", "ID", std::to_string(m_uiID));
+	m_sOpponent1 = db.GetValueWithCond(m_sDBTable, "Opponent1", "ID", std::to_string(m_uiID));
+	m_soptOpponent2 = std::optional<std::string>(db.GetValueWithCond(m_sDBTable, "Opponent2", "ID", std::to_string(m_uiID)));
+	m_Date = QDate::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Date", "ID", std::to_string(m_uiID))));
+	m_Time = QTime::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Time", "ID", std::to_string(m_uiID))));
 	SetSets(SetsFromString(db.GetValueWithCond(m_sDBTable, "Sets", "ID", std::to_string(m_uiID))));
 }

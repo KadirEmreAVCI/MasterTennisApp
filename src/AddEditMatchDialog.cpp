@@ -242,8 +242,18 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
-		Match m;
-		m.SetDate(m_MatchDate);
+		Match m{
+			0,
+			m_RootTournament.GetID(),
+			ui.comboBox_Statu->currentText().toStdString(),
+			ui.comboBox_Stage->currentText().toStdString(),
+			ui.lineEdit__Opponent1->text().toStdString(),
+			m_RootTournament.IsDoubleTournament() ? std::optional<std::string>(ui.lineEdit__Opponent2->text().toStdString()) : std::nullopt,
+			m_MatchDate,
+			ui.timeEdit->time(),
+			GetSets()
+		};
+		/*m.SetDate(m_MatchDate);
 		m.SetTime(ui.timeEdit->time());
 		m.SetTournamentID(m_RootTournament.GetID());
 		m.SetStatu(ui.comboBox_Statu->currentText().toStdString());
@@ -251,7 +261,7 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		m.SetOpponent1(ui.lineEdit__Opponent1->text().toStdString());
 		if (m_RootTournament.IsDoubleTournament())
 			m.SetOpponent2(ui.lineEdit__Opponent2->text().toStdString());
-		m.SetSets(GetSets());
+		m.SetSets(GetSets());*/
 		if (!m.IsValid())
 		{
 			QMessageBox::critical(this, "Error", "Invalid match.");
