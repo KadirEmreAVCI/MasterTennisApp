@@ -25,3 +25,19 @@ TEST_F(SetTest, DetectInvalidSets)
 		EXPECT_EQ(m_vecSet[idx].IsValid(), vecTestOutput[idx]);
 	}
 }
+TEST_F(SetTest, SetToString)
+{
+	const std::vector vecTestOutput{ "0-0", "0-0", "0-0(7-3)", "6-3", "2-6", "7-6(7-4)", "6-7(0-7)", "1-1", "7-6(5-7)", "6-7(2-2)", "6-7(7-2)"};
+	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
+	{
+		EXPECT_EQ(m_vecSet[idx].ToString(), vecTestOutput[idx]);
+	}
+}
+TEST_F(SetTest, SetFromString)
+{
+	const std::vector vecTestOutput{ "0-0", "0-0", "0-0(7-3)", "6-3", "2-6", "7-6(7-4)", "6-7(0-7)", "1-1", "7-6(5-7)", "6-7(2-2)", "6-7(7-2)" };
+	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
+	{
+		EXPECT_EQ(m_vecSet[idx], Set::FromString(vecTestOutput[idx]));
+	}
+}
