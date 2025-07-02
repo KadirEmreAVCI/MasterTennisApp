@@ -32,7 +32,7 @@ public:
 	std::string SetsToString()const;
 	static std::vector<Set> SetsFromString(const std::string& sSets);
 	bool IsUpcomingMatch()const;
-	bool IsMatchValid()const;
+	bool IsValid()const;
 	bool IsEarlier(const Match& other)const;
 	friend bool operator==(const Match& lhs, const Match& rhs)
 	{

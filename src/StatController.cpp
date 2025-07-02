@@ -66,7 +66,7 @@ std::vector<Match> StatController::ConcatanateValidMatches()const
 	std::for_each(m_vecTournament.cbegin(), m_vecTournament.cend(), [&vecCompletedMatches](const auto& t) {
 		const auto& vecMatch = t.GetMatches();
 		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecCompletedMatches), [](const auto& m) {
-			return m.IsMatchValid();
+			return m.IsValid();
 			});
 		});
 	return vecCompletedMatches;

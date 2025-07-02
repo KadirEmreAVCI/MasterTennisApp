@@ -134,12 +134,12 @@ bool Match::IsUpcomingMatch()const
 {
 	return m_Date > QDate::currentDate() || (m_Date == QDate::currentDate() && m_Time > QTime::currentTime());
 }
-bool Match::IsMatchValid()const
+bool Match::IsValid()const
 {
 	const bool blUpcomingMatchValid = IsUpcomingMatch() && GetScore() == Score(0, 0) && (m_vecSet.empty() || std::all_of(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {
 		return s == Set{ Score(0, 0), Score(0, 0) }; }));
 	const bool blCompletedMatchValid = !IsUpcomingMatch() && (GetOutcome() != Outcome::Tied) && std::all_of(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {
-		return s.GetOutcome() != Outcome::Tied; });
+		return (s.GetOutcome() != Outcome::Tied) && s.IsValid(); });
 	return blUpcomingMatchValid || blCompletedMatchValid;
 }
 bool Match::IsEarlier(const Match& other)const

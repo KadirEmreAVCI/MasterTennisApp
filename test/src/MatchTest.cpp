@@ -38,7 +38,7 @@ TEST_F(MatchTest, DetectInvalidMatches)
 	const std::vector<bool> vecTestOutput = { true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, false, true, false };
 	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
 	{
-		EXPECT_EQ(m_vecMatch[idx].IsMatchValid(), vecTestOutput[idx]);
+		EXPECT_EQ(m_vecMatch[idx].IsValid(), vecTestOutput[idx]);
 	}
 }
 TEST_F(MatchTest, SettingMatchScoreAfterSetsAreAssigned)

@@ -109,7 +109,7 @@ void HistoryPage::InsertButtonWithImage2Cell(const std::string& sImageAddr, floa
 }
 void HistoryPage::InsertTrophyPic(const Tournament& t, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
-	if (const auto& lastMatch = t.GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsMatchValid())
+	if (const auto& lastMatch = t.GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsValid())
 	{
 		if (lastMatch.value().GetStage() == "Final")
 		{

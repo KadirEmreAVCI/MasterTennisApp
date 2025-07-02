@@ -11,14 +11,14 @@ public:
 	void SetSetScore(const Score& ss, std::optional<Score> ts = std::nullopt);
 	Score GetTBScore()const;
 	void SetTBScore(const Score&);
-	void Clear();
 	Outcome GetOutcome()const;
 	bool IsSetTBPlayed()const;
+	bool IsValid()const;
 	std::string ToString()const;
 	static Set FromString(const std::string&);
 	friend bool operator==(const Set& lhs, const Set& rhs)
 	{
-		return	lhs.m_MajorScore == rhs.m_MajorScore && lhs.GetTBScore() == rhs.GetTBScore();
+		return	lhs.GetMajorScore() == rhs.GetMajorScore() && lhs.GetTBScore() == rhs.GetTBScore();
 	}
 	friend std::ostream& operator<<(std::ostream& os, const Set& s)
 	{

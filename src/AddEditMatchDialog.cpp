@@ -178,21 +178,6 @@ std::vector<Set> AddEditMatchDialog::GetSets()const
 	}
 	return vecSet;
 }
-Score AddEditMatchDialog::CollectMatchScore()const
-{
-	unsigned uiHomeScore{}, uiAwayScore{};
-	std::vector<Set> vecSet = GetSets();
-	if (!vecSet.empty())
-	{
-		uiHomeScore = std::count_if(vecSet.cbegin(), vecSet.cend(), [](const auto& set) {
-			return set.GetOutcome() == Outcome::HomeWin;
-			});
-		uiAwayScore = std::count_if(vecSet.cbegin(), vecSet.cend(), [](const auto& set) {
-			return set.GetOutcome() == Outcome::AwayWin;
-			});
-	}
-	return Score(uiHomeScore, uiAwayScore);
-}
 bool AddEditMatchDialog::IsMandatoryFieldsFilled()const
 {
 	const bool blWOValid = (ui.comboBox_Statu->currentText() == "WO" && ui.comboBox_Stage->currentText() != "" && ui.lineEdit__Opponent1->text() != "" && (!m_RootTournament.IsDoubleTournament() || (m_RootTournament.IsDoubleTournament() && ui.lineEdit__Opponent2->text() != "")) && m_MatchDate.isValid() && ui.timeEdit->time().isValid());
@@ -266,9 +251,8 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		m.SetOpponent1(ui.lineEdit__Opponent1->text().toStdString());
 		if (m_RootTournament.IsDoubleTournament())
 			m.SetOpponent2(ui.lineEdit__Opponent2->text().toStdString());
-		//m.SetScore(CollectMatchScore());
 		m.SetSets(GetSets());
-		if (!m.IsMatchValid())
+		if (!m.IsValid())
 		{
 			QMessageBox::critical(this, "Error", "Invalid match.");
 		}
