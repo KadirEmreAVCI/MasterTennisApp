@@ -4,9 +4,32 @@
 #include <QMap>
 #include <QVariant>
 #include "Tournament.h"
-Tournament::Tournament(): DBItem("Tournament", "ProfileID,OrganizationID,Season,Category,Type,Teammate,Participant,Locked,ThirdPlaceGameAvailable,SetsBestOf")
+Tournament::Tournament(	unsigned uiID,
+						unsigned uiProfileID ,
+						unsigned uiOrgID,
+						const std::string& sOrgName,
+						const std::string& sSeason,
+						const std::string& sCategory,
+						const std::string& sType,
+						const std::string& sTeammate,
+						unsigned uiParticipant,
+						bool blIsLocked,
+						bool bl3rdPlaceGameAvailable,
+						unsigned uiBestOfSets)
+						: 
+						m_uiProfileID{ uiProfileID },
+						m_uiOrgID{ uiOrgID },
+						m_sSeason{ sSeason },
+						m_sCategory{ sCategory },
+						m_sType{ sType },
+						m_sTeammate{ sTeammate },
+						m_uiParticipant{ uiParticipant },
+						m_blIsLocked{ blIsLocked },
+						m_bl3rdPlaceGameAvailable{ bl3rdPlaceGameAvailable },
+						m_uiBestOfSets{ uiBestOfSets },
+						DBItem("Tournament", "ProfileID,OrganizationID,Season,Category,Type,Teammate,Participant,Locked,ThirdPlaceGameAvailable,SetsBestOf")
 {
-	
+	SetID(uiID);
 }
 
 std::vector<std::string> Tournament::ms_vecPossiblePlayoffStages{"Final", "Semi Final", "Quarter Final", "Final 16", "Final 32", "Final 64"};
@@ -21,29 +44,14 @@ unsigned Tournament::GetID()const
 	return m_uiID;
 }
 
-void Tournament::SetID(unsigned uiID)
-{
-	m_uiID = uiID;
-}
-
 unsigned Tournament::GetProfileID()const
 {
 	return m_uiProfileID;
 }
 
-void Tournament::SetProfileID(unsigned uiProfileID)
-{
-	m_uiProfileID = uiProfileID;
-}
-
 unsigned Tournament::GetOrgID()const
 {
 	return m_uiOrgID;
-}
-
-void Tournament::SetOrgID(unsigned uiOrgID)
-{
-	m_uiOrgID = uiOrgID;
 }
 
 std::string Tournament::GetOrgName()const
@@ -61,11 +69,6 @@ std::string Tournament::GetType()const
 	return m_sType;
 }
 
-void Tournament::SetType(std::string sType)
-{
-	m_sType = sType;
-}
-
 bool Tournament::IsDoubleTournament()const
 {
 	return m_sType.find("Double") != std::string::npos;
@@ -76,19 +79,9 @@ std::string Tournament::GetTeammate()const
 	return m_sTeammate.value_or("-");
 }
 
-void Tournament::SetTeammate(std::string sTeammate)
-{
-	m_sTeammate = sTeammate;
-}
-
 std::string Tournament::GetCategory()const
 {
 	return m_sCategory;
-}
-
-void Tournament::SetCategory(std::string sCategory)
-{
-	m_sCategory = sCategory;
 }
 
 std::string Tournament::GetSeason()const
@@ -96,19 +89,9 @@ std::string Tournament::GetSeason()const
 	return m_sSeason;
 }
 
-void Tournament::SetSeason(std::string sSeason)
-{
-	m_sSeason = sSeason;
-}
-
 unsigned Tournament::GetParticipant()const
 {
 	return m_uiParticipant;
-}
-
-void Tournament::SetParticipant(unsigned uiParticipant)
-{
-	m_uiParticipant = uiParticipant;
 }
 
 bool Tournament::IsLocked()const
@@ -126,20 +109,11 @@ bool Tournament::Get3rdPlaceGameAvailable()const
 	return m_bl3rdPlaceGameAvailable;
 }
 
-void Tournament::Set3rdPlaceGameAvailable(bool bl3rdPlaceGameAvailable)
-{
-	m_bl3rdPlaceGameAvailable = bl3rdPlaceGameAvailable;
-}
-
 unsigned Tournament::GetSetsBestOf()const
 {
 	return m_uiBestOfSets;
 }
 
-void Tournament::SetSetsBestOf(unsigned uiBestOfSets)
-{
-	m_uiBestOfSets = uiBestOfSets;
-}
 /*  
 	GetStages function adds all possible stages for the tournament. 
 	If there are more than 4 players in the tournament, group stage option will be available, else there will be only playoff stages.
@@ -235,17 +209,17 @@ bool Tournament::EditInDB()const
 void Tournament::LoadFromDB(unsigned ID)
 {
 	SQLiteDB& db = SQLiteDB::instance();
-	SetID(stoi(db.GetValue(m_sDBTable, "ID", ID)));
-	SetProfileID(stoi(db.GetValueWithCond(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID))));
-	SetOrgID(stoi(db.GetValueWithCond(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID))));
-	SetSeason(db.GetValueWithCond(m_sDBTable, "Season", "ID", std::to_string(m_uiID)));
-	SetCategory(db.GetValueWithCond(m_sDBTable, "Category", "ID", std::to_string(m_uiID)));
-	SetType(db.GetValueWithCond(m_sDBTable, "Type", "ID", std::to_string(m_uiID)));
-	SetTeammate(db.GetValueWithCond(m_sDBTable, "Teammate", "ID", std::to_string(m_uiID)));
-	SetParticipant(stoi(db.GetValueWithCond(m_sDBTable, "Participant", "ID", std::to_string(m_uiID))));
-	SetLocked(stoi(db.GetValueWithCond(m_sDBTable, "Locked", "ID", std::to_string(m_uiID))));
-	Set3rdPlaceGameAvailable(stoi(db.GetValueWithCond(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID))));
-	SetSetsBestOf(stoi(db.GetValueWithCond(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID))));
+	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
+	m_uiProfileID = stoi(db.GetValueWithCond(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
+	m_uiOrgID = stoi(db.GetValueWithCond(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
+	m_sSeason = db.GetValueWithCond(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
+	m_sCategory = db.GetValueWithCond(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
+	m_sType = db.GetValueWithCond(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
+	m_sTeammate = db.GetValueWithCond(m_sDBTable, "Teammate", "ID", std::to_string(m_uiID));
+	m_uiParticipant = stoi(db.GetValueWithCond(m_sDBTable, "Participant", "ID", std::to_string(m_uiID)));
+	m_blIsLocked = stoi(db.GetValueWithCond(m_sDBTable, "Locked", "ID", std::to_string(m_uiID)));
+	m_bl3rdPlaceGameAvailable = stoi(db.GetValueWithCond(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID)));
+	m_uiBestOfSets = stoi(db.GetValueWithCond(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID)));
 }
 
 

@@ -16,3 +16,7 @@ std::string DBItem::GetDBTable()const
 {
 	return m_sDBTable;
 }
+void DBItem::SetID(unsigned uiID)
+{
+	m_uiID = uiID;
+}

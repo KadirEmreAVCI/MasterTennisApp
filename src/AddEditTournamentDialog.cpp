@@ -201,20 +201,20 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 	if (IsMandatoryFieldsFilled())
 	{
 		close();
-		Tournament t;
-		t.SetID(m_EditedTournament.GetID());
-		t.SetProfileID(m_ActiveProfile.GetID());
-		t.SetOrgID(m_uiOrgID);
-		t.SetOrgName(m_sOrgName.toStdString());
-		t.SetSeason((QString::number(ui.spinBox_Year->value()) + " " + m_sSeason).toStdString());
-		t.SetCategory(m_sCategory.toStdString());
-		t.SetType(m_sType.toStdString());
-		m_sTeammate = IsDoubleTournament() ? ui.lineEdit_Teammate->text() : "";
-		t.SetTeammate(m_sTeammate.toStdString());
-		t.SetParticipant(ui.spinBox_Participant->value());
-		t.SetLocked(m_EditedTournament.IsLocked());
-		t.Set3rdPlaceGameAvailable(ui.checkBox_3rdPlaceGameAvailable->isChecked());
-		t.SetSetsBestOf(m_uiSetsBestOf);
+		Tournament t{
+			m_EditedTournament.GetID(),
+			m_ActiveProfile.GetID(),
+			m_uiOrgID,
+			m_sOrgName.toStdString(),
+			(QString::number(ui.spinBox_Year->value()) + " " + m_sSeason).toStdString(),
+			m_sCategory.toStdString(),
+			m_sType.toStdString(),
+			(IsDoubleTournament() ? ui.lineEdit_Teammate->text() : "").toStdString(),
+			static_cast<unsigned>(ui.spinBox_Participant->value()),
+			m_EditedTournament.IsLocked(),
+			ui.checkBox_3rdPlaceGameAvailable->isChecked(),
+			m_uiSetsBestOf
+		};
 		if (m_DialogMode == DialogMode::eAddDialog)
 		{
 			if(AppController::instance().AddNewTournament(t))

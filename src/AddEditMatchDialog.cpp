@@ -38,6 +38,7 @@ void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, con
 	case DialogMode::eAddDialog:
 	{
 		setWindowTitle("Add Match");
+		m_EditedMatch = Match{};
 		InitSetList(Set(Score(0, 0)));
 		break;
 	}
@@ -243,7 +244,7 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 	if (IsMandatoryFieldsFilled())
 	{
 		Match m{
-			0,
+			m_EditedMatch.GetID(),
 			m_RootTournament.GetID(),
 			ui.comboBox_Statu->currentText().toStdString(),
 			ui.comboBox_Stage->currentText().toStdString(),
@@ -253,15 +254,6 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 			ui.timeEdit->time(),
 			GetSets()
 		};
-		/*m.SetDate(m_MatchDate);
-		m.SetTime(ui.timeEdit->time());
-		m.SetTournamentID(m_RootTournament.GetID());
-		m.SetStatu(ui.comboBox_Statu->currentText().toStdString());
-		m.SetStage(ui.comboBox_Stage->currentText().toStdString());
-		m.SetOpponent1(ui.lineEdit__Opponent1->text().toStdString());
-		if (m_RootTournament.IsDoubleTournament())
-			m.SetOpponent2(ui.lineEdit__Opponent2->text().toStdString());
-		m.SetSets(GetSets());*/
 		if (!m.IsValid())
 		{
 			QMessageBox::critical(this, "Error", "Invalid match.");
@@ -279,7 +271,6 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 			}
 			case DialogMode::eEditDialog:
 			{
-				m.SetID(m_EditedMatch.GetID());
 				if (m == m_EditedMatch)
 				{
 					QMessageBox::warning(this, "Warning", "No change detected in the match.");

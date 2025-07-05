@@ -26,10 +26,6 @@ unsigned Match::GetID()const
 {
 	return m_uiID;
 }
-void Match::SetID(unsigned uiID)
-{
-	m_uiID = uiID;
-}
 unsigned Match::GetTournamentID()const
 {
 	return m_uiTournamentID;

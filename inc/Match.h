@@ -10,7 +10,6 @@ class Match : public DBItem {
 public:
 	Match(unsigned uiID = 0, unsigned uiTournamentID = 0, const std::string& sStatu = "", const std::string& sStage = "", const std::string& sOpponent1 = "", const std::optional<std::string>& sOpponent2 = "", const QDate& rDate = QDate{}, const QTime& rTime = {}, const std::vector<Set>& vecSet = {});
 	unsigned GetID()const;
-	void SetID(unsigned uiID);
 	unsigned GetTournamentID()const;
 	std::string GetStatu()const;
 	std::string GetStage()const;

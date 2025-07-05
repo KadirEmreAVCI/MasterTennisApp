@@ -14,6 +14,7 @@ public:
 	virtual void LoadFromDB(unsigned ID)=0;
 	std::string GetDBTable()const;
 protected:
+	void SetID(unsigned);
 	unsigned m_uiID{};
 	std::string m_sDBTable;
 	std::string m_sDBColumns;
