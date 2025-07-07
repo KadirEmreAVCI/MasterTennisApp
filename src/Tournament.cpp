@@ -11,7 +11,7 @@ Tournament::Tournament(	unsigned uiID,
 						const std::string& sSeason,
 						const std::string& sCategory,
 						const std::string& sType,
-						const std::string& sTeammate,
+						std::optional<std::string> soptTeammate,
 						unsigned uiParticipant,
 						bool blIsLocked,
 						bool bl3rdPlaceGameAvailable,
@@ -22,7 +22,7 @@ Tournament::Tournament(	unsigned uiID,
 						m_sSeason{ sSeason },
 						m_sCategory{ sCategory },
 						m_sType{ sType },
-						m_sTeammate{ sTeammate },
+						m_soptTeammate{ soptTeammate },
 						m_uiParticipant{ uiParticipant },
 						m_blIsLocked{ blIsLocked },
 						m_bl3rdPlaceGameAvailable{ bl3rdPlaceGameAvailable },
@@ -71,12 +71,12 @@ std::string Tournament::GetType()const
 
 bool Tournament::IsDoubleTournament()const
 {
-	return m_sType.find("Double") != std::string::npos;
+	return m_soptTeammate.has_value() && m_soptTeammate.value() != "";
 }
 
 std::string Tournament::GetTeammate()const
 {
-	return m_sTeammate.value_or("-");
+	return m_soptTeammate.value_or("");
 }
 
 std::string Tournament::GetCategory()const
@@ -119,12 +119,12 @@ unsigned Tournament::GetSetsBestOf()const
 	If there are more than 4 players in the tournament, group stage option will be available, else there will be only playoff stages.
 	Supports up to 128 players. 
 */
-std::vector<std::string> Tournament::GetStages()const
+std::vector<std::string> Tournament::GetPossibleStages()const
 {
 	unsigned int uiParticipant = m_uiParticipant;
 	int iStageNum = (log2(uiParticipant) == floor(log2(uiParticipant))) ? log2(uiParticipant) : floor(log2(uiParticipant)) + 1;
 	std::vector<std::string> vecStages;
-	if (iStageNum > 2)
+	if (iStageNum >= 2)
 	{
 		vecStages.push_back("Group Stage");
 		--iStageNum;
@@ -161,6 +161,22 @@ std::optional<Match> Tournament::GetLastMatch()const
 {
 	return !m_vecMatch.empty() ? std::optional<Match>(m_vecMatch.back()) : std::nullopt;
 }
+bool Tournament::IsMatchValidForTournament(const Match& m)const
+{
+	return IsMatchStageValid(m) && !IsMatchExceedingMaxSet(m);
+}
+bool Tournament::IsValid()const
+{
+	bool blAllMatchesAreValid = true;
+	if (!m_vecMatch.empty())
+	{
+		blAllMatchesAreValid = std::all_of(m_vecMatch.cbegin(), m_vecMatch.cend(), [this](const Match& m){
+			return m.IsValid() && IsMatchValidForTournament(m);
+			});
+	}
+	const bool blTournamentTypeCompatible = ((m_sType.find("Double") != std::string::npos) == IsDoubleTournament());
+	return blAllMatchesAreValid && blTournamentTypeCompatible;
+}
 bool Tournament::IsEarlier(const Tournament& other)const
 {
 	if (!m_vecMatch.empty() && !other.m_vecMatch.empty())
@@ -175,6 +191,19 @@ bool Tournament::IsEarlier(const Tournament& other)const
 	{
 		return true;
 	}
+}
+bool Tournament::IsMatchStageValid(const Match& m)const
+{
+	const auto& vecPossibleStages = GetPossibleStages();
+	const bool blMatchStageIsValid = std::any_of(vecPossibleStages.cbegin(), vecPossibleStages.cend(), [m](const std::string& sStage) {
+		return sStage == m.GetStage();
+		});
+	return blMatchStageIsValid;	
+}
+bool Tournament::IsMatchExceedingMaxSet(const Match& m)const
+{
+	const unsigned uiMaxScoreForWinner = (m_uiBestOfSets + 1) / 2;
+	return (m.GetSets().size() > m_uiBestOfSets) || (m.GetScore().GetHomeScore() > uiMaxScoreForWinner || m.GetScore().GetAwayScore() > uiMaxScoreForWinner);
 }
 bool Tournament::InsertToDB()const
 {
@@ -215,7 +244,8 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_sSeason = db.GetValueWithCond(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
 	m_sCategory = db.GetValueWithCond(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
 	m_sType = db.GetValueWithCond(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
-	m_sTeammate = db.GetValueWithCond(m_sDBTable, "Teammate", "ID", std::to_string(m_uiID));
+	const std::string sTeammate = db.GetValueWithCond(m_sDBTable, "Teammate", "ID", std::to_string(m_uiID));
+	m_soptTeammate = (sTeammate != "") ? std::optional<std::string>(sTeammate) : std::nullopt;
 	m_uiParticipant = stoi(db.GetValueWithCond(m_sDBTable, "Participant", "ID", std::to_string(m_uiID)));
 	m_blIsLocked = stoi(db.GetValueWithCond(m_sDBTable, "Locked", "ID", std::to_string(m_uiID)));
 	m_bl3rdPlaceGameAvailable = stoi(db.GetValueWithCond(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID)));

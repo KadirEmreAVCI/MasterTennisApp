@@ -136,6 +136,12 @@
     <ClCompile Include="test\src\ScoreTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test\src\SetTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\src\TournamentTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\IQTComponent.h">
@@ -178,6 +184,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="test\inc\ScoreTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\inc\SetTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\inc\TournamentTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

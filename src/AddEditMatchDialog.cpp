@@ -60,7 +60,7 @@ void AddEditMatchDialog::InitDialog()
 	InitButtonWithPicture(ui.AddSetButton, ":images/images/plus.png", 0.8f);
 	InitButtonWithPicture(ui.RemoveSetButton, ":images/images/minus.png", 0.8f);
 	SetComboBoxAlternatives(ui.comboBox_Statu, m_vecStatuAlternatives);
-	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetStages());
+	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetPossibleStages());
 	ui.lineEdit__Opponent1->setEnabled(true);
 	if (m_RootTournament.IsDoubleTournament())
 		ui.lineEdit__Opponent2->setEnabled(true);
@@ -84,7 +84,7 @@ void AddEditMatchDialog::FillDialog()
 			ui.radioButton_Lose->setChecked(true);
 		}
 	}
-	const auto& vecStage = m_RootTournament.GetStages();
+	const auto& vecStage = m_RootTournament.GetPossibleStages();
 	ui.comboBox_Stage->setCurrentIndex(1 + std::distance(vecStage.cbegin(), std::find(vecStage.cbegin(), vecStage.cend(), m_EditedMatch.GetStage())));
 	ui.lineEdit__Opponent1->setText(QString::fromStdString(m_EditedMatch.GetOpponent1()));
 	if (m_RootTournament.IsDoubleTournament())
@@ -277,8 +277,15 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 				}
 				else
 				{
-					if (AppController::instance().EditMatch(m))
-						QMessageBox::information(this, "Information", "The match is edited successfully");
+					if (m_RootTournament.IsMatchValidForTournament(m))
+					{
+						if (AppController::instance().EditMatch(m))
+							QMessageBox::information(this, "Information", "The match is edited successfully");
+					}
+					else
+					{
+						QMessageBox::warning(this, "Warning", "Edited match is not compatible with the tournament.");
+					}
 				}
 				break;
 			}

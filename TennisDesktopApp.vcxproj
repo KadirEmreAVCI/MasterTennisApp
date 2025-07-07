@@ -140,6 +140,7 @@
     <ClCompile Include="src\DBItem.cpp" />
     <ClCompile Include="src\UpcomingMatch.cpp" />
     <ClCompile Include="src\Tournament.cpp" />
+    <ClCompile Include="test\src\TournamentTest.cpp" />
     <QtRcc Include="Resource.qrc" />
     <QtUic Include="AchievementsPage.ui" />
     <QtUic Include="AddDialog.ui" />
@@ -168,6 +169,7 @@
     <ClInclude Include="test\inc\SetTest.h" />
     <ClInclude Include="test\inc\ScoreTest.h" />
     <ClInclude Include="test\inc\MatchTest.h" />
+    <ClInclude Include="test\inc\TournamentTest.h" />
     <QtMoc Include="inc\ProfileDialog.h" />
     <QtMoc Include="inc\AddEditProfileDialog.h" />
     <ClInclude Include="inc\Config.h" />
