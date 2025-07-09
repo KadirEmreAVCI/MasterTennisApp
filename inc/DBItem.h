@@ -15,6 +15,9 @@ public:
 	std::string GetDBTable()const;
 protected:
 	void SetID(unsigned);
+	static std::string Serialize(std::vector<std::string> vec);
+	static std::vector<std::string> Deserialize(std::string sSerialized);
+	std::vector<std::string> DeserializeDBColumn(const std::string& sColumn)const;
 	unsigned m_uiID{};
 	std::string m_sDBTable;
 	std::string m_sDBColumns;

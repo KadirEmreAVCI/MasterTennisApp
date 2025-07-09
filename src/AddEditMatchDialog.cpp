@@ -131,6 +131,8 @@ void AddEditMatchDialog::ClearDialog()
 	ui.radioButton_Lose->setAutoExclusive(true);
 	ui.radioButton_Win->setVisible(false);
 	ui.radioButton_Lose->setVisible(false);
+	ui.lineEdit__Opponent1->setText("");
+	ui.lineEdit__Opponent2->setText("");
 	SetEnableOpponent(true);
 	ui.listWidget->clear();
 }
@@ -156,8 +158,6 @@ void AddEditMatchDialog::RemoveSet(size_t idx)
 }
 void AddEditMatchDialog::SetEnableOpponent(bool blEnabled)
 {
-	ui.lineEdit__Opponent1->setText("");
-	ui.lineEdit__Opponent2->setText("");
 	ui.lineEdit__Opponent1->setEnabled(blEnabled);
 	if (m_RootTournament.IsDoubleTournament())
 	{
@@ -347,6 +347,8 @@ void AddEditMatchDialog::on_comboBox_Statu_currentTextChanged(const QString& sta
 			ui.radioButton_Win->setVisible(false);
 			ui.radioButton_Lose->setVisible(false);
 			ui.timeEdit->setEnabled(false);
+			ui.lineEdit__Opponent1->setText("");
+			ui.lineEdit__Opponent2->setText("");
 			SetEnableOpponent(false);
 			InitSetList(Set(Score(6, 0)), false);
 		}

@@ -100,11 +100,9 @@ void Profile::LoadFromDB(unsigned ID)
 bool Profile::DeleteFromDB()const
 {
 	const QString sFullSourceDir = GetProfileImageRootDestDir() + QString::fromStdString(GetPPAddr());
-	std::cout << "1- Profile::DeleteFromDB sFullSourceDir = " << sFullSourceDir.toStdString() << "\n";
 	if (QFile::exists(sFullSourceDir))
 	{
-		std::cout << "2- Profile::DeleteFromDB sFullSourceDir = " << sFullSourceDir.toStdString() << "\n";
 		QFile::remove(sFullSourceDir);
 	}
-	return SQLiteDB::instance().DeleteItemFromTable(m_sDBTable, "ID", std::to_string(m_uiID));
+	return DBItem::DeleteFromDB();
 }

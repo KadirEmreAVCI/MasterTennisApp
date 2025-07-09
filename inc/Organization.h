@@ -8,16 +8,11 @@
 #include "DBItem.h"
 class Organization : public DBItem {
 public:
-	Organization();
+	Organization(unsigned uiID = 0, const std::string& sName = "", const std::string& sOrgPictureAddr = "", const std::vector<std::string>& vecCategories = {});
 	unsigned GetID()const;
-	void SetID(unsigned);
 	std::string GetName()const;
-	void SetName(const std::string&);
 	std::string GetOrgPictureAddr()const;
-	void SetOrgPictureAddr(const std::string&);
 	std::vector<std::string> GetCategories()const;
-	void SetCategories(const std::vector<std::string>&);
-	void AddCategory(const std::string&);
 	std::vector<Tournament> GetTournaments()const;
 	void SetTournaments(const std::vector<Tournament>&);
 	static QString GetOrgImageRootDestDir();
@@ -43,9 +38,6 @@ public:
 	virtual bool DeleteFromDB()const override;
 private:
 	static QString ms_sOrgImageRootDestDir;
-	std::string Serialize(std::vector<std::string> vec)const;
-	std::vector<std::string> Deserialize(const std::string& sColumn)const;
-	std::vector<std::string> ExtractSerialized(std::string sSerialized)const;
 	std::string m_sName;
 	std::vector<std::string> m_vecCategories;
 	std::string m_sOrgPictureAddr;

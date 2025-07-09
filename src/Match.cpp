@@ -48,7 +48,7 @@ std::string Match::GetOpponent1()const
 }
 std::string Match::GetOpponent2()const
 {
-	return m_soptOpponent2.value_or("-");
+	return m_soptOpponent2.value_or("");
 }
 QDate Match::GetDate()const
 {
