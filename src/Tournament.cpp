@@ -27,10 +27,8 @@ Tournament::Tournament(	unsigned uiID,
 						m_blIsLocked{ blIsLocked },
 						m_bl3rdPlaceGameAvailable{ bl3rdPlaceGameAvailable },
 						m_uiBestOfSets{ uiBestOfSets },
-						DBItem("Tournament", "ProfileID,OrganizationID,Season,Category,Type,Teammate,Participant,Locked,ThirdPlaceGameAvailable,SetsBestOf")
-{
-	SetID(uiID);
-}
+						DBItem(uiID, "Tournament", "ProfileID,OrganizationID,Season,Category,Type,Teammate,Participant,Locked,ThirdPlaceGameAvailable,SetsBestOf")
+{}
 
 std::vector<std::string> Tournament::ms_vecPossiblePlayoffStages{"Final", "Semi Final", "Quarter Final", "Final 16", "Final 32", "Final 64"};
 

@@ -17,9 +17,8 @@ Match::Match(unsigned uiID,
 	m_soptOpponent2{ soptOpponent2 },
 	m_Date{ rDate },
 	m_Time{ rTime },
-	DBItem("Match", "TournamentID,Statu,Stage,Opponent1,Opponent2,Date,Time,Score,Sets")
+	DBItem(uiID, "Match", "TournamentID,Statu,Stage,Opponent1,Opponent2,Date,Time,Score,Sets")
 {
-	SetID(uiID);
 	SetSets(vecSet);
 }
 unsigned Match::GetID()const

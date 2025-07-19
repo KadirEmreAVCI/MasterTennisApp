@@ -24,7 +24,7 @@ private:
 	void UpdateProfileAlternatives(const std::vector<Profile>&);
 	Ui::ProfileDialogClass ui;
 	std::vector<Profile> m_vecProfile;
-	Profile m_ActiveProfile{};
+	Profile m_ActiveProfile;
 private slots:
 	void on_LogOutButton_clicked();
 	void on_comboBoxProfiles_currentTextChanged(const QString& type);

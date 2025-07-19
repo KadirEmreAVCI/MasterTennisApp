@@ -39,7 +39,7 @@ private:
 	std::unique_ptr<ProfileDialog> m_upProfileDialog{ nullptr };
 	std::string m_sAppName{"Master Tennis App"};
 	std::string m_sAppLogoAddr{":images/images/Logo1.png"};
-	Profile m_ActiveProfile{};
+	Profile m_ActiveProfile;
 public slots:
 	void OnLogOutButtonClicked();
 signals:

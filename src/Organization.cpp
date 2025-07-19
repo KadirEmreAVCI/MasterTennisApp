@@ -12,10 +12,8 @@ Organization::Organization(	unsigned uiID,
 							m_sName{ sName },
 							m_sOrgPictureAddr{ sOrgPictureAddr },
 							m_vecCategories{ vecCategories },
-							DBItem("Organization", "Name,ImageFileName,Categories")
-{
-	SetID(uiID);
-}
+							DBItem(uiID, "Organization", "Name,ImageFileName,Categories")
+{}
 unsigned Organization::GetID()const
 {
 	return m_uiID;

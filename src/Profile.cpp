@@ -6,42 +6,48 @@
 #include "Profile.h"
 
 QString Profile::ms_sProfileImageRootDestDir = "";
-Profile::Profile() : DBItem("Profile", "FullName,Gender,PPAddress")
-{
-	
-}
+Profile::Profile(	unsigned uiID, 
+					const std::string& sFullName, 
+					const std::string& sPPAddr, 
+					Gender gen) 
+					:
+					m_sFullName{sFullName},
+					m_sPPAddr{sPPAddr},
+					m_Gender{gen},
+					DBItem(uiID, "Profile", "FullName,Gender,PPAddress")
+{}
 unsigned int Profile::GetID()const
 {
 	return m_uiID;
 }
-void Profile::SetID(unsigned int uiID)
-{
-	m_uiID = uiID;
-}
+//void Profile::SetID(unsigned int uiID)
+//{
+//	m_uiID = uiID;
+//}
 std::string Profile::GetFullName()const
 {
 	return m_sFullName;
 }
-void Profile::SetFullName(const std::string& sNameSurname)
-{
-	m_sFullName = sNameSurname;
-}
+//void Profile::SetFullName(const std::string& sNameSurname)
+//{
+//	m_sFullName = sNameSurname;
+//}
 std::string Profile::GetPPAddr()const
 {
 	return m_sPPAddr;
 }
-void Profile::SetPPAddr(const std::string& sPPAddr)
-{
-	m_sPPAddr = sPPAddr;
-}
+//void Profile::SetPPAddr(const std::string& sPPAddr)
+//{
+//	m_sPPAddr = sPPAddr;
+//}
 Gender Profile::GetGender()const
 {
 	return m_Gender;
 }
-void Profile::SetGender(Gender gender)
-{
-	m_Gender = gender;
-}
+//void Profile::SetGender(Gender gender)
+//{
+//	m_Gender = gender;
+//}
 std::vector<Organization> Profile::GetParticipatedOrgs()const
 {
 	return m_vecParticipatedOrg;
@@ -92,10 +98,10 @@ bool Profile::EditInDB()const
 void Profile::LoadFromDB(unsigned ID)
 {
 	const SQLiteDB& db = SQLiteDB::instance();
-	SetID(stoi(db.GetValue(m_sDBTable, "ID", ID)));
-	SetFullName(db.GetValueWithCond(m_sDBTable, "FullName", "ID", std::to_string(m_uiID)));
-	SetGender((db.GetValueWithCond(m_sDBTable, "Gender", "ID", std::to_string(m_uiID))) == "Male" ? Gender::Male : Gender::Female);
-	SetPPAddr(db.GetValueWithCond(m_sDBTable, "PPAddress", "ID", std::to_string(m_uiID)));
+	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
+	m_sFullName = db.GetValueWithCond(m_sDBTable, "FullName", "ID", std::to_string(m_uiID));
+	m_Gender = (db.GetValueWithCond(m_sDBTable, "Gender", "ID", std::to_string(m_uiID))) == "Male" ? Gender::Male : Gender::Female;
+	m_sPPAddr = db.GetValueWithCond(m_sDBTable, "PPAddress", "ID", std::to_string(m_uiID));
 }
 bool Profile::DeleteFromDB()const
 {

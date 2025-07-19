@@ -40,7 +40,7 @@ private:
 	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;
 	std::vector<Organization> FindParticipatedOrgsOfProfile(unsigned uiProfileID)const;
-	Profile m_ActiveProfile{};
+	Profile m_ActiveProfile;
 	std::vector<Profile> m_vecProfile;
 	std::vector<Organization> m_vecOrganization;
 	std::vector<Tournament> m_vecTournament;

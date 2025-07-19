@@ -10,15 +10,11 @@ enum class Gender
 };
 class Profile : public DBItem {
 public:
-	Profile();
+	Profile(unsigned uiID = 0, const std::string& sFullName = "", const std::string& sPPAddr = "", Gender gen = Gender::Male);
 	unsigned int GetID()const;
-	void SetID(unsigned int);
 	std::string GetFullName()const;
-	void SetFullName(const std::string&);
 	std::string GetPPAddr()const;
-	void SetPPAddr(const std::string&);
 	Gender GetGender()const;
-	void SetGender(Gender);
 	std::vector<Organization> GetParticipatedOrgs()const;
 	void SetParticipatedOrgs(const std::vector<Organization>&);
 	static QString GetProfileImageRootDestDir();

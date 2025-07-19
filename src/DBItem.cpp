@@ -1,7 +1,7 @@
 #pragma once
 #include "DBItem.h"
 #include <sstream>
-DBItem::DBItem(const std::string& sDBTable, const std::string& sDBColumns) : m_sDBTable{ sDBTable }, m_sDBColumns{ sDBColumns }
+DBItem::DBItem(unsigned uiID, const std::string& sDBTable, const std::string& sDBColumns) : m_uiID{uiID}, m_sDBTable { sDBTable }, m_sDBColumns{ sDBColumns }
 {
 	
 }
@@ -16,10 +16,6 @@ bool DBItem::DeleteFromDB()const
 std::string DBItem::GetDBTable()const
 {
 	return m_sDBTable;
-}
-void DBItem::SetID(unsigned uiID)
-{
-	m_uiID = uiID;
 }
 std::string DBItem::Serialize(std::vector<std::string> vec)
 {

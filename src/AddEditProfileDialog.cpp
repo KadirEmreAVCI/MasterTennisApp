@@ -106,13 +106,15 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 	if (IsMandatoryFieldsFilled())
 	{
 		close();
-		Profile p;
-		p.SetFullName(ui.lineEdit_NameSurname->text().toStdString());
-		p.SetGender(ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female);
+		Profile p{
+			m_EditedProfile.GetID(),
+			ui.lineEdit_NameSurname->text().toStdString(),
+			m_sImageFileName.toStdString(),
+			ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female
+		};
 		if (m_sImageFileName != "")
 		{
 			SaveImage();
-			p.SetPPAddr(m_sImageFileName.toStdString());
 		}
 		switch (m_DialogMode)
 		{
@@ -124,7 +126,6 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 			}
 			case DialogMode::eEditDialog:
 			{
-				p.SetID(m_EditedProfile.GetID());
 				if (p == m_EditedProfile)
 				{
 					QMessageBox::warning(this, "Warning", "No change detected in the profile.");

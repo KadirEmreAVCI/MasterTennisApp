@@ -31,7 +31,7 @@ private:
 	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sSeason;
 	unsigned m_uiSetsBestOf{}, m_uiOrgID;
 	std::vector <Organization> m_vecOrganization;
-	Profile m_ActiveProfile{};
+	Profile m_ActiveProfile;
 private slots:
 	void on_CancelButton_clicked();
 	void on_SaveButton_clicked();
