@@ -108,6 +108,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="test\src\DatabaseControllerTest.cpp" />
     <ClCompile Include="test\src\SetTest.cpp" />
     <ClCompile Include="test\src\ScoreTest.cpp" />
     <ClCompile Include="test\src\MatchTest.cpp" />
@@ -166,6 +167,7 @@
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="test\inc\DatabaseControllerTest.h" />
     <ClInclude Include="test\inc\SetTest.h" />
     <ClInclude Include="test\inc\ScoreTest.h" />
     <ClInclude Include="test\inc\MatchTest.h" />

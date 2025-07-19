@@ -8,6 +8,8 @@
 class DatabaseController : public QObject{
 	Q_OBJECT
 public:
+	friend class DatabaseControllerTest;
+
 	static DatabaseController& instance();
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;

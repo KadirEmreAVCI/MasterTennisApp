@@ -1,5 +1,4 @@
 // Standard Headers
-#include <vector>
 #include <algorithm>
 
 // Test Headers
