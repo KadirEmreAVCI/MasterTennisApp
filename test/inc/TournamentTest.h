@@ -19,18 +19,9 @@ protected:
 			});
 		InitMatchesOfTournaments();
 	}
-	bool IsMatchStageValid(const Tournament& t, const Match& m)
-	{
-		return t.IsMatchStageValid(m);
-	}
-	bool IsMatchExceedingMaxSet(const Tournament& t, const Match& m)
-	{
-		return t.IsMatchExceedingMaxSet(m);
-	}
-	bool IsMatchValidForTournament(const Tournament& t, const Match& m)
-	{
-		return t.IsMatchValidForTournament(m);
-	}
+	bool IsMatchStageValid(const Tournament& t, const Match& m);
+	bool IsMatchExceedingMaxSet(const Tournament& t, const Match& m);
+	bool IsMatchValidForTournament(const Tournament& t, const Match& m);
 private:
 	void InitMatchesOfTournaments()
 	{

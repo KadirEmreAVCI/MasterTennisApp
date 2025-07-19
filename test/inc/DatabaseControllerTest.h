@@ -11,7 +11,7 @@ protected:
 	void SetUp()
 	{
 		m_vecMatch.insert(m_vecMatch.end(), {
-			Match{ 0, 0, "U", "Quarter Final", "Op1", "", QDate{2025, 1, 1}, QTime{9, 0, 0}, {Set{Score(6, 1)}, Set{Score(6, 7), Score(5, 7)}, Set{Score(10, 4)}}},
+			Match{ 0, 0, "U", "Quarter Final", "Op1", "", QDate{2023, 1, 1}, QTime{9, 0, 0}, {Set{Score(6, 1)}, Set{Score(6, 7), Score(5, 7)}, Set{Score(10, 4)}}},
 			Match{ 1, 0, "U", "Final 16", "Mustafa Yavuz Kirli", "", QDate{2024, 2, 11}, QTime{18, 0, 0}, {Set{Score(6, 0)}, Set{Score(6, 1)}, Set{Score(1, 6)}, Set{Score(7, 5)}}},
 			Match{ 2, 0, "U", "Final", "Ismail Ozaydin", "Bora Deveci", QDate{2024, 7, 10}, QTime{18, 0, 0}, {Set{Score(1, 6)}, Set{Score(1, 6)}, Set{Score(4, 6)}}},
 			Match{ 3, 1, "U", "Semi Final", "Ali Oner", "", QDate{2021, 6, 6}, QTime{18, 0, 0}, {Set{Score(1, 6)}, Set{Score(4, 6)}}},
@@ -32,10 +32,10 @@ protected:
 			});
 		m_vecTournament.insert(m_vecTournament.end(), {
 			Tournament{0, 0, 0, "Karayollari", "2022 Winter", "D", "Single Men", std::nullopt, 24, true, true, 3},
-			Tournament{1, 0, 0, "Karayollari", "2023 Summer", "Ilk Turnuvam", "Double Men", "Alp Emre Kamis", 36, false, false, 3},
-			Tournament{2, 0, 1, "Aselsan", "2024 Fall", "C", "Single Men", std::nullopt, 15, true, true, 3},
+			Tournament{1, 1, 0, "Karayollari", "2023 Summer", "Ilk Turnuvam", "Double Men", "Alp Emre Kamis", 36, false, false, 3},
+			Tournament{2, 0, 1, "Ase3lsan", "2024 Fall", "C", "Single Men", std::nullopt, 15, true, true, 3},
 			Tournament{3, 0, 2, "Ahal Teke", "2025 Spring", "D", "Double Mixed", "Hakki Ozdemir", 64, true, true, 3},
-			Tournament{4, 0, 3, "PTA", "2025 Winter", "D", "Double Men", std::nullopt, 8, true, true, 3},
+			Tournament{4, 1, 3, "PTA", "2025 Winter", "D", "Double Men", std::nullopt, 8, true, true, 3},
 			Tournament{5, 0, 1, "Aselsan", "2025 Summer", "A", "Single Men", "", 4, true, false, 1}
 			});
 		m_vecOrganization.insert(m_vecOrganization.end(), {
@@ -44,41 +44,27 @@ protected:
 			Organization{2, "Ahal Teke", "", {"Master", "A", "B", "C", "D"}},
 			Organization{3, "PTA", "", {"Master", "A+", "A", "B", "C", "D", "Ilk Turnuvam"}}
 			});
+		m_vecProfile.insert(m_vecProfile.end(), {
+			Profile{0, "Kadir Emre Avci", "data/pp/", Gender::Male},
+			Profile{1, "Ayse Nur Avci", "data/pp/", Gender::Female}
+			});
 		LoadMatchData();
 		LoadTournamentData();
 		LoadOrganizationData();
+		LoadProfileData();
 	}
-	std::vector<Tournament> GetTournamentsFromDB()const
-	{
-		return DatabaseController::instance().m_vecTournament;
-	}
-	std::vector<Organization> GetOrganizationsFromDB()const
-	{
-		return DatabaseController::instance().m_vecOrganization;
-	}
+	std::vector<Tournament> GetTournamentsFromDB()const;
+	std::vector<Organization> GetOrganizationsFromDB()const;
+	std::vector<Profile> GetProfilesFromDB()const;
+	std::vector<Tournament> GetTournamentsOFProfile(unsigned uiProfileID)const;
 	std::vector<Match> m_vecMatch;
 	std::vector<Tournament> m_vecTournament;
 	std::vector<Organization> m_vecOrganization;
+	std::vector<Profile> m_vecProfile;
 private:
-	void LoadMatchData()
-	{
-		DatabaseController::instance().m_vecMatch = m_vecMatch;
-	}
-	void LoadTournamentData()
-	{
-		DatabaseController::instance().m_vecTournament = m_vecTournament;
-		for (Tournament& t : DatabaseController::instance().m_vecTournament)
-		{
-			t.SetMatches(DatabaseController::instance().FindMatchesOfTournament(t.GetID()));
-		}
-	}
-	void LoadOrganizationData()
-	{
-		DatabaseController::instance().m_vecOrganization = m_vecOrganization;
-		for (Organization& org : DatabaseController::instance().m_vecOrganization)
-		{
-			org.SetTournaments(DatabaseController::instance().FindTournamentsOfOrganization(org.GetID()));
-		}
-	}
+	void LoadMatchData();
+	void LoadTournamentData();
+	void LoadOrganizationData();
+	void LoadProfileData();
 };
 

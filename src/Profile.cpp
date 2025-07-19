@@ -20,34 +20,18 @@ unsigned int Profile::GetID()const
 {
 	return m_uiID;
 }
-//void Profile::SetID(unsigned int uiID)
-//{
-//	m_uiID = uiID;
-//}
 std::string Profile::GetFullName()const
 {
 	return m_sFullName;
 }
-//void Profile::SetFullName(const std::string& sNameSurname)
-//{
-//	m_sFullName = sNameSurname;
-//}
 std::string Profile::GetPPAddr()const
 {
 	return m_sPPAddr;
 }
-//void Profile::SetPPAddr(const std::string& sPPAddr)
-//{
-//	m_sPPAddr = sPPAddr;
-//}
 Gender Profile::GetGender()const
 {
 	return m_Gender;
 }
-//void Profile::SetGender(Gender gender)
-//{
-//	m_Gender = gender;
-//}
 std::vector<Organization> Profile::GetParticipatedOrgs()const
 {
 	return m_vecParticipatedOrg;

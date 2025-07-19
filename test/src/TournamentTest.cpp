@@ -3,7 +3,18 @@
 
 // Test Headers
 #include "TournamentTest.h"
-
+bool TournamentTest::IsMatchStageValid(const Tournament& t, const Match& m)
+{
+	return t.IsMatchStageValid(m);
+}
+bool TournamentTest::IsMatchExceedingMaxSet(const Tournament& t, const Match& m)
+{
+	return t.IsMatchExceedingMaxSet(m);
+}
+bool TournamentTest::IsMatchValidForTournament(const Tournament& t, const Match& m)
+{
+	return t.IsMatchValidForTournament(m);
+}
 TEST_F(TournamentTest, DetectDoubleTournaments)
 {
 	const std::vector vecTestOutput{ false, true, false, true, false, false };

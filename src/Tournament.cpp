@@ -161,7 +161,7 @@ std::optional<Match> Tournament::GetLastMatch()const
 }
 bool Tournament::IsMatchValidForTournament(const Match& m)const
 {
-	return IsMatchStageValid(m) && !IsMatchExceedingMaxSet(m);
+	return m.IsValid() && IsMatchStageValid(m) && !IsMatchExceedingMaxSet(m);
 }
 bool Tournament::IsValid()const
 {
@@ -169,7 +169,7 @@ bool Tournament::IsValid()const
 	if (!m_vecMatch.empty())
 	{
 		blAllMatchesAreValid = std::all_of(m_vecMatch.cbegin(), m_vecMatch.cend(), [this](const Match& m){
-			return m.IsValid() && IsMatchValidForTournament(m);
+			return IsMatchValidForTournament(m);
 			});
 	}
 	const bool blTournamentTypeCompatible = ((m_sType.find("Double") != std::string::npos) == IsDoubleTournament());
