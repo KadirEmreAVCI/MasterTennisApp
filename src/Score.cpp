@@ -9,10 +9,6 @@ std::pair<unsigned, unsigned> Score::GetScore()const
 {
 	return m_Score;
 }
-void Score::SetScore(std::pair<unsigned, unsigned> score)
-{
-	m_Score = score;
-}
 unsigned Score::GetHomeScore()const
 {
 	return m_Score.first;
@@ -20,11 +16,6 @@ unsigned Score::GetHomeScore()const
 unsigned Score::GetAwayScore()const
 {
 	return m_Score.second;
-}
-void Score::Clear()
-{
-	m_Score.first = 0;
-	m_Score.second = 0;
 }
 Outcome Score::GetOutcome()const
 {
@@ -34,10 +25,6 @@ Outcome Score::GetOutcome()const
 		return Outcome::AwayWin;
 	else
 		return Outcome::Tied;
-}
-unsigned Score::GetDiff()const
-{
-	return std::abs(static_cast<int>(m_Score.first) - static_cast<int>(m_Score.second));
 }
 std::string Score::ToString()const
 {
@@ -55,5 +42,6 @@ Score Score::FromString(const std::string& sScore)
 	else
 	{
 		std::cerr << "Error! Illegal string to convert Score!\n";
+		return Score{};
 	}
 }

@@ -28,7 +28,6 @@ private:
 	void RemoveSet(size_t idx);
 	void SetEnableOpponent(bool);
 	std::vector<Set> GetSets()const;
-	Score CollectMatchScore()const;
 	void SetEnableSetList(bool blEnabled);
 	Ui::AddEditMatchDialogClass ui;
 	std::unique_ptr<Calendar> m_upCalendar{ nullptr };

@@ -38,6 +38,7 @@ void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, con
 	case DialogMode::eAddDialog:
 	{
 		setWindowTitle("Add Match");
+		m_EditedMatch = Match{};
 		InitSetList(Set(Score(0, 0)));
 		break;
 	}
@@ -59,7 +60,7 @@ void AddEditMatchDialog::InitDialog()
 	InitButtonWithPicture(ui.AddSetButton, ":images/images/plus.png", 0.8f);
 	InitButtonWithPicture(ui.RemoveSetButton, ":images/images/minus.png", 0.8f);
 	SetComboBoxAlternatives(ui.comboBox_Statu, m_vecStatuAlternatives);
-	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetStages());
+	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetPossibleStages());
 	ui.lineEdit__Opponent1->setEnabled(true);
 	if (m_RootTournament.IsDoubleTournament())
 		ui.lineEdit__Opponent2->setEnabled(true);
@@ -83,7 +84,7 @@ void AddEditMatchDialog::FillDialog()
 			ui.radioButton_Lose->setChecked(true);
 		}
 	}
-	const auto& vecStage = m_RootTournament.GetStages();
+	const auto& vecStage = m_RootTournament.GetPossibleStages();
 	ui.comboBox_Stage->setCurrentIndex(1 + std::distance(vecStage.cbegin(), std::find(vecStage.cbegin(), vecStage.cend(), m_EditedMatch.GetStage())));
 	ui.lineEdit__Opponent1->setText(QString::fromStdString(m_EditedMatch.GetOpponent1()));
 	if (m_RootTournament.IsDoubleTournament())
@@ -130,6 +131,8 @@ void AddEditMatchDialog::ClearDialog()
 	ui.radioButton_Lose->setAutoExclusive(true);
 	ui.radioButton_Win->setVisible(false);
 	ui.radioButton_Lose->setVisible(false);
+	ui.lineEdit__Opponent1->setText("");
+	ui.lineEdit__Opponent2->setText("");
 	SetEnableOpponent(true);
 	ui.listWidget->clear();
 }
@@ -155,8 +158,6 @@ void AddEditMatchDialog::RemoveSet(size_t idx)
 }
 void AddEditMatchDialog::SetEnableOpponent(bool blEnabled)
 {
-	ui.lineEdit__Opponent1->setText("");
-	ui.lineEdit__Opponent2->setText("");
 	ui.lineEdit__Opponent1->setEnabled(blEnabled);
 	if (m_RootTournament.IsDoubleTournament())
 	{
@@ -177,21 +178,6 @@ std::vector<Set> AddEditMatchDialog::GetSets()const
 		}
 	}
 	return vecSet;
-}
-Score AddEditMatchDialog::CollectMatchScore()const
-{
-	unsigned uiHomeScore{}, uiAwayScore{};
-	std::vector<Set> vecSet = GetSets();
-	if (!vecSet.empty())
-	{
-		uiHomeScore = std::count_if(vecSet.cbegin(), vecSet.cend(), [](const auto& set) {
-			return set.GetOutcome() == Outcome::HomeWin;
-			});
-		uiAwayScore = std::count_if(vecSet.cbegin(), vecSet.cend(), [](const auto& set) {
-			return set.GetOutcome() == Outcome::AwayWin;
-			});
-	}
-	return Score(uiHomeScore, uiAwayScore);
 }
 bool AddEditMatchDialog::IsMandatoryFieldsFilled()const
 {
@@ -257,18 +243,18 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
-		Match m;
-		m.SetDate(m_MatchDate);
-		m.SetTime(ui.timeEdit->time());
-		m.SetTournamentID(m_RootTournament.GetID());
-		m.SetStatu(ui.comboBox_Statu->currentText().toStdString());
-		m.SetStage(ui.comboBox_Stage->currentText().toStdString());
-		m.SetOpponent1(ui.lineEdit__Opponent1->text().toStdString());
-		if (m_RootTournament.IsDoubleTournament())
-			m.SetOpponent2(ui.lineEdit__Opponent2->text().toStdString());
-		m.SetScore(CollectMatchScore());
-		m.SetSets(GetSets());
-		if (!m.IsMatchValid())
+		Match m{
+			m_EditedMatch.GetID(),
+			m_RootTournament.GetID(),
+			ui.comboBox_Statu->currentText().toStdString(),
+			ui.comboBox_Stage->currentText().toStdString(),
+			ui.lineEdit__Opponent1->text().toStdString(),
+			m_RootTournament.IsDoubleTournament() ? std::optional<std::string>(ui.lineEdit__Opponent2->text().toStdString()) : std::nullopt,
+			m_MatchDate,
+			ui.timeEdit->time(),
+			GetSets()
+		};
+		if (!m.IsValid())
 		{
 			QMessageBox::critical(this, "Error", "Invalid match.");
 		}
@@ -285,15 +271,21 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 			}
 			case DialogMode::eEditDialog:
 			{
-				m.SetID(m_EditedMatch.GetID());
 				if (m == m_EditedMatch)
 				{
 					QMessageBox::warning(this, "Warning", "No change detected in the match.");
 				}
 				else
 				{
-					if (AppController::instance().EditMatch(m))
-						QMessageBox::information(this, "Information", "The match is edited successfully");
+					if (m_RootTournament.IsMatchValidForTournament(m))
+					{
+						if (AppController::instance().EditMatch(m))
+							QMessageBox::information(this, "Information", "The match is edited successfully");
+					}
+					else
+					{
+						QMessageBox::warning(this, "Warning", "Edited match is not compatible with the tournament.");
+					}
 				}
 				break;
 			}
@@ -355,6 +347,8 @@ void AddEditMatchDialog::on_comboBox_Statu_currentTextChanged(const QString& sta
 			ui.radioButton_Win->setVisible(false);
 			ui.radioButton_Lose->setVisible(false);
 			ui.timeEdit->setEnabled(false);
+			ui.lineEdit__Opponent1->setText("");
+			ui.lineEdit__Opponent2->setText("");
 			SetEnableOpponent(false);
 			InitSetList(Set(Score(6, 0)), false);
 		}

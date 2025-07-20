@@ -14,6 +14,7 @@
 #include <QtWidgets/QCalendarWidget>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
@@ -24,6 +25,7 @@ class Ui_CalendarClass
 {
 public:
     QGridLayout *gridLayout;
+    QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
     QCalendarWidget *calendarWidget;
     QPushButton *TodayButton;
@@ -41,6 +43,9 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName("gridLayout");
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName("horizontalLayout");
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName("verticalLayout");
@@ -56,7 +61,7 @@ public:
         verticalLayout->addWidget(TodayButton);
 
 
-        gridLayout->addLayout(verticalLayout, 0, 0, 1, 1);
+        horizontalLayout->addLayout(verticalLayout);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(6);
@@ -76,7 +81,10 @@ public:
         verticalLayout_2->addItem(verticalSpacer);
 
 
-        gridLayout->addLayout(verticalLayout_2, 0, 1, 1, 1);
+        horizontalLayout->addLayout(verticalLayout_2);
+
+
+        gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
 
         retranslateUi(CalendarClass);

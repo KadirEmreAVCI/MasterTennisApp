@@ -35,6 +35,7 @@ void AddEditOrganizationDialog::PrepareDialog(DialogMode mode, const Organizatio
 	case DialogMode::eAddDialog:
 	{
 		setWindowTitle("Add Organization");
+		m_EditedOrganization = {};
 		break;
 	}
 	case DialogMode::eEditDialog:
@@ -94,14 +95,16 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
-		Organization org;
-		org.SetName(ui.lineEdit_OrganizationName->text().toStdString());
-		if (m_sImageFileName != "")
+		Organization org{
+			m_EditedOrganization.GetID(),
+			ui.lineEdit_OrganizationName->text().toStdString(),
+			m_sImageFileName.toStdString(),
+			m_vecCategories
+		};
+		if (org.GetOrgPictureAddr() != "")
 		{
 			SaveImage();
-			org.SetOrgPictureAddr(m_sImageFileName.toStdString());
 		}
-		org.SetCategories(m_vecCategories);
 		switch (m_DialogMode)
 		{
 		case DialogMode::eAddDialog:
@@ -115,7 +118,6 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		}
 		case DialogMode::eEditDialog:
 		{
-			org.SetID(m_EditedOrganization.GetID());
 			if (AppController::instance().EditOrganization(org))
 			{
 				close();

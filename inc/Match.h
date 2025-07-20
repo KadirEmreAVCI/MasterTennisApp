@@ -8,32 +8,22 @@
 #include "DBItem.h"
 class Match : public DBItem {
 public:
-	Match();
+	Match(unsigned uiID = 0, unsigned uiTournamentID = 0, const std::string& sStatu = "", const std::string& sStage = "", const std::string& sOpponent1 = "", const std::optional<std::string>& sOpponent2 = "", const QDate& rDate = QDate{}, const QTime& rTime = {}, const std::vector<Set>& vecSet = {});
 	unsigned GetID()const;
-	void SetID(unsigned uiID);
 	unsigned GetTournamentID()const;
-	void SetTournamentID(unsigned uiTournamentID);
 	std::string GetStatu()const;
-	void SetStatu(const std::string& sStatu);
 	std::string GetStage()const;
-	void SetStage(const std::string& sStage);
 	std::string GetOpponent1()const;
 	std::string GetOpponent2()const;
-	void SetOpponent1(const std::string&);
-	void SetOpponent2(std::optional<std::string> = std::nullopt);
 	QDate GetDate()const;
-	void SetDate(const QDate& date);
 	QTime GetTime()const;
-	void SetTime(const QTime& time);
 	Score GetScore()const;
-	void SetScore(const Score& s);
 	std::vector<Set> GetSets()const;
 	Outcome GetOutcome()const;
-	void SetSets(std::vector<Set>);
 	std::string SetsToString()const;
 	static std::vector<Set> SetsFromString(const std::string& sSets);
 	bool IsUpcomingMatch()const;
-	bool IsMatchValid()const;
+	bool IsValid()const;
 	bool IsEarlier(const Match& other)const;
 	friend bool operator==(const Match& lhs, const Match& rhs)
 	{
@@ -65,8 +55,9 @@ public:
 	virtual bool EditInDB()const override;
 	virtual void LoadFromDB(unsigned ID)override;
 private:
+	void SetSets(std::vector<Set>);
+	void SetScore();
 	unsigned m_uiTournamentID{};
-	std::string m_sTournamentName;
 	std::string m_sStatu{};
 	std::string m_sStage{};
 	std::string m_sOpponent1{};

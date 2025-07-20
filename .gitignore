@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 rcc/
+*.tlog/
+TennisDesktopApp.tlog/
