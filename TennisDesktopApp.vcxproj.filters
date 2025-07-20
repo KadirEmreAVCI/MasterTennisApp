@@ -35,6 +35,9 @@
     <QtRcc Include="Resource.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+    <QtUic Include="StatisticsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -143,6 +146,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test\src\DatabaseControllerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StatisticsPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,6 +266,9 @@
     <QtMoc Include="inc\ProfileDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="inc\StatisticsPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="UpcomingMatch.ui">
@@ -313,5 +322,8 @@
     <QtUic Include="ProfileDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Sql)
 qt_standard_project_setup()
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.h moc/*.cpp rcc/*.cpp)
 file(GLOB UI_FILES *.ui)
 file(GLOB RESOURCE_FILES *.qrc)
 
