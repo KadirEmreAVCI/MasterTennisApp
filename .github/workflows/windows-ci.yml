@@ -1,0 +1,38 @@
+name: Windows C++ Build and Static Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Visual Studio 2022
+        uses: microsoft/setup-msbuild@v1
+        with:
+          vs-version: '2022'
+
+      - name: Install Cppcheck
+        run: choco install cppcheck
+
+      - name: Build with MSBuild
+        run: msbuild /p:Configuration=Release
+
+      - name: Run Cppcheck
+        run: cppcheck --enable=all --inconclusive --quiet --xml --xml-version=2 . > cppcheck-report.xml
+        continue-on-error: true
+
+      - name: Upload Cppcheck report
+        uses: actions/upload-artifact@v3
+        with:
+          name: cppcheck-report
+          path: cppcheck-report.xml
