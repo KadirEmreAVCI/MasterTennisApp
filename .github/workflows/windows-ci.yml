@@ -2,13 +2,11 @@ name: Windows C++ Build and Static Analysis
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
-    
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,6 +18,18 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Install Qt 6.7.0
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.0'
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          dir: ${{ runner.temp }}
+
+      - name: Set QtMsBuild environment variable
+        run: echo "QtMsBuild=${{ runner.temp }}/6.7.0/msvc2022_64/lib/cmake/Qt6" >> $GITHUB_ENV
+
       - name: Install Cppcheck
         run: choco install cppcheck
 
@@ -27,7 +37,8 @@ jobs:
         run: msbuild /p:Configuration=Release
 
       - name: Run Cppcheck
-        run: cppcheck --enable=all --inconclusive --quiet --xml --xml-version=2 . > cppcheck-report.xml
+        run: |
+          cppcheck --enable=all --inconclusive --quiet --xml --xml-version=2 . > cppcheck-report.xml
         continue-on-error: true
 
       - name: Upload Cppcheck report
