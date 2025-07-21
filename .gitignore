@@ -366,3 +366,4 @@ rcc/
 *.tlog/
 TennisDesktopApp.tlog/
 /build/
+/out/
