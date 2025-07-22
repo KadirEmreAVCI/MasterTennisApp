@@ -108,6 +108,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\StatisticsPage.cpp" />
     <ClCompile Include="test\src\DatabaseControllerTest.cpp" />
     <ClCompile Include="test\src\SetTest.cpp" />
     <ClCompile Include="test\src\ScoreTest.cpp" />
@@ -159,6 +160,7 @@
     <QtUic Include="ProfileSelectionDialog.ui" />
     <QtUic Include="ProfileWidget.ui" />
     <QtUic Include="SetScoreWidget.ui" />
+    <QtUic Include="StatisticsPage.ui" />
     <QtUic Include="TennisDesktopApp.ui" />
     <QtMoc Include="inc\TennisDesktopApp.h" />
     <ClCompile Include="src\AppController.cpp" />
@@ -167,6 +169,7 @@
     <QtUic Include="UpcomingMatch.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="inc\StatisticsPage.h" />
     <ClInclude Include="test\inc\DatabaseControllerTest.h" />
     <ClInclude Include="test\inc\SetTest.h" />
     <ClInclude Include="test\inc\ScoreTest.h" />
@@ -204,6 +207,9 @@
     <ClInclude Include="inc\DBItem.h" />
     <ClInclude Include="inc\Tournament.h" />
     <QtMoc Include="inc\UpcomingMatch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
