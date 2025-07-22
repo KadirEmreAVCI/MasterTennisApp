@@ -1,31 +1,36 @@
-name: Windows CI – TennisDesktopApp
+name: Windows MSVC CMake CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        arch: [ x64 ]  # use amd64, x86, amd64_arm64 as needed
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-	
-		- name: Enable Visual C++ Developer Prompt
+
+      - name: Configure VS developer environment
         uses: ilammy/msvc-dev-cmd@v1
         with:
-          arch: ${{ matrix.arch }}       # select architecture :contentReference[oaicite:1]{index=1}
+          arch: ${{ matrix.arch }}
 
-      - name: Install CMake & Ninja
+      - name: Install CMake + Ninja
         uses: lukka/get-cmake@latest
         with:
-          ninja: true                     # installs Ninja :contentReference[oaicite:2]{index=2}
+          ninja: true
 
       - name: Configure CMake
-        run: cmake -S . -B build -G "Ninja" -A x64 -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -G "Ninja" -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build --config Release	
+        run: cmake --build build --config Release
