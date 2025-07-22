@@ -13,3 +13,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+	
+		- name: Enable Visual C++ Developer Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}       # select architecture :contentReference[oaicite:1]{index=1}
+
+      - name: Install CMake & Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          ninja: true                     # installs Ninja :contentReference[oaicite:2]{index=2}
+
+      - name: Configure CMake
+        run: cmake -S . -B build -G "Ninja" -A x64 -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release	
