@@ -1,0 +1,49 @@
+name: CI – Windows Build (Debug-only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows-debug:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt 6.7.0 (MSVC)
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.7.0'
+          target: desktop
+          arch: win64_msvc*
+          tools: cmake
+
+      - name: Install Ninja and CMake 4.0.3
+        run: |
+          choco install ninja -y
+          choco install cmake --version=4.0.3 -y
+
+      - name: Configure project
+        run: |
+          cmake -S . -B build -G "Ninja Multi-Config"
+
+      - name: Build Debug
+        run: |
+          cmake --build build --config Debug --parallel
+
+      - name: Deploy Qt Debug runtime DLLs
+        run: |
+          pushd build/Debug
+          echo "Deploying Qt Debug runtime dependencies..."
+          windeployqt.debug.bat --compiler-runtime .
+          popd
+
+      - name: Upload Debug build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-debug
+          path: build/Debug/**
