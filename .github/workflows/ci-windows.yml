@@ -19,7 +19,7 @@ jobs:
         with:
           version: '6.7.0'
           target: desktop
-          arch: win64_msvc*
+          arch: win64_msvc2022_64
           tools: cmake
 
       - name: Install Ninja and CMake 4.0.3
