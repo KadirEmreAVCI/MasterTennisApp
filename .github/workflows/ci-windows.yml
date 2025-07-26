@@ -43,7 +43,7 @@ jobs:
           popd
 
       - name: Upload Debug build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-debug
           path: build/Debug/**
