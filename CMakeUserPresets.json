@@ -11,6 +11,18 @@
       }
     },
     {
+      "name": "Qt-Test-Debug",
+      "inherits": "Qt-Default",
+      "binaryDir": "${sourceDir}/out/build_tests",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "RUN_TESTS": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
+    },
+    {
       "name": "Qt-Release",
       "inherits": "Qt-Default",
       "binaryDir": "${sourceDir}/out/build",
@@ -49,7 +61,7 @@
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "ByWdzuMd/65iSME6CRY0O1IESr0="
+      "checksum": "VgT7M17WmRkMj+R3c07rTopUang="
     }
   }
 }
