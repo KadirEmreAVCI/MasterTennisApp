@@ -1,10 +1,10 @@
-name: CI – Windows Build (Debug-only)
+name: CI – Windows Build, Static Analysis & Tests (Debug-only)
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-windows-debug:
+  build-analyze-test:
     runs-on: windows-latest
 
     steps:
@@ -21,27 +21,33 @@ jobs:
           target: desktop
           arch: win64_msvc2019_64
 
-      - name: Install Ninja and CMake 4.0.3
+      - name: Install dependencies
         run: |
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
+          choco install cppcheck -y
 
-      - name: Configure project
+      - name: Configure without tests
+        run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
+
+      - name: Build Debug (application only)
+        run: cmake --build build --config Debug --parallel
+
+      - name: Run Cppcheck static analysis
         run: |
-          cmake -S . -B build -G "Ninja Multi-Config"
+          cppcheck --enable=all --inconclusive --std=c++20 --error-exitcode=1 \
+                   src inc test/inc
 
-      - name: Build Debug
-        run: |
-          cmake --build build --config Debug --parallel
+      - name: Reconfigure with tests
+        run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
 
-      - name: Deploy Qt Debug runtime DLLs
-        run: |
-          pushd build/Debug
-          echo "Deploying Qt Debug runtime dependencies..."
-          windeployqt.debug.bat --compiler-runtime .
-          popd
+      - name: Build Debug including tests
+        run: cmake --build build --config Debug --parallel
 
-      - name: Upload Debug build artifacts
+      - name: Run test executable directly
+        run: build\Debug\TennisDesktopApp_test.exe --gtest_color=yes
+
+      - name: Upload Debug artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-debug
