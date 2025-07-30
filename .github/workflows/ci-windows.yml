@@ -32,14 +32,12 @@ jobs:
       - name: Build Application (Debug)
         run: cmake --build build --config Debug --parallel
 
-      - name: Install And Run Cppcheck
-        uses: deep5050/cppcheck-action@v3.0
+      - name: Run static analysis
+        uses: p-ranav/StaticAnalysis@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          std: c++20
-          enable: all
-          inconclusive: true
-          platform: win64
+          language: c++
+          use_cmake: true
+          cppcheck_args: --enable=all --inconclusive --std=c++20
 
       - name: Configure Build Files (Test)
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
