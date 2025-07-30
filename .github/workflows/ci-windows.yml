@@ -32,16 +32,11 @@ jobs:
       - name: Build Application (Debug)
         run: cmake --build build --config Debug --parallel
 
-      - name: Install Cppcheck
+      - name: Install And Run Cppcheck
         shell: pwsh
         run: |
           choco install cppcheck -y
-          Import-Module "$env:ChocolateyInstall/helpers/chocolateyInstaller.psm1"
-          RefreshEnv
-      
-      - name: Run Cppcheck
-        shell: pwsh
-        run: cppcheck --enable=all --inconclusive --std=c++20 --error-exitcode=1 src inc test/src test/inc
+          cppcheck --enable=all --inconclusive --std=c++20 --error-exitcode=1 src inc test/src test/inc
 
       - name: Configure Build Files (Test)
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
