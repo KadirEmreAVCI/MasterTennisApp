@@ -26,6 +26,7 @@ jobs:
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
           choco install cppcheck -y
+          Import-Module "$env:ChocolateyInstall/helpers/chocolateyInstaller.psm1"
           refreshenv
 
       - name: Configure without tests
@@ -37,7 +38,7 @@ jobs:
       - name: Run Cppcheck static analysis
         run: |
           cppcheck --enable=all --inconclusive --std=c++20 --error-exitcode=1 \
-                   src inc test/inc
+                   src inc test/src test/inc
 
       - name: Reconfigure with tests
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
