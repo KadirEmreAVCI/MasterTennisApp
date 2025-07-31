@@ -25,19 +25,23 @@ jobs:
         run: |
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
-
+          
       - name: Configure Build Files (Application)
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
 
       - name: Build Application (Debug)
         run: cmake --build build --config Debug --parallel
 
-      - name: Run static analysis
-        uses: p-ranav/StaticAnalysis@master
-        with:
-          language: c++
-          use_cmake: true
-          cppcheck_args: --enable=all --inconclusive --std=c++20
+      - name: Install Cppcheck
+        run: |
+          choco install cppcheck -y
+          refreshenv
+      
+      - name: Analyze Code Using Cppcheck
+        run: |
+          cppcheck --version
+          where cppcheck
+          cppcheck --enable=all --inconclusive --std=c++20 inc rsc test/inc test/src
 
       - name: Configure Build Files (Test)
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
