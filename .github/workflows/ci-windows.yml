@@ -38,9 +38,23 @@ jobs:
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
       
-      - name: Analyze Code Using Cppcheck
+      - name: Run Cppcheck (XML output)
         run: |
-          Start-Process cmd -ArgumentList '/c cppcheck --version && where cppcheck && cppcheck --enable=all --inconclusive --std=c++20 inc rsc test/inc test/src' -Wait
+          cppcheck --enable=all --inconclusive --std=c++20 \
+            --xml --xml-version=2 \
+            inc rsc test/inc test/src 2> cppcheck-report.xml
+      
+      - name: Convert XML to SARIF
+        uses: Flast/cppcheck-sarif@v2
+        with:
+          input: cppcheck-report.xml
+          output: cppcheck-report.sarif
+
+      - name: Upload SARIF to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: cppcheck-report.sarif
+          category: cppcheck
           
       - name: Configure Build Files (Test)
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
