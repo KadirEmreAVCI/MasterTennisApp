@@ -38,11 +38,9 @@ jobs:
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
       
-      - name: Run Cppcheck (XML output)
+      - name: Run Cppcheck (XML)
         run: |
-          cppcheck --enable=all --inconclusive --std=c++20 \
-            --xml --xml-version=2 \
-            inc rsc test/inc test/src 2> cppcheck-report.xml
+          cppcheck --enable=all --inconclusive --std=c++20 --xml --xml-version=2 --output-file=cppcheck-report.xml inc rsc test/inc test/src 2> cppcheck-report.xml
       
       - name: Convert XML to SARIF
         uses: Flast/cppcheck-sarif@v2
