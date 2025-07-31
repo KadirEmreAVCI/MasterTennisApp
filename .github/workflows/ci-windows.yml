@@ -35,6 +35,7 @@ jobs:
       - name: Install Cppcheck
         run: |
           choco install cppcheck -y
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
       
       - name: Analyze Code Using Cppcheck
