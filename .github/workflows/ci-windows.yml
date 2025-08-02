@@ -76,11 +76,6 @@ jobs:
           name: test-exe-debug
           path: tests-run
 
-      - name: Find TennisDesktopApp_test.exe
-        shell: pwsh
-        run: |
-          Get-ChildItem -Path C:\ -Filter "TennisDesktopApp_test.exe" -Recurse -ErrorAction SilentlyContinue
-
       - name: Find TennisDesktopApp_test.exe with where
         shell: cmd
         run: |
