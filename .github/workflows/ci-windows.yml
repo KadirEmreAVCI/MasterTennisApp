@@ -22,6 +22,7 @@ jobs:
 
   
   build:
+    needs: analyze
     runs-on: windows-latest
 
     steps:
