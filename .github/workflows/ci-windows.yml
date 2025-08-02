@@ -77,7 +77,7 @@ jobs:
           path: tests-run
       
       - name: Run Tests
-        working-directory: tests-run/Debug  
+        working-directory: tests-run/out/Debug  
         run: .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
 
       - name: Upload Debug Artifacts
