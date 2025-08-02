@@ -47,7 +47,7 @@ jobs:
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
 
-      - name: Build Application (Debug)
+      - name: Build Application Exe (Debug)
         run: | 
           cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
           cmake --build build --config Debug --parallel
@@ -70,14 +70,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download test executable
+      - name: Download Test Executable
         uses: actions/download-artifact@v4
         with:
           name: test-exe-debug
           path: tests-run
       
       - name: Run Tests
-        working-directory: tests-run/out/Debug  
+        working-directory: tests-run\out\Debug  
         run: .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
 
       - name: Upload Debug Artifacts
