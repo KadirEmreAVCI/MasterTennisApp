@@ -41,18 +41,6 @@ jobs:
       - name: Run Cppcheck 
         run: |
           Start-Process cmd -ArgumentList '/c cppcheck --enable=all --inconclusive --std=c++20 --xml --xml-version=2 --output-file=cppcheck-report.xml inc rsc test/inc test/src 2> cppcheck-report.xml' -Wait
-      
-      - name: Convert XML to SARIF
-        uses: Flast/cppcheck-sarif@v2
-        with:
-          input: cppcheck-report.xml
-          output: cppcheck-report.sarif
-
-      - name: Upload SARIF to GitHub
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: cppcheck-report.sarif
-          category: cppcheck
           
       - name: Configure Build Files (Test)
         run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
