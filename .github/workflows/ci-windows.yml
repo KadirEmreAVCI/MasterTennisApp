@@ -78,8 +78,7 @@ jobs:
 
       - name: Find TennisDesktopApp_test.exe with where
         shell: cmd
-        run: |
-          where TennisDesktopApp_test.exe
+        run: where /R "%GITHUB_WORKSPACE%" TennisDesktopApp_test.exe
       
       - name: Find file in workspace
         shell: pwsh
