@@ -51,9 +51,13 @@ jobs:
       - name: Build Test Exe (Debug)
         run: cmake --build build --config Debug --parallel
 
-      - name: Run Debug tests (CMD)
-        shell: cmd
-        run: TennisDesktopApp\out\Debug\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
+      - name: Run Debug tests
+        working-directory: out/Debug  
+        run: |
+          Write-Host 'CI current directory:' (Get-Location).Path
+          Write-Host "Files present:"
+          Get-ChildItem
+          .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
 
       - name: Upload Debug Artifacts
         if: always()
