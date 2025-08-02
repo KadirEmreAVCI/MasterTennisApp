@@ -60,7 +60,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-exe-debug
-          path: build-tests/Debug/TennisDesktopApp_test.exe
+          path: out/Debug/TennisDesktopApp_test.exe
+          if-no-files-found: error
           
   test:
     needs: build 
