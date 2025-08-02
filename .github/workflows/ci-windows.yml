@@ -75,16 +75,16 @@ jobs:
         with:
           name: test-exe-debug
           path: tests-run
-      
-      - name: Run Tests
-        working-directory: tests-run\out\Debug  
-        run: .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
 
       - name: Show downloaded files
         run: |
           echo "PWD=$PWD"
           dir tests-run /b /s
       
+      - name: Run Tests
+        working-directory: tests-run
+        run: .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
+
       - name: Upload Debug Artifacts
         if: always()
         uses: actions/upload-artifact@v4
