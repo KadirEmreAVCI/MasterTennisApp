@@ -4,7 +4,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-analyze-test:
+  analyze:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+          
+      - name: Install Cppcheck
+        run: |
+          choco install cppcheck -y
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+          refreshenv
+      
+      - name: Run Cppcheck 
+        run: |
+          Start-Process cmd -ArgumentList '/c cppcheck --enable=all --inconclusive --std=c++20 --xml --xml-version=2 --output-file=cppcheck-report.xml inc rsc test/inc test/src 2> cppcheck-report.xml' -Wait
+
+  
+  build:
     runs-on: windows-latest
 
     steps:
@@ -28,36 +45,38 @@ jobs:
         run: |
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
-          
-      - name: Configure Build Files (Application)
-        run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
 
       - name: Build Application (Debug)
-        run: cmake --build build --config Debug --parallel
-
-      - name: Install Cppcheck
-        run: |
-          choco install cppcheck -y
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          refreshenv
-      
-      - name: Run Cppcheck 
-        run: |
-          Start-Process cmd -ArgumentList '/c cppcheck --enable=all --inconclusive --std=c++20 --xml --xml-version=2 --output-file=cppcheck-report.xml inc rsc test/inc test/src 2> cppcheck-report.xml' -Wait
-          
-      - name: Configure Build Files (Test)
-        run: cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=ON
+        run: | 
+          cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
+          cmake --build build --config Debug --parallel
 
       - name: Build Test Exe (Debug)
-        run: cmake --build build --config Debug --parallel
+        run: | 
+          cmake -S . -B build-tests -G "Ninja Multi-Config" -DRUN_TESTS=ON
+          cmake --build build-tests --config Debug --parallel
 
-      - name: Run Debug tests
-        working-directory: out/Debug  
-        run: |
-          Write-Host 'CI current directory:' (Get-Location).Path
-          Write-Host "Files present:"
-          Get-ChildItem
-          .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-exe-debug
+          path: build-tests/Debug/TennisDesktopApp_test.exe
+          
+  test:
+    needs: build 
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download test executable
+        uses: actions/download-artifact@v4
+        with:
+          name: test-exe-debug
+          path: tests-run
+      
+      - name: Run Tests
+        working-directory: tests-run/Debug  
+        run: .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
 
       - name: Upload Debug Artifacts
         if: always()
