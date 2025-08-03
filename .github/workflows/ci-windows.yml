@@ -90,8 +90,7 @@ jobs:
           Get-ChildItem -Path $env:GITHUB_WORKSPACE -Filter "TennisDesktopApp_test.exe" -Recurse
       
       - name: Run Tests
-        working-directory: tests-run
-        run: .\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
+        run: .\tests-run\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
 
       - name: Upload Debug Artifacts
         if: always()
