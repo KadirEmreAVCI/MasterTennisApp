@@ -18,7 +18,14 @@ jobs:
       - name: Run Cppcheck
         shell: cmd
         run: |
-          "%ProgramFiles%\Cppcheck\cppcheck.exe" --enable=all --inconclusive --std=c++20 --output-file=cppcheck-report.txt inc src test/inc test/src
+            "%ProgramFiles%\Cppcheck\cppcheck.exe" ^
+              --enable=all ^
+              --inconclusive ^
+              --std=c++20 ^
+              --suppress=missingInclude ^
+              --suppress=missingIncludeSystem ^
+              --output-file=cppcheck-report.txt ^
+              inc src test/inc test/src
       - name: Display Report
         run: |
           Write-Host "==== Cppcheck output ===="
