@@ -18,7 +18,10 @@ jobs:
       
       - name: Run Cppcheck
         shell: cmd
-        run: cppcheck --enable=all --inconclusive --std=c++20 --output-file=cppcheck-report.txt inc src test/inc test/src type cppcheck-report.txt
+        run: |
+          where cppcheck
+          cppcheck --version
+          cppcheck --enable=all --inconclusive --std=c++20 --output-file=cppcheck-report.txt inc src test/inc test/src type cppcheck-report.txt
   
   build:
     needs: analyze
