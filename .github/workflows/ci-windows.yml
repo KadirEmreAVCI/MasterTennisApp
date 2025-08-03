@@ -13,14 +13,12 @@ jobs:
       - name: Install Cppcheck
         run: |
           choco install cppcheck -y
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          refreshenv
+          where cppcheck
+          cppcheck --version
       
       - name: Run Cppcheck
         shell: cmd
         run: |
-          where cppcheck
-          cppcheck --version
           cppcheck --enable=all --inconclusive --std=c++20 --output-file=cppcheck-report.txt inc src test/inc test/src type cppcheck-report.txt
   
   build:
