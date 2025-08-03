@@ -14,9 +14,17 @@ jobs:
           choco install cppcheck -y
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
-      - name: Run Cppcheck 
+      - name: Run Cppcheck and Capture Output
         run: |
-          Start-Process cmd -ArgumentList '/c cppcheck --enable=all --inconclusive --std=c++20 --output-file=cppcheck-report.txt inc src test/inc test/src type cppcheck-report.txt' -Wait
+          $outputFile = "cppcheck-report.txt"
+          cppcheck --enable=all --inconclusive --std=c++20 --output-file=$outputFile inc src test/inc test/src
+          Get-Content $outputFile
+          Upload-Artifact -Path $outputFile -Name cppcheck-report
+      - name: Upload Cppcheck Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cppcheck-report
+          path: cppcheck-report.txt
   build:
     needs: analyze
     runs-on: windows-latest
