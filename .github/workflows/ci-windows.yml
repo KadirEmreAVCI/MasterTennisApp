@@ -74,30 +74,19 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Install Qt 6.7.0 (MSVC)
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.7.0'
+          target: desktop
+          arch: win64_msvc2019_64
+      
       - name: Download Test Executable
         uses: actions/download-artifact@v4
         with:
           name: test-exe-debug
           path: tests-run
-
-      - name: Find TennisDesktopApp_test.exe with where
-        shell: cmd
-        run: where /R "%GITHUB_WORKSPACE%" TennisDesktopApp_test.exe
-      
-      - name: Find file in workspace
-        shell: pwsh
-        run: |
-          Get-ChildItem -Path $env:GITHUB_WORKSPACE -Filter "TennisDesktopApp_test.exe" -Recurse
       
       - name: Run Tests
         shell: cmd
         run: tests-run\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
-
-      - name: Upload Debug Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-debug-artifacts
-          path: | 
-            build/Debug/**
-            build/Debug/TEST-debug.xml
