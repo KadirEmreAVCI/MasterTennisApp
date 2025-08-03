@@ -12,8 +12,9 @@ jobs:
       - name: Install Cppcheck
         run: |
           choco install cppcheck -y
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          refreshenv
+          $cppcheckPath = "C:\Program Files\Cppcheck"
+          $env:PATH += ";$cppcheckPath"
+          Write-Host "Updated PATH: $env:PATH"
       - name: Run Cppcheck and Capture Output
         run: |
           $outputFile = "cppcheck-report.txt"
