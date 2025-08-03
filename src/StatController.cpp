@@ -45,9 +45,8 @@ unsigned StatController::GetTotalMatch()const
 {
 	const auto& vecMatch = ConcatanateValidMatches();
 	return std::count_if(vecMatch.cbegin(), vecMatch.cend(), [](const auto& m) {
-		return m.GetOutcome() != Outcome::Tied;
+		return m.GetOutcome() != Outcome::Tied; 
 		});
-	return ConcatanateValidMatches().size();
 }
 unsigned StatController::GetMatchWin()const
 {
