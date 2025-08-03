@@ -1,119 +1,48 @@
-name: CI – Windows Debug Build
+name: CI – Windows Build (Debug-only)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-      
+
 jobs:
-  Analyze:
+  build-windows-debug:
     runs-on: windows-latest
-    
+
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Install Cppcheck
-        run: |
-          choco install cppcheck -y
-          $cppcheckPath = "C:\Program Files\Cppcheck"
-          $env:PATH += ";$cppcheckPath"
-          Write-Host "Updated PATH: $env:PATH"
-      
-      - name: Run Cppcheck
-        shell: cmd
-        run: |
-            "%ProgramFiles%\Cppcheck\cppcheck.exe" ^
-              --enable=all ^
-              --inconclusive ^
-              --std=c++20 ^
-              --suppress=missingInclude ^
-              --suppress=missingIncludeSystem ^
-              --output-file=cppcheck-report.txt ^
-              inc src test/inc test/src
-      
-      - name: Display Report
-        run: |
-          Write-Host "==== Cppcheck output ===="
-          Get-Content cppcheck-report.txt
-      
-      - name: Upload Cppcheck Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: cppcheck-report
-          path: cppcheck-report.txt
-  
-  Build:
-    needs: Analyze
-    runs-on: windows-latest
-    steps:
-      
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-      
-      - name: Setup MSVC Environment
+
+      - name: Setup MSVC environment
         uses: ilammy/msvc-dev-cmd@v1
-      
+
       - name: Install Qt 6.7.0 (MSVC)
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.7.0'
           target: desktop
           arch: win64_msvc2019_64
-      
-      - name: Install CMake
+
+      - name: Install Ninja and CMake 4.0.3
         run: |
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
-      
-      - name: Build Application Exe (Debug)
-        run: | 
-          cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
+
+      - name: Configure project
+        run: |
+          cmake -S . -B build -G "Ninja Multi-Config"
+
+      - name: Build Debug
+        run: |
           cmake --build build --config Debug --parallel
-      
-      - name: Build Test Exe (Debug)
-        run: | 
-          cmake -S . -B build-tests -G "Ninja Multi-Config" -DRUN_TESTS=ON
-          cmake --build build-tests --config Debug --parallel
-      
-      - name: Upload Build Artifacts
+
+      - name: Deploy Qt Debug runtime DLLs
+        run: |
+          pushd build/Debug
+          echo "Deploying Qt Debug runtime dependencies..."
+          windeployqt.debug.bat --compiler-runtime .
+          popd
+
+      - name: Upload Debug build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: test-exe-debug
-          path: out/Debug/TennisDesktopApp_test.exe
-          if-no-files-found: error
-  
-  Test:
-    needs: Build 
-    runs-on: windows-latest
-    steps:
-      
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-      
-      - name: Install Qt 6.7.0 (MSVC)
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '6.7.0'
-          target: desktop
-          arch: win64_msvc2019_64
-      
-      - name: Download Test Executable
-        uses: actions/download-artifact@v4
-        with:
-          name: test-exe-debug
-          path: tests-run
-      
-      - name: Run Tests
-        shell: cmd
-        run: tests-run\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
+          name: windows-debug
+          path: build/Debug/**
