@@ -13,6 +13,7 @@ jobs:
       - name: Install Cppcheck
         run: |
           choco install cppcheck -y
+          refreshenv
           where cppcheck
           cppcheck --version
       
