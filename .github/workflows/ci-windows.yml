@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-exe-debug
-          path: build-tests/Debug/TennisDesktopApp_test.exe
+          path: build-tests/Debug/MasterTennisApp_test.exe
           if-no-files-found: error
   
   Test:
@@ -118,4 +118,4 @@ jobs:
       
       - name: Run Tests
         shell: cmd
-        run: tests-run\TennisDesktopApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
+        run: tests-run\MasterTennisApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
