@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CALENDAR_H
+#define CALENDAR_H
 
 #include <QDialog>
 #include "ui_Calendar.h"
@@ -24,3 +25,5 @@ public:
 signals:
 	void MatchDateSet(const QDate& date);
 };
+
+#endif

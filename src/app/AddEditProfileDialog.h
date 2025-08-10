@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ADDEDITPROFILEDIALOG_H
+#define ADDEDITPROFILEDIALOG_H
+
 #include <QDialog>
 #include "ui_AddEditProfileDialog.h"
 #include "IQTComponent.h"
@@ -29,3 +31,5 @@ private slots:
 	void on_SaveButton_clicked();
 	void on_CancelButton_clicked();
 };
+
+#endif

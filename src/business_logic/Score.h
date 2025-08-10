@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SCORE_H
+#define SCORE_H
+
 #include <iostream>
 #include <utility>
 enum class Outcome {
@@ -28,3 +30,4 @@ private:
 	std::pair<unsigned, unsigned> m_Score;
 };
 
+#endif

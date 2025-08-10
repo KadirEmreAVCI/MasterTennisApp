@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ORGANIZATIONDIALOG_H
+#define ORGANIZATIONDIALOG_H
+
 #include <memory>
 #include <QDialog>
 #include "ui_OrganizationDialog.h"
@@ -34,3 +36,5 @@ public slots:
 	void EditOrganization();
 	void DeleteOrganization();
 };
+
+#endif

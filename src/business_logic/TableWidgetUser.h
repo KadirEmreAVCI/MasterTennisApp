@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TABLEWIDGETUSER_H
+#define TABLEWIDGETUSER_H
+
 #include <string>
 #include <vector>
 #include <QTableWidget>
@@ -15,3 +17,5 @@ protected:
 	virtual void FillTable() = 0;
 	std::vector<std::string> m_vecColumnNames;
 };
+
+#endif

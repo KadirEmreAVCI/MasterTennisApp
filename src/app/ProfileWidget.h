@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROFILEWIDGET_H
+#define PROFILEWIDGET_H
+
 #include <QWidget>
 #include "ui_ProfileWidget.h"
 #include "Profile.h"
@@ -28,3 +30,5 @@ private slots:
 	void on_DeleteButton_clicked();
 	void on_EditButton_clicked();
 };
+
+#endif

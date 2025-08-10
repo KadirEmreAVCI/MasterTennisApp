@@ -1,4 +1,6 @@
-#pragma once
+#ifndef APPCONTROLLER_H
+#define APPCONTROLLER_H
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -53,3 +55,4 @@ signals:
 	void ChangeInOrganizations(const std::vector<Organization>&);
 };
 
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DATABASECONTROLLER_H
+#define DATABASECONTROLLER_H
+
 #include <vector>
 #include <string>
 #include <map>
@@ -47,3 +49,4 @@ private:
 	std::vector<Match> m_vecMatch;
 };
 
+#endif

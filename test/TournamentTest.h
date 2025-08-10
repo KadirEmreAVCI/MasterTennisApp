@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TOURNAMENTTEST_H
+#define TOURNAMENTTEST_H
+
 // External Headers 
 #include <gtest/gtest.h>
 
@@ -74,3 +76,4 @@ protected:
 	std::vector<Tournament> m_vecTournament;
 };
 
+#endif

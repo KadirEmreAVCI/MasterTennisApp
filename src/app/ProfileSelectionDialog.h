@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROFILESELECTIONDIALOG_H
+#define PROFILESELECTIONDIALOG_H
+
 #include <QDialog>
 #include "ui_ProfileSelectionDialog.h"
 #include "AddEditProfileDialog.h"
@@ -21,3 +23,5 @@ public slots:
 private slots:
 	void on_NewProfileButton_clicked();
 };
+
+#endif
