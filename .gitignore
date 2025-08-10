@@ -1,0 +1,4 @@
+buildTest/
+buildDebug/
+buildRelease/
+.vscode/
