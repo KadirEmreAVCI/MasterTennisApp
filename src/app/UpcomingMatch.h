@@ -1,4 +1,6 @@
-#pragma once
+#ifndef UPCOMINGMATCH_H
+#define UPCOMINGMATCH_H
+
 #include <string>
 #include <memory>
 #include <QWidget>
@@ -36,3 +38,5 @@ public slots:
 signals:
 	void UpcomingMatchStarted(const Tournament& t, const Match& m);
 };
+
+#endif

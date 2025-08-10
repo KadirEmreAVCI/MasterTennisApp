@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DATABASECONTROLLERTEST_H
+#define DATABASECONTROLLERTEST_H
+
 // External Headers 
 #include <gtest/gtest.h>
 
@@ -68,3 +70,4 @@ private:
 	void LoadProfileData();
 };
 
+#endif

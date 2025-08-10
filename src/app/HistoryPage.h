@@ -1,4 +1,6 @@
-#pragma once
+#ifndef HISTORYPAGE_H
+#define HISTORYPAGE_H
+
 #include <memory>
 #include <QWidget>
 #include "ui_HistoryPage.h"
@@ -42,3 +44,5 @@ public slots:
 	void EditTournament();
 	void DeleteTournament();
 };
+
+#endif

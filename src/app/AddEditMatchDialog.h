@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ADDEDITMATCHDIALOG_H
+#define ADDEDITMATCHDIALOG_H
+
 #include <QDialog>
 #include "ui_AddEditMatchDialog.h"
 #include "IQTComponent.h"
@@ -49,3 +51,5 @@ private slots:
 public slots:
 	void SetMatchDate(const QDate& date);
 };
+
+#endif

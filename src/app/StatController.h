@@ -1,4 +1,6 @@
-#pragma once
+#ifndef STATCONTROLLER_H
+#define STATCONTROLLER_H
+
 #include <vector>
 #include <QObject>
 #include "Profile.h"
@@ -65,3 +67,5 @@ signals:
 	void CareerStatsUpdated(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages, const std::array<WinLoseStat, gTotalCareerStat>&);
 	void FinalsStatsUpdated(const std::array<WinLoseStat, gTotalFinalStat>&);
 };
+
+#endif

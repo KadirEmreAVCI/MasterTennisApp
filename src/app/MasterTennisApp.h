@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MASTERTENNISAPP_H
+#define MASTERTENNISAPP_H
+
 #include <memory>
 #include <QtWidgets/QMainWindow>
 #include "ui_MasterTennisApp.h"
@@ -23,3 +25,5 @@ private slots:
     void on_StartButton_clicked();
     void on_OrganizationsButton_clicked();
 };
+
+#endif

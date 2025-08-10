@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ADDEDITORGANIZATIONDIALOG_H
+#define ADDEDITORGANIZATIONDIALOG_H
+
 #include <QDialog>
 #include "ui_AddEditOrganizationDialog.h"
 #include "IQTComponent.h"
@@ -35,3 +37,5 @@ private slots:
 	void on_BrowseButton_clicked();
 	void on_DefaultPPButton_clicked();
 };
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MATCHTEST_H
+#define MATCHTEST_H
+
 // Standard Headers
 #include <vector>
 
@@ -36,4 +38,4 @@ protected:
 	std::vector<Match> m_vecMatch;
 };
 
-
+#endif

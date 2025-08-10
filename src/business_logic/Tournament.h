@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TOURNAMENT_H
+#define TOURNAMENT_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -82,3 +84,4 @@ private:
 	static std::vector<std::string> ms_vecPossiblePlayoffStages;
 };
 
+#endif

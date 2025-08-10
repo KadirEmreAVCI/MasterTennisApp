@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MATCHESDIALOG_H
+#define MATCHESDIALOG_H
 
 #include <QDialog>
 #include "ui_MatchesDialog.h"
@@ -37,3 +38,5 @@ public slots:
 	void EditMatch();
 	void DeleteMatch();
 };
+
+#endif

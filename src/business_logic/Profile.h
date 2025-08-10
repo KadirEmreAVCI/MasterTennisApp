@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROFILE_H
+#define PROFILE_H
+
 #include <string>
 #include <vector>
 #include "DBItem.h"
@@ -47,3 +49,4 @@ private:
 	std::vector<Organization> m_vecParticipatedOrg;
 };
 
+#endif

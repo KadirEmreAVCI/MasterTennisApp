@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SCORETEST_H
+#define SCORETEST_H
+
 // Standard Headers
 #include <vector>
 
@@ -23,3 +25,4 @@ protected:
 	std::vector<Score> m_vecScore;
 };
 
+#endif

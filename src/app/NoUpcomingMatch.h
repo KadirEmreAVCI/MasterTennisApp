@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NOUPCOMINGMATCH_H
+#define NOUPCOMINGMATCH_H
 
 #include <QWidget>
 #include "ui_NoUpcomingMatch.h"
@@ -14,3 +15,5 @@ public:
 private:
 	Ui::NoUpcomingMatchClass ui;
 };
+
+#endif

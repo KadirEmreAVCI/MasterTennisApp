@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SQLITEDB_H
+#define SQLITEDB_H
+
 #include <vector>
 #include <string>
 #include <QSqlDatabase> 
@@ -26,3 +28,4 @@ private:
 	static QSqlDatabase m_SqlDatabase;
 };
 
+#endif
