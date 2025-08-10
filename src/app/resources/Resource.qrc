@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/images/">
+        <file>games.png</file>
+        <file>clutchness.png</file>
+        <file>trophy.png</file>
+        <file>hourglass.png</file>
+        <file>lose2.png</file>
+        <file>win2.png</file>
+        <file>CrossButton.png</file>
+        <file>Logo1.png</file>
+        <file>lock.png</file>
+        <file>unlock.png</file>
+        <file>DeleteButton.png</file>
+        <file>EditButton.png</file>
+        <file>first_place.png</file>
+        <file>second_place.png</file>
+        <file>third_place.png</file>
+        <file>crossed_swords.png</file>
+        <file>setTB.png</file>
+        <file>achievements_page.png</file>
+        <file>home_page.png</file>
+        <file>welcome2.png</file>
+        <file>Warning.png</file>
+        <file>calendar.png</file>
+        <file>minus.png</file>
+        <file>plus.png</file>
+    </qresource>
+</RCC>
