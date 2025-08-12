@@ -9,18 +9,12 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Sql)
 qt6_standard_project_setup()
 
 add_subdirectory(src/business_logic)
-
-option(RUN_TESTS "Build and run unit tests" OFF)
-if(RUN_TESTS)
+add_subdirectory(src/app)
     
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    add_subdirectory(extern/googletest)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+add_subdirectory(extern/googletest)
 
-    enable_testing()
-    include(GoogleTest)
+enable_testing()
+include(GoogleTest)
 
-    add_subdirectory(test)
-
-else()
-    add_subdirectory(src/app)
-endif()
+add_subdirectory(test)

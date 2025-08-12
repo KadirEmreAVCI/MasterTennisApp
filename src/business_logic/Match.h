@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MATCH_H
+#define MATCH_H
+
 #include <vector>
 #include <string>
 #include <QDate>
@@ -68,3 +70,4 @@ private:
 	std::vector<Set> m_vecSet{};
 };
 
+#endif

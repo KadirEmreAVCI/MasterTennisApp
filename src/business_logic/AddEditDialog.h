@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ADDEDITDIALOG_H
+#define ADDEDITDIALOG_H
+
 enum class DialogMode {
 	eAddDialog,
 	eEditDialog
@@ -21,3 +23,5 @@ protected:
 	QString m_sFullSourceDir{};
 	QString m_sImageFileName{};
 };
+
+#endif

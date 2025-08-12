@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ORGANIZATION_H
+#define ORGANIZATION_H
+
 #include <string>
 #include <vector>
 #include <iterator>
@@ -44,3 +46,4 @@ private:
 	std::vector<Tournament> m_vecTournament;
 };
 
+#endif

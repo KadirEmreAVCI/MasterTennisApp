@@ -1,4 +1,6 @@
-#pragma once
+#ifndef HOMEPAGE_H
+#define HOMEPAGE_H
+
 #include <string>
 #include <memory>
 #include <QWidget>
@@ -34,3 +36,5 @@ private:
 public slots:
 	void UpdateActiveProfileData(const Profile&);
 };
+
+#endif

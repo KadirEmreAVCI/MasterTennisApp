@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
       - main
@@ -75,21 +74,16 @@ jobs:
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
       
-      - name: Build Application Exe (Debug)
+      - name: Build Debug
         run: | 
-          cmake -S . -B build -G "Ninja Multi-Config" -DRUN_TESTS=OFF
+          cmake -S . -B build -G "Ninja Multi-Config"
           cmake --build build --config Debug --parallel
-      
-      - name: Build Test Exe (Debug)
-        run: | 
-          cmake -S . -B build-tests -G "Ninja Multi-Config" -DRUN_TESTS=ON
-          cmake --build build-tests --config Debug --parallel
       
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: test-exe-debug
-          path: build-tests/Debug/MasterTennisApp_test.exe
+          path: build/Debug/MasterTennisApp_test.exe
           if-no-files-found: error
   
   Test:

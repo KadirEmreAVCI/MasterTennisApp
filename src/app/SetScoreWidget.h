@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SETSCOREWIDGET_H
+#define SETSCOREWIDGET_H
+
 #include <QWidget>
 #include "ui_SetScoreWidget.h"
 #include "Set.h"
@@ -21,3 +23,5 @@ private slots:
 	void on_ClearButton_clicked();
 	void on_checkBox_Tiebreak_checkStateChanged(Qt::CheckState state);
 };
+
+#endif

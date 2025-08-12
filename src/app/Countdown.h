@@ -1,4 +1,6 @@
-#pragma once
+#ifndef COUNTDOWN_H
+#define COUNTDOWN_H
+
 #include <string>
 #include <QObject>
 #include <QDateTime>
@@ -17,3 +19,4 @@ signals:
 	void TimeIsUp();
 };
 
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROFILEDIALOG_H
+#define PROFILEDIALOG_H
+
 #include <memory>
 #include <QDialog>
 #include <QToolBar>
@@ -29,3 +31,5 @@ private slots:
 	void on_LogOutButton_clicked();
 	void on_comboBoxProfiles_currentTextChanged(const QString& type);
 };
+
+#endif

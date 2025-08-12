@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SETTEST_H
+#define SETTEST_H
+
 // Standard Headers
 #include <vector>
 
@@ -29,3 +31,4 @@ protected:
 	std::vector<Set> m_vecSet;
 };
 
+#endif

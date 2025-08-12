@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ADDEDITTOURNAMENTDIALOG_H
+#define ADDEDITTOURNAMENTDIALOG_H
+
 #include <string>
 #include <QDialog>
 #include "ui_AddEditTournamentDialog.h"
@@ -44,3 +46,5 @@ public slots:
 	void UpdateOrganizations(const std::vector<Organization>&);
 	void UpdateActiveProfileData(const Profile& p);
 };
+
+#endif

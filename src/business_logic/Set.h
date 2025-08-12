@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SET_H
+#define SET_H
+
 #include <iostream>
 #include <utility>
 #include <optional>
@@ -30,3 +32,4 @@ private:
 	std::optional<Score> m_optTBScore = Score(0,0);
 };
 
+#endif
