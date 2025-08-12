@@ -71,7 +71,7 @@ std::vector<Set> Match::GetSets()const
 {
 	return m_vecSet;
 }
-void Match::SetSets(std::vector<Set> vecSet)
+void Match::SetSets(const std::vector<Set>& vecSet)
 {
 	m_vecSet = vecSet;
 	SetScore();
@@ -116,7 +116,6 @@ bool Match::IsEarlier(const Match& other)const
 }
 bool Match::InsertToDB()const
 {
-	std::cout << "Match::InsertToDB t = " << *this << "\n";
 	std::string sDBValues{ "'" + std::to_string(GetTournamentID()) +
 							"','" + GetStatu() +
 							"','" + GetStage() +
@@ -131,7 +130,6 @@ bool Match::InsertToDB()const
 }
 bool Match::EditInDB()const
 {
-	std::cout << "Match::EditInDB t = " << *this << "\n";
 	QMap<QString, QVariant> columnValues;
 	columnValues["TournamentID"] = QString::fromStdString(std::to_string(m_uiTournamentID));
 	columnValues["Statu"] = QString::fromStdString(m_sStatu);

@@ -235,7 +235,7 @@ bool Tournament::EditInDB()const
 }
 void Tournament::LoadFromDB(unsigned ID)
 {
-	SQLiteDB& db = SQLiteDB::instance();
+	const SQLiteDB& db = SQLiteDB::instance();
 	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
 	m_uiProfileID = stoi(db.GetValueWithCond(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
 	m_uiOrgID = stoi(db.GetValueWithCond(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));

@@ -16,7 +16,7 @@ class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass, public IQTC
 	Q_OBJECT
 
 public:
-	UpcomingMatch(QWidget* parent = nullptr, const std::string& sOrgImageFile = {}, const Tournament& t = {}, const Match& m = {});
+	UpcomingMatch(QWidget* parent = nullptr, const std::string& sOrgImageFile = {}, const Tournament& t = Tournament{}, const Match& m = Match{});
 	~UpcomingMatch();
 private:
 	void InitCustomComponents() override final;
