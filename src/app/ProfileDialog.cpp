@@ -37,7 +37,7 @@ void ProfileDialog::CreateTabWidget()
 	}
 	ui.tabWidget->addTab(new HomePage(), QString("Home"));
 	ui.tabWidget->addTab(new AchievementsPage(), QString("Achievements"));
-	ui.tabWidget->addTab(new HistoryPage(), QString("Tournament History"));
+	ui.tabWidget->addTab(new HistoryPage(), QString("History"));
 }
 void ProfileDialog::UpdateProfileName()
 {
