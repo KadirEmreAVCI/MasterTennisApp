@@ -30,6 +30,7 @@ private:
 	Tournament FindSignalingTournament()const;
 	void OpenAddDialog();
 	void OpenEditDialog(const Tournament&);
+	void InitFilterComponents();
 	Ui::HistoryPageClass ui;
 	std::unique_ptr<AddEditTournamentDialog> m_upAddEditTournamentDialog{ nullptr };
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;

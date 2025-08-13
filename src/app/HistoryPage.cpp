@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <QMessageBox>
+#include <QStandardItemModel>
 #include "HistoryPage.h"
 #include "AddEditTournamentDialog.h"
 #include "MatchesDialog.h"
@@ -21,14 +22,13 @@ HistoryPage::HistoryPage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HistoryPage::UpdateActiveProfileData);
 	InitCustomComponents();
 }
-
 HistoryPage::~HistoryPage()
 {}
 void HistoryPage::InitCustomComponents()
 {
-	m_vecColumnNames = { "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" };
-	FillColumnNamesOfTable(ui.tableWidget);
-	MakeColumnHeaderBold(ui.tableWidget);
+	InitFilterComponents();
+	std::vector<std::string> vecColumnNames = { "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" };
+	InitTable(ui.tableWidget, vecColumnNames);
 }
 void HistoryPage::FillTable()
 {
@@ -159,6 +159,18 @@ void HistoryPage::OpenEditDialog(const Tournament& t)
 	m_upAddEditTournamentDialog->setModal(true);
 	m_upAddEditTournamentDialog->PrepareDialog(DialogMode::eEditDialog, t);
 	m_upAddEditTournamentDialog->exec();
+}
+void HistoryPage::InitFilterComponents()
+{
+	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
+	{
+		if(auto* pItem = pModel->item(0); pItem != nullptr)
+		{
+			pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
+		}
+	} 
+	ui.ClearButton->setVisible(false);
+	ui.lineEditSearchBar->setEnabled(false);
 }
 void HistoryPage::on_NewTournamentButton_clicked()
 {

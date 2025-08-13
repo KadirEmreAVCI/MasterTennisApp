@@ -40,11 +40,11 @@
        <item>
         <widget class="QComboBox" name="comboBoxFilter">
          <property name="placeholderText">
-          <string>Filter</string>
+          <string/>
          </property>
          <item>
           <property name="text">
-           <string>Filter</string>
+           <string/>
           </property>
          </item>
          <item>
@@ -99,13 +99,6 @@
          </property>
          <property name="placeholderText">
           <string>Type to search..</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="SearchButton">
-         <property name="text">
-          <string>Search</string>
          </property>
         </widget>
        </item>
