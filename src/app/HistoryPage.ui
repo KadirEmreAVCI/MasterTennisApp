@@ -31,7 +31,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Search according to the filter you choose.</string>
+        <string>Search tournaments according to the filter you choose.</string>
        </property>
       </widget>
      </item>
@@ -103,9 +103,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="ClearButton">
+        <widget class="QPushButton" name="RemoveFilterButton">
          <property name="text">
-          <string>Clear</string>
+          <string> Remove Filter </string>
          </property>
         </widget>
        </item>

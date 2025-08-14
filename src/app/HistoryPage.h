@@ -10,6 +10,7 @@
 
 class AddEditTournamentDialog;
 class MatchesDialog;
+class TournamentFilter;
 class HistoryPage : public QWidget, public TableWidgetUser
 {
 	Q_OBJECT
@@ -34,11 +35,16 @@ private:
 	Ui::HistoryPageClass ui;
 	std::unique_ptr<AddEditTournamentDialog> m_upAddEditTournamentDialog{ nullptr };
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
+	std::unique_ptr<TournamentFilter> m_upActiveFilter{ nullptr };
+	std::vector<Tournament> m_vecDisplayedTournament;
 	std::vector<Tournament> m_vecTournament;
 	std::vector<Organization> m_vecOrganization;
 	bool m_blFirstLoadOfData = true;
 private slots:
 	void on_NewTournamentButton_clicked();
+	void on_RemoveFilterButton_clicked();
+	void on_comboBoxFilter_currentTextChanged(const QString& sFilter);
+	void on_lineEditSearchBar_textChanged(const QString& sFilterWord);
 public slots:	
 	void ShowMatches();
 	void LockUnlockTournament();

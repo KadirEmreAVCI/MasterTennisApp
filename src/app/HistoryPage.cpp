@@ -9,6 +9,7 @@
 #include "MatchesDialog.h"
 #include "AppController.h"
 #include "Config.h"
+#include "FilterByOrganization.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
 	: QWidget(parent)
@@ -33,7 +34,7 @@ void HistoryPage::InitCustomComponents()
 void HistoryPage::FillTable()
 {
 	unsigned int uiRowIdx{};
-	for (const auto& t : m_vecTournament)
+	for (const auto& t : m_vecDisplayedTournament)
 	{
 		InsertTournament2Table(t, uiRowIdx);
 		++uiRowIdx;
@@ -44,7 +45,7 @@ void HistoryPage::FillTable()
 void HistoryPage::LoadDataToTable()
 {
 	ClearTable(ui.tableWidget);
-	if (!m_vecTournament.empty())
+	if (!m_vecDisplayedTournament.empty())
 	{
 		FillTable();
 	}
@@ -140,11 +141,10 @@ std::vector<Tournament> HistoryPage::ConcatanateTournaments()const
 Tournament HistoryPage::FindSignalingTournament()const
 {
 	Tournament SignalingTournament;
-	QWidget* w = qobject_cast<QWidget*>(sender()->parent());
-	if (w)
+	if (QWidget* w = qobject_cast<QWidget*>(sender()->parent()); w)
 	{
 		const unsigned int uiSignalingRow = ui.tableWidget->indexAt(w->pos()).row();
-		SignalingTournament = m_vecTournament[uiSignalingRow];
+		SignalingTournament = m_vecDisplayedTournament[uiSignalingRow];
 	}
 	return SignalingTournament;
 }
@@ -169,12 +169,77 @@ void HistoryPage::InitFilterComponents()
 			pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
 		}
 	} 
-	ui.ClearButton->setVisible(false);
+	ui.comboBoxFilter->setCurrentIndex(0);
+	ui.RemoveFilterButton->setVisible(false);
+	ui.lineEditSearchBar->clear();
 	ui.lineEditSearchBar->setEnabled(false);
 }
 void HistoryPage::on_NewTournamentButton_clicked()
 {
 	OpenAddDialog();
+}
+void HistoryPage::on_RemoveFilterButton_clicked()
+{
+	if(nullptr != m_upActiveFilter)
+	{
+		m_upActiveFilter.reset();
+	}
+	InitFilterComponents();
+	m_vecDisplayedTournament = m_vecTournament;
+	LoadDataToTable();
+}
+void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
+{
+	ui.lineEditSearchBar->setEnabled(true);
+	ui.RemoveFilterButton->setVisible(true);
+	if(sFilter == "Organization")
+	{
+		m_upActiveFilter = std::make_unique<FilterByOrganization>();
+	}
+	else if(sFilter == "Season")
+	{
+
+	}
+	else if(sFilter == "Type")
+	{
+
+	}
+	else if(sFilter == "Category")
+	{
+
+	}
+	else if(sFilter == "Teammate")
+	{
+
+	}
+	else if(sFilter == "Progress")
+	{
+
+	}
+	else if(sFilter == "Opponent")
+	{
+
+	}
+	else if(sFilter != "")
+	{
+		std::cerr << "on_comboBoxFilter_currentTextChanged Unknown filter!\n"; 
+	}
+	if(ui.lineEditSearchBar->text() != "")
+	{
+		on_lineEditSearchBar_textChanged(ui.lineEditSearchBar->text());
+	}
+}
+void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
+{
+	if(m_upActiveFilter)
+	{
+		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(sFilterWord.toStdString());	
+		LoadDataToTable();
+	}
+	else
+	{
+		std::cerr << "on_lineEditSearchBar_textChanged m_upActiveFilter is nullptr!\n";
+	}
 }
 void HistoryPage::UpdateActiveProfileData(const Profile& p)
 {
@@ -186,7 +251,8 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 			return !t1.IsEarlier(t2);
 			});
 	}
-	LoadDataToTable();
+	TournamentFilter::SetUnfilteredTournaments(m_vecTournament);
+	on_RemoveFilterButton_clicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {
@@ -199,9 +265,9 @@ void HistoryPage::UserLoggedIn(const Profile& p)
 }
 void HistoryPage::ShowMatches()
 {
-	const auto& SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = FindSignalingTournament();
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(SignalingTournament.GetName()));
-	const auto& vecMatches = SignalingTournament.GetMatches();
+	const auto vecMatches = SignalingTournament.GetMatches();
 	m_upMatchesDialog->DisplayMatches(SignalingTournament);
 	m_upMatchesDialog->setModal(true);
 	m_upMatchesDialog->exec();
@@ -221,7 +287,7 @@ void HistoryPage::LockUnlockTournament()
 	}
 	else
 	{
-		const auto& vecMatch = SignalingTournament.GetMatches();
+		const auto vecMatch = SignalingTournament.GetMatches();
 		const bool blUpcomingMatchExist = std::any_of(vecMatch.cbegin(), vecMatch.cend(), [](const Match& m) {
 			return m.IsUpcomingMatch();
 			});
@@ -243,7 +309,7 @@ void HistoryPage::LockUnlockTournament()
 }
 void HistoryPage::EditTournament()
 {
-	const auto& SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = FindSignalingTournament();
 	OpenEditDialog(SignalingTournament);
 }
 void HistoryPage::DeleteTournament()
