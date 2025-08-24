@@ -4,7 +4,7 @@
 
 class FilterByOrganization : public TournamentFilter{
 public:
-    virtual std::vector<Tournament> ApplyFilter(const std::string& sFilteredWord) override;
+    virtual std::string GetFilteredData(const Tournament& t)const override;
 };
 
 #endif

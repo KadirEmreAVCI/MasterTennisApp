@@ -6,9 +6,10 @@
 class TournamentFilter{
 public:
     virtual ~TournamentFilter() = default;
-    virtual std::vector<Tournament> ApplyFilter(const std::string& sFilteredWord) = 0;
+    std::vector<Tournament> ApplyFilter(const std::string& sFilteringWord);
     static void SetUnfilteredTournaments(const std::vector<Tournament>&);
-private:    
+private:  
+    virtual std::string GetFilteredData(const Tournament& t)const = 0;
 protected:
     static std::string ToLowerCase(const std::string&);
     static std::vector<Tournament> ms_vecUnfilteredTournaments;
