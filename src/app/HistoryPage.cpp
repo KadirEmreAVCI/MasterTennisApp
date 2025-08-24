@@ -10,6 +10,12 @@
 #include "AppController.h"
 #include "Config.h"
 #include "FilterByOrganization.h"
+#include "FilterBySeason.h"
+#include "FilterByType.h"
+#include "FilterByCategory.h"
+#include "FilterByTeammate.h"
+#include "FilterByProgress.h"	
+#include "FilterByOpponent.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
 	: QWidget(parent)
@@ -198,27 +204,27 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 	}
 	else if(sFilter == "Season")
 	{
-
+		m_upActiveFilter = std::make_unique<FilterBySeason>();
 	}
 	else if(sFilter == "Type")
 	{
-
+		m_upActiveFilter = std::make_unique<FilterByType>();
 	}
 	else if(sFilter == "Category")
 	{
-
+		m_upActiveFilter = std::make_unique<FilterByCategory>();
 	}
 	else if(sFilter == "Teammate")
 	{
-
+		m_upActiveFilter = std::make_unique<FilterByTeammate>();
 	}
 	else if(sFilter == "Progress")
 	{
-
+		m_upActiveFilter = std::make_unique<FilterByProgress>();
 	}
 	else if(sFilter == "Opponent")
 	{
-
+		m_upActiveFilter = std::make_unique<FilterByOpponent>();
 	}
 	else if(sFilter != "")
 	{
