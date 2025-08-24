@@ -1,5 +1,13 @@
 #include "FilterByOpponent.h"
 
+void FilterByOpponent::HighlightFilteredColumn(QTableWidget* tableWidget)const
+{
+    if(nullptr != tableWidget)
+    {
+        tableWidget->clearSelection();
+        tableWidget->selectColumn(9);
+    }
+}
 std::string FilterByOpponent::GetFilteredData(const Tournament& t)const
 {
     std::string sConcatanatedOpponents;

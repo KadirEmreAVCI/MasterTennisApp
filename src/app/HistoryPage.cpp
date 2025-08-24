@@ -179,6 +179,7 @@ void HistoryPage::InitFilterComponents()
 	ui.RemoveFilterButton->setVisible(false);
 	ui.lineEditSearchBar->clear();
 	ui.lineEditSearchBar->setEnabled(false);
+	ui.tableWidget->clearSelection();
 }
 void HistoryPage::on_NewTournamentButton_clicked()
 {
@@ -241,6 +242,7 @@ void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
 	{
 		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(sFilterWord.toStdString());	
 		LoadDataToTable();
+		m_upActiveFilter->HighlightFilteredColumn(ui.tableWidget);
 	}
 	else
 	{
