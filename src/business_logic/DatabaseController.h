@@ -6,7 +6,7 @@
 #include <map>
 #include <QObject>
 #include "Profile.h"
-
+class IDatabase;
 class DatabaseController : public QObject{
 	Q_OBJECT
 public:
@@ -15,6 +15,7 @@ public:
 	static DatabaseController& instance();
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;
+	void InitDatabase(const std::string& sDatabaseAddr);
 	bool DeleteProfile(const Profile&)const;
 	bool DeleteOrganization(const Organization&)const;
 	bool DeleteTournament(const Tournament&)const;
@@ -47,6 +48,7 @@ private:
 	std::vector<Organization> m_vecOrganization;
 	std::vector<Tournament> m_vecTournament;
 	std::vector<Match> m_vecMatch;
+	std::shared_ptr<IDatabase> m_spIDatabase;
 };
 
 #endif

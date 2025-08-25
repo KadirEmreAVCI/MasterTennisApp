@@ -30,7 +30,7 @@ void AppController::StartApplication()
 	QApplication::setWindowIcon(QIcon(QString::fromStdString(m_sAppLogoAddr)));
 	Organization::SetOrgImageRootDestDir(QCoreApplication::applicationDirPath() + "/../../src/app/resources/organizations/");
 	Profile::SetProfileImageRootDestDir(QCoreApplication::applicationDirPath() + "/../../src/app/resources/profiles/");
-	SQLiteDB::instance().SetDatabaseAddr(QCoreApplication::applicationDirPath() + "/../../database/MasterTennisApp.db");
+	DatabaseController::instance().InitDatabase((QCoreApplication::applicationDirPath() + "/../../database/MasterTennisApp.db").toStdString());
 	m_upMasterTennisApp = std::make_unique<MasterTennisApp>();
 	m_upProfileDialog = std::make_unique<ProfileDialog>();
 	StatController::create();

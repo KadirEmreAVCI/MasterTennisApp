@@ -1,8 +1,8 @@
 #ifndef DBITEM_H
 #define DBITEM_H
 
-#include <string>
-#include "SQLiteDB.h"
+#include <memory>
+#include "IDatabase.h"
 class DBItem {
 public:
 	DBItem(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns);
@@ -12,7 +12,9 @@ public:
 	virtual bool DeleteFromDB()const;
 	virtual void LoadFromDB(unsigned ID)=0;
 	std::string GetDBTable()const;
+	static void SetDatabase(std::shared_ptr<IDatabase> spDatabase);
 protected:
+	static std::shared_ptr<IDatabase> m_spIDatabase;
 	static std::string Serialize(std::vector<std::string> vec);
 	static std::vector<std::string> Deserialize(std::string sSerialized);
 	std::vector<std::string> DeserializeDBColumn(const std::string& sColumn)const;

@@ -5,14 +5,9 @@
 #include <QSqlRecord>
 #include <QTableView>
 QSqlDatabase SQLiteDB::m_SqlDatabase;
-SQLiteDB::SQLiteDB()
+SQLiteDB::SQLiteDB(const std::string& sDatabaseAddr)
 {
-	
-}
-SQLiteDB& SQLiteDB::instance()
-{
-	static SQLiteDB obj;
-	return obj;
+	SetDatabaseAddr(QString::fromStdString(sDatabaseAddr));
 }
 void SQLiteDB::SetDatabaseAddr(const QString& sDatabaseAddr)
 {
@@ -39,8 +34,7 @@ bool SQLiteDB::IsOpen()
 {
 	return m_SqlDatabase.isOpen();
 }
-
-unsigned SQLiteDB::GetRowSize(const std::string& sTable) const
+unsigned SQLiteDB::GetItemCount(const std::string& sTable) const
 {
 	unsigned uiRowCount{};
 	if (OpenConn())
@@ -59,7 +53,7 @@ unsigned SQLiteDB::GetRowSize(const std::string& sTable) const
 	return uiRowCount;
 }
 
-bool SQLiteDB::InsertItem2Table(const std::string& sTable, const std::string& sColumnNames, const std::string& sValues)const
+bool SQLiteDB::InsertItem(const std::string& sTable, const std::string& sColumnNames, const std::string& sValues)const
 {
 	bool blRowInsertion{ false };
 	if (OpenConn())
@@ -78,7 +72,7 @@ bool SQLiteDB::InsertItem2Table(const std::string& sTable, const std::string& sC
 	CloseConn();
 	return blRowInsertion;
 }
-bool SQLiteDB::EditItemInTable(const std::string& sTable, const QMap<QString, QVariant>& columnValues, unsigned uiID)const
+bool SQLiteDB::EditItem(const std::string& sTable, const QMap<QString, QVariant>& columnValues, unsigned uiID)const
 {
 	std::cout << "SQLiteDB::EditItemInTable uiID = " << uiID << '\n';
 	bool blEdition = false;
@@ -119,9 +113,8 @@ bool SQLiteDB::EditItemInTable(const std::string& sTable, const QMap<QString, QV
 	}
 	CloseConn();
 	return blEdition;
-
 }
-bool SQLiteDB::DeleteItemFromTable(const std::string& sTable, std::string sColumn, std::string sVal) const
+bool SQLiteDB::DeleteItem(const std::string& sTable, std::string sColumn, std::string sVal) const
 {
 	bool blDeletion = false;
 	if (OpenConn())
@@ -140,7 +133,7 @@ bool SQLiteDB::DeleteItemFromTable(const std::string& sTable, std::string sColum
 	CloseConn();
 	return blDeletion;
 }
-std::vector<std::string> SQLiteDB::GetColumn(const std::string& sTable, const std::string& sColumn)const
+std::vector<std::string> SQLiteDB::GetEntireColumn(const std::string& sTable, const std::string& sColumn)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
@@ -170,7 +163,7 @@ std::vector<std::string> SQLiteDB::GetColumn(const std::string& sTable, const st
 	CloseConn();
 	return vecColumn;
 }
-std::vector<std::string> SQLiteDB::GetColumnWithCond(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond)const
+std::vector<std::string> SQLiteDB::GetEntireColumn(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
@@ -198,23 +191,23 @@ std::vector<std::string> SQLiteDB::GetColumnWithCond(const std::string& sTable, 
 	return vecColumn;
 }
 
-std::string SQLiteDB::GetValue(const std::string& sTable, const std::string& sColumn, unsigned uiRowIdx)const
+std::string SQLiteDB::RetrieveValue(const std::string& sTable, const std::string& sColumn, unsigned uiRowIdx)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
 	{
-		vecColumn = GetColumn(sTable, sColumn);
+		vecColumn = GetEntireColumn(sTable, sColumn);
 	}
 	CloseConn();
 	return !vecColumn.empty() ? vecColumn[uiRowIdx] : "";
 }
 
-std::string SQLiteDB::GetValueWithCond(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond, unsigned uiRowIdx)const
+std::string SQLiteDB::RetrieveValue(const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond, unsigned uiRowIdx)const
 {
 	std::vector<std::string> vecColumn;
 	if (OpenConn())
 	{
-		vecColumn = GetColumnWithCond(sTable, sColumn, sCondColumn, sCond);
+		vecColumn = GetEntireColumn(sTable, sColumn, sCondColumn, sCond);
 	}
 	CloseConn();
 	return !vecColumn.empty() ? vecColumn[uiRowIdx] : "";

@@ -126,7 +126,7 @@ bool Match::InsertToDB()const
 							"','" + GetScore().ToString() +
 							"','" + SetsToString() +
 							"'" };
-	return SQLiteDB::instance().InsertItem2Table(m_sDBTable, m_sDBColumns, sDBValues);
+	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);
 }
 bool Match::EditInDB()const
 {
@@ -140,18 +140,17 @@ bool Match::EditInDB()const
 	columnValues["Time"] = m_Time.toString();
 	columnValues["Score"] = QString::fromStdString(m_Score.ToString());
 	columnValues["Sets"] = QString::fromStdString(SetsToString());
-	return SQLiteDB::instance().EditItemInTable(m_sDBTable, columnValues, m_uiID);
+	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
 }
 void Match::LoadFromDB(unsigned ID)
 {
-	const SQLiteDB& db = SQLiteDB::instance();
-	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
-	m_uiTournamentID = stoi(db.GetValueWithCond(m_sDBTable, "TournamentID", "ID", std::to_string(m_uiID)));
-	m_sStatu = db.GetValueWithCond(m_sDBTable, "Statu", "ID", std::to_string(m_uiID));
-	m_sStage = db.GetValueWithCond(m_sDBTable, "Stage", "ID", std::to_string(m_uiID));
-	m_sOpponent1 = db.GetValueWithCond(m_sDBTable, "Opponent1", "ID", std::to_string(m_uiID));
-	m_soptOpponent2 = std::optional<std::string>(db.GetValueWithCond(m_sDBTable, "Opponent2", "ID", std::to_string(m_uiID)));
-	m_Date = QDate::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Date", "ID", std::to_string(m_uiID))));
-	m_Time = QTime::fromString(QString::fromStdString(db.GetValueWithCond(m_sDBTable, "Time", "ID", std::to_string(m_uiID))));
-	SetSets(SetsFromString(db.GetValueWithCond(m_sDBTable, "Sets", "ID", std::to_string(m_uiID))));
+	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
+	m_uiTournamentID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "TournamentID", "ID", std::to_string(m_uiID)));
+	m_sStatu = m_spIDatabase->RetrieveValue(m_sDBTable, "Statu", "ID", std::to_string(m_uiID));
+	m_sStage = m_spIDatabase->RetrieveValue(m_sDBTable, "Stage", "ID", std::to_string(m_uiID));
+	m_sOpponent1 = m_spIDatabase->RetrieveValue(m_sDBTable, "Opponent1", "ID", std::to_string(m_uiID));
+	m_soptOpponent2 = std::optional<std::string>(m_spIDatabase->RetrieveValue(m_sDBTable, "Opponent2", "ID", std::to_string(m_uiID)));
+	m_Date = QDate::fromString(QString::fromStdString(m_spIDatabase->RetrieveValue(m_sDBTable, "Date", "ID", std::to_string(m_uiID))));
+	m_Time = QTime::fromString(QString::fromStdString(m_spIDatabase->RetrieveValue(m_sDBTable, "Time", "ID", std::to_string(m_uiID))));
+	SetSets(SetsFromString(m_spIDatabase->RetrieveValue(m_sDBTable, "Sets", "ID", std::to_string(m_uiID))));
 }
