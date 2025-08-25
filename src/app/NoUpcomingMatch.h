@@ -9,7 +9,7 @@ class NoUpcomingMatch : public QWidget
 	Q_OBJECT
 
 public:
-	NoUpcomingMatch(QWidget *parent = nullptr);
+	explicit NoUpcomingMatch(QWidget *parent = nullptr);
 	~NoUpcomingMatch();
 
 private:

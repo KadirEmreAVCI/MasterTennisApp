@@ -10,6 +10,12 @@ TableWidgetUser::TableWidgetUser()
 {
 
 }
+void TableWidgetUser::InitTable(QTableWidget* table, const std::vector<std::string>& vecColumnNames)
+{
+	m_vecColumnNames = vecColumnNames;
+	FillColumnNamesOfTable(table);
+	MakeColumnHeaderBold(table);
+}
 void TableWidgetUser::MakeColumnHeaderBold(QTableWidget* table)
 {
 	QFont headerFont = table->horizontalHeader()->font();

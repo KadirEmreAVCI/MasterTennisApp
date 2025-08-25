@@ -19,9 +19,8 @@ OrganizationDialog::~OrganizationDialog()
 void OrganizationDialog::InitCustomComponents()
 {
 	setWindowTitle("Tennis Organizations");
-	m_vecColumnNames = { "", " Organization ", " Categories " , "", ""};
-	FillColumnNamesOfTable(ui.tableWidget);
-	MakeColumnHeaderBold(ui.tableWidget);
+	std::vector<std::string> vecColumnNames = { "", " Organization ", " Categories " , "", ""};
+	InitTable(ui.tableWidget, vecColumnNames);
 	setFixedSize(560, 600);
 }
 void OrganizationDialog::DisplayOrganizations()

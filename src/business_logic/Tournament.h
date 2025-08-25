@@ -11,18 +11,18 @@ class Organization;
 class Tournament : public DBItem {
 friend class TournamentTest;
 public:
-	Tournament(	unsigned uiID = 0, 
-				unsigned uiProfileID = 0, 
-				unsigned uiOrgID = 0, 
-				const std::string & sOrgName = "",
-				const std::string& sSeason = "", 
-				const std::string& sCategory = "", 
-				const std::string& sType = "", 
-				std::optional<std::string> soptTeammate = std::nullopt,
-				unsigned uiParticipant = 0, 
-				bool blIsLocked = false,
-				bool bl3rdPlaceGameAvailable = false, 
-				unsigned uiBestOfSets = 0);
+	explicit Tournament(	unsigned uiID = 0, 
+							unsigned uiProfileID = 0, 
+							unsigned uiOrgID = 0, 
+							const std::string & sOrgName = "",
+							const std::string& sSeason = "", 
+							const std::string& sCategory = "", 
+							const std::string& sType = "", 
+							std::optional<std::string> soptTeammate = std::nullopt,
+							unsigned uiParticipant = 0, 
+							bool blIsLocked = false,
+							bool bl3rdPlaceGameAvailable = false, 
+							unsigned uiBestOfSets = 0);
 	std::string GetName()const;
 	unsigned GetID()const;
 	unsigned GetProfileID()const;

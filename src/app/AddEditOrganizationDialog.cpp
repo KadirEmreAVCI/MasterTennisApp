@@ -35,7 +35,7 @@ void AddEditOrganizationDialog::PrepareDialog(DialogMode mode, const Organizatio
 	case DialogMode::eAddDialog:
 	{
 		setWindowTitle("Add Organization");
-		m_EditedOrganization = {};
+		m_EditedOrganization = Organization{};
 		break;
 	}
 	case DialogMode::eEditDialog:

@@ -65,7 +65,7 @@ bool Organization::EditInDB()const
 }
 void Organization::LoadFromDB(unsigned ID)
 {
-	SQLiteDB& db = SQLiteDB::instance();
+	const SQLiteDB& db = SQLiteDB::instance();
 	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
 	m_sName = db.GetValueWithCond(m_sDBTable, "Name", "ID", std::to_string(m_uiID));
 	m_sOrgPictureAddr = db.GetValueWithCond(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));

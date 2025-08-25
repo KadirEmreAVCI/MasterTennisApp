@@ -17,7 +17,7 @@ public:
 	AddEditMatchDialog(QWidget *parent = nullptr);
 	~AddEditMatchDialog();
 	void InitCustomComponents() override final;
-	void PrepareDialog(DialogMode, const Tournament& t, const Match& m = {});
+	void PrepareDialog(DialogMode, const Tournament& t, const Match& m = Match{});
 private:
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;

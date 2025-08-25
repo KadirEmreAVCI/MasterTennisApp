@@ -48,12 +48,19 @@ bool Set::IsSetTBPlayed()const
 }
 bool Set::IsValid()const
 {
-	const bool blSetUninitialized = m_MajorScore == Score{ 0, 0 } && !IsSetTBPlayed();
-	const bool blMajorScoreInequal = m_MajorScore.GetOutcome() != Outcome::Tied;
-	const bool blTBScoreInequal = !IsSetTBPlayed() || (IsSetTBPlayed() && (m_optTBScore.value().GetOutcome() != Outcome::Tied));
-	const bool blSetInequal = blMajorScoreInequal && blTBScoreInequal;
-	const bool blSetConsistentForHomeWin = m_MajorScore.GetOutcome() == Outcome::HomeWin && (!IsSetTBPlayed() || (IsSetTBPlayed() && (m_optTBScore.value().GetOutcome() == Outcome::HomeWin)));
-	const bool blSetConsistentForAwayWin = m_MajorScore.GetOutcome() == Outcome::AwayWin && (!IsSetTBPlayed() || (IsSetTBPlayed() && (m_optTBScore.value().GetOutcome() == Outcome::AwayWin)));
-	const bool blSetConsistent = blSetConsistentForHomeWin || blSetConsistentForAwayWin;
-	return blSetUninitialized || (blSetInequal && blSetConsistent);
+	return IsUninitialized() || (!IsSetScoreEqual() && IsOutcomeValid());
+}
+bool Set::IsUninitialized()const
+{
+	return m_MajorScore == Score{ 0, 0 } && !IsSetTBPlayed();
+}
+bool Set::IsSetScoreEqual()const
+{
+	return (m_MajorScore.GetOutcome() == Outcome::Tied) && (!IsSetTBPlayed() || (m_optTBScore.value().GetOutcome() == Outcome::Tied));
+}
+bool Set::IsOutcomeValid()const
+{
+	const bool blSetConsistentForHomeWin = m_MajorScore.GetOutcome() == Outcome::HomeWin && (!IsSetTBPlayed() || m_optTBScore.value().GetOutcome() == Outcome::HomeWin);
+	const bool blSetConsistentForAwayWin = m_MajorScore.GetOutcome() == Outcome::AwayWin && (!IsSetTBPlayed() || m_optTBScore.value().GetOutcome() == Outcome::AwayWin);
+	return blSetConsistentForHomeWin || blSetConsistentForAwayWin;
 }

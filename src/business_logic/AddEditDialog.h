@@ -18,7 +18,7 @@ protected:
 	bool SaveImage()const;
 	void ClearImage();
 	void OnBrowseButtonClicked(const QString& sSourceDir, const QString& sRootDestDir);
-	DialogMode m_DialogMode;
+	DialogMode m_DialogMode{DialogMode::eAddDialog};
 	QString m_sFullDestDir{};
 	QString m_sFullSourceDir{};
 	QString m_sImageFileName{};

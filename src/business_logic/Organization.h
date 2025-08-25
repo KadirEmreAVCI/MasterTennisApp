@@ -10,7 +10,10 @@
 #include "DBItem.h"
 class Organization : public DBItem {
 public:
-	Organization(unsigned uiID = 0, const std::string& sName = "", const std::string& sOrgPictureAddr = "", const std::vector<std::string>& vecCategories = {});
+	explicit Organization(	unsigned uiID = 0, 
+							const std::string& sName = "", 
+							const std::string& sOrgPictureAddr = "", 
+							const std::vector<std::string>& vecCategories = {});
 	unsigned GetID()const;
 	std::string GetName()const;
 	std::string GetOrgPictureAddr()const;

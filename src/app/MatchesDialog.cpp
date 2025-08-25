@@ -19,9 +19,8 @@ MatchesDialog::~MatchesDialog()
 }
 void MatchesDialog::InitCustomComponents()
 {
-	m_vecColumnNames = { " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" };
-	FillColumnNamesOfTable(ui.tableWidget);
-	MakeColumnHeaderBold(ui.tableWidget);
+	std::vector<std::string> vecColumnNames = { " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" };
+	InitTable(ui.tableWidget, vecColumnNames);
 	setFixedSize(750, 600);
 }
 void MatchesDialog::FillTable()

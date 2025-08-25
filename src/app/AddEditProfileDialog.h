@@ -14,7 +14,7 @@ class AddEditProfileDialog : public QDialog, public IQTComponent, public AddEdit
 public:
 	AddEditProfileDialog(QWidget *parent = nullptr);
 	~AddEditProfileDialog();
-	void PrepareDialog(DialogMode, const Profile& p = {});
+	void PrepareDialog(DialogMode, const Profile& p = Profile{});
 
 private:
 	void InitCustomComponents() override final;

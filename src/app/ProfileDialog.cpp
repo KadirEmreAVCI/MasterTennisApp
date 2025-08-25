@@ -37,7 +37,7 @@ void ProfileDialog::CreateTabWidget()
 	}
 	ui.tabWidget->addTab(new HomePage(), QString("Home"));
 	ui.tabWidget->addTab(new AchievementsPage(), QString("Achievements"));
-	ui.tabWidget->addTab(new HistoryPage(), QString("Tournament History"));
+	ui.tabWidget->addTab(new HistoryPage(), QString("History"));
 }
 void ProfileDialog::UpdateProfileName()
 {
@@ -86,7 +86,7 @@ void ProfileDialog::on_LogOutButton_clicked()
 	if (reply == QMessageBox::Yes)
 	{
 		AppController::instance().OnLogOutButtonClicked();
-		m_ActiveProfile = {};
+		m_ActiveProfile = Profile{};
 	}
 }
 void ProfileDialog::on_comboBoxProfiles_currentTextChanged(const QString& sProfileName)

@@ -14,7 +14,7 @@ class AddEditOrganizationDialog : public QDialog, public IQTComponent, public Ad
 public:
 	AddEditOrganizationDialog(QWidget *parent = nullptr);
 	~AddEditOrganizationDialog();
-	void PrepareDialog(DialogMode mode, const Organization& org = {});
+	void PrepareDialog(DialogMode mode, const Organization& org = Organization{});
 private:
 	void InitCustomComponents() override final;
 	virtual void InitDialog()override;

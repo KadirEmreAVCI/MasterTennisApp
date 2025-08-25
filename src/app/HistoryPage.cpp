@@ -3,11 +3,19 @@
 #include <string>
 #include <algorithm>
 #include <QMessageBox>
+#include <QStandardItemModel>
 #include "HistoryPage.h"
 #include "AddEditTournamentDialog.h"
 #include "MatchesDialog.h"
 #include "AppController.h"
 #include "Config.h"
+#include "FilterByOrganization.h"
+#include "FilterBySeason.h"
+#include "FilterByType.h"
+#include "FilterByCategory.h"
+#include "FilterByTeammate.h"
+#include "FilterByProgress.h"	
+#include "FilterByOpponent.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
 	: QWidget(parent)
@@ -21,19 +29,18 @@ HistoryPage::HistoryPage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HistoryPage::UpdateActiveProfileData);
 	InitCustomComponents();
 }
-
 HistoryPage::~HistoryPage()
 {}
 void HistoryPage::InitCustomComponents()
 {
-	m_vecColumnNames = { "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" };
-	FillColumnNamesOfTable(ui.tableWidget);
-	MakeColumnHeaderBold(ui.tableWidget);
+	InitFilterComponents();
+	std::vector<std::string> vecColumnNames = { "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" };
+	InitTable(ui.tableWidget, vecColumnNames);
 }
 void HistoryPage::FillTable()
 {
 	unsigned int uiRowIdx{};
-	for (const auto& t : m_vecTournament)
+	for (const auto& t : m_vecDisplayedTournament)
 	{
 		InsertTournament2Table(t, uiRowIdx);
 		++uiRowIdx;
@@ -44,7 +51,7 @@ void HistoryPage::FillTable()
 void HistoryPage::LoadDataToTable()
 {
 	ClearTable(ui.tableWidget);
-	if (!m_vecTournament.empty())
+	if (!m_vecDisplayedTournament.empty())
 	{
 		FillTable();
 	}
@@ -140,11 +147,10 @@ std::vector<Tournament> HistoryPage::ConcatanateTournaments()const
 Tournament HistoryPage::FindSignalingTournament()const
 {
 	Tournament SignalingTournament;
-	QWidget* w = qobject_cast<QWidget*>(sender()->parent());
-	if (w)
+	if (QWidget* w = qobject_cast<QWidget*>(sender()->parent()); w)
 	{
 		const unsigned int uiSignalingRow = ui.tableWidget->indexAt(w->pos()).row();
-		SignalingTournament = m_vecTournament[uiSignalingRow];
+		SignalingTournament = m_vecDisplayedTournament[uiSignalingRow];
 	}
 	return SignalingTournament;
 }
@@ -160,9 +166,88 @@ void HistoryPage::OpenEditDialog(const Tournament& t)
 	m_upAddEditTournamentDialog->PrepareDialog(DialogMode::eEditDialog, t);
 	m_upAddEditTournamentDialog->exec();
 }
+void HistoryPage::InitFilterComponents()
+{
+	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
+	{
+		if(auto* pItem = pModel->item(0); pItem != nullptr)
+		{
+			pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
+		}
+	} 
+	ui.comboBoxFilter->setCurrentIndex(0);
+	ui.RemoveFilterButton->setVisible(false);
+	ui.lineEditSearchBar->clear();
+	ui.lineEditSearchBar->setEnabled(false);
+	ui.tableWidget->clearSelection();
+}
 void HistoryPage::on_NewTournamentButton_clicked()
 {
 	OpenAddDialog();
+}
+void HistoryPage::on_RemoveFilterButton_clicked()
+{
+	if(nullptr != m_upActiveFilter)
+	{
+		m_upActiveFilter.reset();
+	}
+	InitFilterComponents();
+	m_vecDisplayedTournament = m_vecTournament;
+	LoadDataToTable();
+}
+void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
+{
+	ui.lineEditSearchBar->setEnabled(true);
+	ui.RemoveFilterButton->setVisible(true);
+	if(sFilter == "Organization")
+	{
+		m_upActiveFilter = std::make_unique<FilterByOrganization>();
+	}
+	else if(sFilter == "Season")
+	{
+		m_upActiveFilter = std::make_unique<FilterBySeason>();
+	}
+	else if(sFilter == "Type")
+	{
+		m_upActiveFilter = std::make_unique<FilterByType>();
+	}
+	else if(sFilter == "Category")
+	{
+		m_upActiveFilter = std::make_unique<FilterByCategory>();
+	}
+	else if(sFilter == "Teammate")
+	{
+		m_upActiveFilter = std::make_unique<FilterByTeammate>();
+	}
+	else if(sFilter == "Progress")
+	{
+		m_upActiveFilter = std::make_unique<FilterByProgress>();
+	}
+	else if(sFilter == "Opponent")
+	{
+		m_upActiveFilter = std::make_unique<FilterByOpponent>();
+	}
+	else if(sFilter != "")
+	{
+		std::cerr << "on_comboBoxFilter_currentTextChanged Unknown filter!\n"; 
+	}
+	if(ui.lineEditSearchBar->text() != "")
+	{
+		on_lineEditSearchBar_textChanged(ui.lineEditSearchBar->text());
+	}
+}
+void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
+{
+	if(m_upActiveFilter)
+	{
+		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(sFilterWord.toStdString());	
+		LoadDataToTable();
+		m_upActiveFilter->HighlightFilteredColumn(ui.tableWidget);
+	}
+	else
+	{
+		std::cerr << "on_lineEditSearchBar_textChanged m_upActiveFilter is nullptr!\n";
+	}
 }
 void HistoryPage::UpdateActiveProfileData(const Profile& p)
 {
@@ -174,7 +259,8 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 			return !t1.IsEarlier(t2);
 			});
 	}
-	LoadDataToTable();
+	TournamentFilter::SetUnfilteredTournaments(m_vecTournament);
+	on_RemoveFilterButton_clicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {
@@ -187,9 +273,9 @@ void HistoryPage::UserLoggedIn(const Profile& p)
 }
 void HistoryPage::ShowMatches()
 {
-	const auto& SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = FindSignalingTournament();
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(SignalingTournament.GetName()));
-	const auto& vecMatches = SignalingTournament.GetMatches();
+	const auto vecMatches = SignalingTournament.GetMatches();
 	m_upMatchesDialog->DisplayMatches(SignalingTournament);
 	m_upMatchesDialog->setModal(true);
 	m_upMatchesDialog->exec();
@@ -209,7 +295,7 @@ void HistoryPage::LockUnlockTournament()
 	}
 	else
 	{
-		const auto& vecMatch = SignalingTournament.GetMatches();
+		const auto vecMatch = SignalingTournament.GetMatches();
 		const bool blUpcomingMatchExist = std::any_of(vecMatch.cbegin(), vecMatch.cend(), [](const Match& m) {
 			return m.IsUpcomingMatch();
 			});
@@ -231,7 +317,7 @@ void HistoryPage::LockUnlockTournament()
 }
 void HistoryPage::EditTournament()
 {
-	const auto& SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = FindSignalingTournament();
 	OpenEditDialog(SignalingTournament);
 }
 void HistoryPage::DeleteTournament()
