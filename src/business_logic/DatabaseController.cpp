@@ -1,12 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "DatabaseController.h"
-#include "SQLiteDB.h"
 
-DatabaseController::DatabaseController()
-{
-	m_spIDatabase = nullptr;
-}
 DatabaseController& DatabaseController::instance()
 {
 	static DatabaseController obj;
@@ -143,9 +138,9 @@ std::vector<Organization> DatabaseController::FindParticipatedOrgsOfProfile(unsi
 	}
 	return vecOrgsOfProfile;
 }
-void DatabaseController::InitDatabase(const std::string& sDatabaseAddr)
+void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)
 {
-	m_spIDatabase = std::make_shared<SQLiteDB>(sDatabaseAddr);
+	m_spIDatabase = spDatabase;
 	DBItem::SetDatabase(m_spIDatabase);
 	LoadDataFromDB();
 }

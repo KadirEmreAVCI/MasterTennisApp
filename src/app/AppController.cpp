@@ -4,6 +4,7 @@
 #include "MasterTennisApp.h"
 #include "StatController.h"
 #include "DatabaseController.h"
+#include "SQLiteDB.h"
 
 AppController* AppController::ms_pAppController = nullptr;
 void AppController::create()
@@ -30,7 +31,7 @@ void AppController::StartApplication()
 	QApplication::setWindowIcon(QIcon(QString::fromStdString(m_sAppLogoAddr)));
 	Organization::SetOrgImageRootDestDir(QCoreApplication::applicationDirPath() + "/../../src/app/resources/organizations/");
 	Profile::SetProfileImageRootDestDir(QCoreApplication::applicationDirPath() + "/../../src/app/resources/profiles/");
-	DatabaseController::instance().InitDatabase((QCoreApplication::applicationDirPath() + "/../../database/MasterTennisApp.db").toStdString());
+	DatabaseController::instance().InitDatabase(std::make_shared<SQLiteDB>((QCoreApplication::applicationDirPath() + "/../../database/MasterTennisApp.db").toStdString()));
 	m_upMasterTennisApp = std::make_unique<MasterTennisApp>();
 	m_upProfileDialog = std::make_unique<ProfileDialog>();
 	StatController::create();
