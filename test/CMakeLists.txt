@@ -11,7 +11,7 @@ target_include_directories(${PROJECT_NAME}_test
 
 target_link_libraries(${PROJECT_NAME}_test
     PUBLIC
-        gtest_main    
+        gmock_main    
         ${PROJECT_NAME}_lib
 )
 

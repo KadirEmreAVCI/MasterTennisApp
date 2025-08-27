@@ -1,12 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "DatabaseController.h"
-#include "SQLiteDB.h"
 
-DatabaseController::DatabaseController()
-{
-	LoadDataFromDB();
-}
 DatabaseController& DatabaseController::instance()
 {
 	static DatabaseController obj;
@@ -22,7 +17,7 @@ void DatabaseController::LoadDataFromDB()
 void DatabaseController::LoadMatches()
 {
 	m_vecMatch.clear();
-	if (const unsigned uiMatchSize = SQLiteDB::instance().GetRowSize(Match{}.GetDBTable()); uiMatchSize != 0)
+	if (const unsigned uiMatchSize = m_spIDatabase->GetItemCount(Match{}.GetDBTable()); uiMatchSize != 0)
 	{
 		m_vecMatch.resize(uiMatchSize);
 		unsigned uiRowIdx{};
@@ -34,7 +29,7 @@ void DatabaseController::LoadMatches()
 void DatabaseController::LoadTournaments()
 {
 	m_vecTournament.clear();
-	if (const unsigned uiTournamentSize = SQLiteDB::instance().GetRowSize(Tournament{}.GetDBTable()); uiTournamentSize != 0)
+	if (const unsigned uiTournamentSize = m_spIDatabase->GetItemCount(Tournament{}.GetDBTable()); uiTournamentSize != 0)
 	{
 		m_vecTournament.resize(uiTournamentSize);
 		unsigned uiRowIdx{};
@@ -47,7 +42,7 @@ void DatabaseController::LoadTournaments()
 void DatabaseController::LoadOrganizations()
 {
 	m_vecOrganization.clear();
-	if (const unsigned uiOrgSize = SQLiteDB::instance().GetRowSize(Organization{}.GetDBTable()); uiOrgSize != 0)
+	if (const unsigned uiOrgSize = m_spIDatabase->GetItemCount(Organization{}.GetDBTable()); uiOrgSize != 0)
 	{
 		m_vecOrganization.resize(uiOrgSize);
 		unsigned uiRowIdx{};
@@ -60,7 +55,7 @@ void DatabaseController::LoadOrganizations()
 void DatabaseController::LoadProfiles()
 {
 	m_vecProfile.clear();
-	if (const unsigned uiProfileSize = SQLiteDB::instance().GetRowSize(Profile{}.GetDBTable()); uiProfileSize != 0)
+	if (const unsigned uiProfileSize = m_spIDatabase->GetItemCount(Profile{}.GetDBTable()); uiProfileSize != 0)
 	{
 		m_vecProfile.resize(uiProfileSize);
 		unsigned uiRowIdx{};
@@ -142,6 +137,12 @@ std::vector<Organization> DatabaseController::FindParticipatedOrgsOfProfile(unsi
 		}
 	}
 	return vecOrgsOfProfile;
+}
+void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)
+{
+	m_spIDatabase = spDatabase;
+	DBItem::SetDatabase(m_spIDatabase);
+	LoadDataFromDB();
 }
 bool DatabaseController::DeleteProfile(const Profile& p)const
 {

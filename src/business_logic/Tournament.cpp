@@ -216,7 +216,7 @@ bool Tournament::InsertToDB()const
 							"','" + std::to_string(m_bl3rdPlaceGameAvailable) +
 							"','" + std::to_string(m_uiBestOfSets) +
 							"'" };
-	return SQLiteDB::instance().InsertItem2Table(m_sDBTable, m_sDBColumns, sDBValues);;
+	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);;
 }
 bool Tournament::EditInDB()const
 {
@@ -231,23 +231,22 @@ bool Tournament::EditInDB()const
 	columnValues["Locked"] = QString::fromStdString(std::to_string(m_blIsLocked));
 	columnValues["ThirdPlaceGameAvailable"] = QString::fromStdString(std::to_string(m_bl3rdPlaceGameAvailable));
 	columnValues["SetsBestOf"] = QString::fromStdString(std::to_string(m_uiBestOfSets));
-	return SQLiteDB::instance().EditItemInTable(m_sDBTable, columnValues, m_uiID);
+	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
 }
 void Tournament::LoadFromDB(unsigned ID)
 {
-	const SQLiteDB& db = SQLiteDB::instance();
-	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
-	m_uiProfileID = stoi(db.GetValueWithCond(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
-	m_uiOrgID = stoi(db.GetValueWithCond(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
-	m_sSeason = db.GetValueWithCond(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
-	m_sCategory = db.GetValueWithCond(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
-	m_sType = db.GetValueWithCond(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
-	const std::string sTeammate = db.GetValueWithCond(m_sDBTable, "Teammate", "ID", std::to_string(m_uiID));
+	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
+	m_uiProfileID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
+	m_uiOrgID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
+	m_sSeason = m_spIDatabase->RetrieveValue(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
+	m_sCategory = m_spIDatabase->RetrieveValue(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
+	m_sType = m_spIDatabase->RetrieveValue(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
+	const std::string sTeammate = m_spIDatabase->RetrieveValue(m_sDBTable, "Teammate", "ID", std::to_string(m_uiID));
 	m_soptTeammate = (sTeammate != "") ? std::optional<std::string>(sTeammate) : std::nullopt;
-	m_uiParticipant = stoi(db.GetValueWithCond(m_sDBTable, "Participant", "ID", std::to_string(m_uiID)));
-	m_blIsLocked = stoi(db.GetValueWithCond(m_sDBTable, "Locked", "ID", std::to_string(m_uiID)));
-	m_bl3rdPlaceGameAvailable = stoi(db.GetValueWithCond(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID)));
-	m_uiBestOfSets = stoi(db.GetValueWithCond(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID)));
+	m_uiParticipant = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "Participant", "ID", std::to_string(m_uiID)));
+	m_blIsLocked = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "Locked", "ID", std::to_string(m_uiID)));
+	m_bl3rdPlaceGameAvailable = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID)));
+	m_uiBestOfSets = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID)));
 }
 
 
