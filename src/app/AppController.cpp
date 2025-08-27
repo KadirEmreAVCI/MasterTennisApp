@@ -49,7 +49,7 @@ std::string AppController::GetAppLogoAddr()const
 }
 void AppController::LogInToProfile(const Profile& profile)
 {
-	const bool blAlreadyLoggedIn = !(m_ActiveProfile == Profile{});
+	const bool blAlreadyLoggedIn = m_ActiveProfile != Profile{};
 	m_ActiveProfile = DatabaseController::instance().GetActiveProfile(profile.GetID());
 	emit UserLoggedIn(m_ActiveProfile);
 	if (!blAlreadyLoggedIn)
@@ -160,11 +160,9 @@ bool AppController::EditTournament(const Tournament& t)
 }
 bool AppController::EditMatch(const Match& m)
 {
-	std::cout << "AppController::EditMatch\n";
 	const bool blMatchEdited = DatabaseController::instance().EditMatch(m);
 	if (blMatchEdited)
 	{
-		std::cout << "AppController::EditMatch match edited successfully\n";
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
 	}
 	return blMatchEdited;

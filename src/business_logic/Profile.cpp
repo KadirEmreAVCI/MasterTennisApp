@@ -62,7 +62,6 @@ void Profile::DeletePreviousPP()const
 }
 bool Profile::InsertToDB()const
 {
-	std::cout << "Profile::InsertToDB p = " << *this << "\n";
 	std::string sDBValues{ "'" + m_sFullName +
 							"','" + ((m_Gender == Gender::Male) ? "Male" : "Female") +
 							"','" + m_sPPAddr +
@@ -71,7 +70,6 @@ bool Profile::InsertToDB()const
 }
 bool Profile::EditInDB()const
 {
-	std::cout << "Profile::EditInDB p = " << *this << "\n";
 	DeletePreviousPP();
 	QMap<QString, QVariant> columnValues;
 	columnValues["FullName"] = QString::fromStdString(m_sFullName);

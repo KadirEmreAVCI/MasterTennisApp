@@ -4,6 +4,7 @@
 #include <memory>
 #include "IDatabase.h"
 class DBItem {
+friend class DBItemTest;
 public:
 	DBItem(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns);
 	virtual ~DBItem();
