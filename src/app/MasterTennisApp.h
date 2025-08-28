@@ -23,7 +23,7 @@ private:
     std::string m_sAppName{};
 private slots:
     void on_StartButton_clicked();
-    void on_OrganizationsButton_clicked();
+    void on_ManageButton_clicked();
 };
 
 #endif
