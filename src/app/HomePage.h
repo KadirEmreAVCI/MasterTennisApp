@@ -3,11 +3,13 @@
 
 #include <string>
 #include <memory>
+#include <map>
 #include <QWidget>
 #include <QObject>
 #include "ui_HomePage.h"
 #include "IQTComponent.h"
 #include "Profile.h"
+class OrgParticipation;
 class HomePage : public QWidget, public IQTComponent
 {
 	Q_OBJECT
@@ -26,6 +28,10 @@ private:
 	void InsertNoUpcomingMatch();
 	void DeleteUpcomingMatches();
 	void FillWithNoUpcomingMatches();
+	void UpdateTopParticipations();
+	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
+	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);
+	void DeleteTopParticipations();
 	std::vector<Tournament> ConcatanateTournaments()const;
 	Tournament FindRootTournament(const Match& m)const;
 	void UserLoggedIn(const Profile& p);

@@ -31,13 +31,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="labelParticipationCount">
-       <property name="text">
-        <string>Participation Count</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
@@ -49,6 +42,19 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelParticipationCount">
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Participation Count</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
