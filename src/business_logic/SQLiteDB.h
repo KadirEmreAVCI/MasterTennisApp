@@ -6,7 +6,7 @@
 
 class SQLiteDB : public IDatabase{
 public:
-	SQLiteDB(const std::string& sDatabaseAddr);
+	explicit SQLiteDB(const std::string& sDatabaseAddr);
 	// IDatabase interface
 	virtual unsigned GetItemCount(const std::string& sTable) const override;
 	virtual bool InsertItem(const std::string& sTable, const std::string& sColumnNames, const std::string& sValues)const override;

@@ -4,6 +4,7 @@
 #include "HomePage.h"
 #include "UpcomingMatch.h"
 #include "NoUpcomingMatch.h"
+#include "OrgParticipation.h"
 #include "StatController.h"
 #include "AppController.h"
 #include "Config.h"
@@ -45,8 +46,8 @@ void HomePage::UpdateUpcomingMatches()
 		InsertUpcomingMatch((iterOrg->GetOrgPictureAddr() != "") ? iterOrg->GetOrgPictureAddr() : "default_org.png", rootTournament, m);
 	}
 	FillWithNoUpcomingMatches();
-	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 25, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
-	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 30, ui.listWidget_UpcomingMatches->height() + 50);
+	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
+	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
 }
 std::vector<Match> HomePage::FindUpcomingMatches()const
 {
@@ -111,6 +112,47 @@ void HomePage::FillWithNoUpcomingMatches()
 		InsertNoUpcomingMatch();
 	}
 }
+void HomePage::UpdateTopParticipations()
+{
+	ui.listWidget_TopParticipations->clear();
+	const auto vecTopParticipations = FindTopParticipations();
+	for(const auto& prParticipation : vecTopParticipations)
+	{
+		const auto& org = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [prParticipation](const Organization& org){
+			return prParticipation.first == org.GetID();
+		});
+		InsertOrgParticipation(new OrgParticipation(this, org->GetOrgPictureAddr(), org->GetName(), prParticipation.second));
+	}
+	ui.listWidget_TopParticipations->setFixedHeight(280);
+}
+std::vector<std::pair<unsigned, unsigned>> HomePage::FindTopParticipations()const
+{	
+	std::map<unsigned, unsigned> mapParticipationCount;
+	std::ranges::for_each(m_vecTournament, [this, &mapParticipationCount](const Tournament& t){
+		mapParticipationCount[t.GetOrgID()]++;
+	});
+	std::vector<std::pair<unsigned, unsigned>> vecTopParticipations{mapParticipationCount.cbegin(), mapParticipationCount.cend()};
+	std::sort(vecTopParticipations.begin(), vecTopParticipations.end(), [this](const auto& p1, const auto& p2){
+		return p1.second > p2.second;
+	});
+	return vecTopParticipations;
+}
+void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
+{
+	auto item = new QListWidgetItem(ui.listWidget_TopParticipations);
+	item->setSizeHint(QSize(pOrgParticipation->width(), pOrgParticipation->height()));
+	ui.listWidget_TopParticipations->addItem(item);
+	ui.listWidget_TopParticipations->setItemWidget(item, pOrgParticipation);
+}
+void HomePage::DeleteTopParticipations()
+{
+	for (int i = 0; i < ui.listWidget_TopParticipations->count(); ++i) {
+		QListWidgetItem* item = ui.listWidget_TopParticipations->item(i);
+		QWidget* widget = ui.listWidget_TopParticipations->itemWidget(item);
+		delete widget;
+	}
+	ui.listWidget_TopParticipations->clear();
+}
 std::vector<Tournament> HomePage::ConcatanateTournaments()const
 {
 	std::vector<Tournament> vecAllTournament;
@@ -138,6 +180,7 @@ void HomePage::UserLoggedIn(const Profile& p)
 void HomePage::UserLoggedOut()
 {
 	DeleteUpcomingMatches();
+	DeleteTopParticipations();
 }
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
@@ -145,4 +188,5 @@ void HomePage::UpdateActiveProfileData(const Profile& p)
 	m_vecOrganization = p.GetParticipatedOrgs();
 	m_vecTournament = ConcatanateTournaments();
 	UpdateUpcomingMatches();
+	UpdateTopParticipations();
 }
