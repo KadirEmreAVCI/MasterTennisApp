@@ -168,6 +168,7 @@ void HistoryPage::OpenEditDialog(const Tournament& t)
 }
 void HistoryPage::InitFilterComponents()
 {
+	SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Progress", "Opponent"}, true);
 	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
 	{
 		if(auto* pItem = pModel->item(0); pItem != nullptr)
