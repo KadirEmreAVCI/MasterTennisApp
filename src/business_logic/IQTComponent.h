@@ -27,7 +27,7 @@ protected:
 	}
 	void InitComboBox(QComboBox* pComboBox, const QString& sVal = "")
 	{
-		const size_t idx = pComboBox->findText(sVal);
+		const int idx = pComboBox->findText(sVal);
 		if (idx != -1) { // Check if the item was found
 			pComboBox->setCurrentIndex(idx);
 		}
