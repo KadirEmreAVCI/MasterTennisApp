@@ -4,18 +4,17 @@
 #include <memory>
 #include <QtWidgets/QMainWindow>
 #include "ui_MasterTennisApp.h"
-#include "IQTComponent.h"
+
 class OnboardingDialog;
 class ProfileSelectionDialog;
 class OrganizationDialog;
-class MasterTennisApp : public QMainWindow, public IQTComponent
+class MasterTennisApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
     MasterTennisApp(QWidget *parent = nullptr);
     ~MasterTennisApp();
-    void InitCustomComponents() override final;
 private:
     Ui::MasterTennisAppClass ui;
     std::unique_ptr<ProfileSelectionDialog> m_upProfileSelectionDialog{nullptr};

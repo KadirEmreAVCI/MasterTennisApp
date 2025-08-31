@@ -22,6 +22,7 @@ public:
 	Score GetScore()const;
 	std::vector<Set> GetSets()const;
 	Outcome GetOutcome()const;
+	std::string GetOutcomePic()const;
 	std::string SetsToString()const;
 	static std::vector<Set> SetsFromString(const std::string& sSets);
 	bool IsUpcomingMatch()const;

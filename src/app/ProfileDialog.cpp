@@ -7,6 +7,7 @@
 #include "HistoryPage.h"
 #include "ProfileDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 ProfileDialog::ProfileDialog(QWidget* parent)
 	: QDialog(parent)
@@ -15,20 +16,15 @@ ProfileDialog::ProfileDialog(QWidget* parent)
 	QObject::connect(&AppController::instance(), &AppController::InitProfiles, this, &ProfileDialog::UpdateProfileAlternatives);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInProfiles, this, &ProfileDialog::UpdateProfileAlternatives);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &ProfileDialog::UserLoggedIn);
-	InitCustomComponents();
-}
-
-ProfileDialog::~ProfileDialog()
-{}
-
-void ProfileDialog::InitCustomComponents()
-{
 	CreateTabWidget();
 	setFixedSize(1150, 800);
 	ui.labelPP->setFixedSize(30, 30);
 	ui.comboBoxProfiles->setFixedWidth(150);
 	setWindowTitle(QString::fromStdString(AppController::instance().GetAppName()));
 }
+
+ProfileDialog::~ProfileDialog()
+{}
 void ProfileDialog::CreateTabWidget()
 {
 	while (ui.tabWidget->count() > 0) 
@@ -44,7 +40,7 @@ void ProfileDialog::UpdateProfileName()
 	const auto& iterActiveProfile = std::find(m_vecProfile.cbegin(), m_vecProfile.cend(), m_ActiveProfile);
 	if (iterActiveProfile != m_vecProfile.end())
 	{
-		InitComboBox(ui.comboBoxProfiles, QString::fromStdString(iterActiveProfile->GetFullName()));
+		utility::InitComboBox(ui.comboBoxProfiles, QString::fromStdString(iterActiveProfile->GetFullName()));
 	}
 }
 void ProfileDialog::UpdatePP()
@@ -69,7 +65,7 @@ void ProfileDialog::UpdateProfileAlternatives(const std::vector<Profile>& vecPro
 			});
 		if (!vecProfileNames.empty())
 		{
-			SetComboBoxAlternatives(ui.comboBoxProfiles, vecProfileNames, false);
+			utility::SetComboBoxAlternatives(ui.comboBoxProfiles, vecProfileNames, false);
 		}
 	}
 }

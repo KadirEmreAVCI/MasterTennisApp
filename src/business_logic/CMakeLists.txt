@@ -4,6 +4,7 @@ qt_add_library(${PROJECT_NAME}_lib STATIC ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME}_lib 
     PUBLIC
+        ${PROJECT_NAME}_utility
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets

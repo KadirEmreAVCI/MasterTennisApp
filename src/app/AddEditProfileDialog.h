@@ -3,11 +3,10 @@
 
 #include <QDialog>
 #include "ui_AddEditProfileDialog.h"
-#include "IQTComponent.h"
 #include "AddEditDialog.h"
 #include "Profile.h"
 
-class AddEditProfileDialog : public QDialog, public IQTComponent, public AddEditDialog
+class AddEditProfileDialog : public QDialog, public AddEditDialog
 {
 	Q_OBJECT
 
@@ -17,7 +16,6 @@ public:
 	void PrepareDialog(DialogMode, const Profile& p = Profile{});
 
 private:
-	void InitCustomComponents() override final;
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
 	virtual void ClearDialog()override;

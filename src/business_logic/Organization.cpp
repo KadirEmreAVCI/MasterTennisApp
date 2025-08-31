@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <QFile>
 #include "Organization.h"
+#include "Utility.h"
+
 QString Organization::ms_sOrgImageRootDestDir = "";
 Organization::Organization(	unsigned uiID, 
 							const std::string& sName, 
@@ -51,7 +53,7 @@ bool Organization::InsertToDB()const
 	std::cout << "Organization::InsertToDB org = " << *this << "\n";
 	std::string sDBValues{ "'" + GetName() +
 							"','" + GetOrgPictureAddr() +
-							"','" + Serialize(m_vecCategories) + "'" };
+							"','" + utility::Serialize(m_vecCategories) + "'" };
 	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);
 }
 bool Organization::EditInDB()const
@@ -60,7 +62,7 @@ bool Organization::EditInDB()const
 	QMap<QString, QVariant> columnValues;
 	columnValues["Name"] = QString::fromStdString(m_sName);
 	columnValues["ImageFileName"] = QString::fromStdString(m_sOrgPictureAddr);
-	columnValues["Categories"] = QString::fromStdString(Serialize(m_vecCategories));
+	columnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
 	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
 }
 void Organization::LoadFromDB(unsigned ID)

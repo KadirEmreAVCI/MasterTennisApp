@@ -8,6 +8,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Sql)
 
 qt6_standard_project_setup()
 
+add_subdirectory(src/utility)
 add_subdirectory(src/business_logic)
 add_subdirectory(src/app)
     

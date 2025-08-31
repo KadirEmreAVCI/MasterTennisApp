@@ -6,23 +6,19 @@
 #include <QWidget>
 #include <QDateTime>
 #include "ui_UpcomingMatch.h"
-#include "IQTComponent.h"
 #include "Countdown.h"
 #include "Organization.h"
 class QTimer;
 class MatchesDialog;
-class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass, public IQTComponent
-{
+class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass{
 	Q_OBJECT
 
 public:
 	UpcomingMatch(QWidget* parent = nullptr, const std::string& sOrgImageFile = {}, const Tournament& t = Tournament{}, const Match& m = Match{});
 	~UpcomingMatch();
 private:
-	void InitCustomComponents() override final;
 	void InitializeTimer();
 	void InitializeCountdown();
-	void SetOrganizationImage();
 	void FillUpcomingMatchButton();
 	std::unique_ptr<QTimer> m_upTimer{ nullptr };
 	Countdown m_Countdown;

@@ -4,21 +4,19 @@
 #include "AppController.h"
 #include "AddEditProfileDialog.h"
 #include "Config.h"
+#include "Utility.h"
 
 ProfileWidget::ProfileWidget(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
     m_upAddEditProfileDialog = std::make_unique<AddEditProfileDialog>(this);
-	InitCustomComponents();
+	utility::InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
+    utility::InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
 }
 
 ProfileWidget::~ProfileWidget()
 {}
-Profile ProfileWidget::GetProfile()const
-{
-	return m_Profile;
-}
 void ProfileWidget::SetProfile(const Profile& profile)
 {
 	m_Profile = profile;
@@ -55,11 +53,6 @@ QLabel* ProfileWidget::CreatePPLabel()const
     PPLabel->setPixmap(pixmap.scaled(60, 60, Qt::KeepAspectRatio));
     PPLabel->setFixedSize(60, 60);
     return PPLabel;
-}
-void ProfileWidget::InitCustomComponents()
-{
-    InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
-    InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
 }
 void ProfileWidget::OpenEditDialog(const Profile& selectedProfile)
 {

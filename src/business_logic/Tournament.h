@@ -37,6 +37,7 @@ public:
 	bool IsLocked()const;
 	void SetLocked(bool);
 	bool Get3rdPlaceGameAvailable()const;
+	std::string GetTrophyPic()const;
 	unsigned GetSetsBestOf()const;
 	std::vector<std::string> GetPossibleStages()const;
 	bool IsDoubleTournament()const;

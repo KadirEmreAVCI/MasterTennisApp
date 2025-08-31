@@ -6,50 +6,41 @@
 #include <QHeaderView>
 #include <QLabel>
 #include "TableWidgetUser.h"
-TableWidgetUser::TableWidgetUser()
+#include "Utility.h"
+TableWidgetUser::TableWidgetUser(std::vector<std::string> vecColumnNames) : m_pTableWidget{nullptr}, m_vecColumnNames{vecColumnNames}
 {
-
+	
 }
-void TableWidgetUser::InitTable(QTableWidget* table, const std::vector<std::string>& vecColumnNames)
+void TableWidgetUser::InitTable(QTableWidget* pTableWidget)
 {
-	m_vecColumnNames = vecColumnNames;
-	FillColumnNamesOfTable(table);
-	MakeColumnHeaderBold(table);
+	if(nullptr != pTableWidget)
+	{
+		m_pTableWidget = pTableWidget;
+		FillColumnNamesOfTable();
+		MakeColumnHeaderBold();
+	}
 }
-void TableWidgetUser::MakeColumnHeaderBold(QTableWidget* table)
+void TableWidgetUser::MakeColumnHeaderBold()
 {
-	QFont headerFont = table->horizontalHeader()->font();
+	QFont headerFont = m_pTableWidget->horizontalHeader()->font();
 	headerFont.setBold(true);
-	table->horizontalHeader()->setFont(headerFont);
+	m_pTableWidget->horizontalHeader()->setFont(headerFont);
 }
-void TableWidgetUser::FillColumnNamesOfTable(QTableWidget* table)
+void TableWidgetUser::FillColumnNamesOfTable()
 {
-	table->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
-	table->setColumnCount(0);
+	m_pTableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+	m_pTableWidget->setColumnCount(0);
 	unsigned uiColumnIdx = 0;
-	table->setColumnCount(m_vecColumnNames.size());
+	m_pTableWidget->setColumnCount(m_vecColumnNames.size());
 	for (const auto& sColumnName : m_vecColumnNames)
 	{
-		table->setHorizontalHeaderItem(uiColumnIdx, new QTableWidgetItem(QString::fromStdString(sColumnName)));
+		m_pTableWidget->setHorizontalHeaderItem(uiColumnIdx, new QTableWidgetItem(QString::fromStdString(sColumnName)));
 		++uiColumnIdx;
 	}
-	table->resizeColumnsToContents();
+	m_pTableWidget->resizeColumnsToContents();
 }
-void TableWidgetUser::ClearTable(QTableWidget* table)
+void TableWidgetUser::ClearTable()
 {
-	table->clearContents();
-	table->setRowCount(0);
-}
-void TableWidgetUser::InsertValue2Cell(QTableWidget* table, QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QTableWidgetItem* const pVal = new QTableWidgetItem;
-	pVal->setText(sVal);
-	pVal->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	table->setItem(uiRowIdx, uiColumnIdx++, pVal);
-}
-void TableWidgetUser::InsertPic2Cell(QTableWidget* table, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QLabel* pLabel = new QLabel;
-	InitPicture(pLabel, sPicAddr, fScale);
-	table->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
+	m_pTableWidget->clearContents();
+	m_pTableWidget->setRowCount(0);
 }

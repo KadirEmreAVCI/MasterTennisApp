@@ -7,17 +7,14 @@
 #include <QWidget>
 #include <QObject>
 #include "ui_HomePage.h"
-#include "IQTComponent.h"
 #include "Profile.h"
 class OrgParticipation;
-class HomePage : public QWidget, public IQTComponent
-{
+class HomePage : public QWidget{
 	Q_OBJECT
 
 public:
 	HomePage(QWidget *parent = nullptr);
 	~HomePage();
-	void InitCustomComponents() override final;
 private:
 	void UpcomingMatchStarted();
 	void UpdateUpcomingMatches();

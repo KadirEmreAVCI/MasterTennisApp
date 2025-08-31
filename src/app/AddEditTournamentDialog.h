@@ -4,17 +4,15 @@
 #include <string>
 #include <QDialog>
 #include "ui_AddEditTournamentDialog.h"
-#include "IQTComponent.h"
 #include "AddEditDialog.h"
 #include "Profile.h"
-class AddEditTournamentDialog : public QDialog, public IQTComponent, public AddEditDialog
+class AddEditTournamentDialog : public QDialog, public AddEditDialog
 {
 	Q_OBJECT
 
 public:
 	AddEditTournamentDialog(QWidget *parent = nullptr);
 	~AddEditTournamentDialog();
-	void InitCustomComponents() override final;
 	void PrepareDialog(DialogMode, const Tournament& t = Tournament{});
 private:
 	virtual void ClearDialog()override;
