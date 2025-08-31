@@ -107,6 +107,30 @@ bool Tournament::Get3rdPlaceGameAvailable()const
 	return m_bl3rdPlaceGameAvailable;
 }
 
+std::string Tournament::GetTrophyPic()const
+{
+	std::string sTrophyPic = "";
+	if (const auto& lastMatch = GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsValid())
+	{
+		if (lastMatch.value().GetStage() == "Final")
+		{
+			if (lastMatch.value().GetOutcome() == Outcome::HomeWin)
+			{
+				sTrophyPic = ":images/first_place.png";
+			}
+			else if(lastMatch.value().GetOutcome() == Outcome::AwayWin)
+			{
+				sTrophyPic = ":images/second_place.png";
+			}
+		}
+		else if (lastMatch.value().GetStage() == "3rd Place Game" && lastMatch.value().GetOutcome() == Outcome::HomeWin)
+		{
+			sTrophyPic = ":images/third_place.png";
+		}
+	}
+	return sTrophyPic;
+}
+
 unsigned Tournament::GetSetsBestOf()const
 {
 	return m_uiBestOfSets;

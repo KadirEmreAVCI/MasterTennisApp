@@ -27,7 +27,7 @@ void MatchesDialog::FillTable()
 	for (const auto& m : m_vecMatch)
 	{
 		ui.tableWidget->insertRow(uiRowIdx);
-		InsertMatch2Table(m, uiRowIdx);
+		PlaceMatch2Table(m, uiRowIdx);
 		++uiRowIdx;
 	}
 	ui.tableWidget->resizeRowsToContents();
@@ -62,7 +62,7 @@ void MatchesDialog::DisplayMatches(const Tournament& rootTournament)
 	}
 	LoadDataToTable();
 }
-void MatchesDialog::InsertMatch2Table(const Match& m, unsigned uiRowIdx)
+void MatchesDialog::PlaceMatch2Table(const Match& m, unsigned uiRowIdx)
 {
 	using namespace utility;
 	unsigned uiColumnIdx{};

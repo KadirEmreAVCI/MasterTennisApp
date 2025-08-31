@@ -38,7 +38,7 @@ void HistoryPage::FillTable()
 	unsigned int uiRowIdx{};
 	for (const auto& t : m_vecDisplayedTournament)
 	{
-		InsertTournament2Table(t, uiRowIdx);
+		PlaceTournament2Table(t, uiRowIdx);
 		++uiRowIdx;
 	}
 	ui.tableWidget->resizeRowsToContents();
@@ -52,7 +52,7 @@ void HistoryPage::LoadDataToTable()
 		FillTable();
 	}
 }
-void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
+void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 {
 	using namespace utility;
 	ui.tableWidget->insertRow(uiRowIdx);
@@ -77,33 +77,11 @@ void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
 		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetTeammate()), uiRowIdx, uiColumnIdx++);
 		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
 		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
-		InsertTrophyPic(t, uiRowIdx, uiColumnIdx++);
+		PlacePic2TableCell(ui.tableWidget, t.GetTrophyPic(), 0.085f, uiRowIdx, uiColumnIdx++);
 		QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatches);
 		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::DeleteTournament);
 		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
 		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
-	}
-}
-void HistoryPage::InsertTrophyPic(const Tournament& t, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	using namespace utility;
-	if (const auto& lastMatch = t.GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsValid())
-	{
-		if (lastMatch.value().GetStage() == "Final")
-		{
-			if (lastMatch.value().GetOutcome() == Outcome::HomeWin)
-			{
-				PlacePic2TableCell(ui.tableWidget, ":images/first_place.png", 0.085f, uiRowIdx, uiColumnIdx);
-			}
-			else if(lastMatch.value().GetOutcome() == Outcome::AwayWin)
-			{
-				PlacePic2TableCell(ui.tableWidget, ":images/second_place.png", 0.085f, uiRowIdx, uiColumnIdx);
-			}
-		}
-		else if (lastMatch.value().GetStage() == "3rd Place Game" && lastMatch.value().GetOutcome() == Outcome::HomeWin)
-		{
-			PlacePic2TableCell(ui.tableWidget, ":images/third_place.png", 0.085f, uiRowIdx, uiColumnIdx);
-		}
 	}
 }
 std::vector<Tournament> HistoryPage::ConcatanateTournaments()const

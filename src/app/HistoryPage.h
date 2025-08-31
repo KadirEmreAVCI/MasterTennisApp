@@ -19,8 +19,7 @@ public:
 private:
 	virtual void FillTable()override;
 	virtual void LoadDataToTable()override;
-	void InsertTournament2Table(const Tournament& t, unsigned uiRowIdx);
-	void InsertTrophyPic(const Tournament& t, unsigned uiRowIdx, unsigned uiColumnIdx);
+	void PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile&);
 	void UserLoggedIn(const Profile&);
 	std::vector<Tournament> ConcatanateTournaments()const;

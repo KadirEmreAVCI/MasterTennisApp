@@ -36,13 +36,13 @@ void OrganizationDialog::FillTable()
 	for (const auto& org : m_vecOrganization)
 	{
 		ui.tableWidget->insertRow(uiRowIdx);
-		InsertOrg2Table(org, uiRowIdx);
+		PlaceOrg2Table(org, uiRowIdx);
 		++uiRowIdx;
 	}
 	ui.tableWidget->resizeRowsToContents();
 	ui.tableWidget->resizeColumnsToContents();
 }
-void OrganizationDialog::InsertOrg2Table(const Organization& org, unsigned uiRowIdx)
+void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowIdx)
 {
 	using namespace utility;
 	unsigned uiColumnIdx{};
