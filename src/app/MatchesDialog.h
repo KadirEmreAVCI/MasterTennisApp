@@ -15,17 +15,18 @@ public:
 	~MatchesDialog();
 	void DisplayMatches(const Tournament& rootTournament);
 private:
+	// TableWidgetUser
+	virtual void LoadDataToTable()override;
 	virtual void FillTable()override;
+	
 	void OpenAddDialog();
 	void OpenEditDialog(const Match&);
 	void InsertMatch2Table(const Match& m, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile& p);
 	std::vector<Tournament> ConcatanateTournaments()const;
-	virtual void LoadDataToTable()override;
 	Match FindSignalingMatch()const;
 	Ui::MatchesDialogClass ui;
 	std::unique_ptr<AddEditMatchDialog> m_upAddEditMatchDialog{ nullptr };
-	std::vector<std::string> m_vecMatchColumnNames{ "", "Statu", "W/L", "Stage", "Score", "Sets", "Teammate", "Opponent 1", "Opponent 2", "Date", "Time" };
 	Tournament m_RootTournament;
 	std::vector<Match> m_vecMatch;
 	std::vector<Organization> m_vecOrganization;

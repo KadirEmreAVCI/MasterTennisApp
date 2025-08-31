@@ -17,9 +17,10 @@ public:
 	~OrganizationDialog();
 	void DisplayOrganizations();
 private:
-	void InitCustomComponents();
+	// TableWidgetUser
 	virtual void LoadDataToTable()override;
 	virtual void FillTable()override;
+	
 	void InsertOrg2Table(const Organization& org, unsigned uiRowIdx);
 	std::string Serialize(const std::vector<std::string>&)const;
 	void UpdateOrganizations(const std::vector<Organization>&);

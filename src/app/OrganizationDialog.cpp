@@ -6,31 +6,28 @@
 #include "Utility.h"
 
 OrganizationDialog::OrganizationDialog(QWidget *parent)
-	: QDialog(parent)
+	: 
+	QDialog(parent),
+	TableWidgetUser{{ "", " Organization ", " Categories " , "", ""}}
 {
 	ui.setupUi(this);
+	InitTable(ui.tableWidget);
 	m_upAddEditOrganizationDialog = std::make_unique<AddEditOrganizationDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &OrganizationDialog::UpdateOrganizations);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &OrganizationDialog::UpdateOrganizations);
-	InitCustomComponents();
+	setWindowTitle("Tennis Organizations");
+	setFixedSize(560, 600);
 }
 
 OrganizationDialog::~OrganizationDialog()
 {}
-void OrganizationDialog::InitCustomComponents()
-{
-	setWindowTitle("Tennis Organizations");
-	std::vector<std::string> vecColumnNames = { "", " Organization ", " Categories " , "", ""};
-	InitTable(ui.tableWidget, vecColumnNames);
-	setFixedSize(560, 600);
-}
 void OrganizationDialog::DisplayOrganizations()
 {
 	LoadDataToTable();
 }
 void OrganizationDialog::LoadDataToTable()
 {
-	ClearTable(ui.tableWidget);
+	ClearTable();
 	FillTable();
 }
 void OrganizationDialog::FillTable()

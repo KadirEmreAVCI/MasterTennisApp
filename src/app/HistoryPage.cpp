@@ -19,7 +19,9 @@
 #include "Utility.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
-	: QWidget(parent)
+	: 
+	QWidget(parent),
+	TableWidgetUser{{ "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" }}
 {
 	ui.setupUi(this);
 	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
@@ -27,8 +29,7 @@ HistoryPage::HistoryPage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HistoryPage::UpdateActiveProfileData);
 	InitFilterComponents();
-	std::vector<std::string> vecColumnNames = { "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" };
-	InitTable(ui.tableWidget, vecColumnNames);
+	InitTable(ui.tableWidget);
 }
 HistoryPage::~HistoryPage()
 {}
@@ -45,7 +46,7 @@ void HistoryPage::FillTable()
 }
 void HistoryPage::LoadDataToTable()
 {
-	ClearTable(ui.tableWidget);
+	ClearTable();
 	if (!m_vecDisplayedTournament.empty())
 	{
 		FillTable();

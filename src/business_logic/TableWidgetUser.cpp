@@ -7,37 +7,40 @@
 #include <QLabel>
 #include "TableWidgetUser.h"
 #include "Utility.h"
-TableWidgetUser::TableWidgetUser()
+TableWidgetUser::TableWidgetUser(std::vector<std::string> vecColumnNames) : m_vecColumnNames{vecColumnNames}
 {
-
+	
 }
-void TableWidgetUser::InitTable(QTableWidget* table, const std::vector<std::string>& vecColumnNames)
+void TableWidgetUser::InitTable(QTableWidget* pTableWidget)
 {
-	m_vecColumnNames = vecColumnNames;
-	FillColumnNamesOfTable(table);
-	MakeColumnHeaderBold(table);
+	if(nullptr != pTableWidget)
+	{
+		m_pTableWidget = pTableWidget;
+		FillColumnNamesOfTable();
+		MakeColumnHeaderBold();
+	}
 }
-void TableWidgetUser::MakeColumnHeaderBold(QTableWidget* table)
+void TableWidgetUser::MakeColumnHeaderBold()
 {
-	QFont headerFont = table->horizontalHeader()->font();
+	QFont headerFont = m_pTableWidget->horizontalHeader()->font();
 	headerFont.setBold(true);
-	table->horizontalHeader()->setFont(headerFont);
+	m_pTableWidget->horizontalHeader()->setFont(headerFont);
 }
-void TableWidgetUser::FillColumnNamesOfTable(QTableWidget* table)
+void TableWidgetUser::FillColumnNamesOfTable()
 {
-	table->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
-	table->setColumnCount(0);
+	m_pTableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+	m_pTableWidget->setColumnCount(0);
 	unsigned uiColumnIdx = 0;
-	table->setColumnCount(m_vecColumnNames.size());
+	m_pTableWidget->setColumnCount(m_vecColumnNames.size());
 	for (const auto& sColumnName : m_vecColumnNames)
 	{
-		table->setHorizontalHeaderItem(uiColumnIdx, new QTableWidgetItem(QString::fromStdString(sColumnName)));
+		m_pTableWidget->setHorizontalHeaderItem(uiColumnIdx, new QTableWidgetItem(QString::fromStdString(sColumnName)));
 		++uiColumnIdx;
 	}
-	table->resizeColumnsToContents();
+	m_pTableWidget->resizeColumnsToContents();
 }
-void TableWidgetUser::ClearTable(QTableWidget* table)
+void TableWidgetUser::ClearTable()
 {
-	table->clearContents();
-	table->setRowCount(0);
+	m_pTableWidget->clearContents();
+	m_pTableWidget->setRowCount(0);
 }

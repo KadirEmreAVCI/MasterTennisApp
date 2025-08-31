@@ -7,14 +7,15 @@
 #include "Utility.h"
 
 MatchesDialog::MatchesDialog(QWidget *parent)
-	: QDialog(parent)
+	: 
+	QDialog(parent),
+	TableWidgetUser{{ " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" }}
 {
 	ui.setupUi(this);
 	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &MatchesDialog::UpdateActiveProfileData);
-	std::vector<std::string> vecColumnNames = { " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" };
-	InitTable(ui.tableWidget, vecColumnNames);
 	setFixedSize(750, 600);
+	InitTable(ui.tableWidget);
 }
 MatchesDialog::~MatchesDialog()
 {
@@ -105,7 +106,7 @@ std::vector<Tournament> MatchesDialog::ConcatanateTournaments()const
 }
 void MatchesDialog::LoadDataToTable()
 {
-	ClearTable(ui.tableWidget);
+	ClearTable();
 	FillTable();
 	if (m_RootTournament.IsLocked())
 	{
