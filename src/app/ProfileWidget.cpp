@@ -17,10 +17,6 @@ ProfileWidget::ProfileWidget(QWidget *parent)
 
 ProfileWidget::~ProfileWidget()
 {}
-Profile ProfileWidget::GetProfile()const
-{
-	return m_Profile;
-}
 void ProfileWidget::SetProfile(const Profile& profile)
 {
 	m_Profile = profile;

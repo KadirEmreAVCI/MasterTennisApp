@@ -12,7 +12,6 @@ class ProfileWidget : public QWidget{
 public:
 	ProfileWidget(QWidget *parent = nullptr);
 	~ProfileWidget();
-	Profile GetProfile()const;
 	void SetProfile(const Profile& profile);
 private:
 	void FillWidget();
