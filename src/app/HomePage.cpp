@@ -8,6 +8,7 @@
 #include "StatController.h"
 #include "AppController.h"
 #include "Config.h"
+#include "Utility.h"
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
@@ -15,16 +16,12 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HomePage::UpdateActiveProfileData);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
-	InitCustomComponents();
+	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
+	utility::InitPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
 }
 
 HomePage::~HomePage()
 {}
-void HomePage::InitCustomComponents()
-{
-	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
-	InitPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
-}
 void HomePage::UpcomingMatchStarted()
 {
 	StartedUpcomingMatchesDetected();

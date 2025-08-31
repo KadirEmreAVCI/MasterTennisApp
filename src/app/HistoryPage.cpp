@@ -16,27 +16,22 @@
 #include "FilterByTeammate.h"
 #include "FilterByProgress.h"	
 #include "FilterByOpponent.h"
+#include "Utility.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
-	std::cout << "HistoryPage::HistoryPage AddEditTournamentDialog constructed successfully\n";
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
-	std::cout << "HistoryPage::HistoryPage custom components constructed successfully\n";
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HistoryPage::UpdateActiveProfileData);
-	InitCustomComponents();
-}
-HistoryPage::~HistoryPage()
-{}
-void HistoryPage::InitCustomComponents()
-{
 	InitFilterComponents();
 	std::vector<std::string> vecColumnNames = { "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" };
 	InitTable(ui.tableWidget, vecColumnNames);
 }
+HistoryPage::~HistoryPage()
+{}
 void HistoryPage::FillTable()
 {
 	unsigned int uiRowIdx{};
@@ -104,7 +99,7 @@ void HistoryPage::InsertButtonWithImage2Cell(const std::string& sImageAddr, floa
 {
 	QWidget* pWidget = new QWidget();
 	QPushButton* pBtn = new QPushButton;
-	InitButtonWithPicture(pBtn, sImageAddr, fScale);
+	utility::InitButtonWithPicture(pBtn, sImageAddr, fScale);
 	connect(pBtn, &QPushButton::clicked, this, func);
 	pBtn->setEnabled(blEnabled);
 	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
@@ -168,7 +163,7 @@ void HistoryPage::OpenEditDialog(const Tournament& t)
 }
 void HistoryPage::InitFilterComponents()
 {
-	SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Progress", "Opponent"}, true);
+	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Progress", "Opponent"}, true);
 	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
 	{
 		if(auto* pItem = pModel->item(0); pItem != nullptr)

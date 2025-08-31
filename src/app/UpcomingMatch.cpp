@@ -5,26 +5,23 @@
 #include "Organization.h"
 #include "UpcomingMatch.h"
 #include "MatchesDialog.h"
+#include "Utility.h"
+
 UpcomingMatch::UpcomingMatch(QWidget* parent, const std::string& sOrgImageFile, const Tournament& t, const Match& m)
 	: QWidget(parent), m_sOrgImageFile{ (Organization::GetOrgImageRootDestDir() + "/").toStdString() + sOrgImageFile}, m_Tournament{t}, m_Match{m}
 {
 	setupUi(this);
 	QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
-	InitCustomComponents();
-}
-
-UpcomingMatch::~UpcomingMatch()
-{}
-
-void UpcomingMatch::InitCustomComponents()
-{
 	setFixedSize(g_uiUpcomingMatchWidth, g_uiUpcomingMatchHeight);
 	InitializeTimer();
 	InitializeCountdown();
 	FillUpcomingMatchButton();
 	SetOrganizationImage();
 }
+
+UpcomingMatch::~UpcomingMatch()
+{}
 void UpcomingMatch::InitializeTimer()
 {
 	m_upTimer = std::make_unique<QTimer>(this);
@@ -38,7 +35,7 @@ void UpcomingMatch::InitializeCountdown()
 }
 void UpcomingMatch::SetOrganizationImage()
 {
-	InitPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
+	utility::InitPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
 }
 void UpcomingMatch::FillUpcomingMatchButton()
 {

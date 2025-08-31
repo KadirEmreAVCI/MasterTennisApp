@@ -4,7 +4,6 @@
 #include <memory>
 #include <QWidget>
 #include "ui_HistoryPage.h"
-#include "IQTComponent.h"
 #include "TableWidgetUser.h"
 #include "Profile.h"
 
@@ -17,7 +16,6 @@ class HistoryPage : public QWidget, public TableWidgetUser
 public:
 	HistoryPage(QWidget *parent = nullptr);
 	~HistoryPage();
-	void InitCustomComponents() override final;
 private:
 	virtual void FillTable()override;
 	virtual void LoadDataToTable()override;

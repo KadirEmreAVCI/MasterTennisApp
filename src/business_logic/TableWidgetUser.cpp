@@ -6,6 +6,7 @@
 #include <QHeaderView>
 #include <QLabel>
 #include "TableWidgetUser.h"
+#include "Utility.h"
 TableWidgetUser::TableWidgetUser()
 {
 
@@ -50,6 +51,6 @@ void TableWidgetUser::InsertValue2Cell(QTableWidget* table, QString sVal, unsign
 void TableWidgetUser::InsertPic2Cell(QTableWidget* table, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
 	QLabel* pLabel = new QLabel;
-	InitPicture(pLabel, sPicAddr, fScale);
+	utility::InitPicture(pLabel, sPicAddr, fScale);
 	table->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
 }

@@ -3,6 +3,7 @@
 #include "OrganizationDialog.h"
 #include "AppController.h"
 #include "Config.h"
+#include "Utility.h"
 
 OrganizationDialog::OrganizationDialog(QWidget *parent)
 	: QDialog(parent)
@@ -89,7 +90,7 @@ void OrganizationDialog::InsertButtonWithImage2Cell(const std::string& sImageAdd
 {
 	QWidget* pWidget = new QWidget();
 	QPushButton* pBtn = new QPushButton;
-	InitButtonWithPicture(pBtn, sImageAddr, fScale);
+	utility::InitButtonWithPicture(pBtn, sImageAddr, fScale);
 	connect(pBtn, &QPushButton::clicked, this, func);
 	pBtn->setEnabled(blEnabled);
 	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);

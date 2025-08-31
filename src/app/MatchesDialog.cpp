@@ -4,6 +4,7 @@
 #include "AddEditMatchDialog.h"
 #include "MatchesDialog.h"
 #include "Config.h"
+#include "Utility.h"
 
 MatchesDialog::MatchesDialog(QWidget *parent)
 	: QDialog(parent)
@@ -141,7 +142,7 @@ void MatchesDialog::InsertButtonWithImage2Cell(const std::string& sImageAddr, fl
 {
 	QWidget* pWidget = new QWidget();
 	QPushButton* pBtn = new QPushButton;
-	InitButtonWithPicture(pBtn, sImageAddr, fScale);
+	utility::InitButtonWithPicture(pBtn, sImageAddr, fScale);
 	connect(pBtn, &QPushButton::clicked, this, func);
 	pBtn->setEnabled(blEnabled);
 	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);

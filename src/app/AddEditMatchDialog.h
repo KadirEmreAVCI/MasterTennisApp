@@ -3,20 +3,18 @@
 
 #include <QDialog>
 #include "ui_AddEditMatchDialog.h"
-#include "IQTComponent.h"
 #include "AddEditDialog.h"
 #include "Tournament.h"
 #include "Match.h"
 #include "Set.h"
 class Calendar;
-class AddEditMatchDialog : public QDialog, public IQTComponent, public AddEditDialog
+class AddEditMatchDialog : public QDialog, public AddEditDialog
 {
 	Q_OBJECT
 
 public:
 	AddEditMatchDialog(QWidget *parent = nullptr);
 	~AddEditMatchDialog();
-	void InitCustomComponents() override final;
 	void PrepareDialog(DialogMode, const Tournament& t, const Match& m = Match{});
 private:
 	virtual void InitDialog()override;

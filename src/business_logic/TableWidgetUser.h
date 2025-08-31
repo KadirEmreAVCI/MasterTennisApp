@@ -4,8 +4,7 @@
 #include <string>
 #include <vector>
 #include <QTableWidget>
-#include "IQTComponent.h"
-class TableWidgetUser : public IQTComponent {
+class TableWidgetUser{
 protected:
 	TableWidgetUser();
 	void InitTable(QTableWidget* table, const std::vector<std::string>& vecColumnNames);

@@ -1,28 +1,25 @@
 #include "StatisticsPage.h"
 #include "AppController.h"
+#include "Utility.h"
 StatisticsPage::StatisticsPage(QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 	QObject::connect(&StatController::instance(), &StatController::CareerStatsUpdated, this, &StatisticsPage::UpdateCareerStats);
 	QObject::connect(&StatController::instance(), &StatController::FinalsStatsUpdated, this, &StatisticsPage::UpdateFinalsStats);
-	InitCustomComponents();
-}
-
-StatisticsPage::~StatisticsPage()
-{}
-
-void StatisticsPage::InitCustomComponents()
-{
 	InitStatIcons();
 	InitWinLoseLabels();
 	ClearCareerStats();
 	ClearFinalsStats();
 	ClearMedalsAndTrophies();
 }
+
+StatisticsPage::~StatisticsPage()
+{}
 void StatisticsPage::InitStatIcons()
 {
 	std::cout << "StatisticsPage::InitStatIcons\n";
+	using namespace utility;
 	InitPicture(ui.label_IconTournament, ":images/crossed_swords.png", 1.0f);
 	InitPicture(ui.label_IconMatches, ":images/games.png", 1.0f);
 	InitPicture(ui.label_IconSetTB, ":images/setTB.png", 1.0f);

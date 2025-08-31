@@ -2,22 +2,18 @@
 #include <QFileDialog>
 #include "AddEditProfileDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	InitCustomComponents();
+	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
+	InitDialog();
 }
 
 AddEditProfileDialog::~AddEditProfileDialog()
 {}
-
-void AddEditProfileDialog::InitCustomComponents()
-{
-	InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
-	InitDialog();
-}
 void AddEditProfileDialog::PrepareDialog(DialogMode mode, const Profile& p)
 {
 	SetDialogMode(mode);

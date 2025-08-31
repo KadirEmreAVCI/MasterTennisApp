@@ -5,18 +5,12 @@
 #include "Calendar.h"
 #include "Match.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditMatchDialog::AddEditMatchDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	InitCustomComponents();
-	QObject::connect(&*m_upCalendar, &Calendar::MatchDateSet, this, &AddEditMatchDialog::SetMatchDate);
-}
-AddEditMatchDialog::~AddEditMatchDialog()
-{}
-void AddEditMatchDialog::InitCustomComponents()
-{
 	m_upCalendar = std::make_unique<Calendar>(this);
 	const unsigned int uiFixedWidth = 120;
 	ui.comboBox_Statu->setFixedWidth(uiFixedWidth);
@@ -24,7 +18,10 @@ void AddEditMatchDialog::InitCustomComponents()
 	ui.lineEdit_Date->setFixedWidth(uiFixedWidth);
 	ui.timeEdit->setFixedWidth(uiFixedWidth);
 	ui.DateButton->setFixedWidth(30);
+	QObject::connect(&*m_upCalendar, &Calendar::MatchDateSet, this, &AddEditMatchDialog::SetMatchDate);
 }
+AddEditMatchDialog::~AddEditMatchDialog()
+{}
 void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, const Match& m)
 {
 	std::cout << "AddEditMatchDialog::PrepareDialog\n";
@@ -55,6 +52,7 @@ void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, con
 }
 void AddEditMatchDialog::InitDialog()
 {
+	using namespace utility;
 	ClearDialog();
 	InitButtonWithPicture(ui.DateButton, ":images/calendar.png", 0.8f);
 	InitButtonWithPicture(ui.AddSetButton, ":images/plus.png", 0.8f);
@@ -121,8 +119,8 @@ void AddEditMatchDialog::InitSetList(Set s, bool blEnabled)
 }
 void AddEditMatchDialog::ClearDialog()
 {
-	InitComboBox(ui.comboBox_Statu);
-	InitComboBox(ui.comboBox_Stage);
+	utility::InitComboBox(ui.comboBox_Statu);
+	utility::InitComboBox(ui.comboBox_Stage);
 	ui.radioButton_Win->setAutoExclusive(false);
 	ui.radioButton_Lose->setAutoExclusive(false);
 	ui.radioButton_Win->setChecked(false);

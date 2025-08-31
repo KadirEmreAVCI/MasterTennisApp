@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include "AddEditOrganizationDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	: QDialog(parent)
@@ -15,16 +16,12 @@ AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_C);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_D);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_IlkTurnuvam);
-	InitCustomComponents();
+	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
+	InitDialog();
 }
 
 AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
-void AddEditOrganizationDialog::InitCustomComponents()
-{
-	InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
-	InitDialog();
-}
 void AddEditOrganizationDialog::PrepareDialog(DialogMode mode, const Organization& org)
 {
 	std::cout << "AddEditOrganizationDialog::PrepareDialog\n";
