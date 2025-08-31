@@ -17,9 +17,8 @@ UpcomingMatch::UpcomingMatch(QWidget* parent, const std::string& sOrgImageFile, 
 	InitializeTimer();
 	InitializeCountdown();
 	FillUpcomingMatchButton();
-	utility::InitPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
+	utility::InitLabelWithPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
 }
-
 UpcomingMatch::~UpcomingMatch()
 {}
 void UpcomingMatch::InitializeTimer()

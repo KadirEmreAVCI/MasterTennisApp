@@ -20,18 +20,18 @@ void AchievementsPage::InitStatIcons()
 {
 	std::cout << "AchievementsPage::InitStatIcons\n";
 	using namespace utility;
-	InitPicture(ui.label_IconTournament, ":images/crossed_swords.png", 1.0f);
-	InitPicture(ui.label_IconMatches, ":images/games.png", 1.0f);
-	InitPicture(ui.label_IconSetTB, ":images/setTB.png", 1.0f);
-	InitPicture(ui.label_IconSuperTB, ":images/clutchness.png", 1.0f);
-	InitPicture(ui.label_IconQuarterFinals, ":images/trophy.png", 0.9f);
-	InitPicture(ui.label_IconSemiFinals, ":images/trophy.png", 0.9f);
-	InitPicture(ui.label_Icon3rdPlaceMatch, ":images/trophy.png", 0.9f);
-	InitPicture(ui.label_IconFinals, ":images/trophy.png", 0.9f);
-	InitPicture(ui.label_Icon1stPlace, ":images/first_place.png", 3.0f);
-	InitPicture(ui.label_Icon2ndPlace, ":images/second_place.png", 3.0f);
-	InitPicture(ui.label_Icon3rdPlace, ":images/third_place.png", 3.0f);
-	InitPicture(ui.label_IconAchievements, ":images/achievements_page.png", 12.0f);
+	InitLabelWithPicture(ui.label_IconTournament, ":images/crossed_swords.png", 1.0f);
+	InitLabelWithPicture(ui.label_IconMatches, ":images/games.png", 1.0f);
+	InitLabelWithPicture(ui.label_IconSetTB, ":images/setTB.png", 1.0f);
+	InitLabelWithPicture(ui.label_IconSuperTB, ":images/clutchness.png", 1.0f);
+	InitLabelWithPicture(ui.label_IconQuarterFinals, ":images/trophy.png", 0.9f);
+	InitLabelWithPicture(ui.label_IconSemiFinals, ":images/trophy.png", 0.9f);
+	InitLabelWithPicture(ui.label_Icon3rdPlaceMatch, ":images/trophy.png", 0.9f);
+	InitLabelWithPicture(ui.label_IconFinals, ":images/trophy.png", 0.9f);
+	InitLabelWithPicture(ui.label_Icon1stPlace, ":images/first_place.png", 3.0f);
+	InitLabelWithPicture(ui.label_Icon2ndPlace, ":images/second_place.png", 3.0f);
+	InitLabelWithPicture(ui.label_Icon3rdPlace, ":images/third_place.png", 3.0f);
+	InitLabelWithPicture(ui.label_IconAchievements, ":images/achievements_page.png", 12.0f);
 }
 void AchievementsPage::InitWinLoseLabels()
 {

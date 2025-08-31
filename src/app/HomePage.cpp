@@ -17,7 +17,7 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HomePage::UpdateActiveProfileData);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
 	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
-	utility::InitPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
+	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
 }
 
 HomePage::~HomePage()

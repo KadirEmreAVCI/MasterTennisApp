@@ -12,7 +12,7 @@ MasterTennisApp::MasterTennisApp(QWidget *parent)
     m_upOrganizationDialog = std::make_unique<OrganizationDialog>(this);
     m_upProfileSelectionDialog = std::make_unique<ProfileSelectionDialog>(this);
     ui.label_WelcomeText->setText(QString::fromStdString("Welcome To The " + AppController::instance().GetAppName() + "!"));
-    utility::InitPicture(ui.label_LoginPic, ":/images/welcome2.png", 10.0f);
+    utility::InitLabelWithPicture(ui.label_LoginPic, ":/images/welcome2.png", 10.0f);
     setFixedSize(800, 600);
     setWindowTitle(QString::fromStdString(AppController::instance().GetAppName()));
 }

@@ -60,10 +60,7 @@ void AddEditMatchDialog::InitDialog()
 	SetComboBoxAlternatives(ui.comboBox_Statu, m_vecStatuAlternatives);
 	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetPossibleStages());
 	ui.lineEdit__Opponent1->setEnabled(true);
-	if (m_RootTournament.IsDoubleTournament())
-		ui.lineEdit__Opponent2->setEnabled(true);
-	else
-		ui.lineEdit__Opponent2->setEnabled(false);
+	ui.lineEdit__Opponent2->setEnabled(m_RootTournament.IsDoubleTournament());
 	SetMatchDate(QDate::currentDate());
 	ui.timeEdit->setTime(QTime(0, 0));
 	InitSetList(Set{}, true);

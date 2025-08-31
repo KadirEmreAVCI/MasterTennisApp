@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QTableWidget> 
 
-void utility::InitPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale)
+void utility::InitLabelWithPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale)
 {
     QPixmap pix{ QString::fromStdString(sPicAddress) };
     const float fHeight = pPicLabel->height() * fScale;
@@ -58,10 +58,10 @@ void utility::PlaceValue2TableCell(QTableWidget* table, QString sVal, unsigned u
 	pVal->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	table->setItem(uiRowIdx, uiColumnIdx++, pVal);
 }
-QLabel* utility::PlacePic2TableCell(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
+QLabel* utility::PlaceLabel2TableCellWithImage(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
 	QLabel* pLabel = new QLabel;
-	InitPicture(pLabel, sPicAddr, fScale);
+	InitLabelWithPicture(pLabel, sPicAddr, fScale);
 	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
     return pLabel;
 }
