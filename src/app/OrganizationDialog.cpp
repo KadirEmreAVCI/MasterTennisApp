@@ -74,14 +74,7 @@ void OrganizationDialog::OpenEditDialog(const Organization& org)
 }
 Organization OrganizationDialog::FindSignalingOrganization()const
 {
-	Organization SignalingOrganization;
-	QWidget* w = qobject_cast<QWidget*>(sender()->parent());
-	if (w)
-	{
-		const unsigned int uiSignalingRow = ui.tableWidget->indexAt(w->pos()).row();
-		SignalingOrganization = m_vecOrganization[uiSignalingRow];
-	}
-	return SignalingOrganization;
+	return m_vecOrganization[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
 }
 void OrganizationDialog::on_NewOrganizationButton_clicked()
 {

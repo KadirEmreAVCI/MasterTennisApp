@@ -22,7 +22,7 @@ namespace utility{
     QLabel* PlacePic2TableCell(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx);
     QPushButton* PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText);
     QPushButton* PlaceButton2TableCellWithImage(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sImageAddr, float fScale, bool blEnabled);
-
+    unsigned FindIndexOfSignalingItem(QTableWidget*, QObject*);
     // Common helper functions
     std::string Serialize(const std::vector<std::string>& vecDeserialized);
 };

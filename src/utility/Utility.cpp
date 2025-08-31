@@ -91,6 +91,16 @@ QPushButton* utility::PlaceButton2TableCellWithImage(QTableWidget* pTableWidget,
 	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
     return pBtn;
 }
+unsigned utility::FindIndexOfSignalingItem(QTableWidget* pTableWidget, QObject* pSender)
+{
+	unsigned uiSignalingItemIdx{};
+    QWidget* w = qobject_cast<QWidget*>(pSender->parent());
+	if (w)
+	{
+		uiSignalingItemIdx = pTableWidget->indexAt(w->pos()).row();
+	}
+	return uiSignalingItemIdx;
+}
 std::string utility::Serialize(const std::vector<std::string>& vecDeserialized)
 {
 	std::string sSerialized{};

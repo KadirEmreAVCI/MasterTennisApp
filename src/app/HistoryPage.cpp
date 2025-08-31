@@ -95,13 +95,7 @@ std::vector<Tournament> HistoryPage::ConcatanateTournaments()const
 }
 Tournament HistoryPage::FindSignalingTournament()const
 {
-	Tournament SignalingTournament;
-	if (QWidget* w = qobject_cast<QWidget*>(sender()->parent()); w)
-	{
-		const unsigned int uiSignalingRow = ui.tableWidget->indexAt(w->pos()).row();
-		SignalingTournament = m_vecDisplayedTournament[uiSignalingRow];
-	}
-	return SignalingTournament;
+	return m_vecDisplayedTournament[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
 }
 void HistoryPage::OpenAddDialog()
 {

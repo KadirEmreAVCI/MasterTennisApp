@@ -119,14 +119,7 @@ void MatchesDialog::LoadDataToTable()
 }
 Match MatchesDialog::FindSignalingMatch()const
 {
-	Match SignalingMatch;
-	QWidget* w = qobject_cast<QWidget*>(sender()->parent());
-	if (w)
-	{
-		const unsigned int uiSignalingRow = ui.tableWidget->indexAt(w->pos()).row();
-		SignalingMatch = m_vecMatch[uiSignalingRow];
-	}
-	return SignalingMatch;
+	return m_vecMatch[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
 }
 void MatchesDialog::EditMatch()
 {
