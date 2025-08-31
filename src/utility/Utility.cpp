@@ -108,9 +108,19 @@ std::string utility::Serialize(const std::vector<std::string>& vecDeserialized)
 	{
 		if (sSerialized != "")
 		{
-			sSerialized.append(", ");
+			sSerialized.append(",");
 		}
 		sSerialized.append(str);
 	}
 	return sSerialized;
+}
+std::vector<std::string> utility::Deserialize(const std::string& sSerialized)
+{
+	std::vector<std::string> vecDeserialized;
+	std::istringstream iss(sSerialized);
+	std::string sItem;
+	while (std::getline(iss, sItem, ',')) {
+		vecDeserialized.push_back(std::move(sItem));
+	}
+	return vecDeserialized;
 }

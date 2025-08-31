@@ -17,7 +17,7 @@ UpcomingMatch::UpcomingMatch(QWidget* parent, const std::string& sOrgImageFile, 
 	InitializeTimer();
 	InitializeCountdown();
 	FillUpcomingMatchButton();
-	SetOrganizationImage();
+	utility::InitPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
 }
 
 UpcomingMatch::~UpcomingMatch()
@@ -32,10 +32,6 @@ void UpcomingMatch::InitializeTimer()
 void UpcomingMatch::InitializeCountdown()
 {
 	m_Countdown.setMatchDate(m_Match.GetDate(), m_Match.GetTime());
-}
-void UpcomingMatch::SetOrganizationImage()
-{
-	utility::InitPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
 }
 void UpcomingMatch::FillUpcomingMatchButton()
 {

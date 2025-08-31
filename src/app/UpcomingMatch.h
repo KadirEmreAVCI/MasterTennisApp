@@ -19,7 +19,6 @@ public:
 private:
 	void InitializeTimer();
 	void InitializeCountdown();
-	void SetOrganizationImage();
 	void FillUpcomingMatchButton();
 	std::unique_ptr<QTimer> m_upTimer{ nullptr };
 	Countdown m_Countdown;

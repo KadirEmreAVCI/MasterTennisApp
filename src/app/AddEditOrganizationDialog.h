@@ -20,7 +20,6 @@ private:
 	virtual void ClearDialog()override;
 	virtual bool IsMandatoryFieldsFilled()const override;
 	virtual bool IsThereAnyUnsavedInfo()const override;
-	std::string Serialize(const std::vector<std::string>& vecDeserialized)const;
 	void ClearCategoryCheckboxes();
 	Ui::AddEditOrganizationDialogClass ui;
 	Organization m_EditedOrganization;

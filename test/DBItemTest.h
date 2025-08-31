@@ -15,6 +15,7 @@
 #include "Tournament.h"
 #include "Organization.h"
 #include "Profile.h"
+#include "Utility.h"
 
 class MockDatabase : public IDatabase {
 public:
@@ -40,7 +41,7 @@ protected:
     }
     std::vector<std::string> Deserialize(const std::string& sSerialized)
     {
-        return DBItem::Deserialize(sSerialized);
+        return utility::Deserialize(sSerialized);
     }
     std::shared_ptr<MockDatabase> m_spMockDatabase;
     Match m_Match{ 1, 0, "U", "Final 16", "Mustafa Yavuz Kirli", "", QDate{2024, 2, 11}, QTime{18, 0, 0}, {Set{Score(6, 0)}, Set{Score(6, 1)}, Set{Score(1, 6)}, Set{Score(7, 5)}}};

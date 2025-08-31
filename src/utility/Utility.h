@@ -23,8 +23,10 @@ namespace utility{
     QPushButton* PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText);
     QPushButton* PlaceButton2TableCellWithImage(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sImageAddr, float fScale, bool blEnabled);
     unsigned FindIndexOfSignalingItem(QTableWidget*, QObject*);
+    
     // Common helper functions
     std::string Serialize(const std::vector<std::string>& vecDeserialized);
+    std::vector<std::string> Deserialize(const std::string& sSerialized);
 };
 
 #endif
