@@ -21,7 +21,7 @@ private:
 	
 	void OpenAddDialog();
 	void OpenEditDialog(const Match&);
-	void InsertMatch2Table(const Match& m, unsigned uiRowIdx);
+	void PlaceMatch2Table(const Match& m, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile& p);
 	std::vector<Tournament> ConcatanateTournaments()const;
 	Match FindSignalingMatch()const;

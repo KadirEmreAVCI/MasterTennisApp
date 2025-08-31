@@ -56,22 +56,10 @@ void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowI
 	}
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &OrganizationDialog::DeleteOrganization, true, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &OrganizationDialog::EditOrganization, true, uiRowIdx, uiColumnIdx++);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::EditOrganization);
 }
-std::string OrganizationDialog::Serialize(const std::vector<std::string>& vecDeserialized)const
-{
-	std::string sSerialized{};
-	for (const auto& str : vecDeserialized)
-	{
-		if (sSerialized != "")
-		{
-			sSerialized.append(", ");
-		}
-		sSerialized.append(str);
-	}
-	return sSerialized;
-}
+
 void OrganizationDialog::OpenAddDialog()
 {
 	m_upAddEditOrganizationDialog->setModal(true);
@@ -83,19 +71,6 @@ void OrganizationDialog::OpenEditDialog(const Organization& org)
 	m_upAddEditOrganizationDialog->setModal(true);
 	m_upAddEditOrganizationDialog->PrepareDialog(DialogMode::eEditDialog, org);
 	m_upAddEditOrganizationDialog->exec();
-}
-void OrganizationDialog::InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QWidget* pWidget = new QWidget();
-	QPushButton* pBtn = utility::CreateButtonWithPicture(sImageAddr, fScale);
-	connect(pBtn, &QPushButton::clicked, this, func);
-	pBtn->setEnabled(blEnabled);
-	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
-	pLayout->addWidget(pBtn);
-	pLayout->setAlignment(Qt::AlignCenter);
-	pLayout->setContentsMargins(0, 0, 0, 0);
-	pWidget->setLayout(pLayout);
-	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
 }
 Organization OrganizationDialog::FindSignalingOrganization()const
 {

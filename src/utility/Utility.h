@@ -12,6 +12,7 @@ class QTableWidget;
 class QWidget;
 
 namespace utility{
+    // Helper functions for QT Components
     void InitPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale = 1.0f);
     QPushButton* CreateButtonWithPicture(const std::string& sPicAddress, float fScale = 1.0f);
     void InitButtonWithPicture(QPushButton* pButton, const std::string& sPicAddress, float fScale = 1.0f);
@@ -21,6 +22,9 @@ namespace utility{
     QLabel* PlacePic2TableCell(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx);
     QPushButton* PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText);
     QPushButton* PlaceButton2TableCellWithImage(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sImageAddr, float fScale, bool blEnabled);
+
+    // Common helper functions
+    std::string Serialize(const std::vector<std::string>& vecDeserialized);
 };
 
 #endif

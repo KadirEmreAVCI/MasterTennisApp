@@ -91,4 +91,16 @@ QPushButton* utility::PlaceButton2TableCellWithImage(QTableWidget* pTableWidget,
 	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
     return pBtn;
 }
-
+std::string utility::Serialize(const std::vector<std::string>& vecDeserialized)
+{
+	std::string sSerialized{};
+	for (const auto& str : vecDeserialized)
+	{
+		if (sSerialized != "")
+		{
+			sSerialized.append(", ");
+		}
+		sSerialized.append(str);
+	}
+	return sSerialized;
+}
