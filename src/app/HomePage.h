@@ -9,8 +9,7 @@
 #include "ui_HomePage.h"
 #include "Profile.h"
 class OrgParticipation;
-class HomePage : public QWidget
-{
+class HomePage : public QWidget{
 	Q_OBJECT
 
 public:

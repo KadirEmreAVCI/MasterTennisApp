@@ -12,17 +12,13 @@ MatchesDialog::MatchesDialog(QWidget *parent)
 	ui.setupUi(this);
 	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &MatchesDialog::UpdateActiveProfileData);
-	InitCustomComponents();
+	std::vector<std::string> vecColumnNames = { " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" };
+	InitTable(ui.tableWidget, vecColumnNames);
+	setFixedSize(750, 600);
 }
 MatchesDialog::~MatchesDialog()
 {
 
-}
-void MatchesDialog::InitCustomComponents()
-{
-	std::vector<std::string> vecColumnNames = { " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" };
-	InitTable(ui.tableWidget, vecColumnNames);
-	setFixedSize(750, 600);
 }
 void MatchesDialog::FillTable()
 {
@@ -67,18 +63,19 @@ void MatchesDialog::DisplayMatches(const Tournament& rootTournament)
 }
 void MatchesDialog::InsertMatch2Table(const Match& m, unsigned uiRowIdx)
 {
+	using namespace utility;
 	unsigned uiColumnIdx{};
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetStatu()), uiRowIdx, uiColumnIdx++);
-	InsertOutcomePic(m, uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetStage()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetScore().ToString()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.SetsToString()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetOpponent1()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &MatchesDialog::DeleteMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &MatchesDialog::EditMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStatu()), uiRowIdx, uiColumnIdx++);
+	InsertPic2TableCell(ui.tableWidget, GetOutcomePic(m), 0.04f, uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStage()), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetScore().ToString()), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.SetsToString()), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent1()), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::DeleteMatch);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::EditMatch);
 }
 void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 {
@@ -119,38 +116,26 @@ void MatchesDialog::LoadDataToTable()
 		ui.NewMatchButton->setEnabled(true);
 	}
 }
-void MatchesDialog::InsertOutcomePic(const Match& m, unsigned uiRowIdx, unsigned uiColumnIdx)
+std::string MatchesDialog::GetOutcomePic(const Match& m)const
 {
+	std::string sOutcomePic = "";
 	if (m.GetOutcome() == Outcome::HomeWin)
 	{
-		InsertPic2Cell(ui.tableWidget, ":images/win2.png", 0.04f, uiRowIdx, uiColumnIdx);
+		sOutcomePic = ":images/win2.png";
 	}
 	else if (m.GetOutcome() == Outcome::AwayWin)
 	{
-		InsertPic2Cell(ui.tableWidget, ":images/lose2.png", 0.04f, uiRowIdx, uiColumnIdx);
+		sOutcomePic = ":images/lose2.png";
 	}
 	else if(m.GetOutcome() == Outcome::Tied && m.IsUpcomingMatch())
 	{
-		InsertPic2Cell(ui.tableWidget, ":images/hourglass.png", 0.04f, uiRowIdx, uiColumnIdx);
+		sOutcomePic = ":images/hourglass.png";
 	}
 	else
 	{
-		InsertPic2Cell(ui.tableWidget, ":images/Warning.png", 0.04f, uiRowIdx, uiColumnIdx);
+		sOutcomePic = ":images/Warning.png";
 	}
-}
-void MatchesDialog::InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QWidget* pWidget = new QWidget();
-	QPushButton* pBtn = new QPushButton;
-	utility::InitButtonWithPicture(pBtn, sImageAddr, fScale);
-	connect(pBtn, &QPushButton::clicked, this, func);
-	pBtn->setEnabled(blEnabled);
-	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
-	pLayout->addWidget(pBtn);
-	pLayout->setAlignment(Qt::AlignCenter);
-	pLayout->setContentsMargins(0, 0, 0, 0);
-	pWidget->setLayout(pLayout);
-	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
+	return sOutcomePic;
 }
 Match MatchesDialog::FindSignalingMatch()const
 {

@@ -4,6 +4,8 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QString>
+#include <QHBoxLayout>
+#include <QTableWidget> 
 
 void utility::InitPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale)
 {
@@ -13,7 +15,13 @@ void utility::InitPicture(QLabel* pPicLabel, std::string sPicAddress, float fSca
     pPicLabel->setPixmap(pix.scaled(fHeight, fWidth, Qt::KeepAspectRatio));
     pPicLabel->setAlignment(Qt::AlignCenter);
 }
-void utility::InitButtonWithPicture(QPushButton* pButton, std::string sPicAddress, float fScale)
+QPushButton* utility::CreateButtonWithPicture(const std::string& sPicAddress, float fScale)
+{
+    QPushButton* pButton = new QPushButton;
+    InitButtonWithPicture(pButton, sPicAddress, fScale);
+    return pButton;
+}
+void utility::InitButtonWithPicture(QPushButton* pButton, const std::string& sPicAddress, float fScale)
 {
     QPixmap pix(QString::fromStdString(sPicAddress));
     QIcon ButtonIcon(pix);
@@ -42,4 +50,44 @@ void utility::SetComboBoxAlternatives(QComboBox* pComboBox, const std::vector<st
     {
         pComboBox->addItem(QString::fromStdString(sAlternative));
     }
+}
+void utility::InsertValue2TableCell(QTableWidget* table, QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
+{
+	QTableWidgetItem* const pVal = new QTableWidgetItem;
+	pVal->setText(sVal);
+	pVal->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	table->setItem(uiRowIdx, uiColumnIdx++, pVal);
+}
+QPushButton* utility::PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText)
+{
+	QWidget* pWidget = new QWidget();
+	QPushButton* pBtn = new QPushButton();
+	pBtn->setText(QString::fromStdString(sButtonText));
+	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
+	pLayout->addWidget(pBtn);
+	pLayout->setAlignment(Qt::AlignCenter);
+	pLayout->setContentsMargins(0, 0, 0, 0);
+	pWidget->setLayout(pLayout);
+	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
+	return pBtn;
+}
+QPushButton* utility::PlaceButton2TableCellWithImage(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sImageAddr, float fScale, bool blEnabled)
+{
+	QPushButton* pBtn = CreateButtonWithPicture(sImageAddr, fScale);
+	pBtn->setEnabled(blEnabled);
+    QWidget* pWidget = new QWidget();
+	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
+	pLayout->addWidget(pBtn);
+	pLayout->setAlignment(Qt::AlignCenter);
+	pLayout->setContentsMargins(0, 0, 0, 0);
+	pWidget->setLayout(pLayout);
+	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
+    return pBtn;
+}
+QLabel* utility::InsertPic2TableCell(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
+{
+	QLabel* pLabel = new QLabel;
+	InitPicture(pLabel, sPicAddr, fScale);
+	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
+    return pLabel;
 }

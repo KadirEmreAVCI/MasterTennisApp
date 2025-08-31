@@ -15,7 +15,6 @@ public:
 	~MatchesDialog();
 	void DisplayMatches(const Tournament& rootTournament);
 private:
-	void InitCustomComponents();
 	virtual void FillTable()override;
 	void OpenAddDialog();
 	void OpenEditDialog(const Match&);
@@ -23,8 +22,7 @@ private:
 	void UpdateActiveProfileData(const Profile& p);
 	std::vector<Tournament> ConcatanateTournaments()const;
 	virtual void LoadDataToTable()override;
-	void InsertOutcomePic(const Match&, unsigned uiRowIdx, unsigned uiColumnIdx);
-	void InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx);
+	std::string GetOutcomePic(const Match&)const;
 	Match FindSignalingMatch()const;
 	Ui::MatchesDialogClass ui;
 	std::unique_ptr<AddEditMatchDialog> m_upAddEditMatchDialog{ nullptr };

@@ -20,8 +20,6 @@ private:
 	virtual void FillTable()override;
 	virtual void LoadDataToTable()override;
 	void InsertTournament2Table(const Tournament& t, unsigned uiRowIdx);
-	void InsertButton2Cell(const std::string& sButtonText, auto func, unsigned uiRowIdx, unsigned uiColumnIdx);
-	void InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx);
 	void InsertTrophyPic(const Tournament& t, unsigned uiRowIdx, unsigned uiColumnIdx);
 	void UpdateActiveProfileData(const Profile&);
 	void UserLoggedIn(const Profile&);

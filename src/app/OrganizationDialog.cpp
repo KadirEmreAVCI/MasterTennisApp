@@ -47,17 +47,18 @@ void OrganizationDialog::FillTable()
 }
 void OrganizationDialog::InsertOrg2Table(const Organization& org, unsigned uiRowIdx)
 {
+	using namespace utility;
 	unsigned uiColumnIdx{};
 	if (org.GetOrgPictureAddr() != "")
 	{
-		InsertPic2Cell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(org.GetOrgPictureAddr())).toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
+		InsertPic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(org.GetOrgPictureAddr())).toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
 	}
 	else
 	{
-		InsertPic2Cell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
+		InsertPic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
 	}
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
+	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
 	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &OrganizationDialog::DeleteOrganization, true, uiRowIdx, uiColumnIdx++);
 	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &OrganizationDialog::EditOrganization, true, uiRowIdx, uiColumnIdx++);
 }
@@ -89,8 +90,7 @@ void OrganizationDialog::OpenEditDialog(const Organization& org)
 void OrganizationDialog::InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
 	QWidget* pWidget = new QWidget();
-	QPushButton* pBtn = new QPushButton;
-	utility::InitButtonWithPicture(pBtn, sImageAddr, fScale);
+	QPushButton* pBtn = utility::CreateButtonWithPicture(sImageAddr, fScale);
 	connect(pBtn, &QPushButton::clicked, this, func);
 	pBtn->setEnabled(blEnabled);
 	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);

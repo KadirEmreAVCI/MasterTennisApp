@@ -53,6 +53,7 @@ void HistoryPage::LoadDataToTable()
 }
 void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
 {
+	using namespace utility;
 	ui.tableWidget->insertRow(uiRowIdx);
 	const auto& iterRootOrg = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [t](const auto& org) {
 		return org.GetID() == t.GetOrgID();
@@ -62,71 +63,45 @@ void HistoryPage::InsertTournament2Table(const Tournament& t, unsigned uiRowIdx)
 		unsigned uiColumnIdx{};
 		if (iterRootOrg->GetOrgPictureAddr() != "")
 		{
-			InsertPic2Cell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(iterRootOrg->GetOrgPictureAddr())).toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
+			InsertPic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(iterRootOrg->GetOrgPictureAddr())).toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
 		}
 		else
 		{
-			InsertPic2Cell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
+			InsertPic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
 		}
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(iterRootOrg->GetName()), uiRowIdx, uiColumnIdx++);
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(t.GetSeason()), uiRowIdx, uiColumnIdx++);
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(t.GetType()), uiRowIdx, uiColumnIdx++);
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(t.GetCategory()), uiRowIdx, uiColumnIdx++);
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(t.GetTeammate()), uiRowIdx, uiColumnIdx++);
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
-		InsertValue2Cell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(iterRootOrg->GetName()), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetSeason()), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetType()), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetCategory()), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetTeammate()), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
+		InsertValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
 		InsertTrophyPic(t, uiRowIdx, uiColumnIdx++);
-		InsertButton2Cell(std::string(" Match History "), &HistoryPage::ShowMatches, uiRowIdx, uiColumnIdx++);
-		InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &HistoryPage::DeleteTournament, (t.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
-		InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &HistoryPage::EditTournament, (t.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
-		InsertButtonWithImage2Cell((t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png", 0.04f, &HistoryPage::LockUnlockTournament, true, uiRowIdx, uiColumnIdx++);
+		QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatches);
+		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::DeleteTournament);
+		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
+		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
 	}
-}
-void HistoryPage::InsertButton2Cell(const std::string& sButtonText, auto func, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QWidget* pWidget = new QWidget();
-	QPushButton* pBtn = new QPushButton();
-	pBtn->setText(QString::fromStdString(sButtonText));
-	connect(pBtn, &QPushButton::clicked, this, func);
-	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
-	pLayout->addWidget(pBtn);
-	pLayout->setAlignment(Qt::AlignCenter);
-	pLayout->setContentsMargins(0, 0, 0, 0);
-	pWidget->setLayout(pLayout);
-	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
-}
-void HistoryPage::InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QWidget* pWidget = new QWidget();
-	QPushButton* pBtn = new QPushButton;
-	utility::InitButtonWithPicture(pBtn, sImageAddr, fScale);
-	connect(pBtn, &QPushButton::clicked, this, func);
-	pBtn->setEnabled(blEnabled);
-	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
-	pLayout->addWidget(pBtn);
-	pLayout->setAlignment(Qt::AlignCenter);
-	pLayout->setContentsMargins(0, 0, 0, 0);
-	pWidget->setLayout(pLayout);
-	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
 }
 void HistoryPage::InsertTrophyPic(const Tournament& t, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
+	using namespace utility;
 	if (const auto& lastMatch = t.GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsValid())
 	{
 		if (lastMatch.value().GetStage() == "Final")
 		{
 			if (lastMatch.value().GetOutcome() == Outcome::HomeWin)
 			{
-				InsertPic2Cell(ui.tableWidget, ":images/first_place.png", 0.085f, uiRowIdx, uiColumnIdx);
+				InsertPic2TableCell(ui.tableWidget, ":images/first_place.png", 0.085f, uiRowIdx, uiColumnIdx);
 			}
 			else if(lastMatch.value().GetOutcome() == Outcome::AwayWin)
 			{
-				InsertPic2Cell(ui.tableWidget, ":images/second_place.png", 0.085f, uiRowIdx, uiColumnIdx);
+				InsertPic2TableCell(ui.tableWidget, ":images/second_place.png", 0.085f, uiRowIdx, uiColumnIdx);
 			}
 		}
 		else if (lastMatch.value().GetStage() == "3rd Place Game" && lastMatch.value().GetOutcome() == Outcome::HomeWin)
 		{
-			InsertPic2Cell(ui.tableWidget, ":images/third_place.png", 0.085f, uiRowIdx, uiColumnIdx);
+			InsertPic2TableCell(ui.tableWidget, ":images/third_place.png", 0.085f, uiRowIdx, uiColumnIdx);
 		}
 	}
 }

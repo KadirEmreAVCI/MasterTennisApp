@@ -41,16 +41,3 @@ void TableWidgetUser::ClearTable(QTableWidget* table)
 	table->clearContents();
 	table->setRowCount(0);
 }
-void TableWidgetUser::InsertValue2Cell(QTableWidget* table, QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QTableWidgetItem* const pVal = new QTableWidgetItem;
-	pVal->setText(sVal);
-	pVal->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	table->setItem(uiRowIdx, uiColumnIdx++, pVal);
-}
-void TableWidgetUser::InsertPic2Cell(QTableWidget* table, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QLabel* pLabel = new QLabel;
-	utility::InitPicture(pLabel, sPicAddr, fScale);
-	table->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
-}
