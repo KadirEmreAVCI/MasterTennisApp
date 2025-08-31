@@ -65,15 +65,15 @@ void MatchesDialog::InsertMatch2Table(const Match& m, unsigned uiRowIdx)
 {
 	using namespace utility;
 	unsigned uiColumnIdx{};
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStatu()), uiRowIdx, uiColumnIdx++);
-	InsertPic2TableCell(ui.tableWidget, GetOutcomePic(m), 0.04f, uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStage()), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetScore().ToString()), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.SetsToString()), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent1()), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStatu()), uiRowIdx, uiColumnIdx++);
+	PlacePic2TableCell(ui.tableWidget, m.GetOutcomePic(), 0.04f, uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStage()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetScore().ToString()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.SetsToString()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent1()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::DeleteMatch);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::EditMatch);
 }
@@ -115,27 +115,6 @@ void MatchesDialog::LoadDataToTable()
 	{
 		ui.NewMatchButton->setEnabled(true);
 	}
-}
-std::string MatchesDialog::GetOutcomePic(const Match& m)const
-{
-	std::string sOutcomePic = "";
-	if (m.GetOutcome() == Outcome::HomeWin)
-	{
-		sOutcomePic = ":images/win2.png";
-	}
-	else if (m.GetOutcome() == Outcome::AwayWin)
-	{
-		sOutcomePic = ":images/lose2.png";
-	}
-	else if(m.GetOutcome() == Outcome::Tied && m.IsUpcomingMatch())
-	{
-		sOutcomePic = ":images/hourglass.png";
-	}
-	else
-	{
-		sOutcomePic = ":images/Warning.png";
-	}
-	return sOutcomePic;
 }
 Match MatchesDialog::FindSignalingMatch()const
 {

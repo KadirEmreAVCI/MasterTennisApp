@@ -51,14 +51,14 @@ void OrganizationDialog::InsertOrg2Table(const Organization& org, unsigned uiRow
 	unsigned uiColumnIdx{};
 	if (org.GetOrgPictureAddr() != "")
 	{
-		InsertPic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(org.GetOrgPictureAddr())).toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
+		PlacePic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(org.GetOrgPictureAddr())).toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
 	}
 	else
 	{
-		InsertPic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
+		PlacePic2TableCell(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
 	}
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
-	InsertValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
 	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &OrganizationDialog::DeleteOrganization, true, uiRowIdx, uiColumnIdx++);
 	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &OrganizationDialog::EditOrganization, true, uiRowIdx, uiColumnIdx++);
 }

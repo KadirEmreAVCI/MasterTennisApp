@@ -38,6 +38,27 @@ Outcome Match::GetOutcome()const
 {
 	return GetScore().GetOutcome();
 }
+std::string Match::GetOutcomePic()const
+{
+	std::string sOutcomePic = "";
+	if (GetOutcome() == Outcome::HomeWin)
+	{
+		sOutcomePic = ":images/win2.png";
+	}
+	else if (GetOutcome() == Outcome::AwayWin)
+	{
+		sOutcomePic = ":images/lose2.png";
+	}
+	else if(GetOutcome() == Outcome::Tied && IsUpcomingMatch())
+	{
+		sOutcomePic = ":images/hourglass.png";
+	}
+	else
+	{
+		sOutcomePic = ":images/Warning.png";
+	}
+	return sOutcomePic;
+}
 std::string Match::GetStage()const
 {
 	return m_sStage;

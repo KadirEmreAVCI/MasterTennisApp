@@ -51,12 +51,19 @@ void utility::SetComboBoxAlternatives(QComboBox* pComboBox, const std::vector<st
         pComboBox->addItem(QString::fromStdString(sAlternative));
     }
 }
-void utility::InsertValue2TableCell(QTableWidget* table, QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
+void utility::PlaceValue2TableCell(QTableWidget* table, QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
 	QTableWidgetItem* const pVal = new QTableWidgetItem;
 	pVal->setText(sVal);
 	pVal->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	table->setItem(uiRowIdx, uiColumnIdx++, pVal);
+}
+QLabel* utility::PlacePic2TableCell(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
+{
+	QLabel* pLabel = new QLabel;
+	InitPicture(pLabel, sPicAddr, fScale);
+	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
+    return pLabel;
 }
 QPushButton* utility::PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText)
 {
@@ -84,10 +91,4 @@ QPushButton* utility::PlaceButton2TableCellWithImage(QTableWidget* pTableWidget,
 	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
     return pBtn;
 }
-QLabel* utility::InsertPic2TableCell(QTableWidget* pTableWidget, const std::string& sPicAddr, float fScale, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QLabel* pLabel = new QLabel;
-	InitPicture(pLabel, sPicAddr, fScale);
-	pTableWidget->setCellWidget(uiRowIdx, uiColumnIdx++, pLabel);
-    return pLabel;
-}
+

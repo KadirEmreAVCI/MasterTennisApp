@@ -22,7 +22,6 @@ private:
 	void UpdateActiveProfileData(const Profile& p);
 	std::vector<Tournament> ConcatanateTournaments()const;
 	virtual void LoadDataToTable()override;
-	std::string GetOutcomePic(const Match&)const;
 	Match FindSignalingMatch()const;
 	Ui::MatchesDialogClass ui;
 	std::unique_ptr<AddEditMatchDialog> m_upAddEditMatchDialog{ nullptr };
