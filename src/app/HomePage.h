@@ -8,7 +8,11 @@
 #include <QObject>
 #include "ui_HomePage.h"
 #include "Profile.h"
+
+class UpcomingMatch;
+class NoUpcomingMatch;
 class OrgParticipation;
+
 class HomePage : public QWidget{
 	Q_OBJECT
 
@@ -21,14 +25,12 @@ private:
 	std::vector<Match> FindUpcomingMatches()const;
 	std::vector<Match> FindStartedUpcomingMatches()const;
 	void StartedUpcomingMatchesDetected();
-	void InsertUpcomingMatch(const std::string& sOrgImageFile, const Tournament& t, const Match& m);
-	void InsertNoUpcomingMatch();
-	void DeleteUpcomingMatches();
+	void InsertUpcomingMatch(UpcomingMatch*);
+	void InsertNoUpcomingMatch(NoUpcomingMatch*);
 	void FillWithNoUpcomingMatches();
 	void UpdateTopParticipations();
 	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
 	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);
-	void DeleteTopParticipations();
 	std::vector<Tournament> ConcatanateTournaments()const;
 	Tournament FindRootTournament(const Match& m)const;
 	void UserLoggedIn(const Profile& p);

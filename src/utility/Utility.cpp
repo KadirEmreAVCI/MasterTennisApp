@@ -6,6 +6,7 @@
 #include <QString>
 #include <QHBoxLayout>
 #include <QTableWidget> 
+#include <QListWidget>
 
 void utility::InitLabelWithPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale)
 {
@@ -100,6 +101,33 @@ unsigned utility::FindIndexOfSignalingItem(QTableWidget* pTableWidget, QObject* 
 		uiSignalingItemIdx = pTableWidget->indexAt(w->pos()).row();
 	}
 	return uiSignalingItemIdx;
+}
+QWidget* utility::InsertItem2ListWidget(QListWidget* pListWidget, QWidget* pWidget)
+{
+    auto item = new QListWidgetItem(pListWidget);
+	item->setSizeHint(QSize(pWidget->width(), pWidget->height()));
+	pListWidget->addItem(item);
+	pListWidget->setItemWidget(item, pWidget);
+    return pWidget;
+}
+void utility::DeleteItemFromListWidget(QListWidget* pListWidget, unsigned uiItemIdx)
+{
+    if (pListWidget->count() > uiItemIdx)
+	{
+		QListWidgetItem* pItem = pListWidget->item(uiItemIdx);
+		pListWidget->removeItemWidget(pItem);
+		delete pItem;
+	}
+}
+void utility::ClearListWidget(QListWidget* pListWidget)
+{
+    for (unsigned i = 0; i < pListWidget->count(); ++i) 
+    {
+		QListWidgetItem* item = pListWidget->item(i);
+		QWidget* widget = pListWidget->itemWidget(item);
+		delete widget;
+	}
+	pListWidget->clear();
 }
 std::string utility::Serialize(const std::vector<std::string>& vecDeserialized)
 {

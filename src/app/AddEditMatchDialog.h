@@ -24,8 +24,8 @@ private:
 	virtual bool IsThereAnyUnsavedInfo()const override;
 	void FillSets();
 	void InitSetList(Set s, bool blEnabled = true);
-	void InsertSet(size_t idx, Set set);
-	void RemoveSet(size_t idx);
+	bool InsertSet(size_t idx, Set set);
+	bool RemoveSet();
 	void SetEnableOpponent(bool);
 	std::vector<Set> GetSets()const;
 	void SetEnableSetList(bool blEnabled);

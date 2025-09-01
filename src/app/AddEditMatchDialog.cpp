@@ -131,25 +131,23 @@ void AddEditMatchDialog::ClearDialog()
 	SetEnableOpponent(true);
 	ui.listWidget->clear();
 }
-void AddEditMatchDialog::InsertSet(size_t idx, Set set)
+bool AddEditMatchDialog::InsertSet(size_t idx, Set set)
 {
 	if (ui.listWidget->count() < m_uiMaxSet)
 	{
-		auto item = new QListWidgetItem(ui.listWidget);
-		auto ssw = new SetScoreWidget(idx, set, this);
-		item->setSizeHint(QSize(ssw->width(), ssw->height()));
-		ui.listWidget->addItem(item);
-		ui.listWidget->setItemWidget(item, ssw);
+		utility::InsertItem2ListWidget(ui.listWidget, new SetScoreWidget(idx, set, this));
+		return true;
 	}
+	return false;
 }
-void AddEditMatchDialog::RemoveSet(size_t idx)
+bool AddEditMatchDialog::RemoveSet()
 {
-	if (ui.listWidget->count() > 0)
+	if (ui.listWidget->count() > m_uiMinSet)
 	{
-		QListWidgetItem* lastItem = ui.listWidget->item(idx);
-		ui.listWidget->removeItemWidget(lastItem);
-		delete lastItem;
+		utility::DeleteItemFromListWidget(ui.listWidget, ui.listWidget->count() - 1);
+		return true;
 	}
+	return false;
 }
 void AddEditMatchDialog::SetEnableOpponent(bool blEnabled)
 {
@@ -205,35 +203,24 @@ void AddEditMatchDialog::SetMatchDate(const QDate& date)
 }
 void AddEditMatchDialog::on_AddSetButton_clicked()
 {
-	if (ui.listWidget->count() < m_uiMaxSet)
-	{
-		InsertSet(ui.listWidget->count(), Set{});
-	}
-	else
+	if (!InsertSet(ui.listWidget->count(), Set{}))
 	{
 		std::string sMessage = "You can not exceed maximum number of sets(" + std::to_string(m_RootTournament.GetSetsBestOf()) + ") in the tournament";
 		QMessageBox::warning(this, "Warning", QString::fromStdString(sMessage));
 	}
 }
-
 void AddEditMatchDialog::on_RemoveSetButton_clicked()
 {
-	if (ui.listWidget->count() > m_uiMinSet)
-	{
-		RemoveSet(ui.listWidget->count() - 1);
-	}
-	else
+	if (!RemoveSet())
 	{
 		QMessageBox::warning(this, "Warning", "Minimum number of sets already reached!");
 	}
 }
-
 void AddEditMatchDialog::on_DateButton_clicked()
 {
 	m_upCalendar->setModal(true);
 	m_upCalendar->exec();
 }
-
 void AddEditMatchDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
@@ -294,7 +281,6 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		QMessageBox::critical(this, "Error", "Please fill all the mandatory fields.");
 	}
 }
-
 void AddEditMatchDialog::on_ClearButton_clicked()
 {
 	if (IsThereAnyUnsavedInfo() && m_DialogMode != DialogMode::eEditDialog)
@@ -310,7 +296,6 @@ void AddEditMatchDialog::on_ClearButton_clicked()
 		InitDialog();
 	}
 }
-
 void AddEditMatchDialog::on_radioButton_Win_clicked()
 {
 	ui.listWidget->clear();
@@ -320,7 +305,6 @@ void AddEditMatchDialog::on_radioButton_Win_clicked()
 		InitSetList(Set(Score(6, 0)), false);
 	}
 }
-
 void AddEditMatchDialog::on_radioButton_Lose_clicked()
 {
 	ui.listWidget->clear();
@@ -330,7 +314,6 @@ void AddEditMatchDialog::on_radioButton_Lose_clicked()
 		InitSetList(Set(Score(0, 6)), false);
 	}
 }
-
 void AddEditMatchDialog::on_comboBox_Statu_currentTextChanged(const QString& statu)
 {
 	if (ui.comboBox_Statu->currentText() == "BYE" || ui.comboBox_Statu->currentText() == "WO")

@@ -40,7 +40,7 @@ void HomePage::UpdateUpcomingMatches()
 		const auto& iterOrg = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [rootTournament](const auto& org) {
 			return rootTournament.GetOrgID() == org.GetID();
 			});
-		InsertUpcomingMatch((iterOrg->GetOrgPictureAddr() != "") ? iterOrg->GetOrgPictureAddr() : "default_org.png", rootTournament, m);
+		InsertUpcomingMatch(new UpcomingMatch(this, (iterOrg->GetOrgPictureAddr() != "") ? iterOrg->GetOrgPictureAddr() : "default_org.png", rootTournament, m));
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
@@ -74,31 +74,14 @@ void HomePage::StartedUpcomingMatchesDetected()
 {
 	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 }
-void HomePage::InsertUpcomingMatch(const std::string& sOrgImageFile, const Tournament& t, const Match& m)
+void HomePage::InsertUpcomingMatch(UpcomingMatch* pUpcomingMatch)
 {
-	auto item = new QListWidgetItem(ui.listWidget_UpcomingMatches);
-	auto upcomingMatch = new UpcomingMatch(this, sOrgImageFile, t, m);
-	QObject::connect(&*upcomingMatch, &UpcomingMatch::UpcomingMatchStarted, this, &HomePage::UpcomingMatchStarted);
-	item->setSizeHint(QSize(upcomingMatch->width(), upcomingMatch->height()));
-	ui.listWidget_UpcomingMatches->addItem(item);
-	ui.listWidget_UpcomingMatches->setItemWidget(item, upcomingMatch);
+	auto pInsertedUpcomingMatch = utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pUpcomingMatch);
+	QObject::connect(&*reinterpret_cast<UpcomingMatch*>(pInsertedUpcomingMatch), &UpcomingMatch::UpcomingMatchStarted, this, &HomePage::UpcomingMatchStarted);
 }
-void HomePage::InsertNoUpcomingMatch()
+void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
 {
-	auto item = new QListWidgetItem(ui.listWidget_UpcomingMatches);
-	auto noUpcomingMatch = new NoUpcomingMatch(this);
-	item->setSizeHint(QSize(noUpcomingMatch->width(), noUpcomingMatch->height()));
-	ui.listWidget_UpcomingMatches->addItem(item);
-	ui.listWidget_UpcomingMatches->setItemWidget(item, noUpcomingMatch);
-}
-void HomePage::DeleteUpcomingMatches()
-{
-	for (int i = 0; i < ui.listWidget_UpcomingMatches->count(); ++i) {
-		QListWidgetItem* item = ui.listWidget_UpcomingMatches->item(i);
-		QWidget* widget = ui.listWidget_UpcomingMatches->itemWidget(item);
-		delete widget;
-	}
-	ui.listWidget_UpcomingMatches->clear();
+	utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pNoUpcomingMatch);
 }
 void HomePage::FillWithNoUpcomingMatches()
 {
@@ -106,7 +89,7 @@ void HomePage::FillWithNoUpcomingMatches()
 	const int iNoUpcomingMatch = g_uiMaxUpcomingMatch - vecUpcomingMatches.size();
 	for (int i = 0; i < iNoUpcomingMatch; ++i)
 	{
-		InsertNoUpcomingMatch();
+		InsertNoUpcomingMatch(new NoUpcomingMatch(this));
 	}
 }
 void HomePage::UpdateTopParticipations()
@@ -136,19 +119,7 @@ std::vector<std::pair<unsigned, unsigned>> HomePage::FindTopParticipations()cons
 }
 void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
 {
-	auto item = new QListWidgetItem(ui.listWidget_TopParticipations);
-	item->setSizeHint(QSize(pOrgParticipation->width(), pOrgParticipation->height()));
-	ui.listWidget_TopParticipations->addItem(item);
-	ui.listWidget_TopParticipations->setItemWidget(item, pOrgParticipation);
-}
-void HomePage::DeleteTopParticipations()
-{
-	for (int i = 0; i < ui.listWidget_TopParticipations->count(); ++i) {
-		QListWidgetItem* item = ui.listWidget_TopParticipations->item(i);
-		QWidget* widget = ui.listWidget_TopParticipations->itemWidget(item);
-		delete widget;
-	}
-	ui.listWidget_TopParticipations->clear();
+	utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, pOrgParticipation);
 }
 std::vector<Tournament> HomePage::ConcatanateTournaments()const
 {
@@ -176,8 +147,8 @@ void HomePage::UserLoggedIn(const Profile& p)
 }
 void HomePage::UserLoggedOut()
 {
-	DeleteUpcomingMatches();
-	DeleteTopParticipations();
+	utility::ClearListWidget(ui.listWidget_TopParticipations);
+	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
 }
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {

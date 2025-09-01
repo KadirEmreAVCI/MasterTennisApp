@@ -10,6 +10,7 @@ class QPushButton;
 class QComboBox;
 class QTableWidget;
 class QWidget;
+class QListWidget;
 
 namespace utility{
     // Helper functions for QLabel
@@ -29,6 +30,11 @@ namespace utility{
     QPushButton* PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText);
     QPushButton* PlaceButton2TableCellWithImage(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sImageAddr, float fScale, bool blEnabled);
     unsigned FindIndexOfSignalingItem(QTableWidget*, QObject*);
+
+    // Helper functions for QListWidget
+    QWidget* InsertItem2ListWidget(QListWidget*, QWidget*);
+    void DeleteItemFromListWidget(QListWidget*, unsigned uiItemIdx);
+    void ClearListWidget(QListWidget*);
 
     // Common helper functions
     std::string Serialize(const std::vector<std::string>& vecDeserialized);
