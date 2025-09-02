@@ -10,9 +10,8 @@ class ProfileWidget : public QWidget{
 	Q_OBJECT
 
 public:
-	ProfileWidget(QWidget *parent = nullptr);
+	ProfileWidget(QWidget *parent = nullptr, const Profile& p = Profile{});
 	~ProfileWidget();
-	void SetProfile(const Profile& profile);
 private:
 	void FillProfileButton();
 	void OpenEditDialog(const Profile& selectedProfile);

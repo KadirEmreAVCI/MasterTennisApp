@@ -17,9 +17,7 @@ QLabel* utility::CreateLabelWithPicture(const std::string& sPicAddress, float fS
 void utility::InitLabelWithPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale)
 {
     QPixmap pix{ QString::fromStdString(sPicAddress) };
-    const float fHeight = pPicLabel->height() * fScale;
-    const float fWidth = pPicLabel->width() * fScale;
-    pPicLabel->setPixmap(pix.scaled(fHeight, fWidth, Qt::KeepAspectRatio));
+    pPicLabel->setPixmap(pix.scaled(pPicLabel->height() * fScale, pPicLabel->width() * fScale, Qt::KeepAspectRatio));
     pPicLabel->setAlignment(Qt::AlignCenter);
 }
 QPushButton* utility::CreateButtonWithPicture(const std::string& sPicAddress, float fScale)
@@ -102,10 +100,10 @@ unsigned utility::FindIndexOfSignalingItem(QTableWidget* pTableWidget, QObject* 
 	}
 	return uiSignalingItemIdx;
 }
-QWidget* utility::InsertItem2ListWidget(QListWidget* pListWidget, QWidget* pWidget)
+QWidget* utility::InsertItem2ListWidget(QListWidget* pListWidget, QWidget* pWidget, float fScale)
 {
     auto item = new QListWidgetItem(pListWidget);
-	item->setSizeHint(QSize(pWidget->width(), pWidget->height()));
+	item->setSizeHint(QSize(pWidget->width() * fScale, pWidget->height() * fScale));
 	pListWidget->addItem(item);
 	pListWidget->setItemWidget(item, pWidget);
     return pWidget;

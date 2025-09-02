@@ -6,22 +6,20 @@
 #include "Config.h"
 #include "Utility.h"
 
-ProfileWidget::ProfileWidget(QWidget *parent)
-	: QWidget(parent)
+ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p)
+	: 
+    QWidget(parent),
+    m_Profile{p}
 {
 	ui.setupUi(this);
     m_upAddEditProfileDialog = std::make_unique<AddEditProfileDialog>(this);
 	utility::InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
     utility::InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
+    FillProfileButton();
 }
 
 ProfileWidget::~ProfileWidget()
 {}
-void ProfileWidget::SetProfile(const Profile& profile)
-{
-	m_Profile = profile;
-	FillProfileButton();
-}
 void ProfileWidget::FillProfileButton()
 {
     ui.ProfileButton->setFixedSize(310, 70);

@@ -2,6 +2,7 @@
 #include "ProfileSelectionDialog.h"
 #include "ProfileWidget.h"
 #include "AppController.h"
+#include "Utility.h"
 ProfileSelectionDialog::ProfileSelectionDialog(QWidget* parent)
 	: QDialog(parent)
 {
@@ -13,18 +14,9 @@ ProfileSelectionDialog::ProfileSelectionDialog(QWidget* parent)
 	setFixedSize(400, 500);
 	setWindowTitle("Select Your Profile");
 }
-
 ProfileSelectionDialog::~ProfileSelectionDialog()
-{}
-
-void ProfileSelectionDialog::InsertProfile(const Profile& profile)
 {
-	auto item = new QListWidgetItem(ui.listWidget);
-	auto profileWidget = new ProfileWidget(this);
-	profileWidget->SetProfile(profile);
-	item->setSizeHint(QSize(profileWidget->width(), profileWidget->height()));
-	ui.listWidget->addItem(item);
-	ui.listWidget->setItemWidget(item, profileWidget);
+	utility::ClearListWidget(ui.listWidget);
 }
 void ProfileSelectionDialog::OpenAddDialog()
 {
@@ -35,10 +27,10 @@ void ProfileSelectionDialog::OpenAddDialog()
 void ProfileSelectionDialog::UpdateProfiles(const std::vector<Profile>& vecProfile)
 {
 	std::cout << "ProfileSelectionDialog::UpdateProfiles!!!!!!!!!!!!!!!\n";
-	ui.listWidget->clear();
+	utility::ClearListWidget(ui.listWidget);
 	for (const auto& profile : vecProfile)
 	{
-		InsertProfile(profile);
+		utility::InsertItem2ListWidget(ui.listWidget, new ProfileWidget(this, profile));
 	}
 }
 void ProfileSelectionDialog::on_NewProfileButton_clicked()

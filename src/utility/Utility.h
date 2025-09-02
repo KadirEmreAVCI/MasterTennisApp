@@ -33,7 +33,7 @@ namespace utility{
     unsigned FindIndexOfSignalingItem(QTableWidget*, QObject*);
 
     // Helper functions for QListWidget
-    QWidget* InsertItem2ListWidget(QListWidget*, QWidget*);
+    QWidget* InsertItem2ListWidget(QListWidget*, QWidget*, float fScale = 1.0f);
     void DeleteItemFromListWidget(QListWidget*, unsigned uiItemIdx);
     void ClearListWidget(QListWidget*);
 
