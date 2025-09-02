@@ -96,7 +96,6 @@ void AddEditMatchDialog::FillSets()
 	ui.listWidget->clear();
 	for (const auto& s : m_EditedMatch.GetSets())
 	{
-		std::cout << "AddEditMatchDialog::InitDialogWithMatch set = " << s << "\n";
 		InsertSet(szSetIdx, s);
 	}
 	if (ui.comboBox_Statu->currentText() == "BYE")

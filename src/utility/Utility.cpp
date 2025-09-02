@@ -8,6 +8,12 @@
 #include <QTableWidget> 
 #include <QListWidget>
 
+QLabel* utility::CreateLabelWithPicture(const std::string& sPicAddress, float fScale)
+{
+	QLabel* pPicLabel = new QLabel();
+	InitLabelWithPicture(pPicLabel, sPicAddress, fScale);
+	return pPicLabel;
+}
 void utility::InitLabelWithPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale)
 {
     QPixmap pix{ QString::fromStdString(sPicAddress) };
@@ -32,13 +38,7 @@ void utility::InitButtonWithPicture(QPushButton* pButton, const std::string& sPi
 void utility::InitComboBox(QComboBox* pComboBox, const QString& sVal)
 {
     const int idx = pComboBox->findText(sVal);
-    if (idx != -1) { // Check if the item was found
-        pComboBox->setCurrentIndex(idx);
-    }
-    else
-    {
-        pComboBox->setCurrentIndex(0);
-    }
+    pComboBox->setCurrentIndex((idx != -1) ? idx : 0);
 }
 void utility::SetComboBoxAlternatives(QComboBox* pComboBox, const std::vector<std::string>& vecAlternatives, bool blStartWithEmptyAlternative)
 {
@@ -147,7 +147,8 @@ std::vector<std::string> utility::Deserialize(const std::string& sSerialized)
 	std::vector<std::string> vecDeserialized;
 	std::istringstream iss(sSerialized);
 	std::string sItem;
-	while (std::getline(iss, sItem, ',')) {
+	while (std::getline(iss, sItem, ',')) 
+	{
 		vecDeserialized.push_back(std::move(sItem));
 	}
 	return vecDeserialized;

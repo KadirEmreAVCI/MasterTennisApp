@@ -15,11 +15,13 @@ public:
 	~AddEditTournamentDialog();
 	void PrepareDialog(DialogMode, const Tournament& t = Tournament{});
 private:
+	// AddEditDialog
 	virtual void ClearDialog()override;
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
 	virtual bool IsMandatoryFieldsFilled()const override;
 	virtual bool IsThereAnyUnsavedInfo()const override;
+	
 	void DeactivateOptions();
 	void ActivateOptions();
 	bool IsMaxParticipantExceeded(unsigned uiParticipant)const;

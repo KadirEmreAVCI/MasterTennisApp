@@ -20,11 +20,7 @@ ProfileWidget::~ProfileWidget()
 void ProfileWidget::SetProfile(const Profile& profile)
 {
 	m_Profile = profile;
-	FillWidget();
-}
-void ProfileWidget::FillWidget()
-{
-    FillProfileButton();
+	FillProfileButton();
 }
 void ProfileWidget::FillProfileButton()
 {
@@ -34,7 +30,7 @@ void ProfileWidget::FillProfileButton()
     QHBoxLayout* layout = new QHBoxLayout(container);
     layout->setContentsMargins(5, 5, 5, 5);
 
-    QLabel* PPLabel = CreatePPLabel();
+    QLabel* PPLabel = utility::CreateLabelWithPicture((m_Profile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_Profile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString(), 0.125f);
 
     QLabel* ProfileNameLabel = new QLabel(QString::fromStdString(m_Profile.GetFullName()));
     QFont font = ProfileNameLabel->font();
@@ -44,15 +40,6 @@ void ProfileWidget::FillProfileButton()
     layout->addWidget(PPLabel);
     layout->addWidget(ProfileNameLabel);
     layout->addStretch();
-}
-QLabel* ProfileWidget::CreatePPLabel()const
-{
-    QLabel* PPLabel = new QLabel();
-    const std::string sPPAddr = (m_Profile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_Profile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString();
-    QPixmap pixmap(QString::fromStdString(sPPAddr));
-    PPLabel->setPixmap(pixmap.scaled(60, 60, Qt::KeepAspectRatio));
-    PPLabel->setFixedSize(60, 60);
-    return PPLabel;
 }
 void ProfileWidget::OpenEditDialog(const Profile& selectedProfile)
 {

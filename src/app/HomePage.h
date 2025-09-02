@@ -24,7 +24,6 @@ private:
 	void UpdateUpcomingMatches();
 	std::vector<Match> FindUpcomingMatches()const;
 	std::vector<Match> FindStartedUpcomingMatches()const;
-	void StartedUpcomingMatchesDetected();
 	void InsertUpcomingMatch(UpcomingMatch*);
 	void InsertNoUpcomingMatch(NoUpcomingMatch*);
 	void FillWithNoUpcomingMatches();

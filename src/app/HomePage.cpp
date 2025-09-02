@@ -24,7 +24,7 @@ HomePage::~HomePage()
 {}
 void HomePage::UpcomingMatchStarted()
 {
-	StartedUpcomingMatchesDetected();
+	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 	UpdateUpcomingMatches();
 }
 void HomePage::UpdateUpcomingMatches()
@@ -69,10 +69,6 @@ std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 			});
 	}
 	return vecStartedUpcomingMatches;
-}
-void HomePage::StartedUpcomingMatchesDetected()
-{
-	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 }
 void HomePage::InsertUpcomingMatch(UpcomingMatch* pUpcomingMatch)
 {
@@ -142,7 +138,7 @@ void HomePage::UserLoggedIn(const Profile& p)
 	UpdateActiveProfileData(p);
 	if (!FindStartedUpcomingMatches().empty())
 	{
-		StartedUpcomingMatchesDetected();
+		QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 	}
 }
 void HomePage::UserLoggedOut()

@@ -66,14 +66,11 @@ void AddEditProfileDialog::ClearDialog()
 }
 bool AddEditProfileDialog::IsMandatoryFieldsFilled()const
 {
-	return ui.lineEdit_NameSurname->text() != "" 
-		&& (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked());
+	return ui.lineEdit_NameSurname->text() != "" && (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked());
 }
 bool AddEditProfileDialog::IsThereAnyUnsavedInfo()const
 {
-	return ui.lineEdit_NameSurname->text() != "" 
-		|| (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked()) 
-		|| ui.lineEdit_PPAddr->text() != "";
+	return ui.lineEdit_NameSurname->text() != "" || (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked()) || ui.lineEdit_PPAddr->text() != "";
 }
 void AddEditProfileDialog::on_BrowseButton_clicked()
 {

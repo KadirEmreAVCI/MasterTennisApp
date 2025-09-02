@@ -14,9 +14,7 @@ public:
 	~ProfileWidget();
 	void SetProfile(const Profile& profile);
 private:
-	void FillWidget();
 	void FillProfileButton();
-	QLabel* CreatePPLabel()const;
 	void OpenEditDialog(const Profile& selectedProfile);
 	Ui::ProfileWidgetClass ui;
 	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };

@@ -14,6 +14,7 @@ class QListWidget;
 
 namespace utility{
     // Helper functions for QLabel
+    QLabel* CreateLabelWithPicture(const std::string& sPicAddress, float fScale = 1.0f);
     void InitLabelWithPicture(QLabel* pPicLabel, std::string sPicAddress, float fScale = 1.0f);
     
     // Helper functions for QPushButton
