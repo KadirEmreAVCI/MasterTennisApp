@@ -22,7 +22,7 @@ ProfileWidget::~ProfileWidget()
 {}
 void ProfileWidget::FillProfileButton()
 {
-    ui.ProfileButton->setFixedSize(310, 70);
+    ui.ProfileButton->setFixedSize(290, 70);
 
     QWidget* container = new QWidget(ui.ProfileButton);
     QHBoxLayout* layout = new QHBoxLayout(container);

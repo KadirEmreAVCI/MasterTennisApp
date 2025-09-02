@@ -12,7 +12,7 @@ ProfileSelectionDialog::ProfileSelectionDialog(QWidget* parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &ProfileSelectionDialog::close);
 	m_upAddEditProfileDialog = std::make_unique<AddEditProfileDialog>(this);
 	setFixedSize(400, 500);
-	setWindowTitle("Select Your Profile");
+	setWindowTitle("");
 }
 ProfileSelectionDialog::~ProfileSelectionDialog()
 {
