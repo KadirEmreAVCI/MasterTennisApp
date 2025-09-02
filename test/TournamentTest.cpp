@@ -55,6 +55,45 @@ INSTANTIATE_TEST_SUITE_P(
     )
 );
 
+INSTANTIATE_TEST_SUITE_P(
+    DetectValidMatchStages,
+    ValidMatchStageTest,
+    ::testing::Values(
+        std::make_tuple(0, std::vector<bool>{true, true, false, false}),
+        std::make_tuple(1, std::vector<bool>{true, true, true, true, true, false }),
+        std::make_tuple(2, std::vector<bool>{true, true, true, true, true }),
+        std::make_tuple(3, std::vector<bool>{false, false, false, false, true, true, true, true }),
+        std::make_tuple(4, std::vector<bool>{true, true, true, false, false, false, true}),
+        std::make_tuple(5, std::vector<bool>{false, false})
+    )
+);
+
+INSTANTIATE_TEST_SUITE_P(
+    DetectMatchesExceedingMaxSet,
+    MatchExceedingMaxSetTest,
+    ::testing::Values(
+        std::make_tuple(0, std::vector<bool>{true, false, false, false}),
+        std::make_tuple(1, std::vector<bool>{true, false, false, false, false, false }),
+        std::make_tuple(2, std::vector<bool>{false, false, false, false, false}),
+        std::make_tuple(3, std::vector<bool>{false, false, false, false, false, false, false, false }),
+        std::make_tuple(4, std::vector<bool>{true, false, false, false, false, false, false}),
+        std::make_tuple(5, std::vector<bool>{true, true})
+    )
+);
+
+INSTANTIATE_TEST_SUITE_P(
+    DetectValidMatchesForTournament,
+    ValidMatchForTournamentTest,
+    ::testing::Values(
+        std::make_tuple(0, std::vector<bool>{false, true, false, false}),
+        std::make_tuple(1, std::vector<bool>{false, true, true, true, true, false }),
+        std::make_tuple(2, std::vector<bool>{true, true, true, true, true}),
+        std::make_tuple(3, std::vector<bool>{false, false, false, false, true, true, true, true }),
+        std::make_tuple(4, std::vector<bool>{false, true, true, false, false, false, true}),
+        std::make_tuple(5, std::vector<bool>{false, false})
+    )
+);
+
 TEST_F(TournamentTest, SortTournamentsByStartTime) 
 {
 	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2){
@@ -64,65 +103,5 @@ TEST_F(TournamentTest, SortTournamentsByStartTime)
 	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
 	{
 		EXPECT_EQ(m_vecTournament[idx].GetID(), vecTestOutput[idx]);
-	}
-}
-
-TEST_F(TournamentTest, DetectValidMatchStage) 
-{
-	const std::vector<std::vector<bool>> vecTestOutput{
-		{true, true, false, false},
-		{true, true, true, true, true, false },
-		{true, true, true, true, true },
-		{false, false, false, false, true, true, true, true },
-		{true, true, true, false, false, false, true},
-		{false, false}
-	};
-	for (std::size_t idxT = 0; idxT < m_vecTournament.size(); ++idxT)
-	{
-		const auto& vecMatch = m_vecTournament[idxT].GetMatches();
-		for (std::size_t idxM = 0; idxM < vecMatch.size(); ++idxM)
-		{
-			EXPECT_EQ(IsMatchStageValid(m_vecTournament[idxT], vecMatch[idxM]), vecTestOutput[idxT][idxM]);
-		}
-	}
-}
-
-TEST_F(TournamentTest, DetectMatchesExceedingMaxSet)
-{
-	const std::vector<std::vector<bool>> vecTestOutput{
-		{true, false, false, false},
-		{true, false, false, false, false, false },
-		{false, false, false, false, false },
-		{false, false, false, false, false, false, false, false },
-		{true, false, false, false, false, false, false},
-		{true, true}
-	};
-	for (std::size_t idxT = 0; idxT < m_vecTournament.size(); ++idxT)
-	{
-		const auto& vecMatch = m_vecTournament[idxT].GetMatches();
-		for (std::size_t idxM = 0; idxM < vecMatch.size(); ++idxM)
-		{
-			EXPECT_EQ(IsMatchExceedingMaxSet(m_vecTournament[idxT], vecMatch[idxM]), vecTestOutput[idxT][idxM]);
-		}
-	}
-}
-
-TEST_F(TournamentTest, DetectMatchesValidForTournament)
-{
-	const std::vector<std::vector<bool>> vecTestOutput{
-		{false, true, false, false},
-		{false, true, true, true, true, false },
-		{true, true, true, true, true },
-		{false, false, false, false, true, true, true, true },
-		{false, true, true, false, false, false, true},
-		{false, false}
-	};
-	for (std::size_t idxT = 0; idxT < m_vecTournament.size(); ++idxT)
-	{
-		const auto& vecMatch = m_vecTournament[idxT].GetMatches();
-		for (std::size_t idxM = 0; idxM < vecMatch.size(); ++idxM)
-		{
-			EXPECT_EQ(IsMatchValidForTournament(m_vecTournament[idxT], vecMatch[idxM]), vecTestOutput[idxT][idxM]);
-		}
 	}
 }
