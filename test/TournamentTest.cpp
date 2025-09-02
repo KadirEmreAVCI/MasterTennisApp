@@ -15,30 +15,45 @@ bool TournamentTest::IsMatchValidForTournament(const Tournament& t, const Match&
 {
 	return t.IsMatchValidForTournament(m);
 }
-TEST_F(TournamentTest, DetectDoubleTournaments)
-{
-	const std::vector vecTestOutput{ false, true, false, true, false, false };
-	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecTournament[idx].IsDoubleTournament(), vecTestOutput[idx]);
-	}
-}
 
-TEST_F(TournamentTest, GetAllPossibleStagesForTournament)
-{
-	const std::vector<std::vector<std::string>> vecTestOutput{ 
-		{ "Group Stage", "Final 16", "Quarter Final", "Semi Final", "Final", "3rd Place Game" },
-		{ "Group Stage", "Final 32", "Final 16", "Quarter Final", "Semi Final", "Final"},
-		{ "Group Stage", "Quarter Final", "Semi Final", "Final", "3rd Place Game" },
-		{ "Group Stage", "Final 32", "Final 16", "Quarter Final", "Semi Final", "Final", "3rd Place Game" },
-		{ "Group Stage", "Semi Final", "Final", "3rd Place Game" },
-		{ "Group Stage", "Final" }
-	};
-	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecTournament[idx].GetPossibleStages(), vecTestOutput[idx]);
-	}
-}
+INSTANTIATE_TEST_SUITE_P(
+    DetectDoubleTournaments,
+    DoubleTournamentTest,
+    ::testing::Values(
+        std::make_tuple(0, false),
+        std::make_tuple(1, true),
+        std::make_tuple(2, false),
+        std::make_tuple(3, true),
+        std::make_tuple(4, false),
+        std::make_tuple(5, false)
+    )
+);
+
+INSTANTIATE_TEST_SUITE_P(
+    DetectPossibleStages,
+    PossibleStagesTest,
+    ::testing::Values(
+        std::make_tuple(0, std::vector<std::string>{ "Group Stage", "Final 16", "Quarter Final", "Semi Final", "Final", "3rd Place Game" }),
+        std::make_tuple(1, std::vector<std::string>{ "Group Stage", "Final 32", "Final 16", "Quarter Final", "Semi Final", "Final"}),
+        std::make_tuple(2, std::vector<std::string>{ "Group Stage", "Quarter Final", "Semi Final", "Final", "3rd Place Game" }),
+        std::make_tuple(3, std::vector<std::string>{ "Group Stage", "Final 32", "Final 16", "Quarter Final", "Semi Final", "Final", "3rd Place Game" }),
+        std::make_tuple(4, std::vector<std::string>{ "Group Stage", "Semi Final", "Final", "3rd Place Game" }),
+        std::make_tuple(5, std::vector<std::string>{ "Group Stage", "Final" })
+    )
+);
+
+INSTANTIATE_TEST_SUITE_P(
+    DetectExistenceOfGroupStage,
+    GroupStageExistenceTest,
+    ::testing::Values(
+        std::make_tuple(0, true),
+        std::make_tuple(1, true),
+        std::make_tuple(2, true),
+        std::make_tuple(3, false),
+        std::make_tuple(4, true),
+        std::make_tuple(5, false)
+    )
+);
 
 TEST_F(TournamentTest, SortTournamentsByStartTime) 
 {
@@ -49,15 +64,6 @@ TEST_F(TournamentTest, SortTournamentsByStartTime)
 	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
 	{
 		EXPECT_EQ(m_vecTournament[idx].GetID(), vecTestOutput[idx]);
-	}
-}
-
-TEST_F(TournamentTest, DetectGroupStageExistence)
-{
-	const std::vector vecTestOutput{ true, true, true, false, true, false };
-	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecTournament[idx].IsGroupStageExist(), vecTestOutput[idx]);
 	}
 }
 

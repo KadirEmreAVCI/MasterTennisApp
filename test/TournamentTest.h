@@ -4,6 +4,9 @@
 // External Headers 
 #include <gtest/gtest.h>
 
+// Standard Headers
+#include <tuple>
+
 // Project Headers
 #include "Tournament.h"
 
@@ -76,4 +79,24 @@ protected:
 	std::vector<Tournament> m_vecTournament;
 };
 
+class DoubleTournamentTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(DoubleTournamentTest, DetectDoubleTournaments)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecTournament[idx].IsDoubleTournament(), expected);
+}
+
+class PossibleStagesTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<std::string>>> {};
+TEST_P(PossibleStagesTest, DetectPossibleStages)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecTournament[idx].GetPossibleStages(), expected);
+}
+
+class GroupStageExistenceTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(GroupStageExistenceTest, DetectExistenceOfGroupStage)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecTournament[idx].IsGroupStageExist(), expected);
+}
 #endif
