@@ -15,7 +15,7 @@ OrganizationDialog::OrganizationDialog(QWidget *parent)
 	m_upAddEditOrganizationDialog = std::make_unique<AddEditOrganizationDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &OrganizationDialog::UpdateOrganizations);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &OrganizationDialog::UpdateOrganizations);
-	setWindowTitle("Tennis Organizations");
+	setWindowTitle("");
 	setFixedSize(560, 600);
 }
 
