@@ -67,7 +67,7 @@ void AddEditMatchDialog::InitDialog()
 }
 void AddEditMatchDialog::FillDialog()
 {
-	ui.comboBox_Statu->setCurrentIndex(1 + std::distance(m_vecStatuAlternatives.cbegin(), std::find(m_vecStatuAlternatives.cbegin(), m_vecStatuAlternatives.cend(), m_EditedMatch.GetStatu())));
+	utility::InitComboBox(ui.comboBox_Statu, QString::fromStdString(m_EditedMatch.GetStatu()));
 	if (m_EditedMatch.GetStatu() == "WO")
 	{
 		if (m_EditedMatch.GetOutcome() == Outcome::HomeWin)
@@ -79,8 +79,7 @@ void AddEditMatchDialog::FillDialog()
 			ui.radioButton_Lose->setChecked(true);
 		}
 	}
-	const auto& vecStage = m_RootTournament.GetPossibleStages();
-	ui.comboBox_Stage->setCurrentIndex(1 + std::distance(vecStage.cbegin(), std::find(vecStage.cbegin(), vecStage.cend(), m_EditedMatch.GetStage())));
+	utility::InitComboBox(ui.comboBox_Stage, QString::fromStdString(m_EditedMatch.GetStage()));
 	ui.lineEdit__Opponent1->setText(QString::fromStdString(m_EditedMatch.GetOpponent1()));
 	if (m_RootTournament.IsDoubleTournament())
 	{
@@ -159,8 +158,7 @@ void AddEditMatchDialog::SetEnableOpponent(bool blEnabled)
 std::vector<Set> AddEditMatchDialog::GetSets()const
 {
 	std::vector<Set> vecSet;
-	size_t szSet = ui.listWidget->count();
-	for (size_t idx{}; idx < szSet; ++idx)
+	for (size_t idx{}; idx < ui.listWidget->count(); ++idx)
 	{
 		QWidget* widget = ui.listWidget->itemWidget(ui.listWidget->item(idx));
 		SetScoreWidget* ssw = qobject_cast<SetScoreWidget*>(widget);
