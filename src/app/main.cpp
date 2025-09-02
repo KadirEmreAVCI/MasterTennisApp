@@ -1,12 +1,3 @@
-//#define RUN_TESTS
-#ifdef RUN_TESTS
-#include <gtest/gtest.h>
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
-#else
-#include "MasterTennisApp.h"
 #include <QtWidgets/QApplication>
 #include "AppController.h"
 int main(int argc, char* argv[])
@@ -15,4 +6,3 @@ int main(int argc, char* argv[])
     AppController::instance().StartApplication();
     return a.exec();
 }
-#endif
