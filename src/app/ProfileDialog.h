@@ -17,8 +17,6 @@ public:
 	~ProfileDialog();
 private:
 	void CreateTabWidget();
-	void UpdateProfileName();
-	void UpdatePP();
 	void UserLoggedIn(const Profile&);
 	void UpdateProfileAlternatives(const std::vector<Profile>&);
 	Ui::ProfileDialogClass ui;
