@@ -99,9 +99,9 @@ TEST_F(TournamentTest, SortTournamentsByStartTime)
 	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2){
 		return t1.IsEarlier(t2);
 		});
-	const std::vector vecTestOutput{0, 1, 2, 4, 3, 5};
+	const std::vector vecExpected{0, 1, 2, 4, 3, 5};
 	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
 	{
-		EXPECT_EQ(m_vecTournament[idx].GetID(), vecTestOutput[idx]);
+		EXPECT_EQ(m_vecTournament[idx].GetID(), vecExpected[idx]);
 	}
 }

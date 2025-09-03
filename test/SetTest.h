@@ -31,4 +31,38 @@ protected:
 	std::vector<Set> m_vecSet;
 };
 
+class OutcomeTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
+TEST_P(OutcomeTest, DetermineOutcomes)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].GetOutcome(), expected);
+}
+
+class PlayedTiebreakTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(PlayedTiebreakTest, DetectTiebreakPlayed)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].IsSetTBPlayed(), expected);
+}
+
+class InvalidSetTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(InvalidSetTest, DetectInvalidSets)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].IsValid(), expected);
+}
+
+class SetToStringTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(SetToStringTest, SetToString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].ToString(), expected);
+}
+
+class SetFromStringTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(SetFromStringTest, SetFromString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx], Set::FromString(expected));
+}
 #endif

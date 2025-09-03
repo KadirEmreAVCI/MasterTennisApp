@@ -1,43 +1,87 @@
 #include "SetTest.h"
 
-TEST_F(SetTest, GetSetOutcomeCorrectly)
-{
-	using enum Outcome;
-	const std::vector vecTestOutput{ Tied, Tied, Tied, HomeWin, AwayWin, HomeWin, AwayWin, Tied, HomeWin, AwayWin, AwayWin };
-	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecSet[idx].GetOutcome(), vecTestOutput[idx]);
-	}
-}
-TEST_F(SetTest, TiebreakPlayed)
-{
-	const std::vector vecTestOutput{ false, false, true, false, false, true, true, false, true, true, true };
-	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecSet[idx].IsSetTBPlayed(), vecTestOutput[idx]);
-	}
-}
-TEST_F(SetTest, DetectInvalidSets)
-{
-	const std::vector vecTestOutput{ true, true, false, true, true, true, true, false, false, false, false };
-	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecSet[idx].IsValid(), vecTestOutput[idx]);
-	}
-}
-TEST_F(SetTest, SetToString)
-{
-	const std::vector vecTestOutput{ "0-0", "0-0", "0-0(7-3)", "6-3", "2-6", "7-6(7-4)", "6-7(0-7)", "1-1", "7-6(5-7)", "6-7(2-2)", "6-7(7-2)"};
-	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecSet[idx].ToString(), vecTestOutput[idx]);
-	}
-}
-TEST_F(SetTest, SetFromString)
-{
-	const std::vector vecTestOutput{ "0-0", "0-0", "0-0(7-3)", "6-3", "2-6", "7-6(7-4)", "6-7(0-7)", "1-1", "7-6(5-7)", "6-7(2-2)", "6-7(7-2)" };
-	for (std::size_t idx = 0; idx < m_vecSet.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecSet[idx], Set::FromString(vecTestOutput[idx]));
-	}
-}
+INSTANTIATE_TEST_SUITE_P(
+    DetermineOutcomes,
+    OutcomeTest,
+    ::testing::Values(
+        std::make_tuple(0, Outcome::Tied),
+        std::make_tuple(1, Outcome::Tied),
+        std::make_tuple(2, Outcome::Tied),
+        std::make_tuple(3, Outcome::HomeWin),
+        std::make_tuple(4, Outcome::AwayWin),
+        std::make_tuple(5, Outcome::HomeWin),
+		std::make_tuple(6, Outcome::AwayWin),
+		std::make_tuple(7, Outcome::Tied),
+		std::make_tuple(8, Outcome::HomeWin),
+		std::make_tuple(9, Outcome::AwayWin),
+		std::make_tuple(10, Outcome::AwayWin)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetectTiebreakPlayed,
+    PlayedTiebreakTest,
+    ::testing::Values(
+        std::make_tuple(0, false),
+        std::make_tuple(1, false),
+        std::make_tuple(2, true),
+        std::make_tuple(3, false),
+        std::make_tuple(4, false),
+        std::make_tuple(5, true),
+		std::make_tuple(6, true),
+		std::make_tuple(7, false),
+		std::make_tuple(8, true),
+		std::make_tuple(9, true),
+		std::make_tuple(10, true)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetectInvalidSets,
+    InvalidSetTest,
+    ::testing::Values(
+        std::make_tuple(0, true),
+        std::make_tuple(1, true),
+        std::make_tuple(2, false),
+        std::make_tuple(3, true),
+        std::make_tuple(4, true),
+        std::make_tuple(5, true),
+		std::make_tuple(6, true),
+		std::make_tuple(7, false),
+		std::make_tuple(8, false),
+		std::make_tuple(9, false),
+		std::make_tuple(10, false)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    SetToString,
+    SetToStringTest,
+    ::testing::Values(
+        std::make_tuple(0, "0-0"),
+        std::make_tuple(1, "0-0"),
+        std::make_tuple(2, "0-0(7-3)"),
+        std::make_tuple(3, "6-3"),
+        std::make_tuple(4, "2-6"),
+        std::make_tuple(5, "7-6(7-4)"),
+		std::make_tuple(6, "6-7(0-7)"),
+		std::make_tuple(7, "1-1"),
+		std::make_tuple(8, "7-6(5-7)"),
+		std::make_tuple(9, "6-7(2-2)"),
+		std::make_tuple(10, "6-7(7-2)")
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    SetFromString,
+    SetFromStringTest,
+    ::testing::Values(
+        std::make_tuple(0, "0-0"),
+        std::make_tuple(1, "0-0"),
+        std::make_tuple(2, "0-0(7-3)"),
+        std::make_tuple(3, "6-3"),
+        std::make_tuple(4, "2-6"),
+        std::make_tuple(5, "7-6(7-4)"),
+		std::make_tuple(6, "6-7(0-7)"),
+		std::make_tuple(7, "1-1"),
+		std::make_tuple(8, "7-6(5-7)"),
+		std::make_tuple(9, "6-7(2-2)"),
+		std::make_tuple(10, "6-7(7-2)")
+    )
+);
