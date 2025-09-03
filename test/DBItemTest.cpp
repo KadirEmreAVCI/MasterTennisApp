@@ -4,25 +4,25 @@ TEST_F(DBItemTest, DeleteMatchFromDB)
 {
     EXPECT_CALL(*m_spMockDatabase, DeleteItem("Match", "ID", "1")).Times(1).WillOnce(testing::Return(true));
     
-    m_Match.DeleteFromDB();
+    EXPECT_TRUE(m_Match.DeleteFromDB());
 }
 TEST_F(DBItemTest, DeleteTournamentFromDB)
 {
     EXPECT_CALL(*m_spMockDatabase, DeleteItem("Tournament", "ID", "7")).Times(1).WillOnce(testing::Return(true));
     
-    m_Tournament.DeleteFromDB();
+    EXPECT_TRUE(m_Tournament.DeleteFromDB());
 }
 TEST_F(DBItemTest, DeleteOrganizationFromDB)
 {
     EXPECT_CALL(*m_spMockDatabase, DeleteItem("Organization", "ID", "3")).Times(1).WillOnce(testing::Return(true));
     
-    m_Organization.DeleteFromDB();
+    EXPECT_TRUE(m_Organization.DeleteFromDB());
 }
 TEST_F(DBItemTest, DeleteProfileFromDB)
 {
     EXPECT_CALL(*m_spMockDatabase, DeleteItem("Profile", "ID", "2")).Times(1).WillOnce(testing::Return(true));
     
-    m_Profile.DeleteFromDB();       
+    EXPECT_TRUE(m_Profile.DeleteFromDB());       
 }
 TEST_F(DBItemTest, DeserializingString)
 {
@@ -46,7 +46,7 @@ TEST_F(DBItemTest, EditMatchInDB)
     
     EXPECT_CALL(*m_spMockDatabase, EditItem("Match", testing::_, 1)).Times(1).WillOnce(testing::Return(true));
     
-    m_Match.EditInDB();
+    EXPECT_TRUE(m_Match.EditInDB());
 }
 TEST_F(DBItemTest, EditTournamentInDB)
 {
@@ -54,7 +54,7 @@ TEST_F(DBItemTest, EditTournamentInDB)
     
     EXPECT_CALL(*m_spMockDatabase, EditItem("Tournament", testing::_, 7)).Times(1).WillOnce(testing::Return(true));
     
-    m_Tournament.EditInDB();
+    EXPECT_TRUE(m_Tournament.EditInDB());
 }
 TEST_F(DBItemTest, EditOrganizationInDB)
 {
@@ -63,7 +63,7 @@ TEST_F(DBItemTest, EditOrganizationInDB)
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
     EXPECT_CALL(*m_spMockDatabase, EditItem("Organization", testing::_, 3)).Times(1).WillOnce(testing::Return(true));
     
-    m_Organization.EditInDB();
+    EXPECT_TRUE(m_Organization.EditInDB());
 }
 TEST_F(DBItemTest, EditProfileInDB)
 {
@@ -72,7 +72,7 @@ TEST_F(DBItemTest, EditProfileInDB)
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "PPAddress", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
     EXPECT_CALL(*m_spMockDatabase, EditItem("Profile", testing::_, 2)).Times(1).WillOnce(testing::Return(true));
     
-    m_Profile.EditInDB();
+    EXPECT_TRUE(m_Profile.EditInDB());
 }
 TEST_F(DBItemTest, LoadMatchFromDB)
 {
