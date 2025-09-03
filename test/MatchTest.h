@@ -38,4 +38,32 @@ protected:
 	std::vector<Match> m_vecMatch;
 };
 
+class MatchOutcomeTest : public MatchTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
+TEST_P(MatchOutcomeTest, DetermineMatchOutcomes)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecMatch[idx].GetOutcome(), expected);
+}
+
+class UpcomingMatchTest : public MatchTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(UpcomingMatchTest, DetectUpcomingMatches)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecMatch[idx].IsUpcomingMatch(), expected);
+}
+
+class InvalidMatchTest : public MatchTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(InvalidMatchTest, DetectInvalidMatches)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecMatch[idx].IsValid(), expected);
+}
+
+class MatchScoreTest : public MatchTest, public ::testing::WithParamInterface<std::tuple<size_t, Score>> {};
+TEST_P(MatchScoreTest, CheckMatchScores)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecMatch[idx].GetScore(), expected);
+}
+
 #endif
