@@ -1,8 +1,8 @@
 #include "SetTest.h"
 
 INSTANTIATE_TEST_SUITE_P(
-    DetermineOutcomes,
-    OutcomeTest,
+    DetermineSetOutcomes,
+    SetOutcomeTest,
     ::testing::Values(
         std::make_tuple(0, Outcome::Tied),
         std::make_tuple(1, Outcome::Tied),

@@ -31,8 +31,8 @@ protected:
 	std::vector<Set> m_vecSet;
 };
 
-class OutcomeTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
-TEST_P(OutcomeTest, DetermineOutcomes)
+class SetOutcomeTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
+TEST_P(SetOutcomeTest, DetermineSetOutcomes)
 {
 	auto [idx, expected] = GetParam();
 	EXPECT_EQ(m_vecSet[idx].GetOutcome(), expected);

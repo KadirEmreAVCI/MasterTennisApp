@@ -25,4 +25,47 @@ protected:
 	std::vector<Score> m_vecScore;
 };
 
+class ScoreOutcomeTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
+TEST_P(ScoreOutcomeTest, DetermineScoreOutcomes)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].GetOutcome(), expected);
+}
+
+class HomeScoreTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(HomeScoreTest, DetermineHomeScores)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].GetHomeScore(), expected);
+}
+
+class AwayScoreTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(AwayScoreTest, DetermineAwayScores)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].GetAwayScore(), expected);
+}
+
+class ScoreToStringTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(ScoreToStringTest, ScoreToString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].ToString(), expected);
+}
+
+class ScoreFromStringTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(ScoreFromStringTest, ScoreFromString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx], Score::FromString(expected));
+}
+
+class EqualityTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, Score, bool>> {};
+TEST_P(EqualityTest, DetectEqualities)
+{
+	auto [idx, comparedScore, expected] = GetParam();
+	std::cout << "comparedScore = " << comparedScore << ", m_vecScore[idx] = " << m_vecScore[idx] << "\n";
+	EXPECT_EQ((m_vecScore[idx] == comparedScore), expected);
+}
+
 #endif

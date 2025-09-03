@@ -1,53 +1,69 @@
 #include "ScoreTest.h"
 #include <algorithm>
 
-TEST_F(ScoreTest, GetOutcomesCorrectly)
-{
-	using enum Outcome;
-	const std::vector vecTestOutput{ Tied, Tied, HomeWin, HomeWin, AwayWin };
-	for (std::size_t idx = 0; idx < m_vecScore.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecScore[idx].GetOutcome(), vecTestOutput[idx]);
-	}
-}
-TEST_F(ScoreTest, GetHomeScoreCorrectly)
-{
-	const std::vector vecTestOutput{ 0, 1, 2, 2, 1};
-	for (std::size_t idx = 0; idx < m_vecScore.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecScore[idx].GetHomeScore(), vecTestOutput[idx]);
-	}
-}
-TEST_F(ScoreTest, GetAwayScoreCorrectly)
-{
-	const std::vector vecTestOutput{ 0, 1, 1, 0, 5 };
-	for (std::size_t idx = 0; idx < m_vecScore.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecScore[idx].GetAwayScore(), vecTestOutput[idx]);
-	}
-}
-TEST_F(ScoreTest, ScoreToString)
-{
-	const std::vector vecTestOutput{ "0-0", "1-1", "2-1", "2-0", "1-5" };
-	for (std::size_t idx = 0; idx < m_vecScore.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecScore[idx].ToString(), vecTestOutput[idx]);
-	}
-}
-TEST_F(ScoreTest, ScoreFromString)
-{
-	const std::vector vecTestOutput{ "0-0", "1-1", "2-1", "2-0", "1-5" };
-	for (std::size_t idx = 0; idx < m_vecScore.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecScore[idx], Score::FromString(vecTestOutput[idx]));
-	}
-}
-TEST_F(ScoreTest, ScoreEquality)
-{
-	Score rComparedScore{2, 1};
-	const std::vector vecTestOutput{ false, false, true, false, false };
-	for (std::size_t idx = 0; idx < m_vecScore.size(); ++idx)
-	{
-		EXPECT_EQ((m_vecScore[idx] == rComparedScore), vecTestOutput[idx]);
-	}
-}
+INSTANTIATE_TEST_SUITE_P(
+    DetermineScoreOutcomes,
+    ScoreOutcomeTest,
+    ::testing::Values(
+        std::make_tuple(0, Outcome::Tied),
+        std::make_tuple(1, Outcome::Tied),
+        std::make_tuple(2, Outcome::HomeWin),
+        std::make_tuple(3, Outcome::HomeWin),
+        std::make_tuple(4, Outcome::AwayWin)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetermineHomeScores,
+    HomeScoreTest,
+    ::testing::Values(
+        std::make_tuple(0, 0),
+        std::make_tuple(1, 1),
+        std::make_tuple(2, 2),
+        std::make_tuple(3, 2),
+        std::make_tuple(4, 1)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetermineAwayScores,
+    AwayScoreTest,
+    ::testing::Values(
+        std::make_tuple(0, 0),
+        std::make_tuple(1, 1),
+        std::make_tuple(2, 1),
+        std::make_tuple(3, 0),
+        std::make_tuple(4, 5)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    ScoreToString,
+    ScoreToStringTest,
+    ::testing::Values(
+        std::make_tuple(0, "0-0"),
+        std::make_tuple(1, "1-1"),
+        std::make_tuple(2, "2-1"),
+        std::make_tuple(3, "2-0"),
+        std::make_tuple(4, "1-5")
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    ScoreFromString,
+    ScoreFromStringTest,
+    ::testing::Values(
+        std::make_tuple(0, "0-0"),
+        std::make_tuple(1, "1-1"),
+        std::make_tuple(2, "2-1"),
+        std::make_tuple(3, "2-0"),
+        std::make_tuple(4, "1-5")
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetectEqualities,
+    EqualityTest,
+    ::testing::Values(
+        std::make_tuple<unsigned, Score, bool>(0, Score(0, 0), true),
+        std::make_tuple<unsigned, Score, bool>(1, Score(1, 2), false),
+		std::make_tuple<unsigned, Score, bool>(2, Score(2, 1), true),
+		std::make_tuple<unsigned, Score, bool>(3, Score(2, 1), false),
+		std::make_tuple<unsigned, Score, bool>(4, Score(1, 3), false)
+    )
+);
