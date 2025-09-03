@@ -64,7 +64,6 @@ class EqualityTest : public ScoreTest, public ::testing::WithParamInterface<std:
 TEST_P(EqualityTest, DetectEqualities)
 {
 	auto [idx, comparedScore, expected] = GetParam();
-	std::cout << "comparedScore = " << comparedScore << ", m_vecScore[idx] = " << m_vecScore[idx] << "\n";
 	EXPECT_EQ((m_vecScore[idx] == comparedScore), expected);
 }
 
