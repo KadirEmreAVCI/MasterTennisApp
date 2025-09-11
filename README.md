@@ -106,6 +106,8 @@ Browse past tournaments, view all match records for tournaments you participate 
 
 ![Search Tournament Features](docs/screenshots/search_tournament_features.png)
 
+![Match Records](docs/screenshots/match_records.png)
+
 ### Profile Switching
 
 Switch to other profiles directly from your profile screen without returning to the welcome screen.
