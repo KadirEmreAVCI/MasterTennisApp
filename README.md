@@ -143,7 +143,6 @@ MasterTennisApp/
 ## License
 
 This project is licensed under the MIT License.  
-**Update this section if you use a different license.**
 
 ---
 
