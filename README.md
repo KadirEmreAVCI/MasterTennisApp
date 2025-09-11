@@ -104,7 +104,7 @@ Browse past tournaments, view all match records for tournaments you participate 
 
 ![Tournament Records](docs/screenshots/tournament_records.png)
 
-![Search Tournament Features](docs/screenshots/tournament_records.png)
+![Search Tournament Features](docs/screenshots/search_tournament_features.png)
 
 ### Profile Switching
 
