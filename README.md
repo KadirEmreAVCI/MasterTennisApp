@@ -63,14 +63,10 @@ To get a local copy up and running, follow these steps:
 
 ## Usage
 
-Below are guides for key screens and workflows.  
-**You can insert relevant screenshots under each section to give users a visual reference.**  
-Place your screenshots (e.g., PNG/JPG files) in a directory such as `docs/screenshots/` and reference them in the README like shown below.
-
 ### Welcome Screen
 
-Choose **Profiles** to create, edit, or delete player profiles, and to log in to a selected profile.  
-Choose **Manage** to add, edit, or delete organizations. Note that organizations are shared across all profiles.
+Click **Start** button to create, edit, or delete player profiles, and to log in to a selected profile.  
+Click **Manage** button to add, edit, or delete organizations. Note that organizations are shared across all profiles.
 
 ![Welcome Screen](docs/screenshots/welcome_screen.png)
 
