@@ -133,6 +133,7 @@ MasterTennisApp/
     utility/            # Helper functions for custom Qt components and STL
   database/             # Application database file
   extern/               # External dependencies (e.g., Googletest repository)
+	googletest/
   test/                 # Unit test code for business logic
   docs/
 	screenshots/        # Screenshots of the application
