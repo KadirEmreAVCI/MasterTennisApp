@@ -1,4 +1,4 @@
-# MasterTennisApp
+# Master Tennis App
 
 MasterTennisApp is a dedicated **desktop application** designed exclusively for tennis players.  
 Multiple users can use the same application by creating their own profiles, making it ideal for shared environments or family computers.  
