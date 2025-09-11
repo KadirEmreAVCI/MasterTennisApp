@@ -131,10 +131,11 @@ MasterTennisApp/
   database/             # Application database files (.db extension only)
   extern/               # External dependencies (e.g., Googletest repository)
   test/                 # Unit test code for business logic
+  docs/
+	screenshots/        # Screenshots of the application
   README.md             # Project README file
   CMakeLists.txt        # Main CMake project configuration
   .gitignore            # Git ignore rules for files and directories
-  ...                   # Other files and folders as needed
 ```
 
 ---
