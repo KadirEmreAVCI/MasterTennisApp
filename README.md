@@ -121,14 +121,17 @@ Switch to other profiles directly from your profile screen without returning to 
 
 ```
 MasterTennisApp/
+  .github
+    workflows/
+	  ci-windows.yml	# Sets up a Continuous Integration (CI) process on GitHub
   src/
-    app/                # Main application logic, UI code, and resource files
+    app/                # Core application logic, UI code related to Qt, and resource files
       resource/         # UI resource files, including:
         profiles/       # Images for user profiles
         organizations/  # Images for organizations
     business_logic/     # Core business logic (independent of Qt components)
     utility/            # Helper functions for custom Qt components and STL
-  database/             # Application database files (.db extension only)
+  database/             # Application database file
   extern/               # External dependencies (e.g., Googletest repository)
   test/                 # Unit test code for business logic
   docs/
