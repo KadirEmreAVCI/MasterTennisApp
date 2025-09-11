@@ -7,6 +7,7 @@
 #include "HistoryPage.h"
 #include "ProfileDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 ProfileDialog::ProfileDialog(QWidget* parent)
 	: QDialog(parent)
@@ -15,20 +16,15 @@ ProfileDialog::ProfileDialog(QWidget* parent)
 	QObject::connect(&AppController::instance(), &AppController::InitProfiles, this, &ProfileDialog::UpdateProfileAlternatives);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInProfiles, this, &ProfileDialog::UpdateProfileAlternatives);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &ProfileDialog::UserLoggedIn);
-	InitCustomComponents();
-}
-
-ProfileDialog::~ProfileDialog()
-{}
-
-void ProfileDialog::InitCustomComponents()
-{
 	CreateTabWidget();
 	setFixedSize(1150, 800);
 	ui.labelPP->setFixedSize(30, 30);
 	ui.comboBoxProfiles->setFixedWidth(150);
 	setWindowTitle(QString::fromStdString(AppController::instance().GetAppName()));
 }
+
+ProfileDialog::~ProfileDialog()
+{}
 void ProfileDialog::CreateTabWidget()
 {
 	while (ui.tabWidget->count() > 0) 
@@ -37,26 +33,7 @@ void ProfileDialog::CreateTabWidget()
 	}
 	ui.tabWidget->addTab(new HomePage(), QString("Home"));
 	ui.tabWidget->addTab(new AchievementsPage(), QString("Achievements"));
-	ui.tabWidget->addTab(new HistoryPage(), QString("Tournament History"));
-}
-void ProfileDialog::UpdateProfileName()
-{
-	const auto& iterActiveProfile = std::find(m_vecProfile.cbegin(), m_vecProfile.cend(), m_ActiveProfile);
-	if (iterActiveProfile != m_vecProfile.end())
-	{
-		InitComboBox(ui.comboBoxProfiles, QString::fromStdString(iterActiveProfile->GetFullName()));
-	}
-}
-void ProfileDialog::UpdatePP()
-{
-	const auto& iterActiveProfile = std::find(m_vecProfile.cbegin(), m_vecProfile.cend(), m_ActiveProfile);
-	if (iterActiveProfile != m_vecProfile.end())
-	{
-		const std::string sPPAddr = (m_ActiveProfile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_ActiveProfile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString();
-		QPixmap pix{ QString::fromStdString(sPPAddr) };
-		ui.labelPP->setPixmap(pix.scaled(ui.labelPP->height(), ui.labelPP->width()));
-		ui.labelPP->setAlignment(Qt::AlignCenter);
-	}
+	ui.tabWidget->addTab(new HistoryPage(), QString("History"));
 }
 void ProfileDialog::UpdateProfileAlternatives(const std::vector<Profile>& vecProfiles)
 {
@@ -69,7 +46,7 @@ void ProfileDialog::UpdateProfileAlternatives(const std::vector<Profile>& vecPro
 			});
 		if (!vecProfileNames.empty())
 		{
-			SetComboBoxAlternatives(ui.comboBoxProfiles, vecProfileNames, false);
+			utility::SetComboBoxAlternatives(ui.comboBoxProfiles, vecProfileNames, false);
 		}
 	}
 }
@@ -77,8 +54,8 @@ void ProfileDialog::UserLoggedIn(const Profile& p)
 {
 	m_ActiveProfile = p; 
 	ui.tabWidget->setCurrentIndex(0);
-	UpdateProfileName();
-	UpdatePP();
+	utility::InitComboBox(ui.comboBoxProfiles, QString::fromStdString(m_ActiveProfile.GetFullName()));
+	utility::InitLabelWithPicture(ui.labelPP, (m_ActiveProfile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_ActiveProfile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString());
 }
 void ProfileDialog::on_LogOutButton_clicked()
 {
@@ -86,14 +63,14 @@ void ProfileDialog::on_LogOutButton_clicked()
 	if (reply == QMessageBox::Yes)
 	{
 		AppController::instance().OnLogOutButtonClicked();
-		m_ActiveProfile = {};
+		m_ActiveProfile = Profile{};
 	}
 }
 void ProfileDialog::on_comboBoxProfiles_currentTextChanged(const QString& sProfileName)
 {
 	if (m_ActiveProfile.GetFullName() != "" && sProfileName.toStdString() != m_ActiveProfile.GetFullName())
 	{
-		UpdateProfileName();
+		utility::InitComboBox(ui.comboBoxProfiles, QString::fromStdString(m_ActiveProfile.GetFullName()));
 		QMessageBox::StandardButton reply = QMessageBox::question(this, "Profile Switch", "Are you sure you want to switch the profile?", QMessageBox::Yes | QMessageBox::No);
 		if (reply == QMessageBox::Yes)
 		{

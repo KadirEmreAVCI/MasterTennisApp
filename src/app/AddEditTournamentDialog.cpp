@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include "AddEditTournamentDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditTournamentDialog::AddEditTournamentDialog(QWidget *parent)
 	: QDialog(parent)
@@ -15,14 +16,6 @@ AddEditTournamentDialog::AddEditTournamentDialog(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &AddEditTournamentDialog::UpdateActiveProfileData);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);
-	InitCustomComponents();
-}
-
-AddEditTournamentDialog::~AddEditTournamentDialog()
-{}
-
-void AddEditTournamentDialog::InitCustomComponents()
-{
 	ClearDialog();
 	setFixedHeight(250);
 	const unsigned int uiFixedWidth = 120;
@@ -33,8 +26,12 @@ void AddEditTournamentDialog::InitCustomComponents()
 	ui.spinBox_Participant->setFixedWidth(uiFixedWidth);
 	ui.comboBox_SetsBestOf->setFixedWidth(uiFixedWidth);
 }
+
+AddEditTournamentDialog::~AddEditTournamentDialog()
+{}
 void AddEditTournamentDialog::ClearDialog()
 {
+	using namespace utility;
 	m_sOrgName = "";
 	m_sCategory = "";
 	m_sSeason = "";
@@ -106,6 +103,7 @@ bool AddEditTournamentDialog::IsMaxParticipantExceeded(unsigned uiParticipant)co
 
 void AddEditTournamentDialog::FillDialog()
 {
+	using namespace utility;
 	m_sOrgName = QString::fromStdString(m_EditedTournament.GetOrgName());
 	InitComboBox(ui.comboBox_OrganizationName, m_sOrgName);
 	m_sCategory = QString::fromStdString(m_EditedTournament.GetCategory());
@@ -174,7 +172,7 @@ void AddEditTournamentDialog::InitSetsBestOfComboBox(unsigned uiSetsBestOf)
 	else
 		std::cout << "AddEditTournamentDialog::InitSetsBestOfComboBox Unknown SetsBestOf!\n";
 	
-	InitComboBox(ui.comboBox_SetsBestOf, sSetsBestOf);
+	utility::InitComboBox(ui.comboBox_SetsBestOf, sSetsBestOf);
 }
 
 bool AddEditTournamentDialog::IsDoubleTournament()const
@@ -284,7 +282,7 @@ void AddEditTournamentDialog::on_comboBox_OrganizationName_currentTextChanged(co
 		if (iterOrg != m_vecOrganization.end())
 		{
 			m_uiOrgID = iterOrg->GetID();
-			SetComboBoxAlternatives(ui.comboBox_Category, iterOrg->GetCategories());
+			utility::SetComboBoxAlternatives(ui.comboBox_Category, iterOrg->GetCategories());
 		}
 		else
 		{
@@ -313,10 +311,10 @@ void AddEditTournamentDialog::UpdateOrganizations(const std::vector<Organization
 	{
 		vecOrgOptions.insert(vecOrgOptions.cend(), org.GetName());
 	}
-	SetComboBoxAlternatives(ui.comboBox_OrganizationName, vecOrgOptions);
+	utility::SetComboBoxAlternatives(ui.comboBox_OrganizationName, vecOrgOptions);
 }
 void AddEditTournamentDialog::UpdateActiveProfileData(const Profile& p)
 {
 	m_ActiveProfile = p;
-	SetComboBoxAlternatives(ui.comboBox_Type, (m_ActiveProfile.GetGender() == Gender::Male) ? std::vector<std::string>{"Single Men", "Double Men", "Double Mixed"} : std::vector<std::string>{ "Single Women", "Double Women", "Double Mixed" });
+	utility::SetComboBoxAlternatives(ui.comboBox_Type, (m_ActiveProfile.GetGender() == Gender::Male) ? std::vector<std::string>{"Single Men", "Double Men", "Double Mixed"} : std::vector<std::string>{ "Single Women", "Double Women", "Double Mixed" });
 }

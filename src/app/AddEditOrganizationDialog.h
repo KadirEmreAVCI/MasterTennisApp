@@ -3,26 +3,23 @@
 
 #include <QDialog>
 #include "ui_AddEditOrganizationDialog.h"
-#include "IQTComponent.h"
 #include "AddEditDialog.h"
 #include "Organization.h"
 
-class AddEditOrganizationDialog : public QDialog, public IQTComponent, public AddEditDialog
+class AddEditOrganizationDialog : public QDialog, public AddEditDialog
 {
 	Q_OBJECT
 
 public:
 	AddEditOrganizationDialog(QWidget *parent = nullptr);
 	~AddEditOrganizationDialog();
-	void PrepareDialog(DialogMode mode, const Organization& org = {});
+	void PrepareDialog(DialogMode mode, const Organization& org = Organization{});
 private:
-	void InitCustomComponents() override final;
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
 	virtual void ClearDialog()override;
 	virtual bool IsMandatoryFieldsFilled()const override;
 	virtual bool IsThereAnyUnsavedInfo()const override;
-	std::string Serialize(const std::vector<std::string>& vecDeserialized)const;
 	void ClearCategoryCheckboxes();
 	Ui::AddEditOrganizationDialogClass ui;
 	Organization m_EditedOrganization;

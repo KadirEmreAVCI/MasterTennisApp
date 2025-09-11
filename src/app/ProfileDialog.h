@@ -4,24 +4,19 @@
 #include <memory>
 #include <QDialog>
 #include <QToolBar>
-#include "IQTComponent.h"
 #include "ui_ProfileDialog.h"
 #include "Profile.h"
 
 class QTabWidget;
 class QVBoxLayout;
-class ProfileDialog : public QDialog, public IQTComponent
-{
+class ProfileDialog : public QDialog{
 	Q_OBJECT
 
 public:
 	ProfileDialog(QWidget* parent = nullptr);
 	~ProfileDialog();
 private:
-	void InitCustomComponents() override final;
 	void CreateTabWidget();
-	void UpdateProfileName();
-	void UpdatePP();
 	void UserLoggedIn(const Profile&);
 	void UpdateProfileAlternatives(const std::vector<Profile>&);
 	Ui::ProfileDialogClass ui;

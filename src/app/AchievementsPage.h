@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include "ui_AchievementsPage.h"
-#include "IQTComponent.h"
 #include "StatController.h"
 struct WinLoseLabels {
 	WinLoseLabels() = default;
@@ -13,14 +12,12 @@ struct WinLoseLabels {
 	QLabel* m_lblLose = nullptr;
 	QLabel* m_lblWinRate = nullptr;
 };
-class AchievementsPage : public QWidget, public IQTComponent
-{
+class AchievementsPage : public QWidget{
 	Q_OBJECT
 
 public:
 	AchievementsPage(QWidget *parent = nullptr);
 	~AchievementsPage();
-	void InitCustomComponents() override final;
 private:
 	void InitStatIcons();
 	void InitWinLoseLabels();

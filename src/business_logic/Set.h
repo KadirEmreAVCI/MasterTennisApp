@@ -28,6 +28,9 @@ public:
 		return os;
 	}
 private:
+	bool IsUninitialized()const;
+	bool IsSetScoreEqual()const;
+	bool IsOutcomeValid()const;
 	Score m_MajorScore = Score(0,0);
 	std::optional<Score> m_optTBScore = Score(0,0);
 };

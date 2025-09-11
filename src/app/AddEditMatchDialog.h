@@ -3,21 +3,19 @@
 
 #include <QDialog>
 #include "ui_AddEditMatchDialog.h"
-#include "IQTComponent.h"
 #include "AddEditDialog.h"
 #include "Tournament.h"
 #include "Match.h"
 #include "Set.h"
 class Calendar;
-class AddEditMatchDialog : public QDialog, public IQTComponent, public AddEditDialog
+class AddEditMatchDialog : public QDialog, public AddEditDialog
 {
 	Q_OBJECT
 
 public:
 	AddEditMatchDialog(QWidget *parent = nullptr);
 	~AddEditMatchDialog();
-	void InitCustomComponents() override final;
-	void PrepareDialog(DialogMode, const Tournament& t, const Match& m = {});
+	void PrepareDialog(DialogMode, const Tournament& t, const Match& m = Match{});
 private:
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
@@ -26,8 +24,8 @@ private:
 	virtual bool IsThereAnyUnsavedInfo()const override;
 	void FillSets();
 	void InitSetList(Set s, bool blEnabled = true);
-	void InsertSet(size_t idx, Set set);
-	void RemoveSet(size_t idx);
+	bool InsertSet(size_t idx, Set set);
+	bool RemoveSet();
 	void SetEnableOpponent(bool);
 	std::vector<Set> GetSets()const;
 	void SetEnableSetList(bool blEnabled);

@@ -4,25 +4,22 @@
 #include "AddEditMatchDialog.h"
 #include "MatchesDialog.h"
 #include "Config.h"
+#include "Utility.h"
 
 MatchesDialog::MatchesDialog(QWidget *parent)
-	: QDialog(parent)
+	: 
+	QDialog(parent),
+	TableWidgetUser{{ " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" }}
 {
 	ui.setupUi(this);
 	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &MatchesDialog::UpdateActiveProfileData);
-	InitCustomComponents();
+	setFixedSize(750, 600);
+	InitTable(ui.tableWidget);
 }
 MatchesDialog::~MatchesDialog()
 {
 
-}
-void MatchesDialog::InitCustomComponents()
-{
-	m_vecColumnNames = { " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" };
-	FillColumnNamesOfTable(ui.tableWidget);
-	MakeColumnHeaderBold(ui.tableWidget);
-	setFixedSize(750, 600);
 }
 void MatchesDialog::FillTable()
 {
@@ -30,7 +27,7 @@ void MatchesDialog::FillTable()
 	for (const auto& m : m_vecMatch)
 	{
 		ui.tableWidget->insertRow(uiRowIdx);
-		InsertMatch2Table(m, uiRowIdx);
+		PlaceMatch2Table(m, uiRowIdx);
 		++uiRowIdx;
 	}
 	ui.tableWidget->resizeRowsToContents();
@@ -65,20 +62,21 @@ void MatchesDialog::DisplayMatches(const Tournament& rootTournament)
 	}
 	LoadDataToTable();
 }
-void MatchesDialog::InsertMatch2Table(const Match& m, unsigned uiRowIdx)
+void MatchesDialog::PlaceMatch2Table(const Match& m, unsigned uiRowIdx)
 {
+	using namespace utility;
 	unsigned uiColumnIdx{};
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetStatu()), uiRowIdx, uiColumnIdx++);
-	InsertOutcomePic(m, uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetStage()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetScore().ToString()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.SetsToString()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetOpponent1()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
-	InsertValue2Cell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(g_cpDeleteButtonPNG, 0.4f, &MatchesDialog::DeleteMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
-	InsertButtonWithImage2Cell(g_cpEditButtonPNG, 0.4f, &MatchesDialog::EditMatch, (m_RootTournament.IsLocked()) ? false : true, uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStatu()), uiRowIdx, uiColumnIdx++);
+	PlaceLabel2TableCellWithImage(ui.tableWidget, m.GetOutcomePic(), 0.04f, uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetStage()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetScore().ToString()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.SetsToString()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent1()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(m.GetOpponent2()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, m.GetDate().toString("dd.MM.yyyy"), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::DeleteMatch);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::EditMatch);
 }
 void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 {
@@ -108,7 +106,7 @@ std::vector<Tournament> MatchesDialog::ConcatanateTournaments()const
 }
 void MatchesDialog::LoadDataToTable()
 {
-	ClearTable(ui.tableWidget);
+	ClearTable();
 	FillTable();
 	if (m_RootTournament.IsLocked())
 	{
@@ -119,49 +117,9 @@ void MatchesDialog::LoadDataToTable()
 		ui.NewMatchButton->setEnabled(true);
 	}
 }
-void MatchesDialog::InsertOutcomePic(const Match& m, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	if (m.GetOutcome() == Outcome::HomeWin)
-	{
-		InsertPic2Cell(ui.tableWidget, ":images/win2.png", 0.04f, uiRowIdx, uiColumnIdx);
-	}
-	else if (m.GetOutcome() == Outcome::AwayWin)
-	{
-		InsertPic2Cell(ui.tableWidget, ":images/lose2.png", 0.04f, uiRowIdx, uiColumnIdx);
-	}
-	else if(m.GetOutcome() == Outcome::Tied && m.IsUpcomingMatch())
-	{
-		InsertPic2Cell(ui.tableWidget, ":images/hourglass.png", 0.04f, uiRowIdx, uiColumnIdx);
-	}
-	else
-	{
-		InsertPic2Cell(ui.tableWidget, ":images/Warning.png", 0.04f, uiRowIdx, uiColumnIdx);
-	}
-}
-void MatchesDialog::InsertButtonWithImage2Cell(const std::string& sImageAddr, float fScale, auto func, bool blEnabled, unsigned uiRowIdx, unsigned uiColumnIdx)
-{
-	QWidget* pWidget = new QWidget();
-	QPushButton* pBtn = new QPushButton;
-	InitButtonWithPicture(pBtn, sImageAddr, fScale);
-	connect(pBtn, &QPushButton::clicked, this, func);
-	pBtn->setEnabled(blEnabled);
-	QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
-	pLayout->addWidget(pBtn);
-	pLayout->setAlignment(Qt::AlignCenter);
-	pLayout->setContentsMargins(0, 0, 0, 0);
-	pWidget->setLayout(pLayout);
-	ui.tableWidget->setCellWidget(uiRowIdx, uiColumnIdx, pWidget);
-}
 Match MatchesDialog::FindSignalingMatch()const
 {
-	Match SignalingMatch;
-	QWidget* w = qobject_cast<QWidget*>(sender()->parent());
-	if (w)
-	{
-		const unsigned int uiSignalingRow = ui.tableWidget->indexAt(w->pos()).row();
-		SignalingMatch = m_vecMatch[uiSignalingRow];
-	}
-	return SignalingMatch;
+	return m_vecMatch[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
 }
 void MatchesDialog::EditMatch()
 {

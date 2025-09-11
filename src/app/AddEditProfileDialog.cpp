@@ -2,22 +2,18 @@
 #include <QFileDialog>
 #include "AddEditProfileDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	InitCustomComponents();
+	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
+	InitDialog();
 }
 
 AddEditProfileDialog::~AddEditProfileDialog()
 {}
-
-void AddEditProfileDialog::InitCustomComponents()
-{
-	InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
-	InitDialog();
-}
 void AddEditProfileDialog::PrepareDialog(DialogMode mode, const Profile& p)
 {
 	SetDialogMode(mode);
@@ -70,14 +66,11 @@ void AddEditProfileDialog::ClearDialog()
 }
 bool AddEditProfileDialog::IsMandatoryFieldsFilled()const
 {
-	return ui.lineEdit_NameSurname->text() != "" 
-		&& (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked());
+	return ui.lineEdit_NameSurname->text() != "" && (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked());
 }
 bool AddEditProfileDialog::IsThereAnyUnsavedInfo()const
 {
-	return ui.lineEdit_NameSurname->text() != "" 
-		|| (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked()) 
-		|| ui.lineEdit_PPAddr->text() != "";
+	return ui.lineEdit_NameSurname->text() != "" || (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked()) || ui.lineEdit_PPAddr->text() != "";
 }
 void AddEditProfileDialog::on_BrowseButton_clicked()
 {

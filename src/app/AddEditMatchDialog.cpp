@@ -5,18 +5,12 @@
 #include "Calendar.h"
 #include "Match.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditMatchDialog::AddEditMatchDialog(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	InitCustomComponents();
-	QObject::connect(&*m_upCalendar, &Calendar::MatchDateSet, this, &AddEditMatchDialog::SetMatchDate);
-}
-AddEditMatchDialog::~AddEditMatchDialog()
-{}
-void AddEditMatchDialog::InitCustomComponents()
-{
 	m_upCalendar = std::make_unique<Calendar>(this);
 	const unsigned int uiFixedWidth = 120;
 	ui.comboBox_Statu->setFixedWidth(uiFixedWidth);
@@ -24,7 +18,10 @@ void AddEditMatchDialog::InitCustomComponents()
 	ui.lineEdit_Date->setFixedWidth(uiFixedWidth);
 	ui.timeEdit->setFixedWidth(uiFixedWidth);
 	ui.DateButton->setFixedWidth(30);
+	QObject::connect(&*m_upCalendar, &Calendar::MatchDateSet, this, &AddEditMatchDialog::SetMatchDate);
 }
+AddEditMatchDialog::~AddEditMatchDialog()
+{}
 void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, const Match& m)
 {
 	std::cout << "AddEditMatchDialog::PrepareDialog\n";
@@ -55,6 +52,7 @@ void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, con
 }
 void AddEditMatchDialog::InitDialog()
 {
+	using namespace utility;
 	ClearDialog();
 	InitButtonWithPicture(ui.DateButton, ":images/calendar.png", 0.8f);
 	InitButtonWithPicture(ui.AddSetButton, ":images/plus.png", 0.8f);
@@ -62,17 +60,14 @@ void AddEditMatchDialog::InitDialog()
 	SetComboBoxAlternatives(ui.comboBox_Statu, m_vecStatuAlternatives);
 	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetPossibleStages());
 	ui.lineEdit__Opponent1->setEnabled(true);
-	if (m_RootTournament.IsDoubleTournament())
-		ui.lineEdit__Opponent2->setEnabled(true);
-	else
-		ui.lineEdit__Opponent2->setEnabled(false);
+	ui.lineEdit__Opponent2->setEnabled(m_RootTournament.IsDoubleTournament());
 	SetMatchDate(QDate::currentDate());
 	ui.timeEdit->setTime(QTime(0, 0));
 	InitSetList(Set{}, true);
 }
 void AddEditMatchDialog::FillDialog()
 {
-	ui.comboBox_Statu->setCurrentIndex(1 + std::distance(m_vecStatuAlternatives.cbegin(), std::find(m_vecStatuAlternatives.cbegin(), m_vecStatuAlternatives.cend(), m_EditedMatch.GetStatu())));
+	utility::InitComboBox(ui.comboBox_Statu, QString::fromStdString(m_EditedMatch.GetStatu()));
 	if (m_EditedMatch.GetStatu() == "WO")
 	{
 		if (m_EditedMatch.GetOutcome() == Outcome::HomeWin)
@@ -84,8 +79,7 @@ void AddEditMatchDialog::FillDialog()
 			ui.radioButton_Lose->setChecked(true);
 		}
 	}
-	const auto& vecStage = m_RootTournament.GetPossibleStages();
-	ui.comboBox_Stage->setCurrentIndex(1 + std::distance(vecStage.cbegin(), std::find(vecStage.cbegin(), vecStage.cend(), m_EditedMatch.GetStage())));
+	utility::InitComboBox(ui.comboBox_Stage, QString::fromStdString(m_EditedMatch.GetStage()));
 	ui.lineEdit__Opponent1->setText(QString::fromStdString(m_EditedMatch.GetOpponent1()));
 	if (m_RootTournament.IsDoubleTournament())
 	{
@@ -101,7 +95,6 @@ void AddEditMatchDialog::FillSets()
 	ui.listWidget->clear();
 	for (const auto& s : m_EditedMatch.GetSets())
 	{
-		std::cout << "AddEditMatchDialog::InitDialogWithMatch set = " << s << "\n";
 		InsertSet(szSetIdx, s);
 	}
 	if (ui.comboBox_Statu->currentText() == "BYE")
@@ -121,8 +114,8 @@ void AddEditMatchDialog::InitSetList(Set s, bool blEnabled)
 }
 void AddEditMatchDialog::ClearDialog()
 {
-	InitComboBox(ui.comboBox_Statu);
-	InitComboBox(ui.comboBox_Stage);
+	utility::InitComboBox(ui.comboBox_Statu);
+	utility::InitComboBox(ui.comboBox_Stage);
 	ui.radioButton_Win->setAutoExclusive(false);
 	ui.radioButton_Lose->setAutoExclusive(false);
 	ui.radioButton_Win->setChecked(false);
@@ -136,25 +129,23 @@ void AddEditMatchDialog::ClearDialog()
 	SetEnableOpponent(true);
 	ui.listWidget->clear();
 }
-void AddEditMatchDialog::InsertSet(size_t idx, Set set)
+bool AddEditMatchDialog::InsertSet(size_t idx, Set set)
 {
 	if (ui.listWidget->count() < m_uiMaxSet)
 	{
-		auto item = new QListWidgetItem(ui.listWidget);
-		auto ssw = new SetScoreWidget(idx, set, this);
-		item->setSizeHint(QSize(ssw->width(), ssw->height()));
-		ui.listWidget->addItem(item);
-		ui.listWidget->setItemWidget(item, ssw);
+		utility::InsertItem2ListWidget(ui.listWidget, new SetScoreWidget(idx, set, this));
+		return true;
 	}
+	return false;
 }
-void AddEditMatchDialog::RemoveSet(size_t idx)
+bool AddEditMatchDialog::RemoveSet()
 {
-	if (ui.listWidget->count() > 0)
+	if (ui.listWidget->count() > m_uiMinSet)
 	{
-		QListWidgetItem* lastItem = ui.listWidget->item(idx);
-		ui.listWidget->removeItemWidget(lastItem);
-		delete lastItem;
+		utility::DeleteItemFromListWidget(ui.listWidget, ui.listWidget->count() - 1);
+		return true;
 	}
+	return false;
 }
 void AddEditMatchDialog::SetEnableOpponent(bool blEnabled)
 {
@@ -167,8 +158,7 @@ void AddEditMatchDialog::SetEnableOpponent(bool blEnabled)
 std::vector<Set> AddEditMatchDialog::GetSets()const
 {
 	std::vector<Set> vecSet;
-	size_t szSet = ui.listWidget->count();
-	for (size_t idx{}; idx < szSet; ++idx)
+	for (size_t idx{}; idx < ui.listWidget->count(); ++idx)
 	{
 		QWidget* widget = ui.listWidget->itemWidget(ui.listWidget->item(idx));
 		SetScoreWidget* ssw = qobject_cast<SetScoreWidget*>(widget);
@@ -210,35 +200,24 @@ void AddEditMatchDialog::SetMatchDate(const QDate& date)
 }
 void AddEditMatchDialog::on_AddSetButton_clicked()
 {
-	if (ui.listWidget->count() < m_uiMaxSet)
-	{
-		InsertSet(ui.listWidget->count(), Set{});
-	}
-	else
+	if (!InsertSet(ui.listWidget->count(), Set{}))
 	{
 		std::string sMessage = "You can not exceed maximum number of sets(" + std::to_string(m_RootTournament.GetSetsBestOf()) + ") in the tournament";
 		QMessageBox::warning(this, "Warning", QString::fromStdString(sMessage));
 	}
 }
-
 void AddEditMatchDialog::on_RemoveSetButton_clicked()
 {
-	if (ui.listWidget->count() > m_uiMinSet)
-	{
-		RemoveSet(ui.listWidget->count() - 1);
-	}
-	else
+	if (!RemoveSet())
 	{
 		QMessageBox::warning(this, "Warning", "Minimum number of sets already reached!");
 	}
 }
-
 void AddEditMatchDialog::on_DateButton_clicked()
 {
 	m_upCalendar->setModal(true);
 	m_upCalendar->exec();
 }
-
 void AddEditMatchDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
@@ -299,7 +278,6 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		QMessageBox::critical(this, "Error", "Please fill all the mandatory fields.");
 	}
 }
-
 void AddEditMatchDialog::on_ClearButton_clicked()
 {
 	if (IsThereAnyUnsavedInfo() && m_DialogMode != DialogMode::eEditDialog)
@@ -315,7 +293,6 @@ void AddEditMatchDialog::on_ClearButton_clicked()
 		InitDialog();
 	}
 }
-
 void AddEditMatchDialog::on_radioButton_Win_clicked()
 {
 	ui.listWidget->clear();
@@ -325,7 +302,6 @@ void AddEditMatchDialog::on_radioButton_Win_clicked()
 		InitSetList(Set(Score(6, 0)), false);
 	}
 }
-
 void AddEditMatchDialog::on_radioButton_Lose_clicked()
 {
 	ui.listWidget->clear();
@@ -335,7 +311,6 @@ void AddEditMatchDialog::on_radioButton_Lose_clicked()
 		InitSetList(Set(Score(0, 6)), false);
 	}
 }
-
 void AddEditMatchDialog::on_comboBox_Statu_currentTextChanged(const QString& statu)
 {
 	if (ui.comboBox_Statu->currentText() == "BYE" || ui.comboBox_Statu->currentText() == "WO")

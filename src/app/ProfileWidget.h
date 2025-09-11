@@ -4,23 +4,16 @@
 #include <QWidget>
 #include "ui_ProfileWidget.h"
 #include "Profile.h"
-#include "IQTComponent.h"
 #include "ProfileDialog.h"
 class AddEditProfileDialog;
-class ProfileWidget : public QWidget, public IQTComponent
-{
+class ProfileWidget : public QWidget{
 	Q_OBJECT
 
 public:
-	ProfileWidget(QWidget *parent = nullptr);
+	ProfileWidget(QWidget *parent = nullptr, const Profile& p = Profile{});
 	~ProfileWidget();
-	Profile GetProfile()const;
-	void SetProfile(const Profile& profile);
 private:
-	void InitCustomComponents() override final;
-	void FillWidget();
 	void FillProfileButton();
-	QLabel* CreatePPLabel()const;
 	void OpenEditDialog(const Profile& selectedProfile);
 	Ui::ProfileWidgetClass ui;
 	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };

@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include "AddEditOrganizationDialog.h"
 #include "AppController.h"
+#include "Utility.h"
 
 AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	: QDialog(parent)
@@ -15,16 +16,12 @@ AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_C);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_D);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_IlkTurnuvam);
-	InitCustomComponents();
+	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
+	InitDialog();
 }
 
 AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
-void AddEditOrganizationDialog::InitCustomComponents()
-{
-	InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
-	InitDialog();
-}
 void AddEditOrganizationDialog::PrepareDialog(DialogMode mode, const Organization& org)
 {
 	std::cout << "AddEditOrganizationDialog::PrepareDialog\n";
@@ -35,7 +32,7 @@ void AddEditOrganizationDialog::PrepareDialog(DialogMode mode, const Organizatio
 	case DialogMode::eAddDialog:
 	{
 		setWindowTitle("Add Organization");
-		m_EditedOrganization = {};
+		m_EditedOrganization = Organization{};
 		break;
 	}
 	case DialogMode::eEditDialog:
@@ -59,7 +56,7 @@ void AddEditOrganizationDialog::FillDialog()
 {
 	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedOrganization.GetName()));
 	ui.lineEdit_ImagePath->setText(QString::fromStdString(m_EditedOrganization.GetOrgPictureAddr()));
-	ui.lineEdit_Categories->setText(QString::fromStdString(Serialize(m_EditedOrganization.GetCategories())));
+	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedOrganization.GetCategories())));
 }
 void AddEditOrganizationDialog::ClearDialog()
 {
@@ -77,19 +74,6 @@ bool AddEditOrganizationDialog::IsMandatoryFieldsFilled()const
 bool AddEditOrganizationDialog::IsThereAnyUnsavedInfo()const
 {
 	return ui.lineEdit_OrganizationName->text() != "" || ui.lineEdit_Categories->text() != "";
-}
-std::string AddEditOrganizationDialog::Serialize(const std::vector<std::string>& vecDeserialized)const
-{
-	std::string sSerialized{};
-	for (const auto& str : vecDeserialized)
-	{
-		if (sSerialized != "")
-		{
-			sSerialized.append(", ");
-		}
-		sSerialized.append(str);
-	}
-	return sSerialized;
 }
 void AddEditOrganizationDialog::on_SaveButton_clicked()
 {
@@ -159,14 +143,14 @@ void AddEditOrganizationDialog::on_ApplyButton_clicked()
 			m_vecCategories.push_back(cb->text().toStdString());
 		}
 	}
-	ui.lineEdit_Categories->setText(QString::fromStdString(Serialize(m_vecCategories)));
+	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_vecCategories)));
 	ClearCategoryCheckboxes();
 }
 void AddEditOrganizationDialog::on_ClearButton_clicked()
 {
 	m_vecCategories.clear();
 	ClearCategoryCheckboxes();
-	ui.lineEdit_Categories->setText(QString::fromStdString(Serialize(m_vecCategories)));
+	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_vecCategories)));
 }
 void AddEditOrganizationDialog::ClearCategoryCheckboxes()
 {

@@ -3,29 +3,33 @@
 
 #include <string>
 #include <memory>
+#include <map>
 #include <QWidget>
 #include <QObject>
 #include "ui_HomePage.h"
-#include "IQTComponent.h"
 #include "Profile.h"
-class HomePage : public QWidget, public IQTComponent
-{
+
+class UpcomingMatch;
+class NoUpcomingMatch;
+class OrgParticipation;
+
+class HomePage : public QWidget{
 	Q_OBJECT
 
 public:
 	HomePage(QWidget *parent = nullptr);
 	~HomePage();
-	void InitCustomComponents() override final;
 private:
 	void UpcomingMatchStarted();
 	void UpdateUpcomingMatches();
 	std::vector<Match> FindUpcomingMatches()const;
 	std::vector<Match> FindStartedUpcomingMatches()const;
-	void StartedUpcomingMatchesDetected();
-	void InsertUpcomingMatch(const std::string& sOrgImageFile, const Tournament& t, const Match& m);
-	void InsertNoUpcomingMatch();
-	void DeleteUpcomingMatches();
+	void InsertUpcomingMatch(UpcomingMatch*);
+	void InsertNoUpcomingMatch(NoUpcomingMatch*);
 	void FillWithNoUpcomingMatches();
+	void UpdateTopParticipations();
+	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
+	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);
 	std::vector<Tournament> ConcatanateTournaments()const;
 	Tournament FindRootTournament(const Match& m)const;
 	void UserLoggedIn(const Profile& p);

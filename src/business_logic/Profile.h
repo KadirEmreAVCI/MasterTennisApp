@@ -12,7 +12,10 @@ enum class Gender
 };
 class Profile : public DBItem {
 public:
-	Profile(unsigned uiID = 0, const std::string& sFullName = "", const std::string& sPPAddr = "", Gender gen = Gender::Male);
+	explicit Profile(	unsigned uiID = 0, 
+						const std::string& sFullName = "", 
+						const std::string& sPPAddr = "", 
+						Gender gen = Gender::Male);
 	unsigned int GetID()const;
 	std::string GetFullName()const;
 	std::string GetPPAddr()const;

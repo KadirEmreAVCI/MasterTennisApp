@@ -11,18 +11,18 @@ class Organization;
 class Tournament : public DBItem {
 friend class TournamentTest;
 public:
-	Tournament(	unsigned uiID = 0, 
-				unsigned uiProfileID = 0, 
-				unsigned uiOrgID = 0, 
-				const std::string & sOrgName = "",
-				const std::string& sSeason = "", 
-				const std::string& sCategory = "", 
-				const std::string& sType = "", 
-				std::optional<std::string> soptTeammate = std::nullopt,
-				unsigned uiParticipant = 0, 
-				bool blIsLocked = false,
-				bool bl3rdPlaceGameAvailable = false, 
-				unsigned uiBestOfSets = 0);
+	explicit Tournament(	unsigned uiID = 0, 
+							unsigned uiProfileID = 0, 
+							unsigned uiOrgID = 0, 
+							const std::string & sOrgName = "",
+							const std::string& sSeason = "", 
+							const std::string& sCategory = "", 
+							const std::string& sType = "", 
+							std::optional<std::string> soptTeammate = std::nullopt,
+							unsigned uiParticipant = 0, 
+							bool blIsLocked = false,
+							bool bl3rdPlaceGameAvailable = false, 
+							unsigned uiBestOfSets = 0);
 	std::string GetName()const;
 	unsigned GetID()const;
 	unsigned GetProfileID()const;
@@ -37,6 +37,7 @@ public:
 	bool IsLocked()const;
 	void SetLocked(bool);
 	bool Get3rdPlaceGameAvailable()const;
+	std::string GetTrophyPic()const;
 	unsigned GetSetsBestOf()const;
 	std::vector<std::string> GetPossibleStages()const;
 	bool IsDoubleTournament()const;
@@ -47,6 +48,20 @@ public:
 	bool IsMatchValidForTournament(const Match&)const;
 	bool IsValid()const;
 	bool IsEarlier(const Tournament& other)const;
+	friend bool operator==(const Tournament& lhs, const Tournament& rhs)
+	{
+		return	lhs.m_uiID == rhs.m_uiID &&
+				lhs.m_uiProfileID == rhs.m_uiProfileID &&
+				lhs.m_uiOrgID == rhs.m_uiOrgID &&
+				lhs.m_sSeason == rhs.m_sSeason &&
+				lhs.m_sCategory == rhs.m_sCategory &&
+				lhs.m_sType == rhs.m_sType &&
+				lhs.m_soptTeammate == rhs.m_soptTeammate &&
+				lhs.m_uiParticipant == rhs.m_uiParticipant &&
+				lhs.m_blIsLocked == rhs.m_blIsLocked &&
+				lhs.m_bl3rdPlaceGameAvailable == rhs.m_bl3rdPlaceGameAvailable &&
+				lhs.m_uiBestOfSets == rhs.m_uiBestOfSets;
+	}
 	friend std::ostream& operator<<(std::ostream& os, const Tournament& t)
 	{
 		os << "\tID: " << t.m_uiID <<

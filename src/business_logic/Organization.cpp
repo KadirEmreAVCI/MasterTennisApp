@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <QFile>
 #include "Organization.h"
+#include "Utility.h"
+
 QString Organization::ms_sOrgImageRootDestDir = "";
 Organization::Organization(	unsigned uiID, 
 							const std::string& sName, 
@@ -51,8 +53,8 @@ bool Organization::InsertToDB()const
 	std::cout << "Organization::InsertToDB org = " << *this << "\n";
 	std::string sDBValues{ "'" + GetName() +
 							"','" + GetOrgPictureAddr() +
-							"','" + Serialize(m_vecCategories) + "'" };
-	return SQLiteDB::instance().InsertItem2Table(m_sDBTable, m_sDBColumns, sDBValues);
+							"','" + utility::Serialize(m_vecCategories) + "'" };
+	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);
 }
 bool Organization::EditInDB()const
 {
@@ -60,15 +62,14 @@ bool Organization::EditInDB()const
 	QMap<QString, QVariant> columnValues;
 	columnValues["Name"] = QString::fromStdString(m_sName);
 	columnValues["ImageFileName"] = QString::fromStdString(m_sOrgPictureAddr);
-	columnValues["Categories"] = QString::fromStdString(Serialize(m_vecCategories));
-	return SQLiteDB::instance().EditItemInTable(m_sDBTable, columnValues, m_uiID);
+	columnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
+	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
 }
 void Organization::LoadFromDB(unsigned ID)
 {
-	SQLiteDB& db = SQLiteDB::instance();
-	m_uiID = stoi(db.GetValue(m_sDBTable, "ID", ID));
-	m_sName = db.GetValueWithCond(m_sDBTable, "Name", "ID", std::to_string(m_uiID));
-	m_sOrgPictureAddr = db.GetValueWithCond(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
+	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
+	m_sName = m_spIDatabase->RetrieveValue(m_sDBTable, "Name", "ID", std::to_string(m_uiID));
+	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
 	m_vecCategories = DeserializeDBColumn("Categories");
 }
 bool Organization::DeleteFromDB()const
@@ -90,7 +91,7 @@ void Organization::SetOrgImageRootDestDir(const QString& sImageRootDestDir)
 }
 void Organization::DeletePreviousPP()const
 {
-	const std::string sPreviousPPAddr = SQLiteDB::instance().GetValueWithCond(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
+	const std::string sPreviousPPAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
 	if (sPreviousPPAddr != m_sOrgPictureAddr)
 	{
 		const QString sFullsPreviousPPAddr = GetOrgImageRootDestDir() + QString::fromStdString(sPreviousPPAddr);

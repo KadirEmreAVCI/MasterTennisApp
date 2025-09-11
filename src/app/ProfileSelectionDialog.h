@@ -14,7 +14,6 @@ public:
 	ProfileSelectionDialog(QWidget* parent = nullptr);
 	~ProfileSelectionDialog();
 private:
-	void InsertProfile(const Profile& profile);
 	void OpenAddDialog();
 	Ui::ProfileSelectionDialogClass ui;
 	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };

@@ -4,15 +4,102 @@
 // Test Headers
 #include "MatchTest.h"
 
-TEST_F(MatchTest, GetMatchOutcomesCorrectly)
-{
-	using enum Outcome;
-	const std::vector vecTestOutput{ HomeWin, HomeWin, AwayWin, AwayWin, HomeWin, HomeWin, HomeWin, HomeWin, AwayWin, HomeWin, AwayWin, Tied, Tied, HomeWin, AwayWin, Tied, AwayWin, Tied };
-	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecMatch[idx].GetOutcome(), vecTestOutput[idx]);
-	}
-}
+INSTANTIATE_TEST_SUITE_P(
+    DetermineMatchOutcomes,
+    MatchOutcomeTest,
+    ::testing::Values(
+        std::make_tuple(0, Outcome::HomeWin),
+        std::make_tuple(1, Outcome::HomeWin),
+        std::make_tuple(2, Outcome::AwayWin),
+        std::make_tuple(3, Outcome::AwayWin),
+        std::make_tuple(4, Outcome::HomeWin),
+		std::make_tuple(5, Outcome::HomeWin),
+		std::make_tuple(6, Outcome::HomeWin),
+		std::make_tuple(7, Outcome::HomeWin),
+		std::make_tuple(8, Outcome::AwayWin),
+		std::make_tuple(9, Outcome::HomeWin),
+		std::make_tuple(10, Outcome::AwayWin),
+		std::make_tuple(11, Outcome::Tied),
+		std::make_tuple(12, Outcome::Tied),
+		std::make_tuple(13, Outcome::HomeWin),
+		std::make_tuple(14, Outcome::AwayWin),
+		std::make_tuple(15, Outcome::Tied),
+		std::make_tuple(16, Outcome::AwayWin),
+		std::make_tuple(17, Outcome::Tied)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetectUpcomingMatches,
+    UpcomingMatchTest,
+    ::testing::Values(
+        std::make_tuple(0, false),
+        std::make_tuple(1, false),
+        std::make_tuple(2, false),
+        std::make_tuple(3, false),
+        std::make_tuple(4, false),
+		std::make_tuple(5, false),
+		std::make_tuple(6, false),
+		std::make_tuple(7, false),
+		std::make_tuple(8, false),
+		std::make_tuple(9, false),
+		std::make_tuple(10, false),
+		std::make_tuple(11, true),
+		std::make_tuple(12, true),
+		std::make_tuple(13, false),
+		std::make_tuple(14, true),
+		std::make_tuple(15, true),
+		std::make_tuple(16, true),
+		std::make_tuple(17, true)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    DetectInvalidMatches,
+    InvalidMatchTest,
+    ::testing::Values(
+        std::make_tuple(0, true),
+        std::make_tuple(1, true),
+        std::make_tuple(2, true),
+        std::make_tuple(3, true),
+        std::make_tuple(4, true),
+		std::make_tuple(5, true),
+		std::make_tuple(6, true),
+		std::make_tuple(7, true),
+		std::make_tuple(8, true),
+		std::make_tuple(9, true),
+		std::make_tuple(10, true),
+		std::make_tuple(11, true),
+		std::make_tuple(12, false),
+		std::make_tuple(13, false),
+		std::make_tuple(14, false),
+		std::make_tuple(15, true),
+		std::make_tuple(16, false),
+		std::make_tuple(17, true)
+    )
+);
+INSTANTIATE_TEST_SUITE_P(
+    CheckMatchScores,
+    MatchScoreTest,
+    ::testing::Values(
+        std::make_tuple(0, Score{2, 1}),
+        std::make_tuple(1, Score{3, 1}),
+        std::make_tuple(2, Score{0, 3}),
+        std::make_tuple(3, Score{0, 2}),
+        std::make_tuple(4, Score{2, 1}),
+		std::make_tuple(5, Score{1, 0}),
+		std::make_tuple(6, Score{2, 0}),
+		std::make_tuple(7, Score{2, 0}),
+		std::make_tuple(8, Score{0, 2}),
+		std::make_tuple(9, Score{2, 1}),
+		std::make_tuple(10, Score{0, 2}),
+		std::make_tuple(11, Score{0, 0}),
+		std::make_tuple(12, Score{0, 0}),
+		std::make_tuple(13, Score{2, 0}),
+		std::make_tuple(14, Score{0, 2}),
+		std::make_tuple(15, Score{0, 0}),
+		std::make_tuple(16, Score{0, 2}),
+		std::make_tuple(17, Score{0, 0})
+    )
+);
 TEST_F(MatchTest, SortMatchesByStartTime)
 {
 	const std::vector<unsigned> vecTestOutput{ 13, 6, 0, 7, 4, 1, 9, 3, 2, 5, 8, 10, 12, 11, 14, 15, 16, 17 };
@@ -22,48 +109,6 @@ TEST_F(MatchTest, SortMatchesByStartTime)
 	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
 	{
 		EXPECT_EQ(m_vecMatch[idx].GetID(), vecTestOutput[idx]);
-	}
-}
-TEST_F(MatchTest, DetectUpcomingMatches)
-{
-	const std::vector<bool> vecTestOutput = { false, false, false, false, false, false, false, false, false, false, false, true, true, false, true, true, true, true };
-	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecMatch[idx].IsUpcomingMatch(), vecTestOutput[idx]);
-	}
-}
-TEST_F(MatchTest, DetectInvalidMatches)
-{
-	const std::vector<bool> vecTestOutput = { true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, false, true, false };
-	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecMatch[idx].IsValid(), vecTestOutput[idx]);
-	}
-}
-TEST_F(MatchTest, SettingMatchScoreAfterSetsAreAssigned)
-{
-	const std::vector vecTestOutput{	Score{2, 1}, 
-										Score{3, 1}, 
-										Score{0, 3}, 
-										Score{0, 2}, 
-										Score{2, 1}, 
-										Score{1, 0}, 
-										Score{2, 0}, 
-										Score{2, 0}, 
-										Score{0, 2}, 
-										Score{2, 1},
-										Score{0, 2},
-										Score{0, 0},
-										Score{0, 0},
-										Score{2, 0},
-										Score{0, 2},
-										Score{0, 0},
-										Score{0, 2},
-										Score{0, 0}
-	};
-	for (std::size_t idx = 0; idx < m_vecMatch.size(); ++idx)
-	{
-		EXPECT_EQ(m_vecMatch[idx].GetScore(), vecTestOutput[idx]);
 	}
 }
 TEST_F(MatchTest, MatchEquality)

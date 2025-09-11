@@ -4,24 +4,24 @@
 #include <string>
 #include <QDialog>
 #include "ui_AddEditTournamentDialog.h"
-#include "IQTComponent.h"
 #include "AddEditDialog.h"
 #include "Profile.h"
-class AddEditTournamentDialog : public QDialog, public IQTComponent, public AddEditDialog
+class AddEditTournamentDialog : public QDialog, public AddEditDialog
 {
 	Q_OBJECT
 
 public:
 	AddEditTournamentDialog(QWidget *parent = nullptr);
 	~AddEditTournamentDialog();
-	void InitCustomComponents() override final;
-	void PrepareDialog(DialogMode, const Tournament& t = {});
+	void PrepareDialog(DialogMode, const Tournament& t = Tournament{});
 private:
+	// AddEditDialog
 	virtual void ClearDialog()override;
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
 	virtual bool IsMandatoryFieldsFilled()const override;
 	virtual bool IsThereAnyUnsavedInfo()const override;
+	
 	void DeactivateOptions();
 	void ActivateOptions();
 	bool IsMaxParticipantExceeded(unsigned uiParticipant)const;

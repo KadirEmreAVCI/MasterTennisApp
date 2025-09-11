@@ -4,39 +4,31 @@
 #include "AppController.h"
 #include "AddEditProfileDialog.h"
 #include "Config.h"
+#include "Utility.h"
 
-ProfileWidget::ProfileWidget(QWidget *parent)
-	: QWidget(parent)
+ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p)
+	: 
+    QWidget(parent),
+    m_Profile{p}
 {
 	ui.setupUi(this);
     m_upAddEditProfileDialog = std::make_unique<AddEditProfileDialog>(this);
-	InitCustomComponents();
+	utility::InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
+    utility::InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
+    FillProfileButton();
 }
 
 ProfileWidget::~ProfileWidget()
 {}
-Profile ProfileWidget::GetProfile()const
-{
-	return m_Profile;
-}
-void ProfileWidget::SetProfile(const Profile& profile)
-{
-	m_Profile = profile;
-	FillWidget();
-}
-void ProfileWidget::FillWidget()
-{
-    FillProfileButton();
-}
 void ProfileWidget::FillProfileButton()
 {
-    ui.ProfileButton->setFixedSize(310, 70);
+    ui.ProfileButton->setFixedSize(290, 70);
 
     QWidget* container = new QWidget(ui.ProfileButton);
     QHBoxLayout* layout = new QHBoxLayout(container);
     layout->setContentsMargins(5, 5, 5, 5);
 
-    QLabel* PPLabel = CreatePPLabel();
+    QLabel* PPLabel = utility::CreateLabelWithPicture((m_Profile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_Profile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString(), 0.125f);
 
     QLabel* ProfileNameLabel = new QLabel(QString::fromStdString(m_Profile.GetFullName()));
     QFont font = ProfileNameLabel->font();
@@ -46,20 +38,6 @@ void ProfileWidget::FillProfileButton()
     layout->addWidget(PPLabel);
     layout->addWidget(ProfileNameLabel);
     layout->addStretch();
-}
-QLabel* ProfileWidget::CreatePPLabel()const
-{
-    QLabel* PPLabel = new QLabel();
-    const std::string sPPAddr = (m_Profile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_Profile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString();
-    QPixmap pixmap(QString::fromStdString(sPPAddr));
-    PPLabel->setPixmap(pixmap.scaled(60, 60, Qt::KeepAspectRatio));
-    PPLabel->setFixedSize(60, 60);
-    return PPLabel;
-}
-void ProfileWidget::InitCustomComponents()
-{
-    InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
-    InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
 }
 void ProfileWidget::OpenEditDialog(const Profile& selectedProfile)
 {

@@ -4,6 +4,7 @@
 #include "MasterTennisApp.h"
 #include "StatController.h"
 #include "DatabaseController.h"
+#include "SQLiteDB.h"
 
 AppController* AppController::ms_pAppController = nullptr;
 void AppController::create()
@@ -30,7 +31,7 @@ void AppController::StartApplication()
 	QApplication::setWindowIcon(QIcon(QString::fromStdString(m_sAppLogoAddr)));
 	Organization::SetOrgImageRootDestDir(QCoreApplication::applicationDirPath() + "/../../src/app/resources/organizations/");
 	Profile::SetProfileImageRootDestDir(QCoreApplication::applicationDirPath() + "/../../src/app/resources/profiles/");
-	SQLiteDB::instance().SetDatabaseAddr(QCoreApplication::applicationDirPath() + "/../../database/MasterTennisApp.db");
+	DatabaseController::instance().InitDatabase(std::make_shared<SQLiteDB>((QCoreApplication::applicationDirPath() + "/../../database/MasterTennisApp.db").toStdString()));
 	m_upMasterTennisApp = std::make_unique<MasterTennisApp>();
 	m_upProfileDialog = std::make_unique<ProfileDialog>();
 	StatController::create();
@@ -48,7 +49,7 @@ std::string AppController::GetAppLogoAddr()const
 }
 void AppController::LogInToProfile(const Profile& profile)
 {
-	const bool blAlreadyLoggedIn = !(m_ActiveProfile == Profile{});
+	const bool blAlreadyLoggedIn = m_ActiveProfile != Profile{};
 	m_ActiveProfile = DatabaseController::instance().GetActiveProfile(profile.GetID());
 	emit UserLoggedIn(m_ActiveProfile);
 	if (!blAlreadyLoggedIn)
@@ -159,11 +160,9 @@ bool AppController::EditTournament(const Tournament& t)
 }
 bool AppController::EditMatch(const Match& m)
 {
-	std::cout << "AppController::EditMatch\n";
 	const bool blMatchEdited = DatabaseController::instance().EditMatch(m);
 	if (blMatchEdited)
 	{
-		std::cout << "AppController::EditMatch match edited successfully\n";
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
 	}
 	return blMatchEdited;
