@@ -4,6 +4,8 @@ project(MasterTennisApp LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+list(APPEND CMAKE_PREFIX_PATH "D:/Qt/6.7.0/msvc2019_64")
+
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Sql)
 
 qt6_standard_project_setup()
