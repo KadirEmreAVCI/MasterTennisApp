@@ -117,13 +117,9 @@ void MatchesDialog::LoadDataToTable()
 		ui.NewMatchButton->setEnabled(true);
 	}
 }
-Match MatchesDialog::FindSignalingMatch()const
-{
-	return m_vecMatch[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
-}
 void MatchesDialog::EditMatch()
 {
-	const auto& SignalingMatch = FindSignalingMatch();
+	const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
 	OpenEditDialog(SignalingMatch);
 }
 void MatchesDialog::DeleteMatch()
@@ -131,7 +127,7 @@ void MatchesDialog::DeleteMatch()
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this item permanently?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		const auto& SignalingMatch = FindSignalingMatch();
+		const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
 		AppController::instance().DeleteMatch(SignalingMatch);
 		QMessageBox::information(this, "Information", "The match deleted successfully");
 	}

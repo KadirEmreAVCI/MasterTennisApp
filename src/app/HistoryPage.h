@@ -25,7 +25,6 @@ private:
 	void UpdateActiveProfileData(const Profile&);
 	void UserLoggedIn(const Profile&);
 	std::vector<Tournament> ConcatanateTournaments()const;
-	Tournament FindSignalingTournament()const;
 	void OpenAddDialog();
 	void OpenEditDialog(const Tournament&);
 	void InitFilterComponents();

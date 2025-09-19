@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
 #include <QString>
 
 class QLabel;
@@ -31,6 +32,16 @@ namespace utility{
     QPushButton* PlaceButton2TableCell(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sButtonText);
     QPushButton* PlaceButton2TableCellWithImage(QTableWidget* pTableWidget, unsigned uiRowIdx, unsigned uiColumnIdx, const std::string& sImageAddr, float fScale, bool blEnabled);
     unsigned FindIndexOfSignalingItem(QTableWidget*, QObject*);
+    template<typename T>
+    const T& GetSignalingItem(const std::vector<T>& vecItems, QTableWidget* pTableWidget, QObject* pSender)
+    {
+        unsigned uiIdx = FindIndexOfSignalingItem(pTableWidget, pSender);
+        if (uiIdx < vecItems.size())
+        {
+            return vecItems[uiIdx];
+        }
+        throw std::out_of_range("Index out of range in GetSignalingItem");
+    }
 
     // Helper functions for QListWidget
     QWidget* InsertItem2ListWidget(QListWidget*, QWidget*, float fScale = 1.0f);

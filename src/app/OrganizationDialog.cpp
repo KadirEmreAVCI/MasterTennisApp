@@ -72,17 +72,13 @@ void OrganizationDialog::OpenEditDialog(const Organization& org)
 	m_upAddEditOrganizationDialog->PrepareDialog(DialogMode::eEditDialog, org);
 	m_upAddEditOrganizationDialog->exec();
 }
-Organization OrganizationDialog::FindSignalingOrganization()const
-{
-	return m_vecOrganization[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
-}
 void OrganizationDialog::on_NewOrganizationButton_clicked()
 {
 	OpenAddDialog();
 }
 void OrganizationDialog::EditOrganization()
 {
-	auto SignalingOrganization = FindSignalingOrganization();
+	auto SignalingOrganization = utility::GetSignalingItem<Organization>(m_vecOrganization, ui.tableWidget, sender());
 	OpenEditDialog(SignalingOrganization);
 }
 void OrganizationDialog::DeleteOrganization()
@@ -90,7 +86,7 @@ void OrganizationDialog::DeleteOrganization()
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this organization permanently? All child tournaments and matches will be deleted.", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		auto SignalingOrganization = FindSignalingOrganization();
+		auto SignalingOrganization = utility::GetSignalingItem<Organization>(m_vecOrganization, ui.tableWidget, sender());
 		AppController::instance().DeleteOrganization(SignalingOrganization);
 		QMessageBox::information(this, "Information", "The organization deleted successfully");
 	}

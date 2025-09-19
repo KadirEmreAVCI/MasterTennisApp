@@ -93,10 +93,6 @@ std::vector<Tournament> HistoryPage::ConcatanateTournaments()const
 		});
 	return vecAllTournament;
 }
-Tournament HistoryPage::FindSignalingTournament()const
-{
-	return m_vecDisplayedTournament[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
-}
 void HistoryPage::OpenAddDialog()
 {
 	m_upAddEditTournamentDialog->setModal(true);
@@ -217,7 +213,7 @@ void HistoryPage::UserLoggedIn(const Profile& p)
 }
 void HistoryPage::ShowMatches()
 {
-	const auto SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(SignalingTournament.GetName()));
 	const auto vecMatches = SignalingTournament.GetMatches();
 	m_upMatchesDialog->DisplayMatches(SignalingTournament);
@@ -226,7 +222,7 @@ void HistoryPage::ShowMatches()
 }
 void HistoryPage::LockUnlockTournament()
 {
-	auto SignalingTournament = FindSignalingTournament();
+	auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 	if (SignalingTournament.IsLocked())
 	{
 		QMessageBox::StandardButton reply = QMessageBox::question(this, "Unlock Tournament", "Are you sure you want to unlock this tournament? The match history of unlocked tournaments can be changed.", QMessageBox::Yes | QMessageBox::No);
@@ -261,7 +257,7 @@ void HistoryPage::LockUnlockTournament()
 }
 void HistoryPage::EditTournament()
 {
-	const auto SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 	OpenEditDialog(SignalingTournament);
 }
 void HistoryPage::DeleteTournament()
@@ -269,7 +265,7 @@ void HistoryPage::DeleteTournament()
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this item permanently?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		const auto& SignalingTournament = FindSignalingTournament();
+		const auto& SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 		AppController::instance().DeleteTournament(SignalingTournament);
 		QMessageBox::information(this, "Information", "The tournament deleted successfully");
 	}
