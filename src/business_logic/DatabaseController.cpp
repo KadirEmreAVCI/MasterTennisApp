@@ -181,35 +181,3 @@ bool DatabaseController::DeleteMatch(const Match& m)const
 {
 	return m.DeleteFromDB();
 }
-bool DatabaseController::AddNewProfile(const Profile& p)const
-{
-	return p.InsertToDB();
-}
-bool DatabaseController::AddNewOrganization(const Organization& org)const
-{
-	return org.InsertToDB();
-}
-bool DatabaseController::AddNewTournament(const Tournament& t)const
-{
-	return t.InsertToDB();
-}
-bool DatabaseController::AddNewMatch(const Match& m)const
-{
-	return m.InsertToDB();
-}
-bool DatabaseController::EditProfile(const Profile& p)const
-{
-	return p.EditInDB();
-}
-bool DatabaseController::EditOrganization(const Organization& org)const
-{
-	return org.EditInDB();
-}
-bool DatabaseController::EditTournament(const Tournament& t)const
-{
-	return t.EditInDB();
-} 
-bool DatabaseController::EditMatch(const Match& m)const
-{
-	return m.EditInDB();
-}

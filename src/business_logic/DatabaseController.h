@@ -20,17 +20,20 @@ public:
 	bool DeleteOrganization(const Organization&)const;
 	bool DeleteTournament(const Tournament&)const;
 	bool DeleteMatch(const Match&)const;
-	bool AddNewProfile(const Profile&)const;
-	bool AddNewOrganization(const Organization&)const;
-	bool AddNewTournament(const Tournament&)const;
-	bool AddNewMatch(const Match&)const;
-	bool EditProfile(const Profile&)const;
-	bool EditOrganization(const Organization&)const;
-	bool EditTournament(const Tournament&)const;
-	bool EditMatch(const Match&)const;
 	Profile GetActiveProfile(unsigned int uiActiveProfileID);
 	std::vector<Profile> GetProfiles();
 	std::vector<Organization> GetOrganizations();
+
+	template<typename T>
+	bool AddNewDBItem(const T& item)const
+	{
+		return item.InsertToDB();
+	}
+	template<typename T>
+	bool EditDBItem(const T& item)const
+	{
+		return item.EditInDB();
+	}
 private:
 	DatabaseController() = default;
 	void LoadDataFromDB();

@@ -61,7 +61,7 @@ void AppController::LogInToProfile(const Profile& profile)
 }
 bool AppController::AddNewProfile(const Profile& p)
 {
-	const bool blProfileAdded = DatabaseController::instance().AddNewProfile(p);
+	const bool blProfileAdded = DatabaseController::instance().AddNewDBItem<Profile>(p);
 	if (blProfileAdded)
 	{
 		emit ChangeInProfiles(DatabaseController::instance().GetProfiles());
@@ -70,7 +70,7 @@ bool AppController::AddNewProfile(const Profile& p)
 }
 bool AppController::AddNewOrganization(const Organization& org)
 {
-	const bool blOrgAdded = DatabaseController::instance().AddNewOrganization(org);
+	const bool blOrgAdded = DatabaseController::instance().AddNewDBItem<Organization>(org);
 	if (blOrgAdded)
 	{
 		emit ChangeInOrganizations(DatabaseController::instance().GetOrganizations());
@@ -79,7 +79,7 @@ bool AppController::AddNewOrganization(const Organization& org)
 }
 bool AppController::AddNewTournament(const Tournament& t)
 {
-	const bool blTournamentAdded = DatabaseController::instance().AddNewTournament(t);
+	const bool blTournamentAdded = DatabaseController::instance().AddNewDBItem<Tournament>(t);
 	if (blTournamentAdded)
 	{
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
@@ -88,7 +88,7 @@ bool AppController::AddNewTournament(const Tournament& t)
 }
 bool AppController::AddNewMatch(const Match& m)
 {
-	const bool blNewMatchAdded = DatabaseController::instance().AddNewMatch(m);
+	const bool blNewMatchAdded = DatabaseController::instance().AddNewDBItem<Match>(m);
 	if (blNewMatchAdded)
 	{
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
@@ -133,7 +133,7 @@ bool AppController::DeleteMatch(const Match& m)
 }
 bool AppController::EditProfile(const Profile& p)
 {
-	const bool blProfileEdited = DatabaseController::instance().EditProfile(p);
+	const bool blProfileEdited = DatabaseController::instance().EditDBItem<Profile>(p);
 	if (blProfileEdited)
 	{
 		emit ChangeInProfiles(DatabaseController::instance().GetProfiles());
@@ -142,7 +142,7 @@ bool AppController::EditProfile(const Profile& p)
 }
 bool AppController::EditOrganization(const Organization& org)
 {
-	const bool blOrganizationEdited = DatabaseController::instance().EditOrganization(org);
+	const bool blOrganizationEdited = DatabaseController::instance().EditDBItem<Organization>(org);
 	if (blOrganizationEdited)
 	{
 		emit ChangeInOrganizations(DatabaseController::instance().GetOrganizations());
@@ -151,7 +151,7 @@ bool AppController::EditOrganization(const Organization& org)
 }
 bool AppController::EditTournament(const Tournament& t)
 {
-	const bool blTournamentEdited = DatabaseController::instance().EditTournament(t);
+	const bool blTournamentEdited = DatabaseController::instance().EditDBItem<Tournament>(t);
 	if (blTournamentEdited)
 	{
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
@@ -160,7 +160,7 @@ bool AppController::EditTournament(const Tournament& t)
 }
 bool AppController::EditMatch(const Match& m)
 {
-	const bool blMatchEdited = DatabaseController::instance().EditMatch(m);
+	const bool blMatchEdited = DatabaseController::instance().EditDBItem<Match>(m);
 	if (blMatchEdited)
 	{
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
