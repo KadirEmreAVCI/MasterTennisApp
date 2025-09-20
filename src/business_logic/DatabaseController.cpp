@@ -9,61 +9,14 @@ DatabaseController& DatabaseController::instance()
 }
 void DatabaseController::LoadDataFromDB()
 {
-	LoadMatches();
-	LoadTournaments();
-	LoadOrganizations();
-	LoadProfiles();
+	m_vecMatch = LoadDBItems<Match>();
+	m_vecTournament = LoadDBItems<Tournament>();
+	m_vecOrganization = LoadDBItems<Organization>();
+	m_vecProfile = LoadDBItems<Profile>();
 }
-void DatabaseController::LoadMatches()
+Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
 {
-	m_vecMatch.clear();
-	if (const unsigned uiMatchSize = m_spIDatabase->GetItemCount(Match{}.GetDBTable()); uiMatchSize != 0)
-	{
-		m_vecMatch.resize(uiMatchSize);
-		unsigned uiRowIdx{};
-		std::for_each(m_vecMatch.begin(), m_vecMatch.end(), [&](auto& m) {
-			m.LoadFromDB(uiRowIdx++);
-			});
-	}
-}
-void DatabaseController::LoadTournaments()
-{
-	m_vecTournament.clear();
-	if (const unsigned uiTournamentSize = m_spIDatabase->GetItemCount(Tournament{}.GetDBTable()); uiTournamentSize != 0)
-	{
-		m_vecTournament.resize(uiTournamentSize);
-		unsigned uiRowIdx{};
-		std::for_each(m_vecTournament.begin(), m_vecTournament.end(), [&](auto& t) {
-			t.LoadFromDB(uiRowIdx++);
-			});
-	}
-}
-void DatabaseController::LoadOrganizations()
-{
-	m_vecOrganization.clear();
-	if (const unsigned uiOrgSize = m_spIDatabase->GetItemCount(Organization{}.GetDBTable()); uiOrgSize != 0)
-	{
-		m_vecOrganization.resize(uiOrgSize);
-		unsigned uiRowIdx{};
-		std::for_each(m_vecOrganization.begin(), m_vecOrganization.end(), [&](auto& org) {
-			org.LoadFromDB(uiRowIdx++);
-			});
-	}
-}
-void DatabaseController::LoadProfiles()
-{
-	m_vecProfile.clear();
-	if (const unsigned uiProfileSize = m_spIDatabase->GetItemCount(Profile{}.GetDBTable()); uiProfileSize != 0)
-	{
-		m_vecProfile.resize(uiProfileSize);
-		unsigned uiRowIdx{};
-		std::for_each(m_vecProfile.begin(), m_vecProfile.end(), [&](auto& p) {
-			p.LoadFromDB(uiRowIdx++);
-			});
-	}
-}
-Profile DatabaseController::PrepareActiveProfile(unsigned int uiActiveProfileID)const
-{
+	LoadDataFromDB();
 	auto iterActiveProfile = std::find_if(m_vecProfile.cbegin(), m_vecProfile.cend(), [uiActiveProfileID](const auto& p) {
 		return p.GetID() == uiActiveProfileID;
 		});
@@ -72,11 +25,6 @@ Profile DatabaseController::PrepareActiveProfile(unsigned int uiActiveProfileID)
 		std::cerr << "DatabaseController::LoadActiveProfile active profile could not be found!\n";
 	}
 	return *iterActiveProfile;
-}
-Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
-{
-	LoadDataFromDB();
-	return PrepareActiveProfile(uiActiveProfileID);
 }
 std::vector<Profile> DatabaseController::GetProfiles()
 {

@@ -39,11 +39,20 @@ public:
 private:
 	DatabaseController() = default;
 	void LoadDataFromDB();
-	Profile PrepareActiveProfile(unsigned int uiActiveProfileID)const;
-	void LoadProfiles();
-	void LoadOrganizations();
-	void LoadTournaments();
-	void LoadMatches();
+	template<typename T>
+	std::vector<T> LoadDBItems()const
+	{
+		std::vector<T> vecItem;
+		if (const unsigned uiSize = m_spIDatabase->GetItemCount(T{}.GetDBTable()); uiSize != 0)
+		{
+			vecItem.resize(uiSize);
+			unsigned uiRowIdx{};
+			std::for_each(vecItem.begin(), vecItem.end(), [&](auto& item) {
+				item.LoadFromDB(uiRowIdx++);
+				});
+		}
+		return vecItem;
+	}
 	std::vector<Organization> FindParticipatedOrgsOfProfile(unsigned uiProfileID)const;
 	std::vector<Profile> m_vecProfile;
 	std::vector<Organization> m_vecOrganization;
