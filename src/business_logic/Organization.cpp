@@ -39,12 +39,7 @@ std::vector<Tournament> Organization::GetTournaments()const
 }
 void Organization::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
-	m_vecTournament.clear();
-	for (auto t : vecTournament)
-	{
-		t.SetOrgName(m_sName);
-		m_vecTournament.push_back(t);
-	}
+	m_vecTournament = vecTournament;
 	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
 		return t1.IsEarlier(t2);
 		});

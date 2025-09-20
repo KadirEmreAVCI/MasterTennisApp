@@ -47,7 +47,6 @@ void DatabaseController::LoadOrganizations()
 		unsigned uiRowIdx{};
 		std::for_each(m_vecOrganization.begin(), m_vecOrganization.end(), [&](auto& org) {
 			org.LoadFromDB(uiRowIdx++);
-			//org.SetTournaments(FindTournamentsOfOrganization(org.GetID()));
 			});
 	}
 }

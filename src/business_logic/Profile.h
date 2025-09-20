@@ -45,6 +45,8 @@ public:
 	virtual void LoadFromDB(unsigned ID)override;
 	virtual bool DeleteFromDB()const override;
 private:
+	void SetTournaments(const std::vector<Tournament>&);
+	std::vector<Tournament> m_vecTournament;
 	static QString ms_sProfileImageRootDestDir;
 	std::string m_sFullName{};
 	std::string m_sPPAddr{};

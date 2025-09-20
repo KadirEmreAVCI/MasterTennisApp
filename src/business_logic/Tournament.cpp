@@ -58,57 +58,42 @@ std::string Tournament::GetOrgName()const
 {
 	return m_sOrgName;
 }
-
-void Tournament::SetOrgName(const std::string& sName)
-{
-	m_sOrgName = sName;
-}
-
 std::string Tournament::GetType()const
 {
 	return m_sType;
 }
-
 bool Tournament::IsDoubleTournament()const
 {
 	return m_soptTeammate.has_value() && m_soptTeammate.value() != "";
 }
-
 std::string Tournament::GetTeammate()const
 {
 	return m_soptTeammate.value_or("");
 }
-
 std::string Tournament::GetCategory()const
 {
 	return m_sCategory;
 }
-
 std::string Tournament::GetSeason()const
 {
 	return m_sSeason;
 }
-
 unsigned Tournament::GetParticipant()const
 {
 	return m_uiParticipant;
 }
-
 bool Tournament::IsLocked()const
 {
 	return m_blIsLocked;
 }
-
 void Tournament::SetLocked(bool blIsLocked)
 {
 	m_blIsLocked = blIsLocked;
 }
-
 bool Tournament::Get3rdPlaceGameAvailable()const
 {
 	return m_bl3rdPlaceGameAvailable;
 }
-
 std::string Tournament::GetTrophyPic()const
 {
 	std::string sTrophyPic = "";
@@ -132,12 +117,10 @@ std::string Tournament::GetTrophyPic()const
 	}
 	return sTrophyPic;
 }
-
 unsigned Tournament::GetSetsBestOf()const
 {
 	return m_uiBestOfSets;
 }
-
 /*  
 	GetStages function adds all possible stages for the tournament. 
 	If there are more than 4 players in the tournament, group stage option will be available, else there will be only playoff stages.
@@ -264,6 +247,7 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
 	m_uiProfileID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
 	m_uiOrgID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
+	m_sOrgName = m_spIDatabase->RetrieveValue("Organization", "Name", "ID", std::to_string(m_uiOrgID));
 	m_sSeason = m_spIDatabase->RetrieveValue(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
 	m_sCategory = m_spIDatabase->RetrieveValue(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
 	m_sType = m_spIDatabase->RetrieveValue(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
@@ -275,6 +259,3 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_uiBestOfSets = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID)));
 	SetMatches(DatabaseController::instance().FindMatchesOfTournament(m_uiID));
 }
-
-
-

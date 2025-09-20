@@ -29,7 +29,7 @@ public:
 	unsigned GetProfileID()const;
 	unsigned GetOrgID()const;
 	std::string GetOrgName()const;
-	void SetOrgName(const std::string&);
+	//void SetOrgName(const std::string&);
 	std::string GetType()const;
 	std::string GetTeammate()const;
 	std::string GetCategory()const;
