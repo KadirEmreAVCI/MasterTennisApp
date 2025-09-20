@@ -4,6 +4,8 @@
 #include <QMap>
 #include <QVariant>
 #include "Tournament.h"
+#include "DatabaseController.h"
+
 Tournament::Tournament(	unsigned uiID,
 						unsigned uiProfileID ,
 						unsigned uiOrgID,
@@ -166,34 +168,12 @@ std::vector<Match> Tournament::GetMatches()const
 {
 	return m_vecMatch;
 }
-std::vector<Match> Tournament::LoadMatchesFromDB()const
-{
-	std::vector<Match> vecMatches;
-	if (const unsigned uiMatchSize = m_spIDatabase->GetItemCount(Match{}.GetDBTable()); uiMatchSize != 0)
-	{
-		vecMatches.resize(uiMatchSize);
-		unsigned uiRowIdx{};
-		std::for_each(vecMatches.begin(), vecMatches.end(), [&](auto& m) {
-			m.LoadFromDB(uiRowIdx++);
-			});
-	}
-	return vecMatches;
-}
 void Tournament::SetMatches(const std::vector<Match>& vecMatch)
 {
 	m_vecMatch = vecMatch;
 	std::sort(m_vecMatch.begin(), m_vecMatch.end(), [](const Match& m1, const Match& m2) {
 		return m1.IsEarlier(m2);
 		});
-}
-std::vector<Match> Tournament::FindMatchesOfTheTournament()
-{
-	auto vecMatches = LoadMatchesFromDB();
-	std::vector<Match> vecMatchesOfTournament;
-	std::copy_if(vecMatches.cbegin(), vecMatches.cend(), std::back_inserter(vecMatchesOfTournament), [this](const auto& m) {
-		return m.GetTournamentID() == m_uiID;
-		});
-	return vecMatchesOfTournament;
 }
 bool Tournament::IsGroupStageExist()const
 {
@@ -293,7 +273,7 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_blIsLocked = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "Locked", "ID", std::to_string(m_uiID)));
 	m_bl3rdPlaceGameAvailable = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID)));
 	m_uiBestOfSets = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID)));
-	SetMatches(FindMatchesOfTheTournament());
+	SetMatches(DatabaseController::instance().FindMatchesOfTournament(m_uiID));
 }
 
 

@@ -82,8 +82,6 @@ public:
 	virtual bool EditInDB()const override;
 	virtual void LoadFromDB(unsigned ID)override;
 private:
-	std::vector<Match> FindMatchesOfTheTournament();
-	std::vector<Match> LoadMatchesFromDB()const;
 	void SetMatches(const std::vector<Match>&);
 	bool IsMatchStageValid(const Match&)const;
 	bool IsMatchExceedingMaxSet(const Match&)const;
