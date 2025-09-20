@@ -16,10 +16,6 @@ public:
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;
 	void InitDatabase(std::shared_ptr<IDatabase> spDatabase);
-	// bool DeleteProfile(const Profile&)const;
-	// bool DeleteOrganization(const Organization&)const;
-	// bool DeleteTournament(const Tournament&)const;
-	// bool DeleteMatch(const Match&)const;
 	Profile GetActiveProfile(unsigned int uiActiveProfileID);
 	std::vector<Profile> GetProfiles();
 	std::vector<Organization> GetOrganizations();
@@ -65,7 +61,6 @@ private:
 		}
 		return vecItem;
 	}
-	std::vector<Organization> FindParticipatedOrgsOfProfile(unsigned uiProfileID)const;
 	std::vector<Profile> m_vecProfile;
 	std::vector<Organization> m_vecOrganization;
 	std::vector<Tournament> m_vecTournament;

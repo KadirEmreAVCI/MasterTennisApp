@@ -60,64 +60,9 @@ std::vector<Tournament> DatabaseController::FindTournamentsOfProfile(unsigned ui
 		});
 	return vecTournamentsOfProfile;
 }
-std::vector<Organization> DatabaseController::FindParticipatedOrgsOfProfile(unsigned uiProfileID)const
-{
-	std::vector<Organization> vecOrgsOfProfile;
-	std::vector<Organization> vecOrganization = m_vecOrganization;
-	for (auto& org : vecOrganization)
-	{
-		auto vecTournament = org.GetTournaments();
-		std::erase_if(vecTournament, [uiProfileID](const auto& t) {
-			return t.GetProfileID() != uiProfileID;
-			});
-		if (!vecTournament.empty())
-		{
-			org.SetTournaments(vecTournament);
-			vecOrgsOfProfile.push_back(org);
-		}
-	}
-	return vecOrgsOfProfile;
-}
 void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)
 {
 	m_spIDatabase = spDatabase;
 	DBItem::SetDatabase(m_spIDatabase);
 	LoadDataFromDB();
 }
-// bool DatabaseController::DeleteProfile(const Profile& p)const
-// {
-// 	bool blDeletion = true;
-// 	const auto& vecTournamentsOfProfile = FindTournamentsOfProfile(p.GetID());
-// 	for (const auto& t : vecTournamentsOfProfile)
-// 	{
-// 		blDeletion &= DeleteTournament(t);
-// 	}
-// 	blDeletion &= p.DeleteFromDB();
-// 	return blDeletion;
-// }
-// bool DatabaseController::DeleteOrganization(const Organization& org)const
-// {
-// 	bool blDeletion = true;
-// 	const auto& vecTournamentsOfOrganization = FindTournamentsOfOrganization(org.GetID());
-// 	for (const auto& t : vecTournamentsOfOrganization)
-// 	{
-// 		blDeletion &= DeleteTournament(t);
-// 	}
-// 	blDeletion &= org.DeleteFromDB();
-// 	return blDeletion;
-// }
-// bool DatabaseController::DeleteTournament(const Tournament& t)const
-// {
-// 	bool blDeletion = true;
-// 	const auto& vecMatchesOfTournament = FindMatchesOfTournament(t.GetID());
-// 	for (const auto& m : vecMatchesOfTournament)
-// 	{
-// 		blDeletion &= DeleteMatch(m);
-// 	}
-// 	blDeletion &= t.DeleteFromDB();
-// 	return blDeletion;
-// }
-// bool DatabaseController::DeleteMatch(const Match& m)const
-// {
-// 	return m.DeleteFromDB();
-// }
