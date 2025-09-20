@@ -35,7 +35,7 @@ void DatabaseController::LoadTournaments()
 		unsigned uiRowIdx{};
 		std::for_each(m_vecTournament.begin(), m_vecTournament.end(), [&](auto& t) {
 			t.LoadFromDB(uiRowIdx++);
-			t.SetMatches(FindMatchesOfTournament(t.GetID()));
+			//t.SetMatches(FindMatchesOfTournament(t.GetID()));
 			});
 	}
 }

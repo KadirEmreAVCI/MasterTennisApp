@@ -10,6 +10,7 @@
 class Organization;
 class Tournament : public DBItem {
 friend class TournamentTest;
+friend class DatabaseControllerTest;
 public:
 	explicit Tournament(	unsigned uiID = 0, 
 							unsigned uiProfileID = 0, 
@@ -42,7 +43,6 @@ public:
 	std::vector<std::string> GetPossibleStages()const;
 	bool IsDoubleTournament()const;
 	std::vector<Match> GetMatches()const;
-	void SetMatches(const std::vector<Match>&);
 	bool IsGroupStageExist()const;
 	std::optional<Match> GetLastMatch()const;
 	bool IsMatchValidForTournament(const Match&)const;
@@ -82,6 +82,9 @@ public:
 	virtual bool EditInDB()const override;
 	virtual void LoadFromDB(unsigned ID)override;
 private:
+	std::vector<Match> FindMatchesOfTheTournament();
+	std::vector<Match> LoadMatchesFromDB()const;
+	void SetMatches(const std::vector<Match>&);
 	bool IsMatchStageValid(const Match&)const;
 	bool IsMatchExceedingMaxSet(const Match&)const;
 	unsigned m_uiProfileID{};
