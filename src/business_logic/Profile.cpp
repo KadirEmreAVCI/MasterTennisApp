@@ -9,7 +9,7 @@
 QString Profile::ms_sProfileImageRootDestDir = "";
 Profile::Profile(	unsigned uiID, 
 					const std::string& sFullName, 
-					const std::string& sPPAddr, 
+					const std::string& sPPAddr,
 					Gender gen) 
 					:
 					m_sFullName{sFullName},
@@ -33,13 +33,9 @@ Gender Profile::GetGender()const
 {
 	return m_Gender;
 }
-std::vector<Organization> Profile::GetParticipatedOrgs()const
+std::vector<Tournament> Profile::GetTournaments()const
 {
-	return m_vecParticipatedOrg;
-}
-void Profile::SetParticipatedOrgs(const std::vector<Organization>& vecOrganization)
-{
-	m_vecParticipatedOrg = vecOrganization;
+	return m_vecTournament;
 }
 QString Profile::GetProfileImageRootDestDir()
 {

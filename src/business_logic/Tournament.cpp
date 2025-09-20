@@ -38,25 +38,25 @@ std::string Tournament::GetName()const
 {
 	return GetOrgName() + ", " + GetSeason() + ", " + GetType() + ", " + GetCategory();
 }
-
 unsigned Tournament::GetID()const
 {
 	return m_uiID;
 }
-
 unsigned Tournament::GetProfileID()const
 {
 	return m_uiProfileID;
 }
-
 unsigned Tournament::GetOrgID()const
 {
 	return m_uiOrgID;
 }
-
 std::string Tournament::GetOrgName()const
 {
 	return m_sOrgName;
+}
+std::string Tournament::GetOrgPictureAddr()const
+{
+	return m_sOrgPictureAddr;
 }
 std::string Tournament::GetType()const
 {
@@ -248,6 +248,7 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_uiProfileID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
 	m_uiOrgID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
 	m_sOrgName = m_spIDatabase->RetrieveValue("Organization", "Name", "ID", std::to_string(m_uiOrgID));
+	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_uiOrgID));
 	m_sSeason = m_spIDatabase->RetrieveValue(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
 	m_sCategory = m_spIDatabase->RetrieveValue(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
 	m_sType = m_spIDatabase->RetrieveValue(m_sDBTable, "Type", "ID", std::to_string(m_uiID));

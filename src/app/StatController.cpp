@@ -161,20 +161,10 @@ std::string StatController::GetMaxProgress(const Tournament& t)const
 {
 	return t.GetLastMatch().value_or(Match{}).GetStage();
 }
-std::vector<Tournament> StatController::ConcatanateTournaments()const
-{
-	std::vector<Tournament> vecAllTournament;
-	std::for_each(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [&vecAllTournament](const auto& org) {
-		const auto& vecTournament = org.GetTournaments();
-		vecAllTournament.insert(vecAllTournament.cend(), vecTournament.cbegin(), vecTournament.cend());
-		});
-	return vecAllTournament;
-}
 void StatController::UpdateActiveProfileData(const Profile& p)
 {
 	std::cout << "StatController::UpdateTournaments\n";
-	m_vecOrganization = p.GetParticipatedOrgs();
-	m_vecTournament = ConcatanateTournaments();
+	m_vecTournament = p.GetTournaments();
 	const auto& vecUpdatedCareerWLStat = UpdateCareerStats();
 	emit CareerStatsUpdated(m_vecTournament.size(), CountQualificationFromGroupStages(), vecUpdatedCareerWLStat);
 	const auto& vecUpdatedFinalsWLStat = UpdateFinalsStats();

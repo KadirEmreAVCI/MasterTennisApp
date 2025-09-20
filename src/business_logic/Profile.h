@@ -20,8 +20,7 @@ public:
 	std::string GetFullName()const;
 	std::string GetPPAddr()const;
 	Gender GetGender()const;
-	std::vector<Organization> GetParticipatedOrgs()const;
-	void SetParticipatedOrgs(const std::vector<Organization>&);
+	std::vector<Tournament> GetTournaments()const;
 	static QString GetProfileImageRootDestDir();
 	static void SetProfileImageRootDestDir(const QString& sProfileImageRootDestDir);
 	void DeletePreviousPP()const;
@@ -51,7 +50,6 @@ private:
 	std::string m_sFullName{};
 	std::string m_sPPAddr{};
 	Gender m_Gender{};
-	std::vector<Organization> m_vecParticipatedOrg;
 };
 
 #endif

@@ -80,12 +80,11 @@ void MatchesDialog::PlaceMatch2Table(const Match& m, unsigned uiRowIdx)
 }
 void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 {
-	m_vecOrganization = p.GetParticipatedOrgs();
-	const auto& vecAllTournaments = ConcatanateTournaments();
-	const auto& iterUpdatedRootTournament = std::find_if(vecAllTournaments.cbegin(), vecAllTournaments.cend(), [this](const auto& t) {
+	const auto& vecTournamentsOfTheProfile = p.GetTournaments();
+	const auto& iterUpdatedRootTournament = std::find_if(vecTournamentsOfTheProfile.cbegin(), vecTournamentsOfTheProfile.cend(), [this](const auto& t) {
 		return t.GetID() == m_RootTournament.GetID();
 		});
-	if (iterUpdatedRootTournament != vecAllTournaments.end())
+	if (iterUpdatedRootTournament != vecTournamentsOfTheProfile.end())
 	{
 		m_RootTournament = *iterUpdatedRootTournament;
 		DisplayMatches(m_RootTournament);
@@ -94,15 +93,6 @@ void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 	{
 		std::cout << "MatchesDialog::UpdateActiveProfileData updated tournament could not be found.\n";
 	}
-}
-std::vector<Tournament> MatchesDialog::ConcatanateTournaments()const
-{
-	std::vector<Tournament> vecAllTournament;
-	std::for_each(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [&vecAllTournament](const auto& org) {
-		const auto& vecTournament = org.GetTournaments();
-		vecAllTournament.insert(vecAllTournament.cend(), vecTournament.cbegin(), vecTournament.cend());
-		});
-	return vecAllTournament;
 }
 void MatchesDialog::LoadDataToTable()
 {

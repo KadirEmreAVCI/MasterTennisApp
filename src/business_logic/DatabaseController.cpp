@@ -62,27 +62,21 @@ void DatabaseController::LoadProfiles()
 			});
 	}
 }
-void DatabaseController::PrepareActiveProfile(unsigned int uiActiveProfileID)
+Profile DatabaseController::PrepareActiveProfile(unsigned int uiActiveProfileID)const
 {
-	auto vecProfile = m_vecProfile;
-	auto iterActiveProfile = std::find_if(vecProfile.begin(), vecProfile.end(), [uiActiveProfileID](const auto& p) {
+	auto iterActiveProfile = std::find_if(m_vecProfile.cbegin(), m_vecProfile.cend(), [uiActiveProfileID](const auto& p) {
 		return p.GetID() == uiActiveProfileID;
 		});
-	if (iterActiveProfile != vecProfile.cend())
-	{
-		iterActiveProfile->SetParticipatedOrgs(FindParticipatedOrgsOfProfile(uiActiveProfileID));
-	}
-	else
+	if (iterActiveProfile == m_vecProfile.cend())
 	{
 		std::cerr << "DatabaseController::LoadActiveProfile active profile could not be found!\n";
 	}
-	m_ActiveProfile = *iterActiveProfile;
+	return *iterActiveProfile;
 }
 Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
 {
 	LoadDataFromDB();
-	PrepareActiveProfile(uiActiveProfileID);
-	return m_ActiveProfile;
+	return PrepareActiveProfile(uiActiveProfileID);
 }
 std::vector<Profile> DatabaseController::GetProfiles()
 {

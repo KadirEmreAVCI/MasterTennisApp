@@ -100,6 +100,7 @@ TEST_F(DBItemTest, LoadTournamentFromDB)
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Tournament", "ProfileID", "ID", std::to_string(m_Tournament.GetID()), 0)).Times(1).WillOnce(testing::Return(std::to_string(0)));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Tournament", "OrganizationID", "ID", std::to_string(m_Tournament.GetID()), 0)).Times(1).WillOnce(testing::Return(std::to_string(0)));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "Name", "ID", std::to_string(m_Tournament.GetOrgID()), 0)).Times(1).WillOnce(testing::Return("Karayollari"));
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_Tournament.GetOrgID()), 0)).Times(1).WillOnce(testing::Return("karayollari.png"));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Tournament", "Season", "ID", std::to_string(m_Tournament.GetID()), 0)).Times(1).WillOnce(testing::Return("2023 Summer"));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Tournament", "Category", "ID", std::to_string(m_Tournament.GetID()), 0)).Times(1).WillOnce(testing::Return("Ilk Turnuvam"));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Tournament", "Type", "ID", std::to_string(m_Tournament.GetID()), 0)).Times(1).WillOnce(testing::Return("Double Men"));

@@ -30,13 +30,11 @@ private:
 	void UpdateTopParticipations();
 	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
 	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);
-	std::vector<Tournament> ConcatanateTournaments()const;
 	Tournament FindRootTournament(const Match& m)const;
 	void UserLoggedIn(const Profile& p);
 	void UserLoggedOut();
 	Ui::HomePageClass ui;
 	std::vector<Tournament> m_vecTournament;
-	std::vector<Organization> m_vecOrganization;
 public slots:
 	void UpdateActiveProfileData(const Profile&);
 };

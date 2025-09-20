@@ -24,7 +24,6 @@ private:
 	void PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile&);
 	void UserLoggedIn(const Profile&);
-	std::vector<Tournament> ConcatanateTournaments()const;
 	void OpenAddDialog();
 	void OpenEditDialog(const Tournament&);
 	void InitFilterComponents();
@@ -34,7 +33,6 @@ private:
 	std::unique_ptr<TournamentFilter> m_upActiveFilter{ nullptr };
 	std::vector<Tournament> m_vecDisplayedTournament;
 	std::vector<Tournament> m_vecTournament;
-	std::vector<Organization> m_vecOrganization;
 	bool m_blFirstLoadOfData = true;
 private slots:
 	void on_NewTournamentButton_clicked();

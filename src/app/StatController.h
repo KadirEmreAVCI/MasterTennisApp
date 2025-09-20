@@ -41,7 +41,6 @@ private:
 	StatController();
 	static StatController* ms_pStatController;
 	std::vector<Tournament> m_vecTournament;
-	std::vector<Organization> m_vecOrganization;
 	std::array<WinLoseStat, gTotalCareerStat> UpdateCareerStats()const;
 	std::array<WinLoseStat, gTotalFinalStat> UpdateFinalsStats()const;
 	unsigned GetTotalMatch()const;
@@ -60,7 +59,6 @@ private:
 	unsigned CountLosesForStage(const std::string& sStage)const;
 	unsigned CountQualificationFromGroupStages()const;
 	std::string GetMaxProgress(const Tournament& t)const;
-	std::vector<Tournament> ConcatanateTournaments()const;
 public slots:
 	void UpdateActiveProfileData(const Profile&);
 signals:
