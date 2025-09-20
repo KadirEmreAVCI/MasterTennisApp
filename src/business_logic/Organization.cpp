@@ -4,6 +4,7 @@
 #include <QFile>
 #include "Organization.h"
 #include "Utility.h"
+#include "DatabaseController.h"
 
 QString Organization::ms_sOrgImageRootDestDir = "";
 Organization::Organization(	unsigned uiID, 
@@ -71,6 +72,7 @@ void Organization::LoadFromDB(unsigned ID)
 	m_sName = m_spIDatabase->RetrieveValue(m_sDBTable, "Name", "ID", std::to_string(m_uiID));
 	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
 	m_vecCategories = DeserializeDBColumn("Categories");
+	SetTournaments(DatabaseController::instance().FindTournamentsOfOrganization(m_uiID));
 }
 bool Organization::DeleteFromDB()const
 {

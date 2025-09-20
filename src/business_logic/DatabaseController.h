@@ -24,6 +24,7 @@ public:
 	std::vector<Profile> GetProfiles();
 	std::vector<Organization> GetOrganizations();
 	std::vector<Match> FindMatchesOfTournament(unsigned uiTournamentID)const;
+	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	template<typename T>
 	bool AddNewDBItem(const T& item)const
 	{
@@ -42,8 +43,6 @@ private:
 	void LoadOrganizations();
 	void LoadTournaments();
 	void LoadMatches();
-	
-	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;
 	std::vector<Organization> FindParticipatedOrgsOfProfile(unsigned uiProfileID)const;
 	Profile m_ActiveProfile;
