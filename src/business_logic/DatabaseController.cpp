@@ -84,40 +84,40 @@ void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)
 	DBItem::SetDatabase(m_spIDatabase);
 	LoadDataFromDB();
 }
-bool DatabaseController::DeleteProfile(const Profile& p)const
-{
-	bool blDeletion = true;
-	const auto& vecTournamentsOfProfile = FindTournamentsOfProfile(p.GetID());
-	for (const auto& t : vecTournamentsOfProfile)
-	{
-		blDeletion &= DeleteTournament(t);
-	}
-	blDeletion &= p.DeleteFromDB();
-	return blDeletion;
-}
-bool DatabaseController::DeleteOrganization(const Organization& org)const
-{
-	bool blDeletion = true;
-	const auto& vecTournamentsOfOrganization = FindTournamentsOfOrganization(org.GetID());
-	for (const auto& t : vecTournamentsOfOrganization)
-	{
-		blDeletion &= DeleteTournament(t);
-	}
-	blDeletion &= org.DeleteFromDB();
-	return blDeletion;
-}
-bool DatabaseController::DeleteTournament(const Tournament& t)const
-{
-	bool blDeletion = true;
-	const auto& vecMatchesOfTournament = FindMatchesOfTournament(t.GetID());
-	for (const auto& m : vecMatchesOfTournament)
-	{
-		blDeletion &= DeleteMatch(m);
-	}
-	blDeletion &= t.DeleteFromDB();
-	return blDeletion;
-}
-bool DatabaseController::DeleteMatch(const Match& m)const
-{
-	return m.DeleteFromDB();
-}
+// bool DatabaseController::DeleteProfile(const Profile& p)const
+// {
+// 	bool blDeletion = true;
+// 	const auto& vecTournamentsOfProfile = FindTournamentsOfProfile(p.GetID());
+// 	for (const auto& t : vecTournamentsOfProfile)
+// 	{
+// 		blDeletion &= DeleteTournament(t);
+// 	}
+// 	blDeletion &= p.DeleteFromDB();
+// 	return blDeletion;
+// }
+// bool DatabaseController::DeleteOrganization(const Organization& org)const
+// {
+// 	bool blDeletion = true;
+// 	const auto& vecTournamentsOfOrganization = FindTournamentsOfOrganization(org.GetID());
+// 	for (const auto& t : vecTournamentsOfOrganization)
+// 	{
+// 		blDeletion &= DeleteTournament(t);
+// 	}
+// 	blDeletion &= org.DeleteFromDB();
+// 	return blDeletion;
+// }
+// bool DatabaseController::DeleteTournament(const Tournament& t)const
+// {
+// 	bool blDeletion = true;
+// 	const auto& vecMatchesOfTournament = FindMatchesOfTournament(t.GetID());
+// 	for (const auto& m : vecMatchesOfTournament)
+// 	{
+// 		blDeletion &= DeleteMatch(m);
+// 	}
+// 	blDeletion &= t.DeleteFromDB();
+// 	return blDeletion;
+// }
+// bool DatabaseController::DeleteMatch(const Match& m)const
+// {
+// 	return m.DeleteFromDB();
+// }

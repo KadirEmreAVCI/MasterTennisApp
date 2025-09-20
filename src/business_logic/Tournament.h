@@ -78,6 +78,7 @@ public:
 			", BEST OF(SET): " << t.m_uiBestOfSets;
 		return os;
 	}
+	virtual bool DeleteFromDB()const override;
 	virtual bool InsertToDB()const override;
 	virtual bool EditInDB()const override;
 	virtual void LoadFromDB(unsigned ID)override;

@@ -84,6 +84,13 @@ void Profile::LoadFromDB(unsigned ID)
 }
 bool Profile::DeleteFromDB()const
 {
+	for(const auto& t : m_vecTournament)
+	{
+		if (!t.DeleteFromDB())
+		{
+			return false;
+		}
+	}
 	const QString sFullSourceDir = GetProfileImageRootDestDir() + QString::fromStdString(GetPPAddr());
 	if (QFile::exists(sFullSourceDir))
 	{

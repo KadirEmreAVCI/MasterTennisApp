@@ -212,6 +212,17 @@ bool Tournament::IsMatchExceedingMaxSet(const Match& m)const
 	const unsigned uiMaxScoreForWinner = (m_uiBestOfSets + 1) / 2;
 	return (m.GetSets().size() > m_uiBestOfSets) || (m.GetScore().GetHomeScore() > uiMaxScoreForWinner || m.GetScore().GetAwayScore() > uiMaxScoreForWinner);
 }
+bool Tournament::DeleteFromDB()const
+{
+	for(const auto& m : m_vecMatch)
+	{
+		if (!m.DeleteFromDB())
+		{
+			return false;
+		}
+	}
+	return DBItem::DeleteFromDB();
+}
 bool Tournament::InsertToDB()const
 {
 	std::string sDBValues{	"'" + std::to_string(m_uiProfileID) +

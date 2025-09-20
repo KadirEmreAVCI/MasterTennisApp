@@ -16,16 +16,28 @@ public:
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;
 	void InitDatabase(std::shared_ptr<IDatabase> spDatabase);
-	bool DeleteProfile(const Profile&)const;
-	bool DeleteOrganization(const Organization&)const;
-	bool DeleteTournament(const Tournament&)const;
-	bool DeleteMatch(const Match&)const;
+	// bool DeleteProfile(const Profile&)const;
+	// bool DeleteOrganization(const Organization&)const;
+	// bool DeleteTournament(const Tournament&)const;
+	// bool DeleteMatch(const Match&)const;
 	Profile GetActiveProfile(unsigned int uiActiveProfileID);
 	std::vector<Profile> GetProfiles();
 	std::vector<Organization> GetOrganizations();
 	std::vector<Match> FindMatchesOfTournament(unsigned uiTournamentID)const;
 	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;
+	template<typename T>
+	bool DeleteDBItem(const T& item)
+	{
+		std::vector<T> vecItem = LoadDBItems<T>();
+		auto it = std::find(vecItem.cbegin(), vecItem.cend(), item);
+		if (it == vecItem.cend())
+		{
+			std::cerr << "DatabaseController::DeleteDBItem item to be deleted could not be found in DB!\n";
+			return false;
+		}
+		return it->DeleteFromDB();
+	}
 	template<typename T>
 	bool AddNewDBItem(const T& item)const
 	{

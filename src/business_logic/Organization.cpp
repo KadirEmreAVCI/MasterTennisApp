@@ -71,6 +71,13 @@ void Organization::LoadFromDB(unsigned ID)
 }
 bool Organization::DeleteFromDB()const
 {
+	for(const auto& t : m_vecTournament)
+	{
+		if (!t.DeleteFromDB())
+		{
+			return false;
+		}
+	}
 	const QString sFullSourceDir = GetOrgImageRootDestDir() + QString::fromStdString(GetOrgPictureAddr());
 	if (QFile::exists(sFullSourceDir))
 	{
