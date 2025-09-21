@@ -10,6 +10,7 @@
 class Organization;
 class Tournament : public DBItem {
 friend class TournamentTest;
+friend class DatabaseControllerTest;
 public:
 	explicit Tournament(	unsigned uiID = 0, 
 							unsigned uiProfileID = 0, 
@@ -28,7 +29,7 @@ public:
 	unsigned GetProfileID()const;
 	unsigned GetOrgID()const;
 	std::string GetOrgName()const;
-	void SetOrgName(const std::string&);
+	std::string GetOrgPictureAddr()const;
 	std::string GetType()const;
 	std::string GetTeammate()const;
 	std::string GetCategory()const;
@@ -42,7 +43,6 @@ public:
 	std::vector<std::string> GetPossibleStages()const;
 	bool IsDoubleTournament()const;
 	std::vector<Match> GetMatches()const;
-	void SetMatches(const std::vector<Match>&);
 	bool IsGroupStageExist()const;
 	std::optional<Match> GetLastMatch()const;
 	bool IsMatchValidForTournament(const Match&)const;
@@ -78,15 +78,18 @@ public:
 			", BEST OF(SET): " << t.m_uiBestOfSets;
 		return os;
 	}
+	virtual bool DeleteFromDB()const override;
 	virtual bool InsertToDB()const override;
 	virtual bool EditInDB()const override;
 	virtual void LoadFromDB(unsigned ID)override;
 private:
+	void SetMatches(const std::vector<Match>&);
 	bool IsMatchStageValid(const Match&)const;
 	bool IsMatchExceedingMaxSet(const Match&)const;
 	unsigned m_uiProfileID{};
 	unsigned m_uiOrgID{};
 	std::string m_sOrgName;
+	std::string m_sOrgPictureAddr;
 	std::string m_sType{};
 	std::optional<std::string> m_soptTeammate{};
 	std::string m_sCategory{};

@@ -19,10 +19,10 @@ public:
 	std::string GetOrgPictureAddr()const;
 	std::vector<std::string> GetCategories()const;
 	std::vector<Tournament> GetTournaments()const;
-	void SetTournaments(const std::vector<Tournament>&);
 	static QString GetOrgImageRootDestDir();
 	static void SetOrgImageRootDestDir(const QString& sOrgImageRootDestDir);
 	void DeletePreviousPP()const;
+	void SetTournaments(const std::vector<Tournament>&);
 	friend bool operator==(const Organization& lhs, const Organization& rhs)
 	{
 		return lhs.m_uiID == rhs.m_uiID && lhs.m_sName == rhs.m_sName && lhs.m_sOrgPictureAddr == rhs.m_sOrgPictureAddr && lhs.m_vecCategories == rhs.m_vecCategories;

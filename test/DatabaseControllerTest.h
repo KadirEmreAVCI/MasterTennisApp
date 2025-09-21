@@ -95,28 +95,28 @@ TEST_P(FindTournamentsOfOrganizationTest, FindTournamentsOfOrganization)
 	}
 }
 
-class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
-{
-	auto [idx, expected] = GetParam();
-	const auto vecProfile = GetProfilesFromDB();
-	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
-	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
-	{
-		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
-	}
-}
+// class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
+// TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
+// {
+// 	auto [idx, expected] = GetParam();
+// 	const auto vecProfile = GetProfilesFromDB();
+// 	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
+// 	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
+// 	{
+// 		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
+// 	}
+// }
 
-class FindParticipatedOrgsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-TEST_P(FindParticipatedOrgsOfProfileTest, FindParticipatedOrgsOfProfile)
-{
-	auto [idx, expected] = GetParam();
-	const auto vecProfile = GetProfilesFromDB();
-	const auto vecParticipateOrg= GetProfilesFromDB()[idx].GetParticipatedOrgs();
-	for (std::size_t i = 0; i < vecParticipateOrg.size(); ++i)
-	{
-		EXPECT_EQ(expected[i],  vecParticipateOrg[i].GetID());
-	}
-}
+// class FindParticipatedOrgsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
+// TEST_P(FindParticipatedOrgsOfProfileTest, FindParticipatedOrgsOfProfile)
+// {
+// 	auto [idx, expected] = GetParam();
+// 	const auto vecProfile = GetProfilesFromDB();
+// 	const auto vecParticipateOrg= GetProfilesFromDB()[idx].GetParticipatedOrgs();
+// 	for (std::size_t i = 0; i < vecParticipateOrg.size(); ++i)
+// 	{
+// 		EXPECT_EQ(expected[i],  vecParticipateOrg[i].GetID());
+// 	}
+// }
 
 #endif

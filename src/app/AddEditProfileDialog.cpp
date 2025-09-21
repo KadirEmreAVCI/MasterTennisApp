@@ -23,6 +23,7 @@ void AddEditProfileDialog::PrepareDialog(DialogMode mode, const Profile& p)
 	case DialogMode::eAddDialog:
 	{
 		setWindowTitle("New Profile");
+		m_sImageFileName = "";
 		break;
 	}
 	case DialogMode::eEditDialog:

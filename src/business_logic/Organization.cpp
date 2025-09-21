@@ -4,6 +4,7 @@
 #include <QFile>
 #include "Organization.h"
 #include "Utility.h"
+#include "DatabaseController.h"
 
 QString Organization::ms_sOrgImageRootDestDir = "";
 Organization::Organization(	unsigned uiID, 
@@ -38,12 +39,7 @@ std::vector<Tournament> Organization::GetTournaments()const
 }
 void Organization::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
-	m_vecTournament.clear();
-	for (auto t : vecTournament)
-	{
-		t.SetOrgName(m_sName);
-		m_vecTournament.push_back(t);
-	}
+	m_vecTournament = vecTournament;
 	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
 		return t1.IsEarlier(t2);
 		});
@@ -71,9 +67,17 @@ void Organization::LoadFromDB(unsigned ID)
 	m_sName = m_spIDatabase->RetrieveValue(m_sDBTable, "Name", "ID", std::to_string(m_uiID));
 	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
 	m_vecCategories = DeserializeDBColumn("Categories");
+	SetTournaments(DatabaseController::instance().FindTournamentsOfOrganization(m_uiID));
 }
 bool Organization::DeleteFromDB()const
 {
+	for(const auto& t : m_vecTournament)
+	{
+		if (!t.DeleteFromDB())
+		{
+			return false;
+		}
+	}
 	const QString sFullSourceDir = GetOrgImageRootDestDir() + QString::fromStdString(GetOrgPictureAddr());
 	if (QFile::exists(sFullSourceDir))
 	{

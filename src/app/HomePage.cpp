@@ -37,10 +37,7 @@ void HomePage::UpdateUpcomingMatches()
 	for (const auto& m : vecUpcomingMatches)
 	{
 		const Tournament rootTournament = FindRootTournament(m);
-		const auto& iterOrg = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [rootTournament](const auto& org) {
-			return rootTournament.GetOrgID() == org.GetID();
-			});
-		InsertUpcomingMatch(new UpcomingMatch(this, (iterOrg->GetOrgPictureAddr() != "") ? iterOrg->GetOrgPictureAddr() : "default_org.png", rootTournament, m));
+		InsertUpcomingMatch(new UpcomingMatch(this, (rootTournament.GetOrgPictureAddr() != "") ? rootTournament.GetOrgPictureAddr() : "default_org.png", rootTournament, m));
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
@@ -94,10 +91,10 @@ void HomePage::UpdateTopParticipations()
 	const auto vecTopParticipations = FindTopParticipations();
 	for(const auto& prParticipation : vecTopParticipations)
 	{
-		const auto& org = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [prParticipation](const Organization& org){
-			return prParticipation.first == org.GetID();
+		const auto& t = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [prParticipation](const Tournament& t){
+			return prParticipation.first == t.GetOrgID();
 		});
-		InsertOrgParticipation(new OrgParticipation(this, org->GetOrgPictureAddr(), org->GetName(), prParticipation.second));
+		InsertOrgParticipation(new OrgParticipation(this, t->GetOrgPictureAddr(), t->GetOrgName(), prParticipation.second));
 	}
 	ui.listWidget_TopParticipations->setFixedHeight(280);
 }
@@ -116,15 +113,6 @@ std::vector<std::pair<unsigned, unsigned>> HomePage::FindTopParticipations()cons
 void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
 {
 	utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, pOrgParticipation);
-}
-std::vector<Tournament> HomePage::ConcatanateTournaments()const
-{
-	std::vector<Tournament> vecAllTournament;
-	std::for_each(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [&vecAllTournament](const auto& org) {
-		const auto& vecTournament = org.GetTournaments();
-		vecAllTournament.insert(vecAllTournament.cend(), vecTournament.cbegin(), vecTournament.cend());
-		});
-	return vecAllTournament;
 }
 Tournament HomePage::FindRootTournament(const Match& m)const
 {
@@ -149,8 +137,7 @@ void HomePage::UserLoggedOut()
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
 	std::cout << "HomePage::UpdateOrganizations!!!!!!!!!!!!!!!\n";
-	m_vecOrganization = p.GetParticipatedOrgs();
-	m_vecTournament = ConcatanateTournaments();
+	m_vecTournament = p.GetTournaments();
 	UpdateUpcomingMatches();
 	UpdateTopParticipations();
 }

@@ -20,8 +20,7 @@ public:
 	std::string GetFullName()const;
 	std::string GetPPAddr()const;
 	Gender GetGender()const;
-	std::vector<Organization> GetParticipatedOrgs()const;
-	void SetParticipatedOrgs(const std::vector<Organization>&);
+	std::vector<Tournament> GetTournaments()const;
 	static QString GetProfileImageRootDestDir();
 	static void SetProfileImageRootDestDir(const QString& sProfileImageRootDestDir);
 	void DeletePreviousPP()const;
@@ -45,11 +44,12 @@ public:
 	virtual void LoadFromDB(unsigned ID)override;
 	virtual bool DeleteFromDB()const override;
 private:
+	void SetTournaments(const std::vector<Tournament>&);
+	std::vector<Tournament> m_vecTournament;
 	static QString ms_sProfileImageRootDestDir;
 	std::string m_sFullName{};
 	std::string m_sPPAddr{};
 	Gender m_Gender{};
-	std::vector<Organization> m_vecParticipatedOrg;
 };
 
 #endif

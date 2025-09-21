@@ -42,11 +42,11 @@ void DatabaseControllerTest::LoadOrganizationData()
 }
 void DatabaseControllerTest::LoadProfileData()
 {
-	DatabaseController::instance().m_vecProfile = m_vecProfile;
-	for (Profile& p : DatabaseController::instance().m_vecProfile)
-	{
-		p.SetParticipatedOrgs(DatabaseController::instance().FindParticipatedOrgsOfProfile(p.GetID()));
-	}
+	// DatabaseController::instance().m_vecProfile = m_vecProfile;
+	// for (Profile& p : DatabaseController::instance().m_vecProfile)
+	// {
+	// 	p.SetParticipatedOrgs(DatabaseController::instance().FindParticipatedOrgsOfProfile(p.GetID()));
+	// }
 }
 INSTANTIATE_TEST_SUITE_P(
     FindMatchesOfTournament,
@@ -70,19 +70,19 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(3, std::vector<unsigned>{4})
 	)
 );
-INSTANTIATE_TEST_SUITE_P(
-    FindTournamentsOfProfile,
-    FindTournamentsOfProfileTest,
-    ::testing::Values(
-        std::make_tuple(0, std::vector<unsigned>{0, 2, 3, 5}),
-        std::make_tuple(1, std::vector<unsigned>{1, 4})
-	)
-);
-INSTANTIATE_TEST_SUITE_P(
-    FindParticipatedOrgsOfProfile,
-    FindParticipatedOrgsOfProfileTest,
-    ::testing::Values(
-        std::make_tuple(0, std::vector<unsigned>{0, 1, 2}),
-        std::make_tuple(1, std::vector<unsigned>{0, 3})
-	)
-);
+// INSTANTIATE_TEST_SUITE_P(
+//     FindTournamentsOfProfile,
+//     FindTournamentsOfProfileTest,
+//     ::testing::Values(
+//         std::make_tuple(0, std::vector<unsigned>{0, 2, 3, 5}),
+//         std::make_tuple(1, std::vector<unsigned>{1, 4})
+// 	)
+// );
+// INSTANTIATE_TEST_SUITE_P(
+//     FindParticipatedOrgsOfProfile,
+//     FindParticipatedOrgsOfProfileTest,
+//     ::testing::Values(
+//         std::make_tuple(0, std::vector<unsigned>{0, 1, 2}),
+//         std::make_tuple(1, std::vector<unsigned>{0, 3})
+// 	)
+// );

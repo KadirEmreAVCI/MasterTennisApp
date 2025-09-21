@@ -4,11 +4,12 @@
 #include <QFile>
 #include "Tournament.h"
 #include "Profile.h"
+#include "DatabaseController.h"
 
 QString Profile::ms_sProfileImageRootDestDir = "";
 Profile::Profile(	unsigned uiID, 
 					const std::string& sFullName, 
-					const std::string& sPPAddr, 
+					const std::string& sPPAddr,
 					Gender gen) 
 					:
 					m_sFullName{sFullName},
@@ -32,13 +33,9 @@ Gender Profile::GetGender()const
 {
 	return m_Gender;
 }
-std::vector<Organization> Profile::GetParticipatedOrgs()const
+std::vector<Tournament> Profile::GetTournaments()const
 {
-	return m_vecParticipatedOrg;
-}
-void Profile::SetParticipatedOrgs(const std::vector<Organization>& vecOrganization)
-{
-	m_vecParticipatedOrg = vecOrganization;
+	return m_vecTournament;
 }
 QString Profile::GetProfileImageRootDestDir()
 {
@@ -83,13 +80,28 @@ void Profile::LoadFromDB(unsigned ID)
 	m_sFullName = m_spIDatabase->RetrieveValue(m_sDBTable, "FullName", "ID", std::to_string(m_uiID));
 	m_Gender = (m_spIDatabase->RetrieveValue(m_sDBTable, "Gender", "ID", std::to_string(m_uiID))) == "Male" ? Gender::Male : Gender::Female;
 	m_sPPAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "PPAddress", "ID", std::to_string(m_uiID));
+	SetTournaments(DatabaseController::instance().FindTournamentsOfProfile(m_uiID));
 }
 bool Profile::DeleteFromDB()const
 {
+	for(const auto& t : m_vecTournament)
+	{
+		if (!t.DeleteFromDB())
+		{
+			return false;
+		}
+	}
 	const QString sFullSourceDir = GetProfileImageRootDestDir() + QString::fromStdString(GetPPAddr());
 	if (QFile::exists(sFullSourceDir))
 	{
 		QFile::remove(sFullSourceDir);
 	}
 	return DBItem::DeleteFromDB();
+}
+void Profile::SetTournaments(const std::vector<Tournament>& vecTournament)
+{
+	m_vecTournament = vecTournament;
+	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
+		return t1.IsEarlier(t2);
+		});
 }

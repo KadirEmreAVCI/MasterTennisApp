@@ -4,6 +4,8 @@
 #include <QMap>
 #include <QVariant>
 #include "Tournament.h"
+#include "DatabaseController.h"
+
 Tournament::Tournament(	unsigned uiID,
 						unsigned uiProfileID ,
 						unsigned uiOrgID,
@@ -36,77 +38,62 @@ std::string Tournament::GetName()const
 {
 	return GetOrgName() + ", " + GetSeason() + ", " + GetType() + ", " + GetCategory();
 }
-
 unsigned Tournament::GetID()const
 {
 	return m_uiID;
 }
-
 unsigned Tournament::GetProfileID()const
 {
 	return m_uiProfileID;
 }
-
 unsigned Tournament::GetOrgID()const
 {
 	return m_uiOrgID;
 }
-
 std::string Tournament::GetOrgName()const
 {
 	return m_sOrgName;
 }
-
-void Tournament::SetOrgName(const std::string& sName)
+std::string Tournament::GetOrgPictureAddr()const
 {
-	m_sOrgName = sName;
+	return m_sOrgPictureAddr;
 }
-
 std::string Tournament::GetType()const
 {
 	return m_sType;
 }
-
 bool Tournament::IsDoubleTournament()const
 {
 	return m_soptTeammate.has_value() && m_soptTeammate.value() != "";
 }
-
 std::string Tournament::GetTeammate()const
 {
 	return m_soptTeammate.value_or("");
 }
-
 std::string Tournament::GetCategory()const
 {
 	return m_sCategory;
 }
-
 std::string Tournament::GetSeason()const
 {
 	return m_sSeason;
 }
-
 unsigned Tournament::GetParticipant()const
 {
 	return m_uiParticipant;
 }
-
 bool Tournament::IsLocked()const
 {
 	return m_blIsLocked;
 }
-
 void Tournament::SetLocked(bool blIsLocked)
 {
 	m_blIsLocked = blIsLocked;
 }
-
 bool Tournament::Get3rdPlaceGameAvailable()const
 {
 	return m_bl3rdPlaceGameAvailable;
 }
-
 std::string Tournament::GetTrophyPic()const
 {
 	std::string sTrophyPic = "";
@@ -130,12 +117,10 @@ std::string Tournament::GetTrophyPic()const
 	}
 	return sTrophyPic;
 }
-
 unsigned Tournament::GetSetsBestOf()const
 {
 	return m_uiBestOfSets;
 }
-
 /*  
 	GetStages function adds all possible stages for the tournament. 
 	If there are more than 4 players in the tournament, group stage option will be available, else there will be only playoff stages.
@@ -227,6 +212,17 @@ bool Tournament::IsMatchExceedingMaxSet(const Match& m)const
 	const unsigned uiMaxScoreForWinner = (m_uiBestOfSets + 1) / 2;
 	return (m.GetSets().size() > m_uiBestOfSets) || (m.GetScore().GetHomeScore() > uiMaxScoreForWinner || m.GetScore().GetAwayScore() > uiMaxScoreForWinner);
 }
+bool Tournament::DeleteFromDB()const
+{
+	for(const auto& m : m_vecMatch)
+	{
+		if (!m.DeleteFromDB())
+		{
+			return false;
+		}
+	}
+	return DBItem::DeleteFromDB();
+}
 bool Tournament::InsertToDB()const
 {
 	std::string sDBValues{	"'" + std::to_string(m_uiProfileID) +
@@ -262,6 +258,8 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
 	m_uiProfileID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
 	m_uiOrgID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
+	m_sOrgName = m_spIDatabase->RetrieveValue("Organization", "Name", "ID", std::to_string(m_uiOrgID));
+	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_uiOrgID));
 	m_sSeason = m_spIDatabase->RetrieveValue(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
 	m_sCategory = m_spIDatabase->RetrieveValue(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
 	m_sType = m_spIDatabase->RetrieveValue(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
@@ -271,7 +269,5 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_blIsLocked = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "Locked", "ID", std::to_string(m_uiID)));
 	m_bl3rdPlaceGameAvailable = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ThirdPlaceGameAvailable", "ID", std::to_string(m_uiID)));
 	m_uiBestOfSets = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "SetsBestOf", "ID", std::to_string(m_uiID)));
+	SetMatches(DatabaseController::instance().FindMatchesOfTournament(m_uiID));
 }
-
-
-

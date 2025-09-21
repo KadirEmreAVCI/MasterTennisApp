@@ -97,7 +97,7 @@ bool AppController::AddNewMatch(const Match& m)
 }
 bool AppController::DeleteProfile(const Profile& p)
 {
-	const bool blDeletion = DatabaseController::instance().DeleteProfile(p);
+	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Profile>(p);
 	if (blDeletion)
 	{
 		emit ChangeInProfiles(DatabaseController::instance().GetProfiles());
@@ -106,7 +106,7 @@ bool AppController::DeleteProfile(const Profile& p)
 }
 bool AppController::DeleteOrganization(const Organization& org)
 {
-	const bool blDeletion = DatabaseController::instance().DeleteOrganization(org);
+	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Organization>(org);
 	if (blDeletion)
 	{
 		emit ChangeInOrganizations(DatabaseController::instance().GetOrganizations());
@@ -115,7 +115,7 @@ bool AppController::DeleteOrganization(const Organization& org)
 }
 bool AppController::DeleteTournament(const Tournament& t)
 {
-	const bool blDeletion = DatabaseController::instance().DeleteTournament(t);
+	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Tournament>(t);
 	if (blDeletion)
 	{
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
@@ -124,7 +124,7 @@ bool AppController::DeleteTournament(const Tournament& t)
 }
 bool AppController::DeleteMatch(const Match& m)
 {
-	const bool blDeletion = DatabaseController::instance().DeleteMatch(m);
+	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Match>(m);
 	if (blDeletion)
 	{
 		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
