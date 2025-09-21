@@ -59,7 +59,5 @@ void ProfileWidget::on_DeleteButton_clicked()
 }
 void ProfileWidget::on_EditButton_clicked()
 {
-    std::cout << "ProfileWidget::on_EditButton_clicked 1\n";
-    OpenEditDialog(m_Profile);
-    std::cout << "ProfileWidget::on_EditButton_clicked 2\n";
+    emit EditProfileButtonClicked(m_Profile);
 }

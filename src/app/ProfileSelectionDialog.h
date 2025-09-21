@@ -13,6 +13,7 @@ class ProfileSelectionDialog : public QDialog
 public:
 	ProfileSelectionDialog(QWidget* parent = nullptr);
 	~ProfileSelectionDialog();
+	void OpenEditDialog(const Profile& selectedProfile);
 private:
 	void OpenAddDialog();
 	bool IsProfileDeleted(const std::vector<Profile>&)const;

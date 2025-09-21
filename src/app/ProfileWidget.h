@@ -22,6 +22,8 @@ private slots:
 	void on_ProfileButton_clicked();
 	void on_DeleteButton_clicked();
 	void on_EditButton_clicked();
+signals:
+	void EditProfileButtonClicked(const Profile&);
 };
 
 #endif
