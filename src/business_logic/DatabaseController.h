@@ -26,13 +26,13 @@ public:
 	bool DeleteDBItem(const T& item)
 	{
 		std::vector<T> vecItem = LoadDBItems<T>();
-		auto it = std::find(vecItem.cbegin(), vecItem.cend(), item);
-		if (it == vecItem.cend())
+		auto iterItem = std::find(vecItem.cbegin(), vecItem.cend(), item);
+		if (iterItem == vecItem.cend())
 		{
 			std::cerr << "DatabaseController::DeleteDBItem item to be deleted could not be found in DB!\n";
 			return false;
 		}
-		return it->DeleteFromDB();
+		return iterItem->DeleteFromDB();
 	}
 	template<typename T>
 	bool AddNewDBItem(const T& item)const

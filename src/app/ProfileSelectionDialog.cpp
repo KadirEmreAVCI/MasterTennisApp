@@ -24,13 +24,21 @@ void ProfileSelectionDialog::OpenAddDialog()
 	m_upAddEditProfileDialog->PrepareDialog(DialogMode::eAddDialog);
 	m_upAddEditProfileDialog->exec();
 }
+bool ProfileSelectionDialog::IsProfileDeleted(const std::vector<Profile>& vecProfile)const
+{
+	return ui.listWidget->count() > vecProfile.size();
+}
 void ProfileSelectionDialog::UpdateProfiles(const std::vector<Profile>& vecProfile)
 {
 	std::cout << "ProfileSelectionDialog::UpdateProfiles!!!!!!!!!!!!!!!\n";
-	utility::ClearListWidget(ui.listWidget);
-	for (const auto& profile : vecProfile)
+	if(IsProfileDeleted(vecProfile))
 	{
-		utility::InsertItem2ListWidget(ui.listWidget, new ProfileWidget(this, profile));
+		QMessageBox::information(this, "Information", "The profile deleted successfully");
+	}
+	utility::ClearListWidget(ui.listWidget);
+	for (const auto& p : vecProfile)
+	{
+		utility::InsertItem2ListWidget(ui.listWidget, new ProfileWidget(this, p));
 	}
 }
 void ProfileSelectionDialog::on_NewProfileButton_clicked()

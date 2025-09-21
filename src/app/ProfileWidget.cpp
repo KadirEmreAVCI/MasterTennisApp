@@ -6,7 +6,7 @@
 #include "Config.h"
 #include "Utility.h"
 
-ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p)
+ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p) 
 	: 
     QWidget(parent),
     m_Profile{p}
@@ -55,10 +55,11 @@ void ProfileWidget::on_DeleteButton_clicked()
     if (reply == QMessageBox::Yes)
     {
         AppController::instance().DeleteProfile(m_Profile);
-        QMessageBox::information(this, "Information", "The profile deleted successfully");
     }
 }
 void ProfileWidget::on_EditButton_clicked()
 {
+    std::cout << "ProfileWidget::on_EditButton_clicked 1\n";
     OpenEditDialog(m_Profile);
+    std::cout << "ProfileWidget::on_EditButton_clicked 2\n";
 }
