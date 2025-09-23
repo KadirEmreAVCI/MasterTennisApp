@@ -16,7 +16,6 @@ public:
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;
 	void InitDatabase(std::shared_ptr<IDatabase> spDatabase);
-	Profile GetActiveProfile(unsigned int uiActiveProfileID);
 	std::vector<Profile> GetProfiles()const;
 	std::vector<Organization> GetOrganizations()const;
 	std::vector<Tournament> GetTournaments()const;

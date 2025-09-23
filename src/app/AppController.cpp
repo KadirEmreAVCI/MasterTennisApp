@@ -47,8 +47,19 @@ std::string AppController::GetAppLogoAddr()const
 }
 void AppController::LogInToProfile(const Profile& profile)
 {
-	const bool blAlreadyLoggedIn = m_ActiveProfile != Profile{};
-	m_ActiveProfile = DatabaseController::instance().GetActiveProfile(profile.GetID());
+	const bool blAlreadyLoggedIn = (m_ActiveProfile != Profile{});
+	auto vecProfile = DatabaseController::instance().GetProfiles();
+	auto iterActiveProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [profile](const auto& p) {
+		return p.GetID() == profile.GetID();
+		});
+	if (iterActiveProfile == vecProfile.cend())
+	{
+		std::cerr << "AppController::LoadActiveProfile active profile could not be found!\n";
+	}
+	else
+	{
+		m_ActiveProfile = *iterActiveProfile;
+	}
 	emit UserLoggedIn(m_ActiveProfile);
 	if (!blAlreadyLoggedIn)
 	{

@@ -14,17 +14,6 @@ void DatabaseController::LoadDataFromDB()
 	m_vecOrganization = LoadDBItems<Organization>();
 	m_vecProfile = LoadDBItems<Profile>();
 }
-Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
-{
-	auto iterActiveProfile = std::find_if(m_vecProfile.cbegin(), m_vecProfile.cend(), [uiActiveProfileID](const auto& p) {
-		return p.GetID() == uiActiveProfileID;
-		});
-	if (iterActiveProfile == m_vecProfile.cend())
-	{
-		std::cerr << "DatabaseController::LoadActiveProfile active profile could not be found!\n";
-	}
-	return *iterActiveProfile;
-}
 std::vector<Profile> DatabaseController::GetProfiles()const
 {
 	return m_vecProfile;
