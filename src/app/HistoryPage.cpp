@@ -212,8 +212,10 @@ void HistoryPage::LockUnlockTournament()
 		if (reply == QMessageBox::Yes)
 		{
 			SignalingTournament.SetLocked(false);
-			QMessageBox::information(this, "Information", "The tournament unlocked.");
-			AppController::instance().EditTournament(SignalingTournament);
+			if(AppController::instance().EditItem(SignalingTournament))
+			{
+				QMessageBox::information(this, "Information", "The tournament unlocked.");
+			}
 		}
 	}
 	else
@@ -228,8 +230,10 @@ void HistoryPage::LockUnlockTournament()
 			if (reply == QMessageBox::Yes)
 			{
 				SignalingTournament.SetLocked(true);
-				QMessageBox::information(this, "Information", "The tournament locked.");
-				AppController::instance().EditTournament(SignalingTournament);
+				if(AppController::instance().EditItem(SignalingTournament))
+				{
+					QMessageBox::information(this, "Information", "The tournament locked.");
+				}
 			}
 		}
 		else
@@ -249,7 +253,9 @@ void HistoryPage::DeleteTournament()
 	if (reply == QMessageBox::Yes)
 	{
 		const auto& SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
-		AppController::instance().DeleteTournament(SignalingTournament);
-		QMessageBox::information(this, "Information", "The tournament deleted successfully");
+		if(AppController::instance().DeleteItem(SignalingTournament))
+		{
+			QMessageBox::information(this, "Information", "The tournament deleted successfully");
+		}
 	}
 }

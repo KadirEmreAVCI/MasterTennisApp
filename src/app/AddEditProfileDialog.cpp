@@ -92,7 +92,7 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 		{
 			case DialogMode::eAddDialog:
 			{
-				if (AppController::instance().AddNewProfile(p))
+				if (AppController::instance().AddNewItem(p))
 					QMessageBox::information(this, "Information", "New profile is added successfully");
 				break;
 			}
@@ -104,7 +104,7 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 				}
 				else
 				{
-					if (AppController::instance().EditProfile(p))
+					if (AppController::instance().EditItem(p))
 						QMessageBox::information(this, "Information", "The profile is edited successfully");
 				}
 				break;

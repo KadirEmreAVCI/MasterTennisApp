@@ -69,7 +69,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		{
 		case DialogMode::eAddDialog:
 		{
-			if (AppController::instance().AddNewOrganization(org))
+			if (AppController::instance().AddNewItem(org))
 			{
 				close();
 				QMessageBox::information(this, "Information", "New organization is added successfully");
@@ -78,7 +78,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		}
 		case DialogMode::eEditDialog:
 		{
-			if (AppController::instance().EditOrganization(org))
+			if (AppController::instance().EditItem(org))
 			{
 				close();
 				QMessageBox::information(this, "Information", "The organization is edited successfully");

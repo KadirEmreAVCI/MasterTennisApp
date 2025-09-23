@@ -74,8 +74,10 @@ void OrganizationDialog::DeleteOrganization()
 	if (reply == QMessageBox::Yes)
 	{
 		auto SignalingOrganization = utility::GetSignalingItem<Organization>(m_vecOrganization, ui.tableWidget, sender());
-		AppController::instance().DeleteOrganization(SignalingOrganization);
-		QMessageBox::information(this, "Information", "The organization deleted successfully");
+		if(AppController::instance().DeleteItem(SignalingOrganization))
+		{
+			QMessageBox::information(this, "Information", "The organization deleted successfully");
+		}
 	}
 }
 void OrganizationDialog::UpdateOrganizations(const std::vector<Organization>& vecOrganization)

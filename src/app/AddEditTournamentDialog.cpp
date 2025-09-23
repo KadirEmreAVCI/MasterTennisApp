@@ -198,12 +198,12 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 		{
 			if (m_DialogMode == DialogMode::eAddDialog)
 			{
-				if (AppController::instance().AddNewTournament(t))
+				if (AppController::instance().AddNewItem(t))
 					QMessageBox::information(this, "Information", "New tournament is added successfully");
 			}
 			else if (m_DialogMode == DialogMode::eEditDialog)
 			{
-				if (AppController::instance().EditTournament(t))
+				if (AppController::instance().EditItem(t))
 					QMessageBox::information(this, "Information", "Tournament edited successfully");
 			}
 			else

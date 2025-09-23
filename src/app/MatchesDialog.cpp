@@ -117,7 +117,7 @@ void MatchesDialog::DeleteMatch()
 	if (reply == QMessageBox::Yes)
 	{
 		const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
-		AppController::instance().DeleteMatch(SignalingMatch);
+		AppController::instance().DeleteItem(SignalingMatch);
 		QMessageBox::information(this, "Information", "The match deleted successfully");
 	}
 }
