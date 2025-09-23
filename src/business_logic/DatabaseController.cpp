@@ -14,32 +14,21 @@ void DatabaseController::LoadDataFromDB()
 	m_vecOrganization = LoadDBItems<Organization>();
 	m_vecProfile = LoadDBItems<Profile>();
 }
-Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
+std::vector<Profile> DatabaseController::GetProfiles()const
 {
-	LoadDataFromDB();
-	auto iterActiveProfile = std::find_if(m_vecProfile.cbegin(), m_vecProfile.cend(), [uiActiveProfileID](const auto& p) {
-		return p.GetID() == uiActiveProfileID;
-		});
-	if (iterActiveProfile == m_vecProfile.cend())
-	{
-		std::cerr << "DatabaseController::LoadActiveProfile active profile could not be found!\n";
-	}
-	return *iterActiveProfile;
-}
-std::vector<Profile> DatabaseController::GetProfiles()
-{
-	LoadDataFromDB();
 	return m_vecProfile;
 }
-std::vector<Organization> DatabaseController::GetOrganizations()
+std::vector<Organization> DatabaseController::GetOrganizations()const
 {
-	LoadDataFromDB();
 	return m_vecOrganization;
 }
-std::vector<Tournament> DatabaseController::GetTournaments()
+std::vector<Tournament> DatabaseController::GetTournaments()const
 {
-	LoadDataFromDB();
 	return m_vecTournament;
+}
+std::vector<Match> DatabaseController::GetMatches()const
+{
+	return m_vecMatch;
 }
 std::vector<Match> DatabaseController::FindMatchesOfTournament(unsigned uiTournamentID)const
 {
@@ -67,12 +56,10 @@ std::vector<Tournament> DatabaseController::FindTournamentsOfProfile(unsigned ui
 }
 Tournament DatabaseController::FindRootTournament(const Match& m)
 {
-	std::cout << "DatabaseController::FindRootTournament m_uiTournamentID: " << m.GetTournamentID() << "\n";
 	auto vecTournaments = GetTournaments();
 	auto iterRootTournament = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [m](const auto& t) {
 		return m.GetTournamentID() == t.GetID();
 		});
-	std::cout << "DatabaseController::FindRootTournament iterRootTournament == m_vecTournament.cend(): " << (iterRootTournament == m_vecTournament.cend()) << "\n";	
 	return *iterRootTournament;
 }
 void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)

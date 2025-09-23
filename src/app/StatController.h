@@ -43,6 +43,7 @@ private:
 	std::vector<Tournament> m_vecTournament;
 	std::array<WinLoseStat, gTotalCareerStat> UpdateCareerStats()const;
 	std::array<WinLoseStat, gTotalFinalStat> UpdateFinalsStats()const;
+	unsigned m_uiProfileID = 0;
 	unsigned GetTotalMatch()const;
 	unsigned GetMatchWin()const;
 	unsigned GetMatchLose()const;
@@ -59,6 +60,7 @@ private:
 	unsigned CountLosesForStage(const std::string& sStage)const;
 	unsigned CountQualificationFromGroupStages()const;
 	std::string GetMaxProgress(const Tournament& t)const;
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 public slots:
 	void UpdateActiveProfileData(const Profile&);
 signals:

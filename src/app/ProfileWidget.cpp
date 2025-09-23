@@ -52,7 +52,7 @@ void ProfileWidget::on_DeleteButton_clicked()
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this profile permanently? All tournaments and matches of the profile will be deleted.", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes)
     {
-        AppController::instance().DeleteProfile(m_Profile);
+        AppController::instance().DeleteItem(m_Profile);
     }
 }
 void ProfileWidget::on_EditButton_clicked()

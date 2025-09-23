@@ -16,10 +16,12 @@ public:
 	void OpenEditDialog(const Profile& selectedProfile);
 private:
 	bool IsProfileDeleted(const std::vector<Profile>&)const;
+	void DBInitialized(const std::vector<Profile>&, const std::vector<Organization>&);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
+	void UpdateProfiles(const std::vector<Profile>& vecProfile);
 	Ui::ProfileSelectionDialogClass ui;
 	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };
-public slots:
-	void UpdateProfiles(const std::vector<Profile>& vecProfile);
+	std::vector<Profile> m_vecProfile;
 private slots:
 	void on_NewProfileButton_clicked();
 };

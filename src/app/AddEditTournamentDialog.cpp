@@ -13,9 +13,9 @@ AddEditTournamentDialog::AddEditTournamentDialog(QWidget *parent)
 	: QDialog(parent), AddEditDialog<Tournament>(this)
 {
 	ui.setupUi(this);
-	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &AddEditTournamentDialog::DBInitialized);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &AddEditTournamentDialog::UpdateActiveProfileData);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &AddEditTournamentDialog::ChangeInDB);
 	ClearDialog();
 	setFixedHeight(250);
 	const unsigned int uiFixedWidth = 120;
@@ -152,6 +152,14 @@ bool AddEditTournamentDialog::IsDoubleTournament()const
 {
 	return m_sType.toStdString().find("Double") != std::string::npos;
 }
+void AddEditTournamentDialog::DBInitialized(const std::vector<Profile>&, const std::vector<Organization>& vecOrganization)
+{
+	UpdateOrganizations(vecOrganization);
+}
+void AddEditTournamentDialog::ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>& vecOrganization, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	UpdateOrganizations(vecOrganization);
+}
 void AddEditTournamentDialog::on_CancelButton_clicked()
 {
 	if (IsThereAnyUnsavedInfo() && m_DialogMode != DialogMode::eEditDialog)
@@ -190,12 +198,12 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 		{
 			if (m_DialogMode == DialogMode::eAddDialog)
 			{
-				if (AppController::instance().AddNewTournament(t))
+				if (AppController::instance().AddNewItem(t))
 					QMessageBox::information(this, "Information", "New tournament is added successfully");
 			}
 			else if (m_DialogMode == DialogMode::eEditDialog)
 			{
-				if (AppController::instance().EditTournament(t))
+				if (AppController::instance().EditItem(t))
 					QMessageBox::information(this, "Information", "Tournament edited successfully");
 			}
 			else
