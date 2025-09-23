@@ -36,13 +36,13 @@ void MatchesDialog::FillTable()
 void MatchesDialog::OpenAddDialog()
 {
 	m_upAddEditMatchDialog->setModal(true);
-	m_upAddEditMatchDialog->PrepareDialog(DialogMode::eAddDialog, m_RootTournament);
+	m_upAddEditMatchDialog->PrepareDialog(DialogMode::eAddDialog);
 	m_upAddEditMatchDialog->exec();
 }
 void MatchesDialog::OpenEditDialog(const Match& m)
 {
 	m_upAddEditMatchDialog->setModal(true);
-	m_upAddEditMatchDialog->PrepareDialog(DialogMode::eEditDialog, m_RootTournament, m);
+	m_upAddEditMatchDialog->PrepareDialog(DialogMode::eEditDialog, m);
 	m_upAddEditMatchDialog->exec();
 }
 void MatchesDialog::DisplayMatches(const Tournament& rootTournament)
@@ -110,6 +110,7 @@ void MatchesDialog::LoadDataToTable()
 void MatchesDialog::EditMatch()
 {
 	const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
+	m_upAddEditMatchDialog->SetRootTournament(m_RootTournament);
 	OpenEditDialog(SignalingMatch);
 }
 void MatchesDialog::DeleteMatch()
@@ -126,6 +127,7 @@ void MatchesDialog::on_NewMatchButton_clicked()
 {
 	if (false == m_RootTournament.IsLocked())
 	{
+		m_upAddEditMatchDialog->SetRootTournament(m_RootTournament);
 		OpenAddDialog();
 	}
 	else

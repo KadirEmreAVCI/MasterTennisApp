@@ -5,9 +5,12 @@ enum class DialogMode {
 	eAddDialog,
 	eEditDialog
 };
+template <typename T>
 class AddEditDialog {
+public:
+	void PrepareDialog(DialogMode mode, const T& item = T{});
 protected:
-	AddEditDialog();
+	AddEditDialog() = default;
 	virtual ~AddEditDialog() = default;
 	void SetDialogMode(DialogMode);
 	virtual void InitDialog() = 0;
@@ -22,6 +25,7 @@ protected:
 	QString m_sFullDestDir{};
 	QString m_sFullSourceDir{};
 	QString m_sImageFileName{};
+	T m_EditedItem{};
 };
 
 #endif

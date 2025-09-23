@@ -9,6 +9,7 @@
 #include "AppController.h"
 #include "Config.h"
 #include "Utility.h"
+#include "DatabaseController.h"
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
@@ -36,7 +37,7 @@ void HomePage::UpdateUpcomingMatches()
 		});
 	for (const auto& m : vecUpcomingMatches)
 	{
-		const Tournament rootTournament = FindRootTournament(m);
+		const Tournament rootTournament = DatabaseController::instance().FindRootTournament(m);
 		InsertUpcomingMatch(new UpcomingMatch(this, (rootTournament.GetOrgPictureAddr() != "") ? rootTournament.GetOrgPictureAddr() : "default_org.png", rootTournament, m));
 	}
 	FillWithNoUpcomingMatches();
@@ -113,13 +114,6 @@ std::vector<std::pair<unsigned, unsigned>> HomePage::FindTopParticipations()cons
 void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
 {
 	utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, pOrgParticipation);
-}
-Tournament HomePage::FindRootTournament(const Match& m)const
-{
-	const auto& iterRooutTournament = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [m](const auto& t) {
-		return m.GetTournamentID() == t.GetID();
-		});
-	return *iterRooutTournament;
 }
 void HomePage::UserLoggedIn(const Profile& p)
 {

@@ -5,10 +5,11 @@
 #include "Calendar.h"
 #include "Match.h"
 #include "AppController.h"
+#include "DatabaseController.h"
 #include "Utility.h"
 
 AddEditMatchDialog::AddEditMatchDialog(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent),AddEditDialog<Match>()
 {
 	ui.setupUi(this);
 	m_upCalendar = std::make_unique<Calendar>(this);
@@ -22,37 +23,15 @@ AddEditMatchDialog::AddEditMatchDialog(QWidget *parent)
 }
 AddEditMatchDialog::~AddEditMatchDialog()
 {}
-void AddEditMatchDialog::PrepareDialog(DialogMode mode, const Tournament& t, const Match& m)
+void AddEditMatchDialog::SetRootTournament(const Tournament& t)
 {
-	std::cout << "AddEditMatchDialog::PrepareDialog\n";
-	SetDialogMode(mode);
 	m_RootTournament = t;
-	m_uiMinSet = (m_RootTournament.GetSetsBestOf() + 1) / 2;
-	m_uiMaxSet = m_RootTournament.GetSetsBestOf();
-	InitDialog();
-	switch (m_DialogMode)
-	{
-	case DialogMode::eAddDialog:
-	{
-		setWindowTitle("Add Match");
-		m_EditedMatch = Match{};
-		InitSetList(Set(Score(0, 0)));
-		break;
-	}
-	case DialogMode::eEditDialog:
-	{
-		setWindowTitle("Edit Match");
-		m_EditedMatch = m;
-		FillDialog();
-		break;
-	}
-	default:
-		std::cout << "AddEditMatchDialog::SetDialogMode Unknown DialogMode!\n";
-	}
 }
 void AddEditMatchDialog::InitDialog()
 {
 	using namespace utility;
+	m_uiMinSet = (m_RootTournament.GetSetsBestOf() + 1) / 2;
+	m_uiMaxSet = m_RootTournament.GetSetsBestOf();
 	ClearDialog();
 	InitButtonWithPicture(ui.DateButton, ":images/calendar.png", 0.8f);
 	InitButtonWithPicture(ui.AddSetButton, ":images/plus.png", 0.8f);
@@ -63,37 +42,37 @@ void AddEditMatchDialog::InitDialog()
 	ui.lineEdit__Opponent2->setEnabled(m_RootTournament.IsDoubleTournament());
 	SetMatchDate(QDate::currentDate());
 	ui.timeEdit->setTime(QTime(0, 0));
-	InitSetList(Set{}, true);
+	InitSetList(Set(Score(0, 0)));
 }
 void AddEditMatchDialog::FillDialog()
 {
-	utility::InitComboBox(ui.comboBox_Statu, QString::fromStdString(m_EditedMatch.GetStatu()));
-	if (m_EditedMatch.GetStatu() == "WO")
+	utility::InitComboBox(ui.comboBox_Statu, QString::fromStdString(m_EditedItem.GetStatu()));
+	if (m_EditedItem.GetStatu() == "WO")
 	{
-		if (m_EditedMatch.GetOutcome() == Outcome::HomeWin)
+		if (m_EditedItem.GetOutcome() == Outcome::HomeWin)
 		{
 			ui.radioButton_Win->setChecked(true);
 		}
-		else if (m_EditedMatch.GetOutcome() == Outcome::AwayWin)
+		else if (m_EditedItem.GetOutcome() == Outcome::AwayWin)
 		{
 			ui.radioButton_Lose->setChecked(true);
 		}
 	}
-	utility::InitComboBox(ui.comboBox_Stage, QString::fromStdString(m_EditedMatch.GetStage()));
-	ui.lineEdit__Opponent1->setText(QString::fromStdString(m_EditedMatch.GetOpponent1()));
+	utility::InitComboBox(ui.comboBox_Stage, QString::fromStdString(m_EditedItem.GetStage()));
+	ui.lineEdit__Opponent1->setText(QString::fromStdString(m_EditedItem.GetOpponent1()));
 	if (m_RootTournament.IsDoubleTournament())
 	{
-		ui.lineEdit__Opponent2->setText(QString::fromStdString(m_EditedMatch.GetOpponent2()));
+		ui.lineEdit__Opponent2->setText(QString::fromStdString(m_EditedItem.GetOpponent2()));
 	}
-	SetMatchDate(m_EditedMatch.GetDate());
-	ui.timeEdit->setTime(m_EditedMatch.GetTime());
+	SetMatchDate(m_EditedItem.GetDate());
+	ui.timeEdit->setTime(m_EditedItem.GetTime());
 	FillSets();
 }
 void AddEditMatchDialog::FillSets()
 {
 	size_t szSetIdx{ 0 };
 	ui.listWidget->clear();
-	for (const auto& s : m_EditedMatch.GetSets())
+	for (const auto& s : m_EditedItem.GetSets())
 	{
 		InsertSet(szSetIdx, s);
 	}
@@ -105,8 +84,7 @@ void AddEditMatchDialog::FillSets()
 void AddEditMatchDialog::InitSetList(Set s, bool blEnabled)
 {
 	ui.listWidget->clear();
-	const unsigned int uiMinSet = (m_RootTournament.GetSetsBestOf() + 1) / 2;
-	for (auto szSetIdx = 0; szSetIdx < uiMinSet; ++szSetIdx)
+	for (auto szSetIdx = 0; szSetIdx < m_uiMinSet; ++szSetIdx)
 	{
 		InsertSet(szSetIdx, s);
 	}
@@ -223,7 +201,7 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 	if (IsMandatoryFieldsFilled())
 	{
 		Match m{
-			m_EditedMatch.GetID(),
+			m_EditedItem.GetID(),
 			m_RootTournament.GetID(),
 			ui.comboBox_Statu->currentText().toStdString(),
 			ui.comboBox_Stage->currentText().toStdString(),
@@ -250,7 +228,7 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 			}
 			case DialogMode::eEditDialog:
 			{
-				if (m == m_EditedMatch)
+				if (m == m_EditedItem)
 				{
 					QMessageBox::warning(this, "Warning", "No change detected in the match.");
 				}

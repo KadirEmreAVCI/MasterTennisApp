@@ -5,7 +5,7 @@
 #include "Utility.h"
 
 AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent), AddEditDialog<Profile>()
 {
 	ui.setupUi(this);
 	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
@@ -14,32 +14,9 @@ AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
 
 AddEditProfileDialog::~AddEditProfileDialog()
 {}
-void AddEditProfileDialog::PrepareDialog(DialogMode mode, const Profile& p)
-{
-	SetDialogMode(mode);
-	InitDialog();
-	switch (m_DialogMode)
-	{
-	case DialogMode::eAddDialog:
-	{
-		setWindowTitle("New Profile");
-		m_sImageFileName = "";
-		break;
-	}
-	case DialogMode::eEditDialog:
-	{
-		setWindowTitle("Edit Profile");
-		m_EditedProfile = p;
-		m_sImageFileName = QString::fromStdString(m_EditedProfile.GetPPAddr());
-		FillDialog();
-		break;
-	}
-	default:
-		std::cout << "AddEditProfileDialog::SetDialogMode Unknown DialogMode!\n";
-	}
-}
 void AddEditProfileDialog::InitDialog()
 {
+	m_sImageFileName = "";
 	ui.lineEdit_NameSurname->setText("");
 	ui.lineEdit_PPAddr->setText("");
 	ui.radioButton_Female->setAutoExclusive(false);
@@ -51,9 +28,10 @@ void AddEditProfileDialog::InitDialog()
 }
 void AddEditProfileDialog::FillDialog()
 {
-	ui.lineEdit_NameSurname->setText(QString::fromStdString(m_EditedProfile.GetFullName()));
-	ui.lineEdit_PPAddr->setText(QString::fromStdString(m_EditedProfile.GetPPAddr()));
-	if(m_EditedProfile.GetGender() == Gender::Male)
+	m_sImageFileName = QString::fromStdString(m_EditedItem.GetPPAddr());
+	ui.lineEdit_NameSurname->setText(QString::fromStdString(m_EditedItem.GetFullName()));
+	ui.lineEdit_PPAddr->setText(QString::fromStdString(m_EditedItem.GetPPAddr()));
+	if(m_EditedItem.GetGender() == Gender::Male)
 		ui.radioButton_Male->setChecked(true);
 	else
 		ui.radioButton_Female->setChecked(true);
@@ -101,7 +79,7 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 	{
 		close();
 		Profile p{
-			m_EditedProfile.GetID(),
+			m_EditedItem.GetID(),
 			ui.lineEdit_NameSurname->text().toStdString(),
 			m_sImageFileName.toStdString(),
 			ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female
@@ -120,7 +98,7 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 			}
 			case DialogMode::eEditDialog:
 			{
-				if (p == m_EditedProfile)
+				if (p == m_EditedItem)
 				{
 					QMessageBox::warning(this, "Warning", "No change detected in the profile.");
 				}

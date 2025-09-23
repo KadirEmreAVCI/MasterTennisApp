@@ -36,6 +36,11 @@ std::vector<Organization> DatabaseController::GetOrganizations()
 	LoadDataFromDB();
 	return m_vecOrganization;
 }
+std::vector<Tournament> DatabaseController::GetTournaments()
+{
+	LoadDataFromDB();
+	return m_vecTournament;
+}
 std::vector<Match> DatabaseController::FindMatchesOfTournament(unsigned uiTournamentID)const
 {
 	std::vector<Match> vecMatchesOfTournament;
@@ -59,6 +64,16 @@ std::vector<Tournament> DatabaseController::FindTournamentsOfProfile(unsigned ui
 		return t.GetProfileID() == uiProfileID;
 		});
 	return vecTournamentsOfProfile;
+}
+Tournament DatabaseController::FindRootTournament(const Match& m)
+{
+	std::cout << "DatabaseController::FindRootTournament m_uiTournamentID: " << m.GetTournamentID() << "\n";
+	auto vecTournaments = GetTournaments();
+	auto iterRootTournament = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [m](const auto& t) {
+		return m.GetTournamentID() == t.GetID();
+		});
+	std::cout << "DatabaseController::FindRootTournament iterRootTournament == m_vecTournament.cend(): " << (iterRootTournament == m_vecTournament.cend()) << "\n";	
+	return *iterRootTournament;
 }
 void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)
 {

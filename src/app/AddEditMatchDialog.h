@@ -8,14 +8,14 @@
 #include "Match.h"
 #include "Set.h"
 class Calendar;
-class AddEditMatchDialog : public QDialog, public AddEditDialog
+class AddEditMatchDialog : public QDialog, public AddEditDialog<Match>
 {
 	Q_OBJECT
 
 public:
 	AddEditMatchDialog(QWidget *parent = nullptr);
 	~AddEditMatchDialog();
-	void PrepareDialog(DialogMode, const Tournament& t, const Match& m = Match{});
+	void SetRootTournament(const Tournament& t);
 private:
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
@@ -35,7 +35,6 @@ private:
 	QString m_sWL{};
 	unsigned m_uiMinSet{}, m_uiMaxSet{};
 	Tournament m_RootTournament;
-	Match m_EditedMatch{};
 	QDate m_MatchDate{};
 private slots:
 	void on_AddSetButton_clicked();

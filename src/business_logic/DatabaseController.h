@@ -19,9 +19,11 @@ public:
 	Profile GetActiveProfile(unsigned int uiActiveProfileID);
 	std::vector<Profile> GetProfiles();
 	std::vector<Organization> GetOrganizations();
+	std::vector<Tournament> GetTournaments();
 	std::vector<Match> FindMatchesOfTournament(unsigned uiTournamentID)const;
 	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;
+	Tournament FindRootTournament(const Match&);
 	template<typename T>
 	bool DeleteDBItem(const T& item)
 	{

@@ -6,14 +6,13 @@
 #include "ui_AddEditTournamentDialog.h"
 #include "AddEditDialog.h"
 #include "Profile.h"
-class AddEditTournamentDialog : public QDialog, public AddEditDialog
+class AddEditTournamentDialog : public QDialog, public AddEditDialog<Tournament>
 {
 	Q_OBJECT
 
 public:
 	AddEditTournamentDialog(QWidget *parent = nullptr);
 	~AddEditTournamentDialog();
-	void PrepareDialog(DialogMode, const Tournament& t = Tournament{});
 private:
 	// AddEditDialog
 	virtual void ClearDialog()override;
@@ -28,7 +27,6 @@ private:
 	void InitSetsBestOfComboBox(unsigned);
 	bool IsDoubleTournament()const;
 	const unsigned m_uiMaxParticipant{ 128 };
-	Tournament m_EditedTournament;
 	Ui::AddTournamentDialogClass ui;
 	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sSeason;
 	unsigned m_uiSetsBestOf{}, m_uiOrgID;

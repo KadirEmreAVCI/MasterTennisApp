@@ -5,7 +5,7 @@
 #include "Utility.h"
 
 AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent), AddEditDialog<Organization>()
 {
 	ui.setupUi(this);
 	setFixedSize(470, 230);
@@ -22,41 +22,17 @@ AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 
 AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
-void AddEditOrganizationDialog::PrepareDialog(DialogMode mode, const Organization& org)
-{
-	std::cout << "AddEditOrganizationDialog::PrepareDialog\n";
-	SetDialogMode(mode);
-	InitDialog();
-	switch (m_DialogMode)
-	{
-	case DialogMode::eAddDialog:
-	{
-		setWindowTitle("Add Organization");
-		m_EditedOrganization = Organization{};
-		break;
-	}
-	case DialogMode::eEditDialog:
-	{
-		setWindowTitle("Edit Organization");
-		m_EditedOrganization = org;
-		m_vecCategories = m_EditedOrganization.GetCategories();
-		m_sImageFileName = QString::fromStdString(m_EditedOrganization.GetOrgPictureAddr());
-		FillDialog();
-		break;
-	}
-	default:
-		std::cout << "AddEditOrganizationDialog::SetDialogMode Unknown DialogMode!\n";
-	}
-}
 void AddEditOrganizationDialog::InitDialog()
 {
 	ClearDialog();
 }
 void AddEditOrganizationDialog::FillDialog()
 {
-	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedOrganization.GetName()));
-	ui.lineEdit_ImagePath->setText(QString::fromStdString(m_EditedOrganization.GetOrgPictureAddr()));
-	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedOrganization.GetCategories())));
+	m_vecCategories = m_EditedItem.GetCategories();
+	m_sImageFileName = QString::fromStdString(m_EditedItem.GetOrgPictureAddr());
+	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedItem.GetName()));
+	ui.lineEdit_ImagePath->setText(QString::fromStdString(m_EditedItem.GetOrgPictureAddr()));
+	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedItem.GetCategories())));
 }
 void AddEditOrganizationDialog::ClearDialog()
 {
@@ -80,7 +56,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 	if (IsMandatoryFieldsFilled())
 	{
 		Organization org{
-			m_EditedOrganization.GetID(),
+			m_EditedItem.GetID(),
 			ui.lineEdit_OrganizationName->text().toStdString(),
 			m_sImageFileName.toStdString(),
 			m_vecCategories
