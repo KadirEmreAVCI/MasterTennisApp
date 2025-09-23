@@ -16,7 +16,6 @@ void DatabaseController::LoadDataFromDB()
 }
 Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
 {
-	LoadDataFromDB();
 	auto iterActiveProfile = std::find_if(m_vecProfile.cbegin(), m_vecProfile.cend(), [uiActiveProfileID](const auto& p) {
 		return p.GetID() == uiActiveProfileID;
 		});
@@ -28,17 +27,14 @@ Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
 }
 std::vector<Profile> DatabaseController::GetProfiles()
 {
-	LoadDataFromDB();
 	return m_vecProfile;
 }
 std::vector<Organization> DatabaseController::GetOrganizations()
 {
-	LoadDataFromDB();
 	return m_vecOrganization;
 }
 std::vector<Tournament> DatabaseController::GetTournaments()
 {
-	LoadDataFromDB();
 	return m_vecTournament;
 }
 std::vector<Match> DatabaseController::FindMatchesOfTournament(unsigned uiTournamentID)const

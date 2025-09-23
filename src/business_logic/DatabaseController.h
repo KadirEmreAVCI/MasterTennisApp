@@ -34,17 +34,32 @@ public:
 			std::cerr << "DatabaseController::DeleteDBItem item to be deleted could not be found in DB!\n";
 			return false;
 		}
-		return iterItem->DeleteFromDB();
+		const bool blDeletion = iterItem->DeleteFromDB();
+		if(blDeletion)
+		{
+			LoadDataFromDB();
+		}
+		return blDeletion;
 	}
 	template<typename T>
-	bool AddNewDBItem(const T& item)const
+	bool AddNewDBItem(const T& item)
 	{
-		return item.InsertToDB();
+		const bool blAddition = item.InsertToDB();
+		if (blAddition)
+		{
+			LoadDataFromDB();
+		}
+		return blAddition;
 	}
 	template<typename T>
-	bool EditDBItem(const T& item)const
+	bool EditDBItem(const T& item)
 	{
-		return item.EditInDB();
+		const bool blEdition = item.EditInDB();
+		if (blEdition)
+		{
+			LoadDataFromDB();
+		}
+		return blEdition;
 	}
 private:
 	DatabaseController() = default;
