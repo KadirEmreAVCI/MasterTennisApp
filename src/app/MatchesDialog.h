@@ -19,8 +19,6 @@ private:
 	virtual void LoadDataToTable()override;
 	virtual void FillTable()override;
 	
-	void OpenAddDialog();
-	void OpenEditDialog(const Match&);
 	void PlaceMatch2Table(const Match& m, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile& p);
 	Ui::MatchesDialogClass ui;

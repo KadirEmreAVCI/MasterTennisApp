@@ -5,7 +5,7 @@
 #include "Utility.h"
 
 AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
-	: QDialog(parent), AddEditDialog<Profile>()
+	: QDialog(parent), AddEditDialog<Profile>(this)
 {
 	ui.setupUi(this);
 	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);

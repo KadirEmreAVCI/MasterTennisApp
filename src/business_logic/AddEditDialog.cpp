@@ -6,6 +6,25 @@
 #include "Tournament.h"
 #include "Match.h"
 template <typename T>
+AddEditDialog<T>::AddEditDialog(QDialog* parent) : m_pParent{parent}
+{
+
+}
+template <typename T>
+void AddEditDialog<T>::OpenAddDialog()
+{
+	m_pParent->setModal(true);
+	PrepareDialog(DialogMode::eAddDialog);
+	m_pParent->exec();
+}
+template <typename T>
+void AddEditDialog<T>::OpenEditDialog(const T& item)
+{
+	m_pParent->setModal(true);
+	PrepareDialog(DialogMode::eEditDialog, item);
+	m_pParent->exec();
+}
+template <typename T>
 void AddEditDialog<T>::PrepareDialog(DialogMode mode, const T& item)
 {
 	m_EditedItem = item;

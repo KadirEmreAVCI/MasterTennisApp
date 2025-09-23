@@ -15,7 +15,6 @@ public:
 	~ProfileSelectionDialog();
 	void OpenEditDialog(const Profile& selectedProfile);
 private:
-	void OpenAddDialog();
 	bool IsProfileDeleted(const std::vector<Profile>&)const;
 	Ui::ProfileSelectionDialogClass ui;
 	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };

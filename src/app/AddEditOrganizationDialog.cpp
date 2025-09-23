@@ -5,7 +5,7 @@
 #include "Utility.h"
 
 AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
-	: QDialog(parent), AddEditDialog<Organization>()
+	: QDialog(parent), AddEditDialog<Organization>(this)
 {
 	ui.setupUi(this);
 	setFixedSize(470, 230);

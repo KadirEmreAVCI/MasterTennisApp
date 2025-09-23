@@ -10,7 +10,7 @@
 #include "Utility.h"
 
 AddEditTournamentDialog::AddEditTournamentDialog(QWidget *parent)
-	: QDialog(parent), AddEditDialog<Tournament>()
+	: QDialog(parent), AddEditDialog<Tournament>(this)
 {
 	ui.setupUi(this);
 	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);

@@ -9,7 +9,7 @@
 #include "Utility.h"
 
 AddEditMatchDialog::AddEditMatchDialog(QWidget *parent)
-	: QDialog(parent),AddEditDialog<Match>()
+	: QDialog(parent),AddEditDialog<Match>(this)
 {
 	ui.setupUi(this);
 	m_upCalendar = std::make_unique<Calendar>(this);

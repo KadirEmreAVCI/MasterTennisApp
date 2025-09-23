@@ -24,8 +24,6 @@ private:
 	void PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile&);
 	void UserLoggedIn(const Profile&);
-	void OpenAddDialog();
-	void OpenEditDialog(const Tournament&);
 	void InitFilterComponents();
 	Ui::HistoryPageClass ui;
 	std::unique_ptr<AddEditTournamentDialog> m_upAddEditTournamentDialog{ nullptr };

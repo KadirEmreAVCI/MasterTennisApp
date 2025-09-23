@@ -41,9 +41,7 @@ void ProfileWidget::FillProfileButton()
 }
 void ProfileWidget::OpenEditDialog(const Profile& selectedProfile)
 {
-    m_upAddEditProfileDialog->setModal(true);
-    m_upAddEditProfileDialog->PrepareDialog(DialogMode::eEditDialog, selectedProfile);
-    m_upAddEditProfileDialog->exec();
+    m_upAddEditProfileDialog->OpenEditDialog(selectedProfile);
 }
 void ProfileWidget::on_ProfileButton_clicked()
 {

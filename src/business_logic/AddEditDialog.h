@@ -1,6 +1,8 @@
 #ifndef ADDEDITDIALOG_H
 #define ADDEDITDIALOG_H
 
+class QDialog;
+
 enum class DialogMode {
 	eAddDialog,
 	eEditDialog
@@ -8,10 +10,12 @@ enum class DialogMode {
 template <typename T>
 class AddEditDialog {
 public:
-	void PrepareDialog(DialogMode mode, const T& item = T{});
+	void OpenAddDialog();
+	void OpenEditDialog(const T&);
 protected:
-	AddEditDialog() = default;
+	explicit AddEditDialog(QDialog* parent);
 	virtual ~AddEditDialog() = default;
+	void PrepareDialog(DialogMode mode, const T& item = T{});
 	void SetDialogMode(DialogMode);
 	virtual void InitDialog() = 0;
 	virtual void FillDialog() = 0;
@@ -26,6 +30,7 @@ protected:
 	QString m_sFullSourceDir{};
 	QString m_sImageFileName{};
 	T m_EditedItem{};
+	QDialog* m_pParent{nullptr};
 };
 
 #endif

@@ -59,27 +59,14 @@ void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowI
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::EditOrganization);
 }
-
-void OrganizationDialog::OpenAddDialog()
-{
-	m_upAddEditOrganizationDialog->setModal(true);
-	m_upAddEditOrganizationDialog->PrepareDialog(DialogMode::eAddDialog);
-	m_upAddEditOrganizationDialog->exec();
-}
-void OrganizationDialog::OpenEditDialog(const Organization& org)
-{
-	m_upAddEditOrganizationDialog->setModal(true);
-	m_upAddEditOrganizationDialog->PrepareDialog(DialogMode::eEditDialog, org);
-	m_upAddEditOrganizationDialog->exec();
-}
 void OrganizationDialog::on_NewOrganizationButton_clicked()
 {
-	OpenAddDialog();
+	m_upAddEditOrganizationDialog->OpenAddDialog();
 }
 void OrganizationDialog::EditOrganization()
 {
 	auto SignalingOrganization = utility::GetSignalingItem<Organization>(m_vecOrganization, ui.tableWidget, sender());
-	OpenEditDialog(SignalingOrganization);
+	m_upAddEditOrganizationDialog->OpenEditDialog(SignalingOrganization);
 }
 void OrganizationDialog::DeleteOrganization()
 {

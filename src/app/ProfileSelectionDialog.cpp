@@ -18,17 +18,9 @@ ProfileSelectionDialog::~ProfileSelectionDialog()
 {
 	utility::ClearListWidget(ui.listWidget);
 }
-void ProfileSelectionDialog::OpenAddDialog()
-{
-	m_upAddEditProfileDialog->setModal(true);
-	m_upAddEditProfileDialog->PrepareDialog(DialogMode::eAddDialog);
-	m_upAddEditProfileDialog->exec();
-}
 void ProfileSelectionDialog::OpenEditDialog(const Profile& selectedProfile)
 {
-	m_upAddEditProfileDialog->setModal(true);
-	m_upAddEditProfileDialog->PrepareDialog(DialogMode::eEditDialog, selectedProfile);
-	m_upAddEditProfileDialog->exec();
+	m_upAddEditProfileDialog->OpenEditDialog(selectedProfile);
 }
 bool ProfileSelectionDialog::IsProfileDeleted(const std::vector<Profile>& vecProfile)const
 {
@@ -50,5 +42,5 @@ void ProfileSelectionDialog::UpdateProfiles(const std::vector<Profile>& vecProfi
 }
 void ProfileSelectionDialog::on_NewProfileButton_clicked()
 {
-	OpenAddDialog();
+	m_upAddEditProfileDialog->OpenAddDialog();
 }

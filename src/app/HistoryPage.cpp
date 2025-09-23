@@ -78,18 +78,6 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
 }
-void HistoryPage::OpenAddDialog()
-{
-	m_upAddEditTournamentDialog->setModal(true);
-	m_upAddEditTournamentDialog->PrepareDialog(DialogMode::eAddDialog);
-	m_upAddEditTournamentDialog->exec();
-}
-void HistoryPage::OpenEditDialog(const Tournament& t)
-{
-	m_upAddEditTournamentDialog->setModal(true);
-	m_upAddEditTournamentDialog->PrepareDialog(DialogMode::eEditDialog, t);
-	m_upAddEditTournamentDialog->exec();
-}
 void HistoryPage::InitFilterComponents()
 {
 	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Progress", "Opponent"}, true);
@@ -108,7 +96,7 @@ void HistoryPage::InitFilterComponents()
 }
 void HistoryPage::on_NewTournamentButton_clicked()
 {
-	OpenAddDialog();
+	m_upAddEditTournamentDialog->OpenAddDialog();
 }
 void HistoryPage::on_RemoveFilterButton_clicked()
 {
@@ -242,7 +230,7 @@ void HistoryPage::LockUnlockTournament()
 void HistoryPage::EditTournament()
 {
 	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
-	OpenEditDialog(SignalingTournament);
+	m_upAddEditTournamentDialog->OpenEditDialog(SignalingTournament);
 }
 void HistoryPage::DeleteTournament()
 {
