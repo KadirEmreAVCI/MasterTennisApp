@@ -13,7 +13,7 @@ MatchesDialog::MatchesDialog(QWidget *parent)
 {
 	ui.setupUi(this);
 	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &MatchesDialog::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &MatchesDialog::ChangeInDB);
 	setFixedSize(750, 600);
 	InitTable(ui.tableWidget);
 }
@@ -65,6 +65,16 @@ void MatchesDialog::PlaceMatch2Table(const Match& m, unsigned uiRowIdx)
 	PlaceValue2TableCell(ui.tableWidget, m.GetTime().toString("hh:mm"), uiRowIdx, uiColumnIdx++);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::DeleteMatch);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::EditMatch);
+}
+void MatchesDialog::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_RootTournament.GetProfileID();
+		});
+	if(activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
 }
 void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 {

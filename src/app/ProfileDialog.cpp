@@ -13,8 +13,8 @@ ProfileDialog::ProfileDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	QObject::connect(&AppController::instance(), &AppController::InitProfiles, this, &ProfileDialog::UpdateProfileAlternatives);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInProfiles, this, &ProfileDialog::UpdateProfileAlternatives);
+	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &ProfileDialog::DBInitialized);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &ProfileDialog::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &ProfileDialog::UserLoggedIn);
 	CreateTabWidget();
 	setFixedSize(1150, 800);
@@ -56,6 +56,17 @@ void ProfileDialog::UserLoggedIn(const Profile& p)
 	ui.tabWidget->setCurrentIndex(0);
 	utility::InitComboBox(ui.comboBoxProfiles, QString::fromStdString(m_ActiveProfile.GetFullName()));
 	utility::InitLabelWithPicture(ui.labelPP, (m_ActiveProfile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_ActiveProfile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString());
+}
+void ProfileDialog::DBInitialized(const std::vector<Profile>& vecProfiles, const std::vector<Organization>&)
+{
+	UpdateProfileAlternatives(vecProfiles);
+}
+void ProfileDialog::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	if(vecProfile != m_vecProfile)
+	{
+		UpdateProfileAlternatives(m_vecProfile);
+	}
 }
 void ProfileDialog::on_LogOutButton_clicked()
 {

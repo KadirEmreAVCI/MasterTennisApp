@@ -15,7 +15,7 @@ HomePage::HomePage(QWidget *parent)
 {
 	ui.setupUi(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HomePage::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
 	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
@@ -117,6 +117,7 @@ void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
 }
 void HomePage::UserLoggedIn(const Profile& p)
 {
+	m_uiProfileID = p.GetID();
 	UpdateActiveProfileData(p);
 	if (!FindStartedUpcomingMatches().empty())
 	{
@@ -128,9 +129,19 @@ void HomePage::UserLoggedOut()
 	utility::ClearListWidget(ui.listWidget_TopParticipations);
 	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
 }
+void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{	
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_uiProfileID;
+		});
+	if(activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
+}
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
-	std::cout << "HomePage::UpdateOrganizations!!!!!!!!!!!!!!!\n";
+	std::cout << "HomePage::UpdateActiveProfileData!!!!!!!!!!!!!!!\n";
 	m_vecTournament = p.GetTournaments();
 	UpdateUpcomingMatches();
 	UpdateTopParticipations();

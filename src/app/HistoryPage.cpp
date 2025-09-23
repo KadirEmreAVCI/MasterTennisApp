@@ -27,7 +27,7 @@ HistoryPage::HistoryPage(QWidget *parent)
 	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HistoryPage::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HistoryPage::ChangeInDB);
 	InitFilterComponents();
 	InitTable(ui.tableWidget);
 }
@@ -162,6 +162,16 @@ void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
 		std::cerr << "on_lineEditSearchBar_textChanged m_upActiveFilter is nullptr!\n";
 	}
 }
+void HistoryPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_uiProfileID;
+		});
+	if(activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
+}
 void HistoryPage::UpdateActiveProfileData(const Profile& p)
 {
 	m_vecTournament = p.GetTournaments();
@@ -176,6 +186,7 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {
+	m_uiProfileID = p.GetID();
 	if (m_blFirstLoadOfData)
 	{
 		UpdateActiveProfileData(p);		// To adjust the height of the rows properly.

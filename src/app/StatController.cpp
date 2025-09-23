@@ -16,7 +16,7 @@ StatController& StatController::instance()
 StatController::StatController()
 {
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &StatController::UpdateActiveProfileData);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &StatController::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &StatController::ChangeInDB);
 }
 StatController::~StatController()
 {
@@ -161,9 +161,20 @@ std::string StatController::GetMaxProgress(const Tournament& t)const
 {
 	return t.GetLastMatch().value_or(Match{}).GetStage();
 }
+void StatController::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_uiProfileID;
+		});
+	if (activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
+}
 void StatController::UpdateActiveProfileData(const Profile& p)
 {
 	std::cout << "StatController::UpdateTournaments\n";
+	m_uiProfileID = p.GetID();
 	m_vecTournament = p.GetTournaments();
 	const auto& vecUpdatedCareerWLStat = UpdateCareerStats();
 	emit CareerStatsUpdated(m_vecTournament.size(), CountQualificationFromGroupStages(), vecUpdatedCareerWLStat);

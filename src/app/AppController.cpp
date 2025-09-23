@@ -36,8 +36,7 @@ void AppController::StartApplication()
 	m_upProfileDialog = std::make_unique<ProfileDialog>();
 	StatController::create();
 	m_upMasterTennisApp->show();
-	emit InitProfiles(DatabaseController::instance().GetProfiles());
-	emit InitOrganizations(DatabaseController::instance().GetOrganizations());
+	emit DBInitialized(DatabaseController::instance().GetProfiles(), DatabaseController::instance().GetOrganizations());
 }
 std::string AppController::GetAppName()const
 {
@@ -64,7 +63,10 @@ bool AppController::AddNewProfile(const Profile& p)
 	const bool blProfileAdded = DatabaseController::instance().AddNewDBItem<Profile>(p);
 	if (blProfileAdded)
 	{
-		emit ChangeInProfiles(DatabaseController::instance().GetProfiles());
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blProfileAdded;
 }
@@ -73,7 +75,10 @@ bool AppController::AddNewOrganization(const Organization& org)
 	const bool blOrgAdded = DatabaseController::instance().AddNewDBItem<Organization>(org);
 	if (blOrgAdded)
 	{
-		emit ChangeInOrganizations(DatabaseController::instance().GetOrganizations());
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blOrgAdded;
 }
@@ -82,7 +87,10 @@ bool AppController::AddNewTournament(const Tournament& t)
 	const bool blTournamentAdded = DatabaseController::instance().AddNewDBItem<Tournament>(t);
 	if (blTournamentAdded)
 	{
-		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blTournamentAdded;
 }
@@ -91,7 +99,10 @@ bool AppController::AddNewMatch(const Match& m)
 	const bool blNewMatchAdded = DatabaseController::instance().AddNewDBItem<Match>(m);
 	if (blNewMatchAdded)
 	{
-		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blNewMatchAdded;
 }
@@ -100,7 +111,10 @@ bool AppController::DeleteProfile(const Profile& p)
 	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Profile>(p);
 	if (blDeletion)
 	{
-		emit ChangeInProfiles(DatabaseController::instance().GetProfiles());
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blDeletion;
 }
@@ -109,7 +123,10 @@ bool AppController::DeleteOrganization(const Organization& org)
 	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Organization>(org);
 	if (blDeletion)
 	{
-		emit ChangeInOrganizations(DatabaseController::instance().GetOrganizations());
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blDeletion;
 }
@@ -118,7 +135,10 @@ bool AppController::DeleteTournament(const Tournament& t)
 	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Tournament>(t);
 	if (blDeletion)
 	{
-		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blDeletion;
 }
@@ -127,7 +147,10 @@ bool AppController::DeleteMatch(const Match& m)
 	const bool blDeletion = DatabaseController::instance().DeleteDBItem<Match>(m);
 	if (blDeletion)
 	{
-		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blDeletion;
 }
@@ -136,7 +159,10 @@ bool AppController::EditProfile(const Profile& p)
 	const bool blProfileEdited = DatabaseController::instance().EditDBItem<Profile>(p);
 	if (blProfileEdited)
 	{
-		emit ChangeInProfiles(DatabaseController::instance().GetProfiles());
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blProfileEdited;
 }
@@ -145,7 +171,10 @@ bool AppController::EditOrganization(const Organization& org)
 	const bool blOrganizationEdited = DatabaseController::instance().EditDBItem<Organization>(org);
 	if (blOrganizationEdited)
 	{
-		emit ChangeInOrganizations(DatabaseController::instance().GetOrganizations());
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blOrganizationEdited;
 }
@@ -154,7 +183,10 @@ bool AppController::EditTournament(const Tournament& t)
 	const bool blTournamentEdited = DatabaseController::instance().EditDBItem<Tournament>(t);
 	if (blTournamentEdited)
 	{
-		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blTournamentEdited;
 }
@@ -163,7 +195,10 @@ bool AppController::EditMatch(const Match& m)
 	const bool blMatchEdited = DatabaseController::instance().EditDBItem<Match>(m);
 	if (blMatchEdited)
 	{
-		emit ChangeInActiveProfile(DatabaseController::instance().GetActiveProfile(m_ActiveProfile.GetID()));
+		emit ChangeInDB(DatabaseController::instance().GetProfiles(), 
+						DatabaseController::instance().GetOrganizations(), 
+						DatabaseController::instance().GetTournaments(), 
+						DatabaseController::instance().GetMatches());
 	}
 	return blMatchEdited;
 }

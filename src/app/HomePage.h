@@ -32,10 +32,11 @@ private:
 	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);
 	void UserLoggedIn(const Profile& p);
 	void UserLoggedOut();
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
+	void UpdateActiveProfileData(const Profile&);
 	Ui::HomePageClass ui;
 	std::vector<Tournament> m_vecTournament;
-public slots:
-	void UpdateActiveProfileData(const Profile&);
+	unsigned m_uiProfileID = 0;	
 };
 
 #endif

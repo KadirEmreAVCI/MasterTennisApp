@@ -46,13 +46,10 @@ public slots:
 	void OnLogOutButtonClicked();
 signals:
 	// Signal functions are just declared, not defined by programmers!
-	void InitProfiles(const std::vector<Profile>&);
-	void InitOrganizations(const std::vector<Organization>&);
+	void DBInitialized(const std::vector<Profile>&, const std::vector<Organization>&);
 	void UserLoggedIn(const Profile&);
 	void UserLoggedOut();
-	void ChangeInActiveProfile(const Profile&);
-	void ChangeInProfiles(const std::vector<Profile>&);
-	void ChangeInOrganizations(const std::vector<Organization>&);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 };
 
 #endif

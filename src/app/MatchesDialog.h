@@ -21,6 +21,7 @@ private:
 	
 	void PlaceMatch2Table(const Match& m, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile& p);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::MatchesDialogClass ui;
 	std::unique_ptr<AddEditMatchDialog> m_upAddEditMatchDialog{ nullptr };
 	Tournament m_RootTournament;

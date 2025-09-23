@@ -13,9 +13,9 @@ AddEditTournamentDialog::AddEditTournamentDialog(QWidget *parent)
 	: QDialog(parent), AddEditDialog<Tournament>(this)
 {
 	ui.setupUi(this);
-	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &AddEditTournamentDialog::DBInitialized);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &AddEditTournamentDialog::UpdateActiveProfileData);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &AddEditTournamentDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &AddEditTournamentDialog::ChangeInDB);
 	ClearDialog();
 	setFixedHeight(250);
 	const unsigned int uiFixedWidth = 120;
@@ -151,6 +151,14 @@ void AddEditTournamentDialog::InitSetsBestOfComboBox(unsigned uiSetsBestOf)
 bool AddEditTournamentDialog::IsDoubleTournament()const
 {
 	return m_sType.toStdString().find("Double") != std::string::npos;
+}
+void AddEditTournamentDialog::DBInitialized(const std::vector<Profile>&, const std::vector<Organization>& vecOrganization)
+{
+	UpdateOrganizations(vecOrganization);
+}
+void AddEditTournamentDialog::ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>& vecOrganization, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	UpdateOrganizations(vecOrganization);
 }
 void AddEditTournamentDialog::on_CancelButton_clicked()
 {

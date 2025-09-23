@@ -25,17 +25,21 @@ Profile DatabaseController::GetActiveProfile(unsigned int uiActiveProfileID)
 	}
 	return *iterActiveProfile;
 }
-std::vector<Profile> DatabaseController::GetProfiles()
+std::vector<Profile> DatabaseController::GetProfiles()const
 {
 	return m_vecProfile;
 }
-std::vector<Organization> DatabaseController::GetOrganizations()
+std::vector<Organization> DatabaseController::GetOrganizations()const
 {
 	return m_vecOrganization;
 }
-std::vector<Tournament> DatabaseController::GetTournaments()
+std::vector<Tournament> DatabaseController::GetTournaments()const
 {
 	return m_vecTournament;
+}
+std::vector<Match> DatabaseController::GetMatches()const
+{
+	return m_vecMatch;
 }
 std::vector<Match> DatabaseController::FindMatchesOfTournament(unsigned uiTournamentID)const
 {

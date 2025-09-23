@@ -13,8 +13,8 @@ OrganizationDialog::OrganizationDialog(QWidget *parent)
 	ui.setupUi(this);
 	InitTable(ui.tableWidget);
 	m_upAddEditOrganizationDialog = std::make_unique<AddEditOrganizationDialog>(this);
-	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &OrganizationDialog::UpdateOrganizations);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &OrganizationDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &OrganizationDialog::DBInitialized);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &OrganizationDialog::ChangeInDB);
 	setWindowTitle("");
 	setFixedSize(560, 600);
 }
@@ -83,4 +83,15 @@ void OrganizationDialog::UpdateOrganizations(const std::vector<Organization>& ve
 	std::cout << "OrganizationDialog::UpdateOrganizations!!!!!!!!!!!!!!!\n";
 	m_vecOrganization = vecOrganization;
 	DisplayOrganizations();
+}
+void OrganizationDialog::DBInitialized(const std::vector<Profile>&, const std::vector<Organization>& vecOrganization)
+{
+	UpdateOrganizations(vecOrganization);
+}
+void OrganizationDialog::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>& vecOrganization, const std::vector<Tournament>& vecTournament, const std::vector<Match>& vecMatch)
+{
+	if(vecOrganization != m_vecOrganization)
+	{
+		UpdateOrganizations(vecOrganization);
+	}
 }
