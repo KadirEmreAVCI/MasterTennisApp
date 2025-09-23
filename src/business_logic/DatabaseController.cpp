@@ -56,12 +56,10 @@ std::vector<Tournament> DatabaseController::FindTournamentsOfProfile(unsigned ui
 }
 Tournament DatabaseController::FindRootTournament(const Match& m)
 {
-	std::cout << "DatabaseController::FindRootTournament m_uiTournamentID: " << m.GetTournamentID() << "\n";
 	auto vecTournaments = GetTournaments();
 	auto iterRootTournament = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [m](const auto& t) {
 		return m.GetTournamentID() == t.GetID();
 		});
-	std::cout << "DatabaseController::FindRootTournament iterRootTournament == m_vecTournament.cend(): " << (iterRootTournament == m_vecTournament.cend()) << "\n";	
 	return *iterRootTournament;
 }
 void DatabaseController::InitDatabase(std::shared_ptr<IDatabase> spDatabase)
