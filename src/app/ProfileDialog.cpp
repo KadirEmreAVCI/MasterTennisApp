@@ -65,7 +65,7 @@ void ProfileDialog::ChangeInDB(const std::vector<Profile>& vecProfile, const std
 {
 	if(vecProfile != m_vecProfile)
 	{
-		UpdateProfileAlternatives(m_vecProfile);
+		UpdateProfileAlternatives(vecProfile);
 	}
 }
 void ProfileDialog::on_LogOutButton_clicked()

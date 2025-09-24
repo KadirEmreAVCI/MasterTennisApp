@@ -6,6 +6,7 @@
 #include "UpcomingMatch.h"
 #include "MatchesDialog.h"
 #include "Utility.h"
+#include "DatabaseController.h"
 
 UpcomingMatch::UpcomingMatch(QWidget* parent, const std::string& sOrgImageFile, const Tournament& t, const Match& m)
 	: QWidget(parent), m_sOrgImageFile{ (Organization::GetOrgImageRootDestDir() + "/").toStdString() + sOrgImageFile}, m_Tournament{t}, m_Match{m}
@@ -44,7 +45,7 @@ void UpcomingMatch::FillUpcomingMatchButton()
 
 	QLabel* StageLabel = new QLabel(QString::fromStdString(m_Match.GetStage()));
 	std::string sOpponent = m_Match.GetOpponent1();
-	if (m_Match.GetOpponent2() != "-")
+	if(DatabaseController::instance().FindRootTournament(m_Match).IsDoubleTournament())
 	{
 		sOpponent += ("/" + m_Match.GetOpponent2());
 	}
