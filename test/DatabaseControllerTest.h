@@ -58,6 +58,7 @@ protected:
 		LoadOrganizationData();
 		LoadProfileData();
 	}
+	std::vector<Match> GetMatchesFromDB()const;
 	std::vector<Tournament> GetTournamentsFromDB()const;
 	std::vector<Organization> GetOrganizationsFromDB()const;
 	std::vector<Profile> GetProfilesFromDB()const;
@@ -95,28 +96,25 @@ TEST_P(FindTournamentsOfOrganizationTest, FindTournamentsOfOrganization)
 	}
 }
 
-// class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-// TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
-// {
-// 	auto [idx, expected] = GetParam();
-// 	const auto vecProfile = GetProfilesFromDB();
-// 	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
-// 	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
-// 	{
-// 		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
-// 	}
-// }
+class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
+TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
+{
+	auto [idx, expected] = GetParam();
+	const auto vecProfile = GetProfilesFromDB();
+	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
+	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
+	{
+		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
+	}
+}
 
-// class FindParticipatedOrgsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-// TEST_P(FindParticipatedOrgsOfProfileTest, FindParticipatedOrgsOfProfile)
-// {
-// 	auto [idx, expected] = GetParam();
-// 	const auto vecProfile = GetProfilesFromDB();
-// 	const auto vecParticipateOrg= GetProfilesFromDB()[idx].GetParticipatedOrgs();
-// 	for (std::size_t i = 0; i < vecParticipateOrg.size(); ++i)
-// 	{
-// 		EXPECT_EQ(expected[i],  vecParticipateOrg[i].GetID());
-// 	}
-// }
+class FindRootTournamentOfMatchTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(FindRootTournamentOfMatchTest, FindRootTournamentOfMatch)
+{
+	auto [idx, expected] = GetParam();
+	const auto vecMatch = GetMatchesFromDB();
+	const auto rootTournament = DatabaseController::instance().FindRootTournament(vecMatch[idx]);
+	EXPECT_EQ(expected, rootTournament.GetID());
+}
 
 #endif
