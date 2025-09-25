@@ -8,7 +8,7 @@ AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	: QDialog(parent), AddEditDialog<Organization>(this)
 {
 	ui.setupUi(this);
-	setFixedSize(470, 230);
+	setFixedSize(470, 250);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_Master);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_Aplus);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_A);
