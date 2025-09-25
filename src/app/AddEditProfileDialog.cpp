@@ -8,7 +8,6 @@ AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
 	: QDialog(parent), AddEditDialog<Profile>(this)
 {
 	ui.setupUi(this);
-	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
 	InitDialog();
 }
 
@@ -16,9 +15,8 @@ AddEditProfileDialog::~AddEditProfileDialog()
 {}
 void AddEditProfileDialog::InitDialog()
 {
-	m_sImageFileName = "";
+	ui.ProfilePicWidget->InitWidget(Profile::GetPictureRootDestDir());
 	ui.lineEdit_NameSurname->setText("");
-	ui.lineEdit_PPAddr->setText("");
 	ui.radioButton_Female->setAutoExclusive(false);
 	ui.radioButton_Male->setAutoExclusive(false);
 	ui.radioButton_Female->setChecked(false);
@@ -28,9 +26,8 @@ void AddEditProfileDialog::InitDialog()
 }
 void AddEditProfileDialog::FillDialog()
 {
-	m_sImageFileName = QString::fromStdString(m_EditedItem.GetPPAddr());
 	ui.lineEdit_NameSurname->setText(QString::fromStdString(m_EditedItem.GetFullName()));
-	ui.lineEdit_PPAddr->setText(QString::fromStdString(m_EditedItem.GetPPAddr()));
+	ui.ProfilePicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureAddr()));
 	if(m_EditedItem.GetGender() == Gender::Male)
 		ui.radioButton_Male->setChecked(true);
 	else
@@ -39,9 +36,9 @@ void AddEditProfileDialog::FillDialog()
 void AddEditProfileDialog::ClearDialog()
 {
 	ui.lineEdit_NameSurname->setText("");
-	ui.lineEdit_PPAddr->setText("");
 	ui.radioButton_Male->setChecked(false);
 	ui.radioButton_Female->setChecked(false);
+	ui.ProfilePicWidget->ClearWidget();
 }
 bool AddEditProfileDialog::IsMandatoryFieldsFilled()const
 {
@@ -49,29 +46,7 @@ bool AddEditProfileDialog::IsMandatoryFieldsFilled()const
 }
 bool AddEditProfileDialog::IsThereAnyUnsavedInfo()const
 {
-	return ui.lineEdit_NameSurname->text() != "" || (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked()) || ui.lineEdit_PPAddr->text() != "";
-}
-void AddEditProfileDialog::on_BrowseButton_clicked()
-{
-	const QString sFullSourceDir = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
-	if (QFileInfo(sFullSourceDir).fileName() != "")
-	{
-		const QString sRootDestDir = Profile::GetProfileImageRootDestDir();
-		OnBrowseButtonClicked(sFullSourceDir, sRootDestDir);
-		ui.lineEdit_PPAddr->setText(m_sFullSourceDir);
-	}
-}
-void AddEditProfileDialog::on_DefaultPPButton_clicked()
-{
-	if (ui.lineEdit_PPAddr->text() != "")
-	{
-		QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Cancellation", "Are you sure you want to remove the profile picture?", QMessageBox::Yes | QMessageBox::No);
-		if (reply == QMessageBox::Yes)
-		{
-			ClearImage();
-			ui.lineEdit_PPAddr->setText("");
-		}
-	}
+	return ui.lineEdit_NameSurname->text() != "" || (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked());
 }
 void AddEditProfileDialog::on_SaveButton_clicked()
 {
@@ -81,12 +56,12 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 		Profile p{
 			m_EditedItem.GetID(),
 			ui.lineEdit_NameSurname->text().toStdString(),
-			m_sImageFileName.toStdString(),
+			ui.ProfilePicWidget->GetImageFileName().toStdString(),
 			ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female
 		};
-		if (m_sImageFileName != "")
+		if (p.GetPictureAddr() != "")
 		{
-			SaveImage();
+			ui.ProfilePicWidget->SaveImage();
 		}
 		switch (m_DialogMode)
 		{

@@ -9,7 +9,7 @@
 #include "DatabaseController.h"
 
 UpcomingMatch::UpcomingMatch(QWidget* parent, const std::string& sOrgImageFile, const Tournament& t, const Match& m)
-	: QWidget(parent), m_sOrgImageFile{ (Organization::GetOrgImageRootDestDir() + "/").toStdString() + sOrgImageFile}, m_Tournament{t}, m_Match{m}
+	: QWidget(parent), m_sOrgImageFile{ (Organization::GetPictureRootDestDir() + "/").toStdString() + sOrgImageFile}, m_Tournament{t}, m_Match{m}
 {
 	setupUi(this);
 	QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
