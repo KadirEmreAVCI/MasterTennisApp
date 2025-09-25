@@ -29,8 +29,6 @@ private slots:
 	void on_CancelButton_clicked();
 	void on_ApplyButton_clicked();
 	void on_ClearButton_clicked();
-	void on_BrowseButton_clicked();
-	void on_DefaultPPButton_clicked();
 };
 
 #endif

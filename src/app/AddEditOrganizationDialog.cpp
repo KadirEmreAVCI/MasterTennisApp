@@ -16,7 +16,6 @@ AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_C);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_D);
 	m_vecCategoryCheckboxes.push_back(ui.checkBox_IlkTurnuvam);
-	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
 	InitDialog();
 }
 
@@ -24,24 +23,21 @@ AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
 void AddEditOrganizationDialog::InitDialog()
 {
+	ui.ProfilePicWidget->InitWidget(Organization::GetOrgImageRootDestDir());
 	ClearDialog();
 }
 void AddEditOrganizationDialog::FillDialog()
 {
 	m_vecCategories = m_EditedItem.GetCategories();
-	m_sImageFileName = QString::fromStdString(m_EditedItem.GetOrgPictureAddr());
 	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedItem.GetName()));
-	ui.lineEdit_ImagePath->setText(QString::fromStdString(m_EditedItem.GetOrgPictureAddr()));
 	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedItem.GetCategories())));
+	ui.ProfilePicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetOrgPictureAddr()));
 }
 void AddEditOrganizationDialog::ClearDialog()
 {
 	ui.lineEdit_OrganizationName->setText("");
-	ui.lineEdit_ImagePath->setText("");
 	ui.lineEdit_Categories->setText("");
-	m_sFullDestDir = "";
-	m_sFullSourceDir = "";
-	m_sImageFileName = "";
+	ui.ProfilePicWidget->ClearWidget();
 }
 bool AddEditOrganizationDialog::IsMandatoryFieldsFilled()const
 {
@@ -58,12 +54,12 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		Organization org{
 			m_EditedItem.GetID(),
 			ui.lineEdit_OrganizationName->text().toStdString(),
-			m_sImageFileName.toStdString(),
+			ui.ProfilePicWidget->GetImageFileName().toStdString(),
 			m_vecCategories
 		};
 		if (org.GetOrgPictureAddr() != "")
 		{
-			SaveImage();
+			ui.ProfilePicWidget->SaveImage();
 		}
 		switch (m_DialogMode)
 		{
@@ -133,26 +129,4 @@ void AddEditOrganizationDialog::ClearCategoryCheckboxes()
 	std::for_each(m_vecCategoryCheckboxes.begin(), m_vecCategoryCheckboxes.end(), [](QCheckBox* cb) {
 		cb->setChecked(false);
 		});
-}
-void AddEditOrganizationDialog::on_BrowseButton_clicked()
-{
-	const QString sFullSourceDir = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
-	if (QFileInfo(sFullSourceDir).fileName() != "")
-	{
-		const QString sRootDestDir = Organization::GetOrgImageRootDestDir();
-		OnBrowseButtonClicked(sFullSourceDir, sRootDestDir);
-		ui.lineEdit_ImagePath->setText(m_sFullSourceDir);
-	}
-}
-void AddEditOrganizationDialog::on_DefaultPPButton_clicked()
-{
-	if (ui.lineEdit_ImagePath->text() != "")
-	{
-		QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Cancellation", "Are you sure you want to remove the organization picture?", QMessageBox::Yes | QMessageBox::No);
-		if (reply == QMessageBox::Yes)
-		{
-			ClearImage();
-			ui.lineEdit_ImagePath->setText("");
-		}
-	}
 }
