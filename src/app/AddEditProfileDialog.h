@@ -21,8 +21,6 @@ private:
 	virtual bool IsThereAnyUnsavedInfo()const override;
 	Ui::AddEditProfileDialogClass ui;
 private slots:
-	void on_BrowseButton_clicked();
-	void on_DefaultPPButton_clicked();
 	void on_SaveButton_clicked();
 	void on_CancelButton_clicked();
 };

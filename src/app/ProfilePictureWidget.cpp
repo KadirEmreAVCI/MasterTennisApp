@@ -15,6 +15,7 @@ ProfilePictureWidget::~ProfilePictureWidget()
 }
 void ProfilePictureWidget::InitWidget(const QString& sImageRootDestDir)
 {
+    ClearWidget();
     m_sImageRootDestDir = sImageRootDestDir;
 }
 void ProfilePictureWidget::ClearWidget()

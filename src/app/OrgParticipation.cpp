@@ -4,7 +4,7 @@
 
 OrgParticipation::OrgParticipation(QWidget* parent, const std::string& sOrgImageFile, const std::string& sOrgName, unsigned uiParticipationCount) 
     :
-    m_sOrgImageFile{ (Organization::GetOrgImageRootDestDir() + "/").toStdString() + sOrgImageFile}, m_sOrgName{sOrgName}, m_uiParticipationCount{uiParticipationCount}
+    m_sOrgImageFile{ (Organization::GetPictureRootDestDir() + "/").toStdString() + sOrgImageFile}, m_sOrgName{sOrgName}, m_uiParticipationCount{uiParticipationCount}
 {
     setupUi(this);
     utility::InitLabelWithPicture(labelOrgIcon, m_sOrgImageFile, 1.90f);
