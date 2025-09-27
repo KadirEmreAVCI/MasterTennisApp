@@ -23,7 +23,7 @@ AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
 void AddEditOrganizationDialog::InitDialog()
 {
-	ui.OrgPicWidget->InitWidget(QString::fromStdString(Organization{}.GetPictureRootPath()));
+	ui.OrgPicWidget->InitWidget();
 	ClearDialog();
 }
 void AddEditOrganizationDialog::FillDialog()
@@ -31,7 +31,7 @@ void AddEditOrganizationDialog::FillDialog()
 	m_vecCategories = m_EditedItem.GetCategories();
 	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedItem.GetName()));
 	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedItem.GetCategories())));
-	ui.OrgPicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureFileName()));
+	ui.OrgPicWidget->FillWidget(&m_EditedItem);
 }
 void AddEditOrganizationDialog::ClearDialog()
 {
@@ -51,15 +51,16 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
+		const QString sSourcePictureFullPath = ui.OrgPicWidget->GetSourcePictureFullPath(); 
 		Organization org{
 			m_EditedItem.GetID(),
 			ui.lineEdit_OrganizationName->text().toStdString(),
-			ui.OrgPicWidget->GetImageFileName().toStdString(),
+			QFileInfo(sSourcePictureFullPath).fileName().toStdString(),
 			m_vecCategories
 		};
-		if (org.GetPictureFileName() != "")
+		if (sSourcePictureFullPath != "")
 		{
-			ui.OrgPicWidget->SaveImage();
+			org.SaveImage(sSourcePictureFullPath.toStdString());
 		}
 		switch (m_DialogMode)
 		{

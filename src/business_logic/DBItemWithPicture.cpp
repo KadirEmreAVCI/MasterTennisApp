@@ -4,6 +4,7 @@
 // Qt Headers
 #include <QFile>
 #include <QString>
+#include <QFileInfo>
 
 DBItemWithPicture::DBItemWithPicture(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns, const std::string& sPictureRootPath, const std::string& sPictureFileName) 
 	: 
@@ -44,3 +45,13 @@ void DBItemWithPicture::DeletePreviousPicture()const
 		QFile::remove(sPreviousPictureFullPath);
 	}
 }
+bool DBItemWithPicture::SaveImage(const std::string& sSourcePictureFullPath)const
+{
+	QString sPictureFileName = QFileInfo(QString::fromStdString(sSourcePictureFullPath)).fileName();
+	QString sDestPictureFullPath = QString::fromStdString(m_sPictureRootPath) + sPictureFileName;
+	if (QFile::exists(sDestPictureFullPath))
+	{
+		QFile::remove(sDestPictureFullPath);
+	}
+	return QFile::copy(QString::fromStdString(sSourcePictureFullPath), sDestPictureFullPath);
+} 
