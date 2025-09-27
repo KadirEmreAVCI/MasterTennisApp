@@ -17,7 +17,7 @@ protected:
     ~DBItemWithPicture() = default;
     virtual bool DeleteFromDB()const override;
     void LoadPictureFileName();
-	void DeleteCurrentPicture()const;
+    void DeletePreviousPicture()const;
 private:
     std::string m_sPictureFileName{};
     std::string m_sPictureRootPath{};

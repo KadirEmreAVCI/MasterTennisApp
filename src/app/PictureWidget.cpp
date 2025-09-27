@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <iostream>
 
 PictureWidget::PictureWidget(QWidget *parent): QWidget(parent)
 {

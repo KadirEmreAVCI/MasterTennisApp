@@ -48,7 +48,7 @@ bool Organization::InsertToDB()const
 }
 bool Organization::EditInDB()const
 {
-	DeleteCurrentPicture();
+	DeletePreviousPicture();
 	QMap<QString, QVariant> columnValues;
 	columnValues["Name"] = QString::fromStdString(m_sName);
 	columnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());

@@ -19,7 +19,7 @@ std::string DBItemWithPicture::GetPictureFileName()const
 }
 bool DBItemWithPicture::DeleteFromDB()const
 {
-	DeleteCurrentPicture();
+	DeletePreviousPicture();
 	return DBItem::DeleteFromDB();
 }
 void DBItemWithPicture::LoadPictureFileName()
@@ -35,15 +35,12 @@ std::string DBItemWithPicture::GetFullPicturePath()const
 	const std::string sPictureFileName = (m_sPictureFileName == "") ? "default.png" : m_sPictureFileName;
 	return m_sPictureRootPath + m_sPictureFileName;
 }
-void DBItemWithPicture::DeleteCurrentPicture()const
+void DBItemWithPicture::DeletePreviousPicture()const
 {
-	const std::string sCurrentPictureFileName = m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));
-	if (sCurrentPictureFileName != m_sPictureFileName)
+	const std::string sPreviousPictureFileName = m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));
+	const QString sPreviousPictureFullPath = QString::fromStdString(m_sPictureRootPath + sPreviousPictureFileName);
+	if (QFile::exists(sPreviousPictureFullPath))
 	{
-		const QString sFullCurrentPicturePath = QString::fromStdString(GetFullPicturePath());
-		if (QFile::exists(sFullCurrentPicturePath))
-		{
-			QFile::remove(sFullCurrentPicturePath);
-		}
+		QFile::remove(sPreviousPictureFullPath);
 	}
 }
