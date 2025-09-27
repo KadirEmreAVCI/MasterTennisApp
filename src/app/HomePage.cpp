@@ -37,8 +37,7 @@ void HomePage::UpdateUpcomingMatches()
 		});
 	for (const auto& m : vecUpcomingMatches)
 	{
-		const Tournament rootTournament = DatabaseController::instance().FindRootTournament(m);
-		InsertUpcomingMatch(new UpcomingMatch(this, (rootTournament.GetOrgPictureAddr() != "") ? rootTournament.GetOrgPictureAddr() : "default_org.png", rootTournament, m));
+		InsertUpcomingMatch(new UpcomingMatch(m, this));
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
