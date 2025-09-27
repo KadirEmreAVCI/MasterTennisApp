@@ -102,7 +102,7 @@ void AddEditTournamentDialog::FillDialog()
 {
 	using namespace utility;
 	m_uiOrgID = m_EditedItem.GetOrgID();
-	m_sOrgName = QString::fromStdString(m_EditedItem.GetOrgName());
+	m_sOrgName = QString::fromStdString(DatabaseController::instance().FindRootOrganization(m_EditedItem).GetName());
 	InitComboBox(ui.comboBox_OrganizationName, m_sOrgName);
 	m_sCategory = QString::fromStdString(m_EditedItem.GetCategory());
 	InitComboBox(ui.comboBox_Category, m_sCategory);

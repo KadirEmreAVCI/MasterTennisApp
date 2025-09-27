@@ -10,5 +10,5 @@ void FilterByOrganization::HighlightFilteredColumn(QTableWidget* tableWidget)con
 }
 std::string FilterByOrganization::GetFilteredData(const Tournament& t)const
 {
-    return t.GetOrgName();
+    return DatabaseController::instance().FindRootOrganization(t).GetName();
 }

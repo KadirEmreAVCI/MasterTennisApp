@@ -36,7 +36,7 @@ std::vector<std::string> Tournament::ms_vecPossiblePlayoffStages{"Final", "Semi 
 
 std::string Tournament::GetName()const
 {
-	return GetOrgName() + ", " + GetSeason() + ", " + GetType() + ", " + GetCategory();
+	return DatabaseController::instance().FindRootOrganization(*this).GetName() + ", " + GetSeason() + ", " + GetType() + ", " + GetCategory();
 }
 unsigned Tournament::GetID()const
 {
@@ -49,14 +49,6 @@ unsigned Tournament::GetProfileID()const
 unsigned Tournament::GetOrgID()const
 {
 	return m_uiOrgID;
-}
-std::string Tournament::GetOrgName()const
-{
-	return m_sOrgName;
-}
-std::string Tournament::GetOrgPictureAddr()const
-{
-	return m_sOrgPictureAddr;
 }
 std::string Tournament::GetType()const
 {
@@ -258,8 +250,6 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
 	m_uiProfileID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
 	m_uiOrgID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
-	m_sOrgName = m_spIDatabase->RetrieveValue("Organization", "Name", "ID", std::to_string(m_uiOrgID));
-	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue("Organization", "PictureFileName", "ID", std::to_string(m_uiOrgID));
 	m_sSeason = m_spIDatabase->RetrieveValue(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
 	m_sCategory = m_spIDatabase->RetrieveValue(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
 	m_sType = m_spIDatabase->RetrieveValue(m_sDBTable, "Type", "ID", std::to_string(m_uiID));
