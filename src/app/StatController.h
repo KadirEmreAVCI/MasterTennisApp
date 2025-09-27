@@ -28,6 +28,28 @@ private:
 	unsigned m_uiWin = 0;
 	unsigned m_uiLose = 0;
 };
+template <typename T, typename FuncCond = AlwaysTrue>
+class Stat{
+public:
+	void AssignDataByFilter(const std::vector<T>& vecData)
+	{
+		m_vecData = std::copy_if(vecData.cbegin(), vecData.cend(), vecData.cbegin(), FuncCond);
+	}
+	size_t GetCount()const
+	{
+		return m_vecData.size();
+	}
+	size_t GetWins()const
+	{
+		return std::count_if(m_vecData.cbegin(), m_vecData.cend(), [](const T& item){item.GetOutcome() == Outcome::HomeWin; });
+	}
+	size_t GetLoses()const
+	{
+		return GetCount() - GetWins();
+	}
+private:
+	std::vector<T> m_vecData;
+};
 class StatController : public QObject {
 	Q_OBJECT
 public:
