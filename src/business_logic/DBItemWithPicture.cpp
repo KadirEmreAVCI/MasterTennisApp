@@ -17,6 +17,11 @@ std::string DBItemWithPicture::GetPictureFileName()const
 {
 	return m_sPictureFileName;
 }
+bool DBItemWithPicture::DeleteFromDB()const
+{
+	DeleteCurrentPicture();
+	return DBItem::DeleteFromDB();
+}
 void DBItemWithPicture::LoadPictureFileName()
 {
 	m_sPictureFileName = m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));

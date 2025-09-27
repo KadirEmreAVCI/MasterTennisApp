@@ -72,6 +72,5 @@ bool Organization::DeleteFromDB()const
 			return false;
 		}
 	}
-	DeleteCurrentPicture();
-	return DBItem::DeleteFromDB();
+	return DBItemWithPicture::DeleteFromDB();
 }

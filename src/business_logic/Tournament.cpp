@@ -259,7 +259,7 @@ void Tournament::LoadFromDB(unsigned ID)
 	m_uiProfileID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ProfileID", "ID", std::to_string(m_uiID)));
 	m_uiOrgID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "OrganizationID", "ID", std::to_string(m_uiID)));
 	m_sOrgName = m_spIDatabase->RetrieveValue("Organization", "Name", "ID", std::to_string(m_uiOrgID));
-	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_uiOrgID));
+	m_sOrgPictureAddr = m_spIDatabase->RetrieveValue("Organization", "PictureFileName", "ID", std::to_string(m_uiOrgID));
 	m_sSeason = m_spIDatabase->RetrieveValue(m_sDBTable, "Season", "ID", std::to_string(m_uiID));
 	m_sCategory = m_spIDatabase->RetrieveValue(m_sDBTable, "Category", "ID", std::to_string(m_uiID));
 	m_sType = m_spIDatabase->RetrieveValue(m_sDBTable, "Type", "ID", std::to_string(m_uiID));

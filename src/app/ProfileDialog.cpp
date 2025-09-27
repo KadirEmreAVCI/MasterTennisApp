@@ -55,7 +55,7 @@ void ProfileDialog::UserLoggedIn(const Profile& p)
 	m_ActiveProfile = p; 
 	ui.tabWidget->setCurrentIndex(0);
 	utility::InitComboBox(ui.comboBoxProfiles, QString::fromStdString(m_ActiveProfile.GetFullName()));
-	utility::InitLabelWithPicture(ui.labelPP, (m_ActiveProfile.GetPictureAddr() != "") ? (Profile::GetPictureRootDestDir().toStdString() + m_ActiveProfile.GetPictureAddr()) : (Profile::GetPictureRootDestDir() + "default_profile.png").toStdString());
+	utility::InitLabelWithPicture(ui.labelPP, m_ActiveProfile.GetFullPicturePath());
 }
 void ProfileDialog::DBInitialized(const std::vector<Profile>& vecProfiles, const std::vector<Organization>&)
 {

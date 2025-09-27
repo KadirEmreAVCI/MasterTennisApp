@@ -15,6 +15,7 @@ public:
 protected: 
     DBItemWithPicture(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns, const std::string& sPictureRootPath, const std::string& sPictureFileName);
     ~DBItemWithPicture() = default;
+    virtual bool DeleteFromDB()const override;
     void LoadPictureFileName();
 	void DeleteCurrentPicture()const;
 private:

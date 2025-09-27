@@ -28,7 +28,7 @@ void ProfileWidget::FillProfileButton()
     QHBoxLayout* layout = new QHBoxLayout(container);
     layout->setContentsMargins(5, 5, 5, 5);
 
-    QLabel* PPLabel = utility::CreateLabelWithPicture((m_Profile.GetPictureAddr() != "") ? (Profile::GetPictureRootDestDir().toStdString() + m_Profile.GetPictureAddr()) : (Profile::GetPictureRootDestDir() + "default_profile.png").toStdString(), 0.125f);
+    QLabel* PPLabel = utility::CreateLabelWithPicture(m_Profile.GetFullPicturePath(), 0.125f);
 
     QLabel* ProfileNameLabel = new QLabel(QString::fromStdString(m_Profile.GetFullName()));
     QFont font = ProfileNameLabel->font();
