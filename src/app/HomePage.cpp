@@ -95,7 +95,7 @@ void HomePage::UpdateTopParticipations()
 		const auto& t = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [prParticipation](const Tournament& t){
 			return prParticipation.first == t.GetOrgID();
 		});
-		InsertOrgParticipation(new OrgParticipation(this, t->GetOrgPictureAddr(), t->GetOrgName(), prParticipation.second));
+		InsertOrgParticipation(new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
 	}
 	ui.listWidget_TopParticipations->setFixedHeight(280);
 }
