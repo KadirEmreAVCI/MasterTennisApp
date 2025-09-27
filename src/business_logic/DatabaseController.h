@@ -24,6 +24,7 @@ public:
 	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;
 	Tournament FindRootTournament(const Match&);
+	Organization FindRootOrganization(const Tournament&)const;
 	template<typename T>
 	bool DeleteDBItem(const T& item)
 	{

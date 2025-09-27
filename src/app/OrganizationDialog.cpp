@@ -46,14 +46,7 @@ void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowI
 {
 	using namespace utility;
 	unsigned uiColumnIdx{};
-	if (org.GetPictureAddr() != "")
-	{
-		PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetPictureRootDestDir() + QString::fromStdString(org.GetPictureAddr())).toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
-	}
-	else
-	{
-		PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetPictureRootDestDir() + "default_org.png").toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
-	}
+	PlaceLabel2TableCellWithImage(ui.tableWidget, org.GetFullPicturePath(), 0.1f, uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);

@@ -23,7 +23,7 @@ AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
 void AddEditOrganizationDialog::InitDialog()
 {
-	ui.ProfilePicWidget->InitWidget(Organization::GetPictureRootDestDir());
+	ui.ProfilePicWidget->InitWidget(QString::fromStdString(Organization{}.GetPictureRootPath()));
 	ClearDialog();
 }
 void AddEditOrganizationDialog::FillDialog()
@@ -31,7 +31,7 @@ void AddEditOrganizationDialog::FillDialog()
 	m_vecCategories = m_EditedItem.GetCategories();
 	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedItem.GetName()));
 	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedItem.GetCategories())));
-	ui.ProfilePicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureAddr()));
+	ui.ProfilePicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureFileName()));
 }
 void AddEditOrganizationDialog::ClearDialog()
 {
@@ -57,7 +57,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 			ui.ProfilePicWidget->GetImageFileName().toStdString(),
 			m_vecCategories
 		};
-		if (org.GetPictureAddr() != "")
+		if (org.GetPictureFileName() != "")
 		{
 			ui.ProfilePicWidget->SaveImage();
 		}

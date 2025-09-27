@@ -6,16 +6,14 @@
 #include "Utility.h"
 #include "DatabaseController.h"
 
-QString Organization::ms_sPictureRootDestDir = "";
 Organization::Organization(	unsigned uiID, 
 							const std::string& sName, 
-							const std::string& sPictureAddr,
+							const std::string& sPictureFileName,
 							const std::vector<std::string>& vecCategories)
 							:
 							m_sName{ sName },
-							m_sPictureAddr{ sPictureAddr },
 							m_vecCategories{ vecCategories },
-							DBItem(uiID, "Organization", "Name,ImageFileName,Categories")
+							DBItemWithPicture(uiID, "Organization", "Name,PictureFileName,Categories", "../../src/app/resources/organizations/", sPictureFileName)
 {}
 unsigned Organization::GetID()const
 {
@@ -24,10 +22,6 @@ unsigned Organization::GetID()const
 std::string Organization::GetName()const
 {
 	return m_sName;
-}
-std::string Organization::GetPictureAddr()const
-{
-	return m_sPictureAddr;
 }
 std::vector<std::string> Organization::GetCategories()const
 {
@@ -48,16 +42,16 @@ bool Organization::InsertToDB()const
 {
 	std::cout << "Organization::InsertToDB org = " << *this << "\n";
 	std::string sDBValues{ "'" + GetName() +
-							"','" + GetPictureAddr() +
+							"','" + GetPictureFileName() +
 							"','" + utility::Serialize(m_vecCategories) + "'" };
 	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);
 }
 bool Organization::EditInDB()const
 {
-	DeletePreviousPP();
+	DeleteCurrentPicture();
 	QMap<QString, QVariant> columnValues;
 	columnValues["Name"] = QString::fromStdString(m_sName);
-	columnValues["ImageFileName"] = QString::fromStdString(m_sPictureAddr);
+	columnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
 	columnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
 	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
 }
@@ -65,7 +59,7 @@ void Organization::LoadFromDB(unsigned ID)
 {
 	m_uiID = stoi(m_spIDatabase->RetrieveValue(m_sDBTable, "ID", ID));
 	m_sName = m_spIDatabase->RetrieveValue(m_sDBTable, "Name", "ID", std::to_string(m_uiID));
-	m_sPictureAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
+	LoadPictureFileName();
 	m_vecCategories = DeserializeDBColumn("Categories");
 	SetTournaments(DatabaseController::instance().FindTournamentsOfOrganization(m_uiID));
 }
@@ -78,30 +72,6 @@ bool Organization::DeleteFromDB()const
 			return false;
 		}
 	}
-	const QString sFullSourceDir = GetPictureRootDestDir() + QString::fromStdString(GetPictureAddr());
-	if (QFile::exists(sFullSourceDir))
-	{
-		QFile::remove(sFullSourceDir);
-	}
+	DeleteCurrentPicture();
 	return DBItem::DeleteFromDB();
-}
-QString Organization::GetPictureRootDestDir()
-{
-	return ms_sPictureRootDestDir;
-}
-void Organization::SetPictureRootDestDir(const QString& sPictureRootDestDir)
-{
-	ms_sPictureRootDestDir = sPictureRootDestDir;
-}
-void Organization::DeletePreviousPP()const
-{
-	const std::string sPreviousPPAddr = m_spIDatabase->RetrieveValue(m_sDBTable, "ImageFileName", "ID", std::to_string(m_uiID));
-	if (sPreviousPPAddr != m_sPictureAddr)
-	{
-		const QString sFullsPreviousPPAddr = GetPictureRootDestDir() + QString::fromStdString(sPreviousPPAddr);
-		if (QFile::exists(sFullsPreviousPPAddr))
-		{
-			QFile::remove(sFullsPreviousPPAddr);
-		}
-	}
 }
