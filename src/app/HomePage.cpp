@@ -37,8 +37,7 @@ void HomePage::UpdateUpcomingMatches()
 		});
 	for (const auto& m : vecUpcomingMatches)
 	{
-		const Tournament rootTournament = DatabaseController::instance().FindRootTournament(m);
-		InsertUpcomingMatch(new UpcomingMatch(this, (rootTournament.GetOrgPictureAddr() != "") ? rootTournament.GetOrgPictureAddr() : "default_org.png", rootTournament, m));
+		InsertUpcomingMatch(new UpcomingMatch(m, this));
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
@@ -95,7 +94,7 @@ void HomePage::UpdateTopParticipations()
 		const auto& t = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [prParticipation](const Tournament& t){
 			return prParticipation.first == t.GetOrgID();
 		});
-		InsertOrgParticipation(new OrgParticipation(this, t->GetOrgPictureAddr(), t->GetOrgName(), prParticipation.second));
+		InsertOrgParticipation(new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
 	}
 	ui.listWidget_TopParticipations->setFixedHeight(280);
 }

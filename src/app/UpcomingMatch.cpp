@@ -8,17 +8,18 @@
 #include "Utility.h"
 #include "DatabaseController.h"
 
-UpcomingMatch::UpcomingMatch(QWidget* parent, const std::string& sOrgImageFile, const Tournament& t, const Match& m)
-	: QWidget(parent), m_sOrgImageFile{ (Organization::GetPictureRootDestDir() + "/").toStdString() + sOrgImageFile}, m_Tournament{t}, m_Match{m}
+UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, QWidget(parent) 
 {
 	setupUi(this);
-	QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
+	m_RootTournament = DatabaseController::instance().FindRootTournament(m_Match);
+	m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
+	QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
 	setFixedSize(g_uiUpcomingMatchWidth, g_uiUpcomingMatchHeight);
 	InitializeTimer();
 	InitializeCountdown();
 	FillUpcomingMatchButton();
-	utility::InitLabelWithPicture(label_OrgImage, m_sOrgImageFile, 1.90f);
+	utility::InitLabelWithPicture(label_OrgImage, m_RootOrganization.GetFullPicturePath(), 1.90f);
 }
 UpcomingMatch::~UpcomingMatch()
 {}
@@ -41,11 +42,11 @@ void UpcomingMatch::FillUpcomingMatchButton()
 	QVBoxLayout* layout = new QVBoxLayout(container);
 	layout->setContentsMargins(5, 5, 5, 5);
 
-	QLabel* TournamentNameLabel = new QLabel(QString::fromStdString(m_Tournament.GetOrgName() + ", " + m_Tournament.GetType() + ", " + m_Tournament.GetCategory()));
+	QLabel* TournamentNameLabel = new QLabel(QString::fromStdString(m_RootOrganization.GetName() + ", " + m_RootTournament.GetType() + ", " + m_RootTournament.GetCategory()));
 
 	QLabel* StageLabel = new QLabel(QString::fromStdString(m_Match.GetStage()));
 	std::string sOpponent = m_Match.GetOpponent1();
-	if(DatabaseController::instance().FindRootTournament(m_Match).IsDoubleTournament())
+	if(m_RootTournament.IsDoubleTournament())
 	{
 		sOpponent += ("/" + m_Match.GetOpponent2());
 	}
@@ -84,13 +85,13 @@ void UpcomingMatch::PrintCountdown()
 }
 void UpcomingMatch::MatchStarted()
 {
-	emit UpcomingMatchStarted(m_Tournament, m_Match);
+	emit UpcomingMatchStarted(m_RootTournament, m_Match);
 }
 void UpcomingMatch::on_UpcomingMatchButton_clicked()
 {
-	m_upMatchesDialog->setWindowTitle(QString::fromStdString(m_Tournament.GetName()));
-	const auto& vecMatches = m_Tournament.GetMatches();
-	m_upMatchesDialog->DisplayMatches(m_Tournament);
+	m_upMatchesDialog->setWindowTitle(QString::fromStdString(m_RootTournament.GetName()));
+	const auto& vecMatches = m_RootTournament.GetMatches();
+	m_upMatchesDialog->DisplayMatches(m_RootTournament);
 	m_upMatchesDialog->setModal(true);
 	m_upMatchesDialog->exec();
 }

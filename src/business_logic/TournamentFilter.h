@@ -3,6 +3,7 @@
 #include <vector>
 #include <QTableWidget>
 #include "Tournament.h"
+#include "DatabaseController.h"
 
 class TournamentFilter{
 public:

@@ -28,8 +28,6 @@ public:
 	unsigned GetID()const;
 	unsigned GetProfileID()const;
 	unsigned GetOrgID()const;
-	std::string GetOrgName()const;
-	std::string GetOrgPictureAddr()const;
 	std::string GetType()const;
 	std::string GetTeammate()const;
 	std::string GetCategory()const;
@@ -67,7 +65,6 @@ public:
 		os << "\tID: " << t.m_uiID <<
 			", PROFILE ID: " << t.m_uiProfileID <<
 			", ORG ID: " << t.m_uiOrgID <<
-			", ORG NAME: " << t.m_sOrgName <<
 			", TYPE: " << t.m_sType <<
 			", TEAMMATE: " << t.m_soptTeammate.value_or("NA") <<
 			", CATEGORY: " << t.m_sCategory <<
@@ -88,8 +85,6 @@ private:
 	bool IsMatchExceedingMaxSet(const Match&)const;
 	unsigned m_uiProfileID{};
 	unsigned m_uiOrgID{};
-	std::string m_sOrgName;
-	std::string m_sOrgPictureAddr;
 	std::string m_sType{};
 	std::optional<std::string> m_soptTeammate{};
 	std::string m_sCategory{};

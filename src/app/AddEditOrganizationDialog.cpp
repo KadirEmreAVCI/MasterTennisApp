@@ -23,7 +23,7 @@ AddEditOrganizationDialog::~AddEditOrganizationDialog()
 {}
 void AddEditOrganizationDialog::InitDialog()
 {
-	ui.ProfilePicWidget->InitWidget(Organization::GetPictureRootDestDir());
+	ui.OrgPicWidget->InitWidget(QString::fromStdString(Organization{}.GetPictureRootPath()));
 	ClearDialog();
 }
 void AddEditOrganizationDialog::FillDialog()
@@ -31,13 +31,13 @@ void AddEditOrganizationDialog::FillDialog()
 	m_vecCategories = m_EditedItem.GetCategories();
 	ui.lineEdit_OrganizationName->setText(QString::fromStdString(m_EditedItem.GetName()));
 	ui.lineEdit_Categories->setText(QString::fromStdString(utility::Serialize(m_EditedItem.GetCategories())));
-	ui.ProfilePicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureAddr()));
+	ui.OrgPicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureFileName()));
 }
 void AddEditOrganizationDialog::ClearDialog()
 {
 	ui.lineEdit_OrganizationName->setText("");
 	ui.lineEdit_Categories->setText("");
-	ui.ProfilePicWidget->ClearWidget();
+	ui.OrgPicWidget->ClearWidget();
 }
 bool AddEditOrganizationDialog::IsMandatoryFieldsFilled()const
 {
@@ -54,12 +54,12 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		Organization org{
 			m_EditedItem.GetID(),
 			ui.lineEdit_OrganizationName->text().toStdString(),
-			ui.ProfilePicWidget->GetImageFileName().toStdString(),
+			ui.OrgPicWidget->GetImageFileName().toStdString(),
 			m_vecCategories
 		};
-		if (org.GetPictureAddr() != "")
+		if (org.GetPictureFileName() != "")
 		{
-			ui.ProfilePicWidget->SaveImage();
+			ui.OrgPicWidget->SaveImage();
 		}
 		switch (m_DialogMode)
 		{

@@ -135,7 +135,7 @@
         </layout>
        </item>
        <item>
-        <widget class="ProfilePictureWidget" name="ProfilePicWidget" native="true"/>
+        <widget class="PictureWidget" name="OrgPicWidget" native="true"/>
        </item>
       </layout>
      </item>
@@ -177,9 +177,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ProfilePictureWidget</class>
+   <class>PictureWidget</class>
    <extends>QWidget</extends>
-   <header>ProfilePictureWidget.h</header>
+   <header>PictureWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

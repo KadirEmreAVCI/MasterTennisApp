@@ -57,15 +57,9 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 	using namespace utility;
 	ui.tableWidget->insertRow(uiRowIdx);
 	unsigned uiColumnIdx{};
-	if (t.GetOrgPictureAddr() != "")
-	{
-		PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetPictureRootDestDir() + QString::fromStdString(t.GetOrgPictureAddr())).toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
-	}
-	else
-	{
-		PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetPictureRootDestDir() + "default_org.png").toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
-	}
-	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetOrgName()), uiRowIdx, uiColumnIdx++);
+	auto rRootOrganization = DatabaseController::instance().FindRootOrganization(t);
+	PlaceLabel2TableCellWithImage(ui.tableWidget, rRootOrganization.GetFullPicturePath(), 0.07f, uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(rRootOrganization.GetName()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetSeason()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetType()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetCategory()), uiRowIdx, uiColumnIdx++);

@@ -95,7 +95,7 @@
       </layout>
      </item>
      <item>
-      <widget class="ProfilePictureWidget" name="ProfilePicWidget" native="true"/>
+      <widget class="PictureWidget" name="ProfilePicWidget" native="true"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -135,9 +135,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ProfilePictureWidget</class>
+   <class>PictureWidget</class>
    <extends>QWidget</extends>
-   <header>ProfilePictureWidget.h</header>
+   <header>PictureWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

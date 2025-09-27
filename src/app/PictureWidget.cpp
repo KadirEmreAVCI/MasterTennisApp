@@ -1,38 +1,39 @@
-#include "ProfilePictureWidget.h"
+#include "PictureWidget.h"
 #include "utility.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <iostream>
 
-ProfilePictureWidget::ProfilePictureWidget(QWidget *parent): QWidget(parent)
+PictureWidget::PictureWidget(QWidget *parent): QWidget(parent)
 {
 	setupUi(this);
     utility::InitButtonWithPicture(DefaultPPButton, ":images/CrossButton.png", 0.35f);
 }
-ProfilePictureWidget::~ProfilePictureWidget()
+PictureWidget::~PictureWidget()
 {
 
 }
-void ProfilePictureWidget::InitWidget(const QString& sImageRootDestDir)
+void PictureWidget::InitWidget(const QString& sImageRootDestDir)
 {
     ClearWidget();
     m_sImageRootDestDir = sImageRootDestDir;
 }
-void ProfilePictureWidget::ClearWidget()
+void PictureWidget::ClearWidget()
 {
     lineEdit_ImageFileName->setText("");
     m_sFullDestDir = "";
     m_sFullSourceDir = "";
 }
-void ProfilePictureWidget::FillWidget(const QString& sImageFileName)
+void PictureWidget::FillWidget(const QString& sImageFileName)
 {
     lineEdit_ImageFileName->setText(sImageFileName);
 }
-QString ProfilePictureWidget::GetImageFileName()const
+QString PictureWidget::GetImageFileName()const
 {
     return QFileInfo(m_sFullDestDir).fileName();
 }
-void ProfilePictureWidget::on_BrowseButton_clicked()
+void PictureWidget::on_BrowseButton_clicked()
 {
 	const QString sFullSourceDir = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
 	if (QFileInfo(sFullSourceDir).fileName() != "")
@@ -42,7 +43,7 @@ void ProfilePictureWidget::on_BrowseButton_clicked()
 		lineEdit_ImageFileName->setText(m_sFullSourceDir);
 	}
 }
-void ProfilePictureWidget::on_DefaultPPButton_clicked()
+void PictureWidget::on_DefaultPPButton_clicked()
 {
 	if (lineEdit_ImageFileName->text() != "")
 	{
@@ -54,7 +55,7 @@ void ProfilePictureWidget::on_DefaultPPButton_clicked()
 		}
 	}
 }
-bool ProfilePictureWidget::SaveImage()const
+bool PictureWidget::SaveImage()const
 {
 	if (QFile::exists(m_sFullDestDir))
 	{
@@ -62,7 +63,7 @@ bool ProfilePictureWidget::SaveImage()const
 	}
 	return QFile::copy(m_sFullSourceDir, m_sFullDestDir);
 } 
-void ProfilePictureWidget::FindFullDestDir(const QString& sRootDestDir)
+void PictureWidget::FindFullDestDir(const QString& sRootDestDir)
 {
     lineEdit_ImageFileName->setText(QFileInfo(m_sFullSourceDir).fileName());
 	if (lineEdit_ImageFileName->text() != "")

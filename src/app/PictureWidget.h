@@ -1,15 +1,15 @@
-#ifndef PROFILEPICTUREWIDGET_H
-#define PROFILEPICTUREWIDGET_H
+#ifndef PICTUREWIDGET_H
+#define PICTUREWIDGET_H
 
 #include <QWidget>
-#include "ui_ProfilePictureWidget.h"
-class ProfilePictureWidget : public QWidget, public Ui::ProfilePictureWidgetClass
+#include "ui_PictureWidget.h"
+class PictureWidget : public QWidget, public Ui::PictureWidgetClass
 {
 	Q_OBJECT
 
 public:
-	ProfilePictureWidget(QWidget *parent = nullptr);
-	~ProfilePictureWidget();
+	PictureWidget(QWidget *parent = nullptr);
+	~PictureWidget();
     void InitWidget(const QString& sImageRootDestDir);
     void ClearWidget();
     void FillWidget(const QString& sImageFileName);
