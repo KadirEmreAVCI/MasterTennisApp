@@ -22,7 +22,7 @@ private:
     DBItemWithPicture* m_pDBItemWithPicture{nullptr};
 private slots:
 	void on_BrowseButton_clicked();
-	void on_DefaultPPButton_clicked();
+	void on_DefaultPictureButton_clicked();
 };
 
 #endif

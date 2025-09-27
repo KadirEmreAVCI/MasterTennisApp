@@ -27,10 +27,6 @@ void DBItemWithPicture::LoadPictureFileName()
 {
 	m_sPictureFileName = m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));
 }
-std::string DBItemWithPicture::GetPictureRootPath()const
-{
-	return m_sPictureRootPath;
-}
 std::string DBItemWithPicture::GetFullPicturePath()const
 {
 	const std::string sPictureFileName = (m_sPictureFileName == "") ? "default.png" : m_sPictureFileName;

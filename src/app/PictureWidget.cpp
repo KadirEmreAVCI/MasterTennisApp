@@ -8,7 +8,7 @@
 PictureWidget::PictureWidget(QWidget *parent): QWidget(parent)
 {
 	setupUi(this);
-    utility::InitButtonWithPicture(DefaultPPButton, ":images/CrossButton.png", 0.35f);
+    utility::InitButtonWithPicture(DefaultPictureButton, ":images/CrossButton.png", 0.35f);
 }
 PictureWidget::~PictureWidget()
 {
@@ -20,13 +20,13 @@ void PictureWidget::InitWidget()
 }
 void PictureWidget::ClearWidget()
 {
-    lineEdit_ImageFileName->setText("");
+    lineEdit_PictureFileName->setText("");
     m_sSourcePictureFullPath = "";
 }
 void PictureWidget::FillWidget(DBItemWithPicture* pDBItemWithPicture)
 {
 	m_pDBItemWithPicture = pDBItemWithPicture;
-    lineEdit_ImageFileName->setText(QString::fromStdString(m_pDBItemWithPicture->GetPictureFileName()));
+    lineEdit_PictureFileName->setText(QString::fromStdString(m_pDBItemWithPicture->GetPictureFileName()));
 }
 QString PictureWidget::GetSourcePictureFullPath()const
 {
@@ -38,12 +38,12 @@ void PictureWidget::on_BrowseButton_clicked()
 	if (QFileInfo(sSourcePictureFullPath).fileName() != "")
 	{
 		m_sSourcePictureFullPath = sSourcePictureFullPath;
-		lineEdit_ImageFileName->setText(QFileInfo(m_sSourcePictureFullPath).fileName());
+		lineEdit_PictureFileName->setText(QFileInfo(m_sSourcePictureFullPath).fileName());
 	}
 }
-void PictureWidget::on_DefaultPPButton_clicked()
+void PictureWidget::on_DefaultPictureButton_clicked()
 {
-	if (lineEdit_ImageFileName->text() != "")
+	if (lineEdit_PictureFileName->text() != "")
 	{
 		QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Cancellation", "Are you sure you want to remove the organization picture?", QMessageBox::Yes | QMessageBox::No);
 		if (reply == QMessageBox::Yes)

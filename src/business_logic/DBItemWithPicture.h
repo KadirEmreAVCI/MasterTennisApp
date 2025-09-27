@@ -9,7 +9,7 @@
 
 class DBItemWithPicture : public DBItem{
 public:
-    std::string GetPictureRootPath()const;
+    
     std::string GetFullPicturePath()const;
     std::string GetPictureFileName()const;
     bool SaveImage(const std::string& sSourcePictureFullPath)const;
