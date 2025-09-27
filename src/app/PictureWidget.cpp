@@ -8,71 +8,47 @@
 PictureWidget::PictureWidget(QWidget *parent): QWidget(parent)
 {
 	setupUi(this);
-    utility::InitButtonWithPicture(DefaultPPButton, ":images/CrossButton.png", 0.35f);
+    utility::InitButtonWithPicture(DefaultPictureButton, ":images/CrossButton.png", 0.35f);
 }
 PictureWidget::~PictureWidget()
 {
 
 }
-void PictureWidget::InitWidget(const QString& sImageRootDestDir)
+void PictureWidget::InitWidget()
 {
     ClearWidget();
-    m_sImageRootDestDir = sImageRootDestDir;
 }
 void PictureWidget::ClearWidget()
 {
-    lineEdit_ImageFileName->setText("");
-    m_sFullDestDir = "";
-    m_sFullSourceDir = "";
+    lineEdit_PictureFileName->setText("");
+    m_sSourcePictureFullPath = "";
 }
-void PictureWidget::FillWidget(const QString& sImageFileName)
+void PictureWidget::FillWidget(DBItemWithPicture* pDBItemWithPicture)
 {
-    lineEdit_ImageFileName->setText(sImageFileName);
+	m_pDBItemWithPicture = pDBItemWithPicture;
+    lineEdit_PictureFileName->setText(QString::fromStdString(m_pDBItemWithPicture->GetPictureFileName()));
 }
-QString PictureWidget::GetImageFileName()const
+QString PictureWidget::GetSourcePictureFullPath()const
 {
-    return QFileInfo(m_sFullDestDir).fileName();
+    return m_sSourcePictureFullPath;
 }
 void PictureWidget::on_BrowseButton_clicked()
 {
-	const QString sFullSourceDir = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
-	if (QFileInfo(sFullSourceDir).fileName() != "")
+	const QString sSourcePictureFullPath = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
+	if (QFileInfo(sSourcePictureFullPath).fileName() != "")
 	{
-		m_sFullSourceDir = sFullSourceDir;
-        FindFullDestDir(m_sImageRootDestDir);
-		lineEdit_ImageFileName->setText(m_sFullSourceDir);
+		m_sSourcePictureFullPath = sSourcePictureFullPath;
+		lineEdit_PictureFileName->setText(QFileInfo(m_sSourcePictureFullPath).fileName());
 	}
 }
-void PictureWidget::on_DefaultPPButton_clicked()
+void PictureWidget::on_DefaultPictureButton_clicked()
 {
-	if (lineEdit_ImageFileName->text() != "")
+	if (lineEdit_PictureFileName->text() != "")
 	{
 		QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Cancellation", "Are you sure you want to remove the organization picture?", QMessageBox::Yes | QMessageBox::No);
 		if (reply == QMessageBox::Yes)
 		{
 			ClearWidget();
-			lineEdit_ImageFileName->setText("");
 		}
-	}
-}
-bool PictureWidget::SaveImage()const
-{
-	if (QFile::exists(m_sFullDestDir))
-	{
-		QFile::remove(m_sFullDestDir);
-	}
-	return QFile::copy(m_sFullSourceDir, m_sFullDestDir);
-} 
-void PictureWidget::FindFullDestDir(const QString& sRootDestDir)
-{
-    lineEdit_ImageFileName->setText(QFileInfo(m_sFullSourceDir).fileName());
-	if (lineEdit_ImageFileName->text() != "")
-	{
-		QDir destDir(sRootDestDir);
-		if (!destDir.exists())
-		{
-			destDir.mkpath(sRootDestDir);
-		}
-		m_sFullDestDir = destDir.filePath(lineEdit_ImageFileName->text());
 	}
 }

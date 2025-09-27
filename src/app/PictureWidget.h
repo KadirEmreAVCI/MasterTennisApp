@@ -1,6 +1,9 @@
 #ifndef PICTUREWIDGET_H
 #define PICTUREWIDGET_H
 
+// Project Headers
+#include "DBItemWithPicture.h"
+
 #include <QWidget>
 #include "ui_PictureWidget.h"
 class PictureWidget : public QWidget, public Ui::PictureWidgetClass
@@ -10,19 +13,16 @@ class PictureWidget : public QWidget, public Ui::PictureWidgetClass
 public:
 	PictureWidget(QWidget *parent = nullptr);
 	~PictureWidget();
-    void InitWidget(const QString& sImageRootDestDir);
+    void InitWidget();
     void ClearWidget();
-    void FillWidget(const QString& sImageFileName);
-    QString GetImageFileName()const;
-    bool SaveImage()const;
+    void FillWidget(DBItemWithPicture* pDBItemWithPicture);
+    QString GetSourcePictureFullPath()const;
 private:
-    QString m_sImageRootDestDir;
-    QString m_sFullDestDir{};
-	QString m_sFullSourceDir{};
-    void FindFullDestDir(const QString& sRootDestDir);
+	QString m_sSourcePictureFullPath{};
+    DBItemWithPicture* m_pDBItemWithPicture{nullptr};
 private slots:
 	void on_BrowseButton_clicked();
-	void on_DefaultPPButton_clicked();
+	void on_DefaultPictureButton_clicked();
 };
 
 #endif

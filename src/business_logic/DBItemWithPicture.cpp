@@ -4,6 +4,7 @@
 // Qt Headers
 #include <QFile>
 #include <QString>
+#include <QFileInfo>
 
 DBItemWithPicture::DBItemWithPicture(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns, const std::string& sPictureRootPath, const std::string& sPictureFileName) 
 	: 
@@ -26,10 +27,6 @@ void DBItemWithPicture::LoadPictureFileName()
 {
 	m_sPictureFileName = m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));
 }
-std::string DBItemWithPicture::GetPictureRootPath()const
-{
-	return m_sPictureRootPath;
-}
 std::string DBItemWithPicture::GetFullPicturePath()const
 {
 	const std::string sPictureFileName = (m_sPictureFileName == "") ? "default.png" : m_sPictureFileName;
@@ -44,3 +41,13 @@ void DBItemWithPicture::DeletePreviousPicture()const
 		QFile::remove(sPreviousPictureFullPath);
 	}
 }
+bool DBItemWithPicture::SaveImage(const std::string& sSourcePictureFullPath)const
+{
+	QString sPictureFileName = QFileInfo(QString::fromStdString(sSourcePictureFullPath)).fileName();
+	QString sDestPictureFullPath = QString::fromStdString(m_sPictureRootPath) + sPictureFileName;
+	if (QFile::exists(sDestPictureFullPath))
+	{
+		QFile::remove(sDestPictureFullPath);
+	}
+	return QFile::copy(QString::fromStdString(sSourcePictureFullPath), sDestPictureFullPath);
+} 

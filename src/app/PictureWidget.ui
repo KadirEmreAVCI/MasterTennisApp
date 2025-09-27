@@ -26,14 +26,14 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLineEdit" name="lineEdit_ImageFileName">
+        <widget class="QLineEdit" name="lineEdit_PictureFileName">
          <property name="enabled">
           <bool>false</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="DefaultPPButton">
+        <widget class="QPushButton" name="DefaultPictureButton">
          <property name="text">
           <string/>
          </property>

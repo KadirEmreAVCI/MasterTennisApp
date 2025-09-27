@@ -15,7 +15,7 @@ AddEditProfileDialog::~AddEditProfileDialog()
 {}
 void AddEditProfileDialog::InitDialog()
 {
-	ui.ProfilePicWidget->InitWidget(QString::fromStdString(Profile{}.GetPictureRootPath()));
+	ui.ProfilePicWidget->InitWidget();
 	ui.lineEdit_NameSurname->setText("");
 	ui.radioButton_Female->setAutoExclusive(false);
 	ui.radioButton_Male->setAutoExclusive(false);
@@ -27,7 +27,7 @@ void AddEditProfileDialog::InitDialog()
 void AddEditProfileDialog::FillDialog()
 {
 	ui.lineEdit_NameSurname->setText(QString::fromStdString(m_EditedItem.GetFullName()));
-	ui.ProfilePicWidget->FillWidget(QString::fromStdString(m_EditedItem.GetPictureFileName()));
+	ui.ProfilePicWidget->FillWidget(&m_EditedItem);
 	if(m_EditedItem.GetGender() == Gender::Male)
 		ui.radioButton_Male->setChecked(true);
 	else
@@ -53,15 +53,16 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 	if (IsMandatoryFieldsFilled())
 	{
 		close();
+		const QString sSourcePictureFullPath = ui.ProfilePicWidget->GetSourcePictureFullPath(); 
 		Profile p{
 			m_EditedItem.GetID(),
 			ui.lineEdit_NameSurname->text().toStdString(),
-			ui.ProfilePicWidget->GetImageFileName().toStdString(),
+			QFileInfo(sSourcePictureFullPath).fileName().toStdString(),
 			ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female
 		};
-		if (p.GetPictureFileName() != "")
+		if (sSourcePictureFullPath != "")
 		{
-			ui.ProfilePicWidget->SaveImage();
+			p.SaveImage(sSourcePictureFullPath.toStdString());
 		}
 		switch (m_DialogMode)
 		{
