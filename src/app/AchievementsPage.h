@@ -24,11 +24,11 @@ private:
 	void ClearCareerStats();
 	void ClearFinalsStats();
 	void ClearMedalsAndTrophies();
-	void UpdateCareerStats(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages, const std::array<WinLoseStat, gTotalCareerStat>&);
-	void UpdateFinalsStats(const std::array<WinLoseStat, gTotalFinalStat>&); 
-	void UpdateMedalsAndTrophies(const WinLoseStat& wlFinalStat, const WinLoseStat& wl3rdPlaceGameStat);
+	void UpdateCareerStats(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages, const std::vector<StatReport>&);
+	void UpdateFinalsStats(const std::vector<StatReport>&); 
+	void UpdateMedalsAndTrophies(const StatReport& rFinalStat, const StatReport& r3rdPlaceGameStat);
 	void SetTournamentStats(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages);
-	void SetWLStat(WinLoseLabels, WinLoseStat);
+	void SetStatReport(WinLoseLabels, StatReport = {0, 0, 0.0f});
 	Ui::AchievementsPageClass ui;
 	WinLoseLabels m_MatchLabels;
 	WinLoseLabels m_SetTBLabels;

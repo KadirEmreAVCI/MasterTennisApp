@@ -8,6 +8,14 @@
 #include <vector>
 #include <algorithm>
 
+struct StatReport{
+public:
+	StatReport(unsigned uiWin, unsigned uiLose, float fWinRatePercentage) : m_uiWin(uiWin), m_uiLose(uiLose), m_fWinRatePercentage{fWinRatePercentage}{}
+	unsigned m_uiWin = 0;
+	unsigned m_uiLose = 0;
+    float m_fWinRatePercentage = 0.0f;
+};
+
 inline constexpr auto DefaultTrue = [] (auto const&) { return true; };
 
 template <typename T, typename FuncCond = decltype(DefaultTrue)>
@@ -19,6 +27,11 @@ public:
         m_vecData.clear();
         std::copy_if(vecData.cbegin(), vecData.cend(), std::back_inserter(m_vecData), fCond);
     }
+    StatReport GetStatReport()const
+    {
+        return StatReport(GetWins(), GetLoses(), GetWinRatePercentage());
+    }
+private:
 	size_t GetCount()const
     {
         return m_vecData.size();
