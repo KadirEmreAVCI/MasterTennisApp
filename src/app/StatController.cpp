@@ -22,42 +22,31 @@ StatController::~StatController()
 {
 
 }
-std::array<WinLoseStat, gTotalCareerStat> StatController::UpdateCareerStats()const
+std::array<WinLoseStat, gTotalCareerStat> StatController::UpdateCareerStats()
 {
+	m_StatMatch.AssignDataByFilter(m_vecMatch);
+	m_StatMatchTiebreaks.AssignDataByFilter(m_vecMatch);
+	m_StatSetTiebreaks.AssignDataByFilter(m_vecSet);
 	std::array<WinLoseStat, gTotalCareerStat> arrWLStat;
 	size_t arrIdx = 0;
-	arrWLStat[arrIdx++] = WinLoseStat(GetMatchWin(), GetMatchLose());
-	arrWLStat[arrIdx++] = WinLoseStat(GetSetTBWin(), GetSetTBLose());
-	arrWLStat[arrIdx++] = WinLoseStat(GetSuperTBWin(), GetSuperTBLose());
+	arrWLStat[arrIdx++] = WinLoseStat(m_StatMatch.GetWins(), m_StatMatch.GetLoses());
+	arrWLStat[arrIdx++] = WinLoseStat(m_StatSetTiebreaks.GetWins(), m_StatSetTiebreaks.GetLoses());
+	arrWLStat[arrIdx++] = WinLoseStat(m_StatMatchTiebreaks.GetWins(), m_StatMatchTiebreaks.GetLoses());
 	return arrWLStat;
 }
-std::array<WinLoseStat, gTotalFinalStat> StatController::UpdateFinalsStats()const
+std::array<WinLoseStat, gTotalFinalStat> StatController::UpdateFinalsStats()
 {
+	m_StatQuarterFinals.AssignDataByFilter(m_vecMatch);
+	m_StatSemiFinals.AssignDataByFilter(m_vecMatch);
+	m_Stat3rdPlaceGames.AssignDataByFilter(m_vecMatch);
+	m_StatFinals.AssignDataByFilter(m_vecMatch);
 	std::array<WinLoseStat, gTotalFinalStat> arrWLStat;
 	size_t arrIdx = 0;
-	arrWLStat[arrIdx++] = WinLoseStat(CountWinsForStage("Quarter Final"), CountLosesForStage("Quarter Final"));
-	arrWLStat[arrIdx++] = WinLoseStat(CountWinsForStage("Semi Final"), CountLosesForStage("Semi Final"));
-	arrWLStat[arrIdx++] = WinLoseStat(CountWinsForStage("3rd Place Game"), CountLosesForStage("3rd Place Game"));
-	arrWLStat[arrIdx++] = WinLoseStat(CountWinsForStage("Final"), CountLosesForStage("Final"));
+	arrWLStat[arrIdx++] = WinLoseStat(m_StatQuarterFinals.GetWins(), m_StatQuarterFinals.GetLoses());
+	arrWLStat[arrIdx++] = WinLoseStat(m_StatSemiFinals.GetWins(), m_StatSemiFinals.GetLoses());
+	arrWLStat[arrIdx++] = WinLoseStat(m_Stat3rdPlaceGames.GetWins(), m_Stat3rdPlaceGames.GetLoses());
+	arrWLStat[arrIdx++] = WinLoseStat(m_StatFinals.GetWins(), m_StatFinals.GetLoses());
 	return arrWLStat;
-}
-unsigned StatController::GetTotalMatch()const
-{
-	const auto& vecMatch = ConcatanateValidMatches();
-	return std::count_if(vecMatch.cbegin(), vecMatch.cend(), [](const auto& m) {
-		return m.GetOutcome() != Outcome::Tied; 
-		});
-}
-unsigned StatController::GetMatchWin()const
-{
-	const auto& vecMatch = ConcatanateValidMatches();
-	return std::count_if(vecMatch.cbegin(), vecMatch.cend(), [](const auto& m) {
-		return m.GetOutcome() == Outcome::HomeWin;
-		});
-}
-unsigned StatController::GetMatchLose()const
-{
-	return GetTotalMatch() - GetMatchWin();
 }
 std::vector<Match> StatController::ConcatanateValidMatches()const
 {
@@ -79,77 +68,6 @@ std::vector<Set> StatController::ConcetanateSets()const
 		vecAllSets.insert(vecAllSets.cend(), vecSet.cbegin(), vecSet.cend());
 		});
 	return vecAllSets;
-}
-unsigned StatController::GetTotalSetTB()const
-{
-	const auto& vecAllSet = ConcetanateSets();
-	return std::count_if(vecAllSet.cbegin(), vecAllSet.cend(), [](const auto& set) {
-		return set.IsTiebreakPlayed();
-		});
-}
-unsigned StatController::GetSetTBWin()const
-{
-	const auto& vecAllSet = ConcetanateSets();
-	return std::count_if(vecAllSet.cbegin(), vecAllSet.cend(), [](const auto& set) {
-		return set.IsTiebreakPlayed() && set.GetOutcome() == Outcome::HomeWin;
-		});
-}
-unsigned StatController::GetSetTBLose()const
-{
-	return GetTotalSetTB() - GetSetTBWin();
-}
-unsigned StatController::GetTotalSuperTB()const
-{
-	unsigned uiTotalSuperTB = 0;
-	for (const auto& t : m_vecTournament)
-	{
-		const auto& vecMatch = t.GetMatches();
-		uiTotalSuperTB += std::count_if(vecMatch.cbegin(), vecMatch.cend(), [t](const auto& m) {
-			return m.IsTiebreakPlayed();
-			});
-	}
-	return uiTotalSuperTB;
-}
-unsigned StatController::GetSuperTBWin()const
-{
-	unsigned uiSuperTBWin = 0;
-	for (const auto& t : m_vecTournament)
-	{
-		const auto& vecMatch = t.GetMatches();
-		uiSuperTBWin += std::count_if(vecMatch.cbegin(), vecMatch.cend(), [t](const auto& m) {
-			return (t.GetSetsBestOf() == m.GetSets().size() && t.GetSetsBestOf() != 1) && m.GetOutcome() == Outcome::HomeWin;
-			});
-	}
-	return uiSuperTBWin;
-}
-unsigned StatController::GetSuperTBLose()const
-{
-	return GetTotalSuperTB() - GetSuperTBWin();
-}
-std::vector<Match> StatController::FindMatchesWithStage(const std::string& sStage)const
-{
-	std::vector<Match> vecMatchesWithStage;
-	const auto& vecMatch = ConcatanateValidMatches();
-	std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecMatchesWithStage), [sStage](const auto& m) {
-		return m.GetStage() == sStage;
-		});
-	return vecMatchesWithStage;
-}
-unsigned StatController::CountWinsForStage(const std::string& sStage)const
-{
-	unsigned uiWinsForStage{};
-	const auto& vecMatchesWithStage = FindMatchesWithStage(sStage);
-	if (!vecMatchesWithStage.empty())
-	{
-		uiWinsForStage = std::count_if(vecMatchesWithStage.cbegin(), vecMatchesWithStage.cend(), [](const auto& m) {
-			return m.GetOutcome() == Outcome::HomeWin;
-			});
-	}
-	return uiWinsForStage;
-}
-unsigned StatController::CountLosesForStage(const std::string& sStage)const
-{
-	return FindMatchesWithStage(sStage).size() - CountWinsForStage(sStage);
 }
 unsigned StatController::CountQualificationFromGroupStages()const
 {
@@ -176,6 +94,8 @@ void StatController::UpdateActiveProfileData(const Profile& p)
 	std::cout << "StatController::UpdateTournaments\n";
 	m_uiProfileID = p.GetID();
 	m_vecTournament = p.GetTournaments();
+	m_vecMatch = ConcatanateValidMatches();
+	m_vecSet = ConcetanateSets();
 	const auto& vecUpdatedCareerWLStat = UpdateCareerStats();
 	emit CareerStatsUpdated(m_vecTournament.size(), CountQualificationFromGroupStages(), vecUpdatedCareerWLStat);
 	const auto& vecUpdatedFinalsWLStat = UpdateFinalsStats();

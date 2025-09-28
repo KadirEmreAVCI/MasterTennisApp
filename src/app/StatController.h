@@ -4,6 +4,7 @@
 #include <vector>
 #include <QObject>
 #include "Profile.h"
+#include "Stat.h"
 constexpr size_t gTotalCareerStat = 3;
 constexpr size_t gTotalFinalStat = 4;
 class WinLoseStat{
@@ -28,28 +29,6 @@ private:
 	unsigned m_uiWin = 0;
 	unsigned m_uiLose = 0;
 };
-template <typename T, typename FuncCond = AlwaysTrue>
-class Stat{
-public:
-	void AssignDataByFilter(const std::vector<T>& vecData)
-	{
-		m_vecData = std::copy_if(vecData.cbegin(), vecData.cend(), vecData.cbegin(), FuncCond);
-	}
-	size_t GetCount()const
-	{
-		return m_vecData.size();
-	}
-	size_t GetWins()const
-	{
-		return std::count_if(m_vecData.cbegin(), m_vecData.cend(), [](const T& item){item.GetOutcome() == Outcome::HomeWin; });
-	}
-	size_t GetLoses()const
-	{
-		return GetCount() - GetWins();
-	}
-private:
-	std::vector<T> m_vecData;
-};
 class StatController : public QObject {
 	Q_OBJECT
 public:
@@ -63,25 +42,22 @@ private:
 	StatController();
 	static StatController* ms_pStatController;
 	std::vector<Tournament> m_vecTournament;
-	std::array<WinLoseStat, gTotalCareerStat> UpdateCareerStats()const;
-	std::array<WinLoseStat, gTotalFinalStat> UpdateFinalsStats()const;
+	std::vector<Match> m_vecMatch;
+	std::vector<Set> m_vecSet;
+	std::array<WinLoseStat, gTotalCareerStat> UpdateCareerStats();
+	std::array<WinLoseStat, gTotalFinalStat> UpdateFinalsStats();
 	unsigned m_uiProfileID = 0;
-	unsigned GetTotalMatch()const;
-	unsigned GetMatchWin()const;
-	unsigned GetMatchLose()const;
 	std::vector<Match> ConcatanateValidMatches()const;
 	std::vector<Set> ConcetanateSets()const;
-	unsigned GetTotalSetTB()const;
-	unsigned GetSetTBWin()const;
-	unsigned GetSetTBLose()const;
-	unsigned GetTotalSuperTB()const;
-	unsigned GetSuperTBWin()const;
-	unsigned GetSuperTBLose()const;
-	std::vector<Match> FindMatchesWithStage(const std::string& sStage)const;
-	unsigned CountWinsForStage(const std::string& sStage)const;
-	unsigned CountLosesForStage(const std::string& sStage)const;
 	unsigned CountQualificationFromGroupStages()const;
 	std::string GetMaxProgress(const Tournament& t)const;
+	Stat<Set, 	decltype([](const Set& s)  {return s.IsTiebreakPlayed();})> m_StatSetTiebreaks;
+	Stat<Match, decltype([](const Match& m){return m.IsValid();})> m_StatMatch;
+	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.IsTiebreakPlayed();})> m_StatMatchTiebreaks;
+	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "Quarter Final";})> m_StatQuarterFinals;
+	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "Semi Final";})> m_StatSemiFinals;
+	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "3rd Place Game";})> m_Stat3rdPlaceGames;
+	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "Final";})> m_StatFinals;
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 public slots:
 	void UpdateActiveProfileData(const Profile&);
