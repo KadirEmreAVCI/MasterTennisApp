@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <sstream>
 #include "Match.h"
+#include "DatabaseController.h"
 Match::Match(unsigned uiID,
 	unsigned uiTournamentID,
 	const std::string& sStatu,
@@ -134,6 +135,11 @@ bool Match::IsValid()const
 bool Match::IsEarlier(const Match& other)const
 {
 	return (m_Date < other.m_Date) || ((m_Date == other.m_Date) && (m_Time < other.m_Time));
+}
+bool Match::IsTiebreakPlayed()const
+{
+	const Tournament rRootTournament = DatabaseController::instance().FindRootTournament(*this);
+	return rRootTournament.GetSetsBestOf() != 1 && rRootTournament.GetSetsBestOf() == GetSets().size();
 }
 bool Match::InsertToDB()const
 {

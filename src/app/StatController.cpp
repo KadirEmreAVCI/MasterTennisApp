@@ -84,14 +84,14 @@ unsigned StatController::GetTotalSetTB()const
 {
 	const auto& vecAllSet = ConcetanateSets();
 	return std::count_if(vecAllSet.cbegin(), vecAllSet.cend(), [](const auto& set) {
-		return set.IsSetTBPlayed();
+		return set.IsTiebreakPlayed();
 		});
 }
 unsigned StatController::GetSetTBWin()const
 {
 	const auto& vecAllSet = ConcetanateSets();
 	return std::count_if(vecAllSet.cbegin(), vecAllSet.cend(), [](const auto& set) {
-		return set.IsSetTBPlayed() && set.GetOutcome() == Outcome::HomeWin;
+		return set.IsTiebreakPlayed() && set.GetOutcome() == Outcome::HomeWin;
 		});
 }
 unsigned StatController::GetSetTBLose()const
@@ -105,7 +105,7 @@ unsigned StatController::GetTotalSuperTB()const
 	{
 		const auto& vecMatch = t.GetMatches();
 		uiTotalSuperTB += std::count_if(vecMatch.cbegin(), vecMatch.cend(), [t](const auto& m) {
-			return t.GetSetsBestOf() == m.GetSets().size() && t.GetSetsBestOf() != 1;
+			return m.IsTiebreakPlayed();
 			});
 	}
 	return uiTotalSuperTB;
