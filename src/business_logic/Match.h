@@ -28,6 +28,7 @@ public:
 	bool IsUpcomingMatch()const;
 	bool IsValid()const;
 	bool IsEarlier(const Match& other)const;
+	bool IsTiebreakPlayed()const;
 	friend bool operator==(const Match& lhs, const Match& rhs)
 	{
 		return	lhs.m_uiID == rhs.m_uiID &&

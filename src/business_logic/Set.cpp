@@ -22,7 +22,7 @@ std::string Set::ToString()const
 {
 	std::ostringstream oss;
 	oss << m_MajorScore.ToString();
-	if(IsSetTBPlayed())
+	if(IsTiebreakPlayed())
 		oss << "(" << m_optTBScore.value().ToString() << ")";
 	return oss.str();
 }
@@ -42,7 +42,7 @@ Set Set::FromString(const std::string& sSet)
 		return Set(Score::FromString(sMajorScore));
 	}
 }
-bool Set::IsSetTBPlayed()const
+bool Set::IsTiebreakPlayed()const
 {
 	return m_optTBScore.has_value() && m_optTBScore.value() != Score(0,0);
 }
@@ -52,15 +52,15 @@ bool Set::IsValid()const
 }
 bool Set::IsUninitialized()const
 {
-	return m_MajorScore == Score{ 0, 0 } && !IsSetTBPlayed();
+	return m_MajorScore == Score{ 0, 0 } && !IsTiebreakPlayed();
 }
 bool Set::IsSetScoreEqual()const
 {
-	return (m_MajorScore.GetOutcome() == Outcome::Tied) && (!IsSetTBPlayed() || (m_optTBScore.value().GetOutcome() == Outcome::Tied));
+	return (m_MajorScore.GetOutcome() == Outcome::Tied) && (!IsTiebreakPlayed() || (m_optTBScore.value().GetOutcome() == Outcome::Tied));
 }
 bool Set::IsOutcomeValid()const
 {
-	const bool blSetConsistentForHomeWin = m_MajorScore.GetOutcome() == Outcome::HomeWin && (!IsSetTBPlayed() || m_optTBScore.value().GetOutcome() == Outcome::HomeWin);
-	const bool blSetConsistentForAwayWin = m_MajorScore.GetOutcome() == Outcome::AwayWin && (!IsSetTBPlayed() || m_optTBScore.value().GetOutcome() == Outcome::AwayWin);
+	const bool blSetConsistentForHomeWin = m_MajorScore.GetOutcome() == Outcome::HomeWin && (!IsTiebreakPlayed() || m_optTBScore.value().GetOutcome() == Outcome::HomeWin);
+	const bool blSetConsistentForAwayWin = m_MajorScore.GetOutcome() == Outcome::AwayWin && (!IsTiebreakPlayed() || m_optTBScore.value().GetOutcome() == Outcome::AwayWin);
 	return blSetConsistentForHomeWin || blSetConsistentForAwayWin;
 }
