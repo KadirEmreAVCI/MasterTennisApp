@@ -63,7 +63,7 @@ void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWi
 	size_t idxColumn = 0;
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelIcon(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelStatName(), 		idxRow, idxColumn++);
-	ui.gridLayout_CareerStats->addItem(new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(60, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinText(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWin(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);

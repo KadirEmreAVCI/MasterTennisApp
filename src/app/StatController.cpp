@@ -33,8 +33,8 @@ std::vector<StatReport> StatController::UpdateCareerStats()
 	m_StatFinals.AssignDataByFilter(m_vecMatch);
 	std::vector<StatReport> vecStatReport;
 	vecStatReport.emplace_back(m_StatMatch.GetStatReport());
-	vecStatReport.emplace_back(m_StatSetTiebreaks.GetStatReport());
 	vecStatReport.emplace_back(m_StatMatchTiebreaks.GetStatReport());
+	vecStatReport.emplace_back(m_StatSetTiebreaks.GetStatReport());
 	vecStatReport.emplace_back(m_StatQuarterFinals.GetStatReport());
 	vecStatReport.emplace_back(m_StatSemiFinals.GetStatReport());
 	vecStatReport.emplace_back(m_Stat3rdPlaceGames.GetStatReport());
