@@ -27,19 +27,14 @@ std::vector<StatReport> StatController::UpdateCareerStats()
 	m_StatMatch.AssignDataByFilter(m_vecMatch);
 	m_StatMatchTiebreaks.AssignDataByFilter(m_vecMatch);
 	m_StatSetTiebreaks.AssignDataByFilter(m_vecSet);
-	std::vector<StatReport> vecStatReport;
-	vecStatReport.emplace_back(m_StatMatch.GetStatReport());
-	vecStatReport.emplace_back(m_StatSetTiebreaks.GetStatReport());
-	vecStatReport.emplace_back(m_StatMatchTiebreaks.GetStatReport());
-	return vecStatReport;
-}
-std::vector<StatReport> StatController::UpdateFinalsStats()
-{
 	m_StatQuarterFinals.AssignDataByFilter(m_vecMatch);
 	m_StatSemiFinals.AssignDataByFilter(m_vecMatch);
 	m_Stat3rdPlaceGames.AssignDataByFilter(m_vecMatch);
 	m_StatFinals.AssignDataByFilter(m_vecMatch);
 	std::vector<StatReport> vecStatReport;
+	vecStatReport.emplace_back(m_StatMatch.GetStatReport());
+	vecStatReport.emplace_back(m_StatSetTiebreaks.GetStatReport());
+	vecStatReport.emplace_back(m_StatMatchTiebreaks.GetStatReport());
 	vecStatReport.emplace_back(m_StatQuarterFinals.GetStatReport());
 	vecStatReport.emplace_back(m_StatSemiFinals.GetStatReport());
 	vecStatReport.emplace_back(m_Stat3rdPlaceGames.GetStatReport());
@@ -68,16 +63,6 @@ std::vector<Set> StatController::ConcetanateSets()const
 	});
 	return vecAllSets;
 }
-unsigned StatController::CountQualificationFromGroupStages()const
-{
-	return std::count_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [this](const auto& t) {
-		return t.IsGroupStageExist() && GetMaxProgress(t) != "Group Stage";
-		});
-}
-std::string StatController::GetMaxProgress(const Tournament& t)const
-{
-	return t.GetLastMatch().value_or(Match{}).GetStage();
-}
 void StatController::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
 {
 	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
@@ -90,13 +75,10 @@ void StatController::ChangeInDB(const std::vector<Profile>& vecProfile, const st
 }
 void StatController::UpdateActiveProfileData(const Profile& p)
 {
-	std::cout << "StatController::UpdateTournaments\n";
 	m_uiProfileID = p.GetID();
 	m_vecTournament = p.GetTournaments();
 	m_vecMatch = ConcatanateMatches(); 
 	m_vecSet = ConcetanateSets();
 	const auto& vecUpdatedCareerWLStat = UpdateCareerStats();
-	emit CareerStatsUpdated(m_vecTournament.size(), CountQualificationFromGroupStages(), vecUpdatedCareerWLStat);
-	const auto& vecUpdatedFinalsWLStat = UpdateFinalsStats();
-	emit FinalsStatsUpdated(vecUpdatedFinalsWLStat);
+	emit CareerStatsUpdated(vecUpdatedCareerWLStat);
 }

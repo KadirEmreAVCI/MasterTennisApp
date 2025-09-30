@@ -6,7 +6,6 @@
 #include "Profile.h"
 #include "Stat.h"
 
-
 class StatController : public QObject {
 	Q_OBJECT
 public:
@@ -23,12 +22,9 @@ private:
 	std::vector<Match> m_vecMatch;
 	std::vector<Set> m_vecSet;
 	std::vector<StatReport> UpdateCareerStats();
-	std::vector<StatReport> UpdateFinalsStats();
 	unsigned m_uiProfileID = 0;
 	std::vector<Match> ConcatanateMatches()const;
 	std::vector<Set> ConcetanateSets()const;
-	unsigned CountQualificationFromGroupStages()const;
-	std::string GetMaxProgress(const Tournament& t)const;
 	Stat<Set, 	decltype([](const Set& s)  {return s.IsTiebreakPlayed();})> m_StatSetTiebreaks;
 	Stat<Match, decltype([](const Match& m){return m.IsValid();})> m_StatMatch;
 	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.IsTiebreakPlayed();})> m_StatMatchTiebreaks;
@@ -40,8 +36,7 @@ private:
 public slots:
 	void UpdateActiveProfileData(const Profile&);
 signals:
-	void CareerStatsUpdated(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages, const std::vector<StatReport>&);
-	void FinalsStatsUpdated(const std::vector<StatReport>&);
+	void CareerStatsUpdated(const std::vector<StatReport>&);
 };
 
 #endif

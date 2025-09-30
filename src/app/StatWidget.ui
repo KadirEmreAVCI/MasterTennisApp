@@ -24,7 +24,7 @@
     <widget class="QLabel" name="lblIcon">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -37,7 +37,7 @@
     <widget class="QLabel" name="lblStatName">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -50,7 +50,7 @@
     <widget class="QLabel" name="lblWinText">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -63,7 +63,7 @@
     <widget class="QLabel" name="lblWin">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -76,7 +76,7 @@
     <widget class="QLabel" name="lblLoseText">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -89,7 +89,7 @@
     <widget class="QLabel" name="lblLose">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -102,7 +102,7 @@
     <widget class="QLabel" name="lblWinRateText">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
@@ -115,7 +115,7 @@
     <widget class="QLabel" name="lblWinRate">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>12</pointsize>
        <fontweight>DemiBold</fontweight>
       </font>
      </property>
