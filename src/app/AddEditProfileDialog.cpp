@@ -5,42 +5,18 @@
 #include "Utility.h"
 
 AddEditProfileDialog::AddEditProfileDialog(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent), AddEditDialog<Profile>(this)
 {
 	ui.setupUi(this);
-	utility::InitButtonWithPicture(ui.DefaultPPButton, ":images/CrossButton.png", 0.35f);
 	InitDialog();
 }
 
 AddEditProfileDialog::~AddEditProfileDialog()
 {}
-void AddEditProfileDialog::PrepareDialog(DialogMode mode, const Profile& p)
-{
-	SetDialogMode(mode);
-	InitDialog();
-	switch (m_DialogMode)
-	{
-	case DialogMode::eAddDialog:
-	{
-		setWindowTitle("New Profile");
-		break;
-	}
-	case DialogMode::eEditDialog:
-	{
-		setWindowTitle("Edit Profile");
-		m_EditedProfile = p;
-		m_sImageFileName = QString::fromStdString(m_EditedProfile.GetPPAddr());
-		FillDialog();
-		break;
-	}
-	default:
-		std::cout << "AddEditProfileDialog::SetDialogMode Unknown DialogMode!\n";
-	}
-}
 void AddEditProfileDialog::InitDialog()
 {
+	ui.ProfilePicWidget->InitWidget();
 	ui.lineEdit_NameSurname->setText("");
-	ui.lineEdit_PPAddr->setText("");
 	ui.radioButton_Female->setAutoExclusive(false);
 	ui.radioButton_Male->setAutoExclusive(false);
 	ui.radioButton_Female->setChecked(false);
@@ -50,9 +26,9 @@ void AddEditProfileDialog::InitDialog()
 }
 void AddEditProfileDialog::FillDialog()
 {
-	ui.lineEdit_NameSurname->setText(QString::fromStdString(m_EditedProfile.GetFullName()));
-	ui.lineEdit_PPAddr->setText(QString::fromStdString(m_EditedProfile.GetPPAddr()));
-	if(m_EditedProfile.GetGender() == Gender::Male)
+	ui.lineEdit_NameSurname->setText(QString::fromStdString(m_EditedItem.GetFullName()));
+	ui.ProfilePicWidget->FillWidget(&m_EditedItem);
+	if(m_EditedItem.GetGender() == Gender::Male)
 		ui.radioButton_Male->setChecked(true);
 	else
 		ui.radioButton_Female->setChecked(true);
@@ -60,9 +36,9 @@ void AddEditProfileDialog::FillDialog()
 void AddEditProfileDialog::ClearDialog()
 {
 	ui.lineEdit_NameSurname->setText("");
-	ui.lineEdit_PPAddr->setText("");
 	ui.radioButton_Male->setChecked(false);
 	ui.radioButton_Female->setChecked(false);
+	ui.ProfilePicWidget->ClearWidget();
 }
 bool AddEditProfileDialog::IsMandatoryFieldsFilled()const
 {
@@ -70,62 +46,41 @@ bool AddEditProfileDialog::IsMandatoryFieldsFilled()const
 }
 bool AddEditProfileDialog::IsThereAnyUnsavedInfo()const
 {
-	return ui.lineEdit_NameSurname->text() != "" || (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked()) || ui.lineEdit_PPAddr->text() != "";
-}
-void AddEditProfileDialog::on_BrowseButton_clicked()
-{
-	const QString sFullSourceDir = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
-	if (QFileInfo(sFullSourceDir).fileName() != "")
-	{
-		const QString sRootDestDir = Profile::GetProfileImageRootDestDir();
-		OnBrowseButtonClicked(sFullSourceDir, sRootDestDir);
-		ui.lineEdit_PPAddr->setText(m_sFullSourceDir);
-	}
-}
-void AddEditProfileDialog::on_DefaultPPButton_clicked()
-{
-	if (ui.lineEdit_PPAddr->text() != "")
-	{
-		QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Cancellation", "Are you sure you want to remove the profile picture?", QMessageBox::Yes | QMessageBox::No);
-		if (reply == QMessageBox::Yes)
-		{
-			ClearImage();
-			ui.lineEdit_PPAddr->setText("");
-		}
-	}
+	return ui.lineEdit_NameSurname->text() != "" || (ui.radioButton_Male->isChecked() || ui.radioButton_Female->isChecked());
 }
 void AddEditProfileDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
 		close();
+		const QString sSourcePictureFullPath = ui.ProfilePicWidget->GetSourcePictureFullPath(); 
 		Profile p{
-			m_EditedProfile.GetID(),
+			m_EditedItem.GetID(),
 			ui.lineEdit_NameSurname->text().toStdString(),
-			m_sImageFileName.toStdString(),
+			QFileInfo(sSourcePictureFullPath).fileName().toStdString(),
 			ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female
 		};
-		if (m_sImageFileName != "")
+		if (sSourcePictureFullPath != "")
 		{
-			SaveImage();
+			p.SaveImage(sSourcePictureFullPath.toStdString());
 		}
 		switch (m_DialogMode)
 		{
 			case DialogMode::eAddDialog:
 			{
-				if (AppController::instance().AddNewProfile(p))
+				if (AppController::instance().AddNewItem(p))
 					QMessageBox::information(this, "Information", "New profile is added successfully");
 				break;
 			}
 			case DialogMode::eEditDialog:
 			{
-				if (p == m_EditedProfile)
+				if (p == m_EditedItem)
 				{
 					QMessageBox::warning(this, "Warning", "No change detected in the profile.");
 				}
 				else
 				{
-					if (AppController::instance().EditProfile(p))
+					if (AppController::instance().EditItem(p))
 						QMessageBox::information(this, "Information", "The profile is edited successfully");
 				}
 				break;

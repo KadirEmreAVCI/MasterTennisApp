@@ -58,6 +58,7 @@ protected:
 		LoadOrganizationData();
 		LoadProfileData();
 	}
+	std::vector<Match> GetMatchesFromDB()const;
 	std::vector<Tournament> GetTournamentsFromDB()const;
 	std::vector<Organization> GetOrganizationsFromDB()const;
 	std::vector<Profile> GetProfilesFromDB()const;
@@ -107,16 +108,13 @@ TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
 	}
 }
 
-class FindParticipatedOrgsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-TEST_P(FindParticipatedOrgsOfProfileTest, FindParticipatedOrgsOfProfile)
+class FindRootTournamentOfMatchTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(FindRootTournamentOfMatchTest, FindRootTournamentOfMatch)
 {
 	auto [idx, expected] = GetParam();
-	const auto vecProfile = GetProfilesFromDB();
-	const auto vecParticipateOrg= GetProfilesFromDB()[idx].GetParticipatedOrgs();
-	for (std::size_t i = 0; i < vecParticipateOrg.size(); ++i)
-	{
-		EXPECT_EQ(expected[i],  vecParticipateOrg[i].GetID());
-	}
+	const auto vecMatch = GetMatchesFromDB();
+	const auto rootTournament = DatabaseController::instance().FindRootTournament(vecMatch[idx]);
+	EXPECT_EQ(expected, rootTournament.GetID());
 }
 
 #endif

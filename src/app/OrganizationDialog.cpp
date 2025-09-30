@@ -13,8 +13,8 @@ OrganizationDialog::OrganizationDialog(QWidget *parent)
 	ui.setupUi(this);
 	InitTable(ui.tableWidget);
 	m_upAddEditOrganizationDialog = std::make_unique<AddEditOrganizationDialog>(this);
-	QObject::connect(&AppController::instance(), &AppController::InitOrganizations, this, &OrganizationDialog::UpdateOrganizations);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInOrganizations, this, &OrganizationDialog::UpdateOrganizations);
+	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &OrganizationDialog::DBInitialized);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &OrganizationDialog::ChangeInDB);
 	setWindowTitle("");
 	setFixedSize(560, 600);
 }
@@ -46,53 +46,31 @@ void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowI
 {
 	using namespace utility;
 	unsigned uiColumnIdx{};
-	if (org.GetOrgPictureAddr() != "")
-	{
-		PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(org.GetOrgPictureAddr())).toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
-	}
-	else
-	{
-		PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.1f, uiRowIdx, uiColumnIdx++);
-	}
+	PlaceLabel2TableCellWithImage(ui.tableWidget, org.GetFullPicturePath(), 0.1f, uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::EditOrganization);
 }
-
-void OrganizationDialog::OpenAddDialog()
-{
-	m_upAddEditOrganizationDialog->setModal(true);
-	m_upAddEditOrganizationDialog->PrepareDialog(DialogMode::eAddDialog);
-	m_upAddEditOrganizationDialog->exec();
-}
-void OrganizationDialog::OpenEditDialog(const Organization& org)
-{
-	m_upAddEditOrganizationDialog->setModal(true);
-	m_upAddEditOrganizationDialog->PrepareDialog(DialogMode::eEditDialog, org);
-	m_upAddEditOrganizationDialog->exec();
-}
-Organization OrganizationDialog::FindSignalingOrganization()const
-{
-	return m_vecOrganization[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
-}
 void OrganizationDialog::on_NewOrganizationButton_clicked()
 {
-	OpenAddDialog();
+	m_upAddEditOrganizationDialog->OpenAddDialog();
 }
 void OrganizationDialog::EditOrganization()
 {
-	auto SignalingOrganization = FindSignalingOrganization();
-	OpenEditDialog(SignalingOrganization);
+	auto SignalingOrganization = utility::GetSignalingItem<Organization>(m_vecOrganization, ui.tableWidget, sender());
+	m_upAddEditOrganizationDialog->OpenEditDialog(SignalingOrganization);
 }
 void OrganizationDialog::DeleteOrganization()
 {
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this organization permanently? All child tournaments and matches will be deleted.", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		auto SignalingOrganization = FindSignalingOrganization();
-		AppController::instance().DeleteOrganization(SignalingOrganization);
-		QMessageBox::information(this, "Information", "The organization deleted successfully");
+		auto SignalingOrganization = utility::GetSignalingItem<Organization>(m_vecOrganization, ui.tableWidget, sender());
+		if(AppController::instance().DeleteItem(SignalingOrganization))
+		{
+			QMessageBox::information(this, "Information", "The organization deleted successfully");
+		}
 	}
 }
 void OrganizationDialog::UpdateOrganizations(const std::vector<Organization>& vecOrganization)
@@ -100,4 +78,15 @@ void OrganizationDialog::UpdateOrganizations(const std::vector<Organization>& ve
 	std::cout << "OrganizationDialog::UpdateOrganizations!!!!!!!!!!!!!!!\n";
 	m_vecOrganization = vecOrganization;
 	DisplayOrganizations();
+}
+void OrganizationDialog::DBInitialized(const std::vector<Profile>&, const std::vector<Organization>& vecOrganization)
+{
+	UpdateOrganizations(vecOrganization);
+}
+void OrganizationDialog::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>& vecOrganization, const std::vector<Tournament>& vecTournament, const std::vector<Match>& vecMatch)
+{
+	if(vecOrganization != m_vecOrganization)
+	{
+		UpdateOrganizations(vecOrganization);
+	}
 }

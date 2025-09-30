@@ -19,17 +19,13 @@ private:
 	virtual void LoadDataToTable()override;
 	virtual void FillTable()override;
 	
-	void OpenAddDialog();
-	void OpenEditDialog(const Match&);
 	void PlaceMatch2Table(const Match& m, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile& p);
-	std::vector<Tournament> ConcatanateTournaments()const;
-	Match FindSignalingMatch()const;
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::MatchesDialogClass ui;
 	std::unique_ptr<AddEditMatchDialog> m_upAddEditMatchDialog{ nullptr };
 	Tournament m_RootTournament;
 	std::vector<Match> m_vecMatch;
-	std::vector<Organization> m_vecOrganization;
 private slots:
 	void on_NewMatchButton_clicked();
 public slots:

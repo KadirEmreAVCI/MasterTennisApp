@@ -6,6 +6,7 @@
 #include "ui_OrganizationDialog.h"
 #include "TableWidgetUser.h"
 #include "Organization.h"
+#include "Profile.h"
 #include "AddEditOrganizationDialog.h"
 
 class OrganizationDialog : public QDialog, public TableWidgetUser
@@ -20,12 +21,10 @@ private:
 	// TableWidgetUser
 	virtual void LoadDataToTable()override;
 	virtual void FillTable()override;
-	
 	void PlaceOrg2Table(const Organization& org, unsigned uiRowIdx);
 	void UpdateOrganizations(const std::vector<Organization>&);
-	void OpenAddDialog();
-	void OpenEditDialog(const Organization& org);
-	Organization FindSignalingOrganization()const;
+	void DBInitialized(const std::vector<Profile>&, const std::vector<Organization>&);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::OrganizationDialogClass ui;
 	std::unique_ptr<AddEditOrganizationDialog> m_upAddEditOrganizationDialog;
 	std::vector<Organization> m_vecOrganization;

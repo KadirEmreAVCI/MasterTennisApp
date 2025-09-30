@@ -12,7 +12,7 @@ public:
 	Score GetMajorScore()const;
 	Score GetTBScore()const;
 	Outcome GetOutcome()const;
-	bool IsSetTBPlayed()const;
+	bool IsTiebreakPlayed()const;
 	bool IsValid()const;
 	std::string ToString()const;
 	static Set FromString(const std::string&);
@@ -23,7 +23,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Set& s)
 	{
 		os << s.m_MajorScore;
-		if (s.IsSetTBPlayed())
+		if (s.IsTiebreakPlayed())
 			os << "(" << s.m_optTBScore.value() << ")";
 		return os;
 	}

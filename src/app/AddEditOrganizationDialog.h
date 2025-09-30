@@ -6,14 +6,13 @@
 #include "AddEditDialog.h"
 #include "Organization.h"
 
-class AddEditOrganizationDialog : public QDialog, public AddEditDialog
+class AddEditOrganizationDialog : public QDialog, public AddEditDialog<Organization>
 {
 	Q_OBJECT
 
 public:
 	AddEditOrganizationDialog(QWidget *parent = nullptr);
 	~AddEditOrganizationDialog();
-	void PrepareDialog(DialogMode mode, const Organization& org = Organization{});
 private:
 	virtual void InitDialog()override;
 	virtual void FillDialog()override;
@@ -22,7 +21,6 @@ private:
 	virtual bool IsThereAnyUnsavedInfo()const override;
 	void ClearCategoryCheckboxes();
 	Ui::AddEditOrganizationDialogClass ui;
-	Organization m_EditedOrganization;
 	std::vector<QCheckBox*> m_vecCategoryCheckboxes;
 	std::vector<std::string> m_vecCategories;
 	
@@ -31,8 +29,6 @@ private slots:
 	void on_CancelButton_clicked();
 	void on_ApplyButton_clicked();
 	void on_ClearButton_clicked();
-	void on_BrowseButton_clicked();
-	void on_DefaultPPButton_clicked();
 };
 
 #endif

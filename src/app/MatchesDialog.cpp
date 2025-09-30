@@ -13,7 +13,7 @@ MatchesDialog::MatchesDialog(QWidget *parent)
 {
 	ui.setupUi(this);
 	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &MatchesDialog::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &MatchesDialog::ChangeInDB);
 	setFixedSize(750, 600);
 	InitTable(ui.tableWidget);
 }
@@ -32,18 +32,6 @@ void MatchesDialog::FillTable()
 	}
 	ui.tableWidget->resizeRowsToContents();
 	ui.tableWidget->resizeColumnsToContents();
-}
-void MatchesDialog::OpenAddDialog()
-{
-	m_upAddEditMatchDialog->setModal(true);
-	m_upAddEditMatchDialog->PrepareDialog(DialogMode::eAddDialog, m_RootTournament);
-	m_upAddEditMatchDialog->exec();
-}
-void MatchesDialog::OpenEditDialog(const Match& m)
-{
-	m_upAddEditMatchDialog->setModal(true);
-	m_upAddEditMatchDialog->PrepareDialog(DialogMode::eEditDialog, m_RootTournament, m);
-	m_upAddEditMatchDialog->exec();
 }
 void MatchesDialog::DisplayMatches(const Tournament& rootTournament)
 {
@@ -78,14 +66,23 @@ void MatchesDialog::PlaceMatch2Table(const Match& m, unsigned uiRowIdx)
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::DeleteMatch);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (m_RootTournament.IsLocked()) ? false : true), &QPushButton::clicked, this, &MatchesDialog::EditMatch);
 }
+void MatchesDialog::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_RootTournament.GetProfileID();
+		});
+	if(activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
+}
 void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 {
-	m_vecOrganization = p.GetParticipatedOrgs();
-	const auto& vecAllTournaments = ConcatanateTournaments();
-	const auto& iterUpdatedRootTournament = std::find_if(vecAllTournaments.cbegin(), vecAllTournaments.cend(), [this](const auto& t) {
+	const auto& vecTournamentsOfTheProfile = p.GetTournaments();
+	const auto& iterUpdatedRootTournament = std::find_if(vecTournamentsOfTheProfile.cbegin(), vecTournamentsOfTheProfile.cend(), [this](const auto& t) {
 		return t.GetID() == m_RootTournament.GetID();
 		});
-	if (iterUpdatedRootTournament != vecAllTournaments.end())
+	if (iterUpdatedRootTournament != vecTournamentsOfTheProfile.end())
 	{
 		m_RootTournament = *iterUpdatedRootTournament;
 		DisplayMatches(m_RootTournament);
@@ -94,15 +91,6 @@ void MatchesDialog::UpdateActiveProfileData(const Profile& p)
 	{
 		std::cout << "MatchesDialog::UpdateActiveProfileData updated tournament could not be found.\n";
 	}
-}
-std::vector<Tournament> MatchesDialog::ConcatanateTournaments()const
-{
-	std::vector<Tournament> vecAllTournament;
-	std::for_each(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [&vecAllTournament](const auto& org) {
-		const auto& vecTournament = org.GetTournaments();
-		vecAllTournament.insert(vecAllTournament.cend(), vecTournament.cbegin(), vecTournament.cend());
-		});
-	return vecAllTournament;
 }
 void MatchesDialog::LoadDataToTable()
 {
@@ -117,22 +105,19 @@ void MatchesDialog::LoadDataToTable()
 		ui.NewMatchButton->setEnabled(true);
 	}
 }
-Match MatchesDialog::FindSignalingMatch()const
-{
-	return m_vecMatch[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
-}
 void MatchesDialog::EditMatch()
 {
-	const auto& SignalingMatch = FindSignalingMatch();
-	OpenEditDialog(SignalingMatch);
+	const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
+	m_upAddEditMatchDialog->SetRootTournament(m_RootTournament);
+	m_upAddEditMatchDialog->OpenEditDialog(SignalingMatch);
 }
 void MatchesDialog::DeleteMatch()
 {
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this item permanently?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		const auto& SignalingMatch = FindSignalingMatch();
-		AppController::instance().DeleteMatch(SignalingMatch);
+		const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
+		AppController::instance().DeleteItem(SignalingMatch);
 		QMessageBox::information(this, "Information", "The match deleted successfully");
 	}
 }
@@ -140,7 +125,8 @@ void MatchesDialog::on_NewMatchButton_clicked()
 {
 	if (false == m_RootTournament.IsLocked())
 	{
-		OpenAddDialog();
+		m_upAddEditMatchDialog->SetRootTournament(m_RootTournament);
+		m_upAddEditMatchDialog->OpenAddDialog();
 	}
 	else
 	{

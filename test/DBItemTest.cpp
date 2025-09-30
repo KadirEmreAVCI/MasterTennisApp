@@ -60,7 +60,7 @@ TEST_F(DBItemTest, EditOrganizationInDB)
 {
     m_Organization = Organization{m_Organization.GetID(), "Karayollari", "/pp_addr_new", std::vector<std::string>{"A", "B", "C"}};
     
-    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "PictureFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
     EXPECT_CALL(*m_spMockDatabase, EditItem("Organization", testing::_, 3)).Times(1).WillOnce(testing::Return(true));
     
     EXPECT_TRUE(m_Organization.EditInDB());
@@ -69,7 +69,7 @@ TEST_F(DBItemTest, EditProfileInDB)
 {
     m_Profile = Profile{ m_Profile.GetID(), "Emre Avci", "/pp_addr", Gender::Male};
     
-    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "PPAddress", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "PictureFileName", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
     EXPECT_CALL(*m_spMockDatabase, EditItem("Profile", testing::_, 2)).Times(1).WillOnce(testing::Return(true));
     
     EXPECT_TRUE(m_Profile.EditInDB());
@@ -118,7 +118,7 @@ TEST_F(DBItemTest, LoadOrganizationFromDB)
 
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "ID", 0)).Times(1).WillOnce(testing::Return(std::to_string(m_Organization.GetID())));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "Name", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("Karayollari"));
-    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "ImageFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "PictureFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "Categories", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("A,B,C"));
 
     org.LoadFromDB(org.GetID());
@@ -132,7 +132,7 @@ TEST_F(DBItemTest, LoadProfileFromDB)
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "ID", 0)).Times(1).WillOnce(testing::Return(std::to_string(m_Profile.GetID())));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "FullName", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("Kadir Emre Avci"));
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "Gender", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("Male"));
-    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "PPAddress", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "PictureFileName", "ID", std::to_string(m_Profile.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
 	
     p.LoadFromDB(p.GetID());
 

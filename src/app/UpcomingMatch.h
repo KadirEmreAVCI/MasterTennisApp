@@ -14,7 +14,7 @@ class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass{
 	Q_OBJECT
 
 public:
-	UpcomingMatch(QWidget* parent = nullptr, const std::string& sOrgImageFile = {}, const Tournament& t = Tournament{}, const Match& m = Match{});
+	UpcomingMatch(const Match& m, QWidget* parent = nullptr);
 	~UpcomingMatch();
 private:
 	void InitializeTimer();
@@ -22,8 +22,8 @@ private:
 	void FillUpcomingMatchButton();
 	std::unique_ptr<QTimer> m_upTimer{ nullptr };
 	Countdown m_Countdown;
-	std::string m_sOrgImageFile;
-	Tournament m_Tournament{};
+	Organization m_RootOrganization;
+	Tournament m_RootTournament;
 	Match m_Match;
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
 private slots:

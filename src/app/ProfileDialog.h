@@ -18,6 +18,8 @@ public:
 private:
 	void CreateTabWidget();
 	void UserLoggedIn(const Profile&);
+	void DBInitialized(const std::vector<Profile>&, const std::vector<Organization>&);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	void UpdateProfileAlternatives(const std::vector<Profile>&);
 	Ui::ProfileDialogClass ui;
 	std::vector<Profile> m_vecProfile;

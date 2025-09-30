@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StatWidget</class>
+ <widget class="QWidget" name="StatWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>467</width>
+    <height>42</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>15</pointsize>
+    <bold>false</bold>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QLabel" name="lblIcon">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>ICON</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblStatName">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>Stat Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblWinText">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>Win:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblWin">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>XXX</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblLoseText">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>Lose:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblLose">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>XXX</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblWinRateText">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>Win Rate:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblWinRate">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <fontweight>DemiBold</fontweight>
+      </font>
+     </property>
+     <property name="text">
+      <string>XX</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

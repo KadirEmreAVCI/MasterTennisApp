@@ -16,34 +16,69 @@ public:
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;
 	void InitDatabase(std::shared_ptr<IDatabase> spDatabase);
-	bool DeleteProfile(const Profile&)const;
-	bool DeleteOrganization(const Organization&)const;
-	bool DeleteTournament(const Tournament&)const;
-	bool DeleteMatch(const Match&)const;
-	bool AddNewProfile(const Profile&)const;
-	bool AddNewOrganization(const Organization&)const;
-	bool AddNewTournament(const Tournament&)const;
-	bool AddNewMatch(const Match&)const;
-	bool EditProfile(const Profile&)const;
-	bool EditOrganization(const Organization&)const;
-	bool EditTournament(const Tournament&)const;
-	bool EditMatch(const Match&)const;
-	Profile GetActiveProfile(unsigned int uiActiveProfileID);
-	std::vector<Profile> GetProfiles();
-	std::vector<Organization> GetOrganizations();
-private:
-	DatabaseController() = default;
-	void LoadDataFromDB();
-	void PrepareActiveProfile(unsigned int uiActiveProfileID);
-	void LoadProfiles();
-	void LoadOrganizations();
-	void LoadTournaments();
-	void LoadMatches();
+	std::vector<Profile> GetProfiles()const;
+	std::vector<Organization> GetOrganizations()const;
+	std::vector<Tournament> GetTournaments()const;
+	std::vector<Match> GetMatches()const;
 	std::vector<Match> FindMatchesOfTournament(unsigned uiTournamentID)const;
 	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;
-	std::vector<Organization> FindParticipatedOrgsOfProfile(unsigned uiProfileID)const;
-	Profile m_ActiveProfile;
+	Tournament FindRootTournament(const Match&);
+	Organization FindRootOrganization(const Tournament&)const;
+	template<typename T>
+	bool DeleteDBItem(const T& item)
+	{
+		std::vector<T> vecItem = LoadDBItems<T>();
+		auto iterItem = std::find(vecItem.cbegin(), vecItem.cend(), item);
+		if (iterItem == vecItem.cend())
+		{
+			std::cerr << "DatabaseController::DeleteDBItem item to be deleted could not be found in DB!\n";
+			return false;
+		}
+		const bool blDeletion = iterItem->DeleteFromDB();
+		if(blDeletion)
+		{
+			LoadDataFromDB();
+		}
+		return blDeletion;
+	}
+	template<typename T>
+	bool AddNewDBItem(const T& item)
+	{
+		const bool blAddition = item.InsertToDB();
+		if (blAddition)
+		{
+			LoadDataFromDB();
+		}
+		return blAddition;
+	}
+	template<typename T>
+	bool EditDBItem(const T& item)
+	{
+		const bool blEdition = item.EditInDB();
+		if (blEdition)
+		{
+			LoadDataFromDB();
+		}
+		return blEdition;
+	}
+private:
+	DatabaseController() = default;
+	void LoadDataFromDB();
+	template<typename T>
+	std::vector<T> LoadDBItems()const
+	{
+		std::vector<T> vecItem;
+		if (const unsigned uiSize = m_spIDatabase->GetItemCount(T{}.GetDBTable()); uiSize != 0)
+		{
+			vecItem.resize(uiSize);
+			unsigned uiRowIdx{};
+			std::for_each(vecItem.begin(), vecItem.end(), [&](auto& item) {
+				item.LoadFromDB(uiRowIdx++);
+				});
+		}
+		return vecItem;
+	}
 	std::vector<Profile> m_vecProfile;
 	std::vector<Organization> m_vecOrganization;
 	std::vector<Tournament> m_vecTournament;

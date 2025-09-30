@@ -1,6 +1,9 @@
 #ifndef ORGPARTICIPATION_H
 #define ORGPARTICIPATION_H
 
+// Project Headers
+#include "Organization.h"
+
 #include <string>
 #include <memory>
 #include <QWidget>
@@ -11,12 +14,8 @@ class OrgParticipation : public QWidget, public Ui::OrgParticipationClass
 	Q_OBJECT
 
 public:
-	OrgParticipation(QWidget* parent = nullptr, const std::string& sOrgImageFile = "", const std::string& sOrgName = "", unsigned uiParticipationCount = 0);
+	OrgParticipation(const Organization& org, unsigned uiParticipationCount, QWidget* parent = nullptr);
 	~OrgParticipation() = default;
-private:
-    std::string m_sOrgImageFile;
-    std::string m_sOrgName;
-    unsigned m_uiParticipationCount;
 };
 
 #endif

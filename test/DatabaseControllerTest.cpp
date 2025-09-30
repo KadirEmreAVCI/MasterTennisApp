@@ -4,6 +4,10 @@
 // Test Headers
 #include "DatabaseControllerTest.h"
 
+std::vector<Match> DatabaseControllerTest::GetMatchesFromDB()const
+{
+	return DatabaseController::instance().m_vecMatch;
+}
 std::vector<Tournament> DatabaseControllerTest::GetTournamentsFromDB()const
 {
 	return DatabaseController::instance().m_vecTournament;
@@ -45,7 +49,7 @@ void DatabaseControllerTest::LoadProfileData()
 	DatabaseController::instance().m_vecProfile = m_vecProfile;
 	for (Profile& p : DatabaseController::instance().m_vecProfile)
 	{
-		p.SetParticipatedOrgs(DatabaseController::instance().FindParticipatedOrgsOfProfile(p.GetID()));
+		p.SetTournaments(DatabaseController::instance().FindTournamentsOfProfile(p.GetID()));
 	}
 }
 INSTANTIATE_TEST_SUITE_P(
@@ -79,10 +83,26 @@ INSTANTIATE_TEST_SUITE_P(
 	)
 );
 INSTANTIATE_TEST_SUITE_P(
-    FindParticipatedOrgsOfProfile,
-    FindParticipatedOrgsOfProfileTest,
-    ::testing::Values(
-        std::make_tuple(0, std::vector<unsigned>{0, 1, 2}),
-        std::make_tuple(1, std::vector<unsigned>{0, 3})
+	FindRootTournamentOfMatch,
+	FindRootTournamentOfMatchTest,
+	::testing::Values(
+		std::make_tuple(0, 0),
+		std::make_tuple(1, 0),
+		std::make_tuple(2, 0),
+		std::make_tuple(3, 1),
+		std::make_tuple(4, 1),
+		std::make_tuple(5, 1),
+		std::make_tuple(6, 1),
+		std::make_tuple(7, 1),
+		std::make_tuple(8, 2),
+		std::make_tuple(9, 2),
+		std::make_tuple(10,2),
+		std::make_tuple(11,3),
+		std::make_tuple(12,3),
+		std::make_tuple(13,4),
+		std::make_tuple(14,4),
+		std::make_tuple(15,5),
+		std::make_tuple(16,5),
+		std::make_tuple(17,5)
 	)
 );

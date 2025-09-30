@@ -6,7 +6,7 @@
 #include "Config.h"
 #include "Utility.h"
 
-ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p)
+ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p) 
 	: 
     QWidget(parent),
     m_Profile{p}
@@ -28,7 +28,7 @@ void ProfileWidget::FillProfileButton()
     QHBoxLayout* layout = new QHBoxLayout(container);
     layout->setContentsMargins(5, 5, 5, 5);
 
-    QLabel* PPLabel = utility::CreateLabelWithPicture((m_Profile.GetPPAddr() != "") ? (Profile::GetProfileImageRootDestDir().toStdString() + m_Profile.GetPPAddr()) : (Profile::GetProfileImageRootDestDir() + "default_profile.png").toStdString(), 0.125f);
+    QLabel* PPLabel = utility::CreateLabelWithPicture(m_Profile.GetFullPicturePath(), 0.125f);
 
     QLabel* ProfileNameLabel = new QLabel(QString::fromStdString(m_Profile.GetFullName()));
     QFont font = ProfileNameLabel->font();
@@ -41,9 +41,7 @@ void ProfileWidget::FillProfileButton()
 }
 void ProfileWidget::OpenEditDialog(const Profile& selectedProfile)
 {
-    m_upAddEditProfileDialog->setModal(true);
-    m_upAddEditProfileDialog->PrepareDialog(DialogMode::eEditDialog, selectedProfile);
-    m_upAddEditProfileDialog->exec();
+    m_upAddEditProfileDialog->OpenEditDialog(selectedProfile);
 }
 void ProfileWidget::on_ProfileButton_clicked()
 {
@@ -54,11 +52,10 @@ void ProfileWidget::on_DeleteButton_clicked()
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this profile permanently? All tournaments and matches of the profile will be deleted.", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes)
     {
-        AppController::instance().DeleteProfile(m_Profile);
-        QMessageBox::information(this, "Information", "The profile deleted successfully");
+        AppController::instance().DeleteItem(m_Profile);
     }
 }
 void ProfileWidget::on_EditButton_clicked()
 {
-    OpenEditDialog(m_Profile);
+    emit EditProfileButtonClicked(m_Profile);
 }

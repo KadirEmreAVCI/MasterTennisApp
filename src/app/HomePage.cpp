@@ -9,12 +9,13 @@
 #include "AppController.h"
 #include "Config.h"
 #include "Utility.h"
+#include "DatabaseController.h"
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HomePage::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
 	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
@@ -36,11 +37,7 @@ void HomePage::UpdateUpcomingMatches()
 		});
 	for (const auto& m : vecUpcomingMatches)
 	{
-		const Tournament rootTournament = FindRootTournament(m);
-		const auto& iterOrg = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [rootTournament](const auto& org) {
-			return rootTournament.GetOrgID() == org.GetID();
-			});
-		InsertUpcomingMatch(new UpcomingMatch(this, (iterOrg->GetOrgPictureAddr() != "") ? iterOrg->GetOrgPictureAddr() : "default_org.png", rootTournament, m));
+		InsertUpcomingMatch(new UpcomingMatch(m, this));
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
@@ -94,10 +91,10 @@ void HomePage::UpdateTopParticipations()
 	const auto vecTopParticipations = FindTopParticipations();
 	for(const auto& prParticipation : vecTopParticipations)
 	{
-		const auto& org = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [prParticipation](const Organization& org){
-			return prParticipation.first == org.GetID();
+		const auto& t = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [prParticipation](const Tournament& t){
+			return prParticipation.first == t.GetOrgID();
 		});
-		InsertOrgParticipation(new OrgParticipation(this, org->GetOrgPictureAddr(), org->GetName(), prParticipation.second));
+		InsertOrgParticipation(new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
 	}
 	ui.listWidget_TopParticipations->setFixedHeight(280);
 }
@@ -117,24 +114,9 @@ void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
 {
 	utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, pOrgParticipation);
 }
-std::vector<Tournament> HomePage::ConcatanateTournaments()const
-{
-	std::vector<Tournament> vecAllTournament;
-	std::for_each(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [&vecAllTournament](const auto& org) {
-		const auto& vecTournament = org.GetTournaments();
-		vecAllTournament.insert(vecAllTournament.cend(), vecTournament.cbegin(), vecTournament.cend());
-		});
-	return vecAllTournament;
-}
-Tournament HomePage::FindRootTournament(const Match& m)const
-{
-	const auto& iterRooutTournament = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [m](const auto& t) {
-		return m.GetTournamentID() == t.GetID();
-		});
-	return *iterRooutTournament;
-}
 void HomePage::UserLoggedIn(const Profile& p)
 {
+	m_uiProfileID = p.GetID();
 	UpdateActiveProfileData(p);
 	if (!FindStartedUpcomingMatches().empty())
 	{
@@ -146,11 +128,20 @@ void HomePage::UserLoggedOut()
 	utility::ClearListWidget(ui.listWidget_TopParticipations);
 	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
 }
+void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{	
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_uiProfileID;
+		});
+	if(activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
+}
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
-	std::cout << "HomePage::UpdateOrganizations!!!!!!!!!!!!!!!\n";
-	m_vecOrganization = p.GetParticipatedOrgs();
-	m_vecTournament = ConcatanateTournaments();
+	std::cout << "HomePage::UpdateActiveProfileData!!!!!!!!!!!!!!!\n";
+	m_vecTournament = p.GetTournaments();
 	UpdateUpcomingMatches();
 	UpdateTopParticipations();
 }

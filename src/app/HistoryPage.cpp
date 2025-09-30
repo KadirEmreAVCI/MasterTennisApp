@@ -27,7 +27,7 @@ HistoryPage::HistoryPage(QWidget *parent)
 	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInActiveProfile, this, &HistoryPage::UpdateActiveProfileData);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HistoryPage::ChangeInDB);
 	InitFilterComponents();
 	InitTable(ui.tableWidget);
 }
@@ -56,58 +56,21 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 {
 	using namespace utility;
 	ui.tableWidget->insertRow(uiRowIdx);
-	const auto& iterRootOrg = std::find_if(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [t](const auto& org) {
-		return org.GetID() == t.GetOrgID();
-		});
-	if (iterRootOrg != m_vecOrganization.end())
-	{
-		unsigned uiColumnIdx{};
-		if (iterRootOrg->GetOrgPictureAddr() != "")
-		{
-			PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + QString::fromStdString(iterRootOrg->GetOrgPictureAddr())).toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
-		}
-		else
-		{
-			PlaceLabel2TableCellWithImage(ui.tableWidget, (Organization::GetOrgImageRootDestDir() + "default_org.png").toStdString(), 0.07f, uiRowIdx, uiColumnIdx++);
-		}
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(iterRootOrg->GetName()), uiRowIdx, uiColumnIdx++);
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetSeason()), uiRowIdx, uiColumnIdx++);
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetType()), uiRowIdx, uiColumnIdx++);
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetCategory()), uiRowIdx, uiColumnIdx++);
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetTeammate()), uiRowIdx, uiColumnIdx++);
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
-		PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
-		PlaceLabel2TableCellWithImage(ui.tableWidget, t.GetTrophyPic(), 0.085f, uiRowIdx, uiColumnIdx++);
-		QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatches);
-		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::DeleteTournament);
-		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
-		QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
-	}
-}
-std::vector<Tournament> HistoryPage::ConcatanateTournaments()const
-{
-	std::vector<Tournament> vecAllTournament;
-	std::for_each(m_vecOrganization.cbegin(), m_vecOrganization.cend(), [&vecAllTournament](const auto& org) {
-		const auto& vecTournament = org.GetTournaments();
-		vecAllTournament.insert(vecAllTournament.cend(), vecTournament.cbegin(), vecTournament.cend());
-		});
-	return vecAllTournament;
-}
-Tournament HistoryPage::FindSignalingTournament()const
-{
-	return m_vecDisplayedTournament[utility::FindIndexOfSignalingItem(ui.tableWidget, sender())];
-}
-void HistoryPage::OpenAddDialog()
-{
-	m_upAddEditTournamentDialog->setModal(true);
-	m_upAddEditTournamentDialog->PrepareDialog(DialogMode::eAddDialog);
-	m_upAddEditTournamentDialog->exec();
-}
-void HistoryPage::OpenEditDialog(const Tournament& t)
-{
-	m_upAddEditTournamentDialog->setModal(true);
-	m_upAddEditTournamentDialog->PrepareDialog(DialogMode::eEditDialog, t);
-	m_upAddEditTournamentDialog->exec();
+	unsigned uiColumnIdx{};
+	auto rRootOrganization = DatabaseController::instance().FindRootOrganization(t);
+	PlaceLabel2TableCellWithImage(ui.tableWidget, rRootOrganization.GetFullPicturePath(), 0.07f, uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(rRootOrganization.GetName()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetSeason()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetType()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetCategory()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetTeammate()), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
+	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
+	PlaceLabel2TableCellWithImage(ui.tableWidget, t.GetTrophyPic(), 0.085f, uiRowIdx, uiColumnIdx++);
+	QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatches);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::DeleteTournament);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
 }
 void HistoryPage::InitFilterComponents()
 {
@@ -127,7 +90,7 @@ void HistoryPage::InitFilterComponents()
 }
 void HistoryPage::on_NewTournamentButton_clicked()
 {
-	OpenAddDialog();
+	m_upAddEditTournamentDialog->OpenAddDialog();
 }
 void HistoryPage::on_RemoveFilterButton_clicked()
 {
@@ -193,10 +156,19 @@ void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
 		std::cerr << "on_lineEditSearchBar_textChanged m_upActiveFilter is nullptr!\n";
 	}
 }
+void HistoryPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_uiProfileID;
+		});
+	if(activeProfile != vecProfile.cend())
+	{
+		UpdateActiveProfileData(*activeProfile);
+	}
+}
 void HistoryPage::UpdateActiveProfileData(const Profile& p)
 {
-	m_vecOrganization = p.GetParticipatedOrgs();
-	m_vecTournament = ConcatanateTournaments();
+	m_vecTournament = p.GetTournaments();
 	if (m_vecTournament.size() > 1)
 	{
 		std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const auto& t1, const auto& t2) {
@@ -208,6 +180,7 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {
+	m_uiProfileID = p.GetID();
 	if (m_blFirstLoadOfData)
 	{
 		UpdateActiveProfileData(p);		// To adjust the height of the rows properly.
@@ -217,7 +190,7 @@ void HistoryPage::UserLoggedIn(const Profile& p)
 }
 void HistoryPage::ShowMatches()
 {
-	const auto SignalingTournament = FindSignalingTournament();
+	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(SignalingTournament.GetName()));
 	const auto vecMatches = SignalingTournament.GetMatches();
 	m_upMatchesDialog->DisplayMatches(SignalingTournament);
@@ -226,15 +199,17 @@ void HistoryPage::ShowMatches()
 }
 void HistoryPage::LockUnlockTournament()
 {
-	auto SignalingTournament = FindSignalingTournament();
+	auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 	if (SignalingTournament.IsLocked())
 	{
 		QMessageBox::StandardButton reply = QMessageBox::question(this, "Unlock Tournament", "Are you sure you want to unlock this tournament? The match history of unlocked tournaments can be changed.", QMessageBox::Yes | QMessageBox::No);
 		if (reply == QMessageBox::Yes)
 		{
 			SignalingTournament.SetLocked(false);
-			QMessageBox::information(this, "Information", "The tournament unlocked.");
-			AppController::instance().EditTournament(SignalingTournament);
+			if(AppController::instance().EditItem(SignalingTournament))
+			{
+				QMessageBox::information(this, "Information", "The tournament unlocked.");
+			}
 		}
 	}
 	else
@@ -249,8 +224,10 @@ void HistoryPage::LockUnlockTournament()
 			if (reply == QMessageBox::Yes)
 			{
 				SignalingTournament.SetLocked(true);
-				QMessageBox::information(this, "Information", "The tournament locked.");
-				AppController::instance().EditTournament(SignalingTournament);
+				if(AppController::instance().EditItem(SignalingTournament))
+				{
+					QMessageBox::information(this, "Information", "The tournament locked.");
+				}
 			}
 		}
 		else
@@ -261,16 +238,18 @@ void HistoryPage::LockUnlockTournament()
 }
 void HistoryPage::EditTournament()
 {
-	const auto SignalingTournament = FindSignalingTournament();
-	OpenEditDialog(SignalingTournament);
+	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
+	m_upAddEditTournamentDialog->OpenEditDialog(SignalingTournament);
 }
 void HistoryPage::DeleteTournament()
 {
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this item permanently?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		const auto& SignalingTournament = FindSignalingTournament();
-		AppController::instance().DeleteTournament(SignalingTournament);
-		QMessageBox::information(this, "Information", "The tournament deleted successfully");
+		const auto& SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
+		if(AppController::instance().DeleteItem(SignalingTournament))
+		{
+			QMessageBox::information(this, "Information", "The tournament deleted successfully");
+		}
 	}
 }

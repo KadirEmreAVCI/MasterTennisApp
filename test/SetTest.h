@@ -42,7 +42,7 @@ class PlayedTiebreakTest : public SetTest, public ::testing::WithParamInterface<
 TEST_P(PlayedTiebreakTest, DetectTiebreakPlayed)
 {
 	auto [idx, expected] = GetParam();
-	EXPECT_EQ(m_vecSet[idx].IsSetTBPlayed(), expected);
+	EXPECT_EQ(m_vecSet[idx].IsTiebreakPlayed(), expected);
 }
 
 class InvalidSetTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};

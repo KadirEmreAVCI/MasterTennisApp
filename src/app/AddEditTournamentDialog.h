@@ -6,14 +6,13 @@
 #include "ui_AddEditTournamentDialog.h"
 #include "AddEditDialog.h"
 #include "Profile.h"
-class AddEditTournamentDialog : public QDialog, public AddEditDialog
+class AddEditTournamentDialog : public QDialog, public AddEditDialog<Tournament>
 {
 	Q_OBJECT
 
 public:
 	AddEditTournamentDialog(QWidget *parent = nullptr);
 	~AddEditTournamentDialog();
-	void PrepareDialog(DialogMode, const Tournament& t = Tournament{});
 private:
 	// AddEditDialog
 	virtual void ClearDialog()override;
@@ -27,8 +26,11 @@ private:
 	bool IsMaxParticipantExceeded(unsigned uiParticipant)const;
 	void InitSetsBestOfComboBox(unsigned);
 	bool IsDoubleTournament()const;
+	void DBInitialized(const std::vector<Profile>&, const std::vector<Organization>&);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
+	void UpdateOrganizations(const std::vector<Organization>&);
+	void UpdateActiveProfileData(const Profile& p);
 	const unsigned m_uiMaxParticipant{ 128 };
-	Tournament m_EditedTournament;
 	Ui::AddTournamentDialogClass ui;
 	QString m_sOrgName, m_sType, m_sTeammate, m_sCategory, m_sTotalCategory, m_sSeason;
 	unsigned m_uiSetsBestOf{}, m_uiOrgID;
@@ -41,10 +43,7 @@ private slots:
 	void on_comboBox_Category_currentTextChanged(const QString& category);
 	void on_comboBox_Season_currentTextChanged(const QString& season);
 	void on_comboBox_OrganizationName_currentTextChanged(const QString& org);
-	void on_comboBox_SetsBestOf_currentTextChanged(const QString& setsbestof);
-public slots:
-	void UpdateOrganizations(const std::vector<Organization>&);
-	void UpdateActiveProfileData(const Profile& p);
+	void on_comboBox_SetsBestOf_currentTextChanged(const QString& setsbestof);	
 };
 
 #endif
