@@ -2,16 +2,19 @@
 #include "AppController.h"
 #include "Utility.h"
 AchievementsPage::AchievementsPage(QWidget *parent)
-	: QWidget(parent)
+	: QWidget(parent), m_upMatchesStatWidget{std::make_unique<StatWidget>(this)}, m_upMatchTiebreaksStatWidget{std::make_unique<StatWidget>(this)}, m_upSetTiebreaksStatWidget{std::make_unique<StatWidget>(this)}
 {
 	ui.setupUi(this);
 	QObject::connect(&StatController::instance(), &StatController::CareerStatsUpdated, this, &AchievementsPage::UpdateCareerStats);
 	QObject::connect(&StatController::instance(), &StatController::FinalsStatsUpdated, this, &AchievementsPage::UpdateFinalsStats);
 	InitStatIcons();
 	InitWinLoseLabels();
-	ClearCareerStats();
+	//ClearCareerStats();
 	ClearFinalsStats();
 	ClearMedalsAndTrophies();
+	AddStatWidget(m_upMatchesStatWidget, 0);
+	AddStatWidget(m_upMatchTiebreaksStatWidget, 1);
+	AddStatWidget(m_upSetTiebreaksStatWidget, 2);
 }
 
 AchievementsPage::~AchievementsPage()
@@ -20,10 +23,10 @@ void AchievementsPage::InitStatIcons()
 {
 	std::cout << "AchievementsPage::InitStatIcons\n";
 	using namespace utility;
-	InitLabelWithPicture(ui.label_IconTournament, ":images/crossed_swords.png", 1.0f);
-	InitLabelWithPicture(ui.label_IconMatches, ":images/games.png", 1.0f);
-	InitLabelWithPicture(ui.label_IconSetTB, ":images/setTB.png", 1.0f);
-	InitLabelWithPicture(ui.label_IconSuperTB, ":images/clutchness.png", 1.0f);
+	// InitLabelWithPicture(ui.label_IconTournament, ":images/crossed_swords.png", 1.0f);
+	// InitLabelWithPicture(ui.label_IconMatches, ":images/games.png", 1.0f);
+	// InitLabelWithPicture(ui.label_IconSetTB, ":images/setTB.png", 1.0f);
+	// InitLabelWithPicture(ui.label_IconSuperTB, ":images/clutchness.png", 1.0f);
 	InitLabelWithPicture(ui.label_IconQuarterFinals, ":images/trophy.png", 0.9f);
 	InitLabelWithPicture(ui.label_IconSemiFinals, ":images/trophy.png", 0.9f);
 	InitLabelWithPicture(ui.label_Icon3rdPlaceMatch, ":images/trophy.png", 0.9f);
@@ -32,24 +35,27 @@ void AchievementsPage::InitStatIcons()
 	InitLabelWithPicture(ui.label_Icon2ndPlace, ":images/second_place.png", 3.0f);
 	InitLabelWithPicture(ui.label_Icon3rdPlace, ":images/third_place.png", 3.0f);
 	InitLabelWithPicture(ui.label_IconAchievements, ":images/achievements_page.png", 12.0f);
+	m_upMatchesStatWidget->InitWidget("Matches:", ":images/games.png", 1.0f);
+	m_upMatchTiebreaksStatWidget->InitWidget("Match Tiebreaks:", ":images/clutchness.png", 1.0f);
+	m_upSetTiebreaksStatWidget->InitWidget("Set Tiebreaks:", ":images/setTB.png", 1.0f);
 }
 void AchievementsPage::InitWinLoseLabels()
 {
-	m_MatchLabels = WinLoseLabels{ ui.label_MatchWin, ui.label_MatchLose, ui.label_MatchWinRate };
-	m_SetTBLabels = WinLoseLabels{ ui.label_SetTBWin, ui.label_SetTBLose, ui.label_SetTBWinRate };
-	m_SuperTBLabels = WinLoseLabels{ ui.label_SuperTBWin, ui.label_SuperTBLose, ui.label_SuperTBWinRate };
+	// m_MatchLabels = WinLoseLabels{ ui.label_MatchWin, ui.label_MatchLose, ui.label_MatchWinRate };
+	// m_SetTBLabels = WinLoseLabels{ ui.label_SetTBWin, ui.label_SetTBLose, ui.label_SetTBWinRate };
+	// m_SuperTBLabels = WinLoseLabels{ ui.label_SuperTBWin, ui.label_SuperTBLose, ui.label_SuperTBWinRate };
 	m_QuarterFinalsLabels = WinLoseLabels{ ui.label_QuarterFinalWin, ui.label_QuarterFinalLose, ui.label_QuarterFinalWinRate };
 	m_SemiFinalsLabels = WinLoseLabels{ ui.label_SemiFinalsWin, ui.label_SemiFinalsLose, ui.label_SemiFinalsWinRate };
 	m_3rdPlaceMatchLabels = WinLoseLabels{ ui.label_3rdPlaceMatchWin, ui.label_3rdPlaceMatchLose, ui.label_3rdPlaceMatchWinRate };
 	m_FinalsLabels = WinLoseLabels{ ui.label_FinalsWin, ui.label_FinalsLose, ui.label_FinalsWinRate };
 }
-void AchievementsPage::ClearCareerStats()
-{
-	SetTournamentStats(0,0);
-	SetStatReport(m_MatchLabels);
-	SetStatReport(m_SetTBLabels);
-	SetStatReport(m_SuperTBLabels);
-}
+// void AchievementsPage::ClearCareerStats()
+// {
+// 	SetTournamentStats(0,0);
+// 	SetStatReport(m_MatchLabels);
+// 	SetStatReport(m_SetTBLabels);
+// 	SetStatReport(m_SuperTBLabels);
+// }
 void AchievementsPage::ClearFinalsStats()
 {
 	SetStatReport(m_QuarterFinalsLabels);
@@ -63,12 +69,15 @@ void AchievementsPage::ClearMedalsAndTrophies()
 }
 void AchievementsPage::UpdateCareerStats(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages, const std::vector<StatReport>& vecStatReport)
 {
-	ClearCareerStats();
-	SetTournamentStats(uiTotalTournament, uiTotalQualificationFromGroupStages);
+	//ClearCareerStats();
+	//SetTournamentStats(uiTotalTournament, uiTotalQualificationFromGroupStages);
 	size_t szIdx = 0;
-	SetStatReport(m_MatchLabels, vecStatReport[szIdx++]);
-	SetStatReport(m_SetTBLabels, vecStatReport[szIdx++]);
-	SetStatReport(m_SuperTBLabels, vecStatReport[szIdx++]);
+	m_upMatchesStatWidget->FillWidget(vecStatReport[szIdx++]);
+	//SetStatReport(m_MatchLabels, vecStatReport[szIdx++]);
+	m_upMatchTiebreaksStatWidget->FillWidget(vecStatReport[szIdx++]);
+	//SetStatReport(m_SetTBLabels, vecStatReport[szIdx++]);
+	m_upSetTiebreaksStatWidget->FillWidget(vecStatReport[szIdx++]);
+	//SetStatReport(m_SuperTBLabels, vecStatReport[szIdx++]);
 }
 void AchievementsPage::UpdateFinalsStats(const std::vector<StatReport>& vecStatReport)
 {
@@ -88,14 +97,29 @@ void AchievementsPage::UpdateMedalsAndTrophies(const StatReport& rFinalStatRepor
 	ui.label_2ndPlace->setText(QString::fromStdString(std::to_string(rFinalStatReport.m_uiLose)));
 	ui.label_3rdPlace->setText(QString::fromStdString(std::to_string(r3rdPlaceGameStatReport.m_uiWin)));
 }
-void AchievementsPage::SetTournamentStats(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages)
-{
-	ui.label_TotalTournament->setText(QString::fromStdString(std::to_string(uiTotalTournament)));
-	ui.label_QualifiedFromGroupStage->setText(QString::fromStdString(std::to_string(uiTotalQualificationFromGroupStages)));
-}
+// void AchievementsPage::SetTournamentStats(unsigned uiTotalTournament, unsigned uiTotalQualificationFromGroupStages)
+// {
+// 	ui.label_TotalTournament->setText(QString::fromStdString(std::to_string(uiTotalTournament)));
+// 	ui.label_QualifiedFromGroupStage->setText(QString::fromStdString(std::to_string(uiTotalQualificationFromGroupStages)));
+// }
 void AchievementsPage::SetStatReport(WinLoseLabels wlLabels, StatReport rStatReport)
 {
 	wlLabels.m_lblWin->setText(QString::fromStdString(std::to_string(rStatReport.m_uiWin)));
 	wlLabels.m_lblLose->setText(QString::fromStdString(std::to_string(rStatReport.m_uiLose)));
-	wlLabels.m_lblWinRate->setText("(" + QString::fromStdString(std::format("{:.1f}", rStatReport.m_fWinRatePercentage)) + "% Win Rate)");
+	wlLabels.m_lblWinRate->setText(QString::fromStdString(std::format("{:.1f}", rStatReport.m_fWinRatePercentage)) + "%");
+}
+void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWidget, unsigned idx)
+{
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelIcon(), 			idx, 0);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelStatName(), 		idx, 1);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinText(), 		idx, 3);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWin(), 			idx, 4);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 5);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelLoseText(), 		idx, 6);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelLose(), 			idx, 7);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 8);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRateText(), 	idx, 9);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRate(), 		idx, 10);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 11);
 }
