@@ -20,12 +20,12 @@ private:
 	// TableWidgetUser
 	virtual void FillTable()override;
 	virtual void LoadDataToTable()override;
-	
 	void PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx);
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	void UpdateActiveProfileData(const Profile&);
 	void UserLoggedIn(const Profile&);
 	void InitFilterComponents();
+	void HighlightFilteredColumn();
 	Ui::HistoryPageClass ui;
 	std::unique_ptr<AddEditTournamentDialog> m_upAddEditTournamentDialog{ nullptr };
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
@@ -34,6 +34,7 @@ private:
 	std::vector<Tournament> m_vecTournament;
 	bool m_blFirstLoadOfData = true;
 	unsigned m_uiProfileID = 0;
+	std::string m_sFilter = "";
 private slots:
 	void on_NewTournamentButton_clicked();
 	void on_RemoveFilterButton_clicked();
