@@ -9,19 +9,12 @@
 #include "MatchesDialog.h"
 #include "AppController.h"
 #include "Config.h"
-#include "FilterByOrganization.h"
-#include "FilterBySeason.h"
-#include "FilterByType.h"
-#include "FilterByCategory.h"
-#include "FilterByTeammate.h"
-#include "FilterByProgress.h"	
-#include "FilterByOpponent.h"
 #include "Utility.h"
 
 HistoryPage::HistoryPage(QWidget *parent)
 	: 
 	QWidget(parent),
-	TableWidgetUser{{ "", " Organization ", " Season ", " Type ", " Category ", " Teammate ", " Participant ", " Max. Progress ", " Trophy ", "", "", "", "" }}
+	TableWidgetUser{{ "", "Organization", "Season", "Type", "Category", "Teammate", "Participant", "Max. Progress", "Trophy", "", "", "", "" }}
 {
 	ui.setupUi(this);
 	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
@@ -74,7 +67,7 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 }
 void HistoryPage::InitFilterComponents()
 {
-	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Progress", "Opponent"}, true);
+	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
 	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
 	{
 		if(auto* pItem = pModel->item(0); pItem != nullptr)
@@ -87,6 +80,20 @@ void HistoryPage::InitFilterComponents()
 	ui.lineEditSearchBar->clear();
 	ui.lineEditSearchBar->setEnabled(false);
 	ui.tableWidget->clearSelection();
+}
+void HistoryPage::HighlightFilteredColumn()
+{
+	int idx = -1;
+	if(auto it = std::find(m_vecColumnNames.begin(), m_vecColumnNames.end(), m_sFilter); it != m_vecColumnNames.end()) 
+	{
+        idx = std::distance(m_vecColumnNames.begin(), it);
+	}
+	else if(m_sFilter == "Opponent")
+	{
+		idx = 9;
+	}
+	ui.tableWidget->clearSelection();
+	ui.tableWidget->selectColumn(idx);
 }
 void HistoryPage::on_NewTournamentButton_clicked()
 {
@@ -106,35 +113,48 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 {
 	ui.lineEditSearchBar->setEnabled(true);
 	ui.RemoveFilterButton->setVisible(true);
-	if(sFilter == "Organization")
+	m_sFilter = sFilter.toStdString();
+	HighlightFilteredColumn();
+	if(m_sFilter == "Organization")
 	{
-		m_upActiveFilter = std::make_unique<FilterByOrganization>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>();
 	}
-	else if(sFilter == "Season")
+	else if(m_sFilter == "Season")
 	{
-		m_upActiveFilter = std::make_unique<FilterBySeason>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>();
 	}
-	else if(sFilter == "Type")
+	else if(m_sFilter == "Type")
 	{
-		m_upActiveFilter = std::make_unique<FilterByType>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>();
 	}
-	else if(sFilter == "Category")
+	else if(m_sFilter == "Category")
 	{
-		m_upActiveFilter = std::make_unique<FilterByCategory>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>();
 	}
-	else if(sFilter == "Teammate")
+	else if(m_sFilter == "Teammate")
 	{
-		m_upActiveFilter = std::make_unique<FilterByTeammate>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>();
 	}
-	else if(sFilter == "Progress")
+	else if(m_sFilter == "Progress")
 	{
-		m_upActiveFilter = std::make_unique<FilterByProgress>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>();
 	}
-	else if(sFilter == "Opponent")
+	else if(m_sFilter == "Opponent")
 	{
-		m_upActiveFilter = std::make_unique<FilterByOpponent>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){
+			std::string sConcatanatedOpponents;
+			for(const Match& m : t.GetMatches())
+			{
+				sConcatanatedOpponents += m.GetOpponent1() + " ";
+				if(t.IsDoubleTournament())
+				{
+					sConcatanatedOpponents += m.GetOpponent2() + " ";
+				}
+			}
+			return sConcatanatedOpponents;}
+		)>>();
 	}
-	else if(sFilter != "")
+	else if(m_sFilter != "")
 	{
 		std::cerr << "on_comboBoxFilter_currentTextChanged Unknown filter!\n"; 
 	}
@@ -147,9 +167,9 @@ void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
 {
 	if(m_upActiveFilter)
 	{
-		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(sFilterWord.toStdString());	
+		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(m_vecTournament, sFilterWord.toStdString());	
 		LoadDataToTable();
-		m_upActiveFilter->HighlightFilteredColumn(ui.tableWidget);
+		HighlightFilteredColumn();
 	}
 	else
 	{
@@ -175,7 +195,6 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 			return !t1.IsEarlier(t2);
 			});
 	}
-	TournamentFilter::SetUnfilteredTournaments(m_vecTournament);
 	on_RemoveFilterButton_clicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
