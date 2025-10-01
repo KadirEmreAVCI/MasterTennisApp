@@ -6,10 +6,10 @@
 #include "ui_HistoryPage.h"
 #include "TableWidgetUser.h"
 #include "Profile.h"
+#include "DataFilter.h"
 
 class AddEditTournamentDialog;
 class MatchesDialog;
-class TournamentFilter;
 class HistoryPage : public QWidget, public TableWidgetUser
 {
 	Q_OBJECT
@@ -29,7 +29,7 @@ private:
 	Ui::HistoryPageClass ui;
 	std::unique_ptr<AddEditTournamentDialog> m_upAddEditTournamentDialog{ nullptr };
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
-	std::unique_ptr<TournamentFilter> m_upActiveFilter{ nullptr };
+	std::unique_ptr<IDataFilter<Tournament>> m_upActiveFilter{ nullptr };
 	std::vector<Tournament> m_vecDisplayedTournament;
 	std::vector<Tournament> m_vecTournament;
 	bool m_blFirstLoadOfData = true;

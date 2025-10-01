@@ -108,31 +108,42 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 	ui.RemoveFilterButton->setVisible(true);
 	if(sFilter == "Organization")
 	{
-		m_upActiveFilter = std::make_unique<FilterByOrganization>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>();
 	}
 	else if(sFilter == "Season")
 	{
-		m_upActiveFilter = std::make_unique<FilterBySeason>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>();
 	}
 	else if(sFilter == "Type")
 	{
-		m_upActiveFilter = std::make_unique<FilterByType>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>();
 	}
 	else if(sFilter == "Category")
 	{
-		m_upActiveFilter = std::make_unique<FilterByCategory>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>();
 	}
 	else if(sFilter == "Teammate")
 	{
-		m_upActiveFilter = std::make_unique<FilterByTeammate>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>();
 	}
 	else if(sFilter == "Progress")
 	{
-		m_upActiveFilter = std::make_unique<FilterByProgress>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>();
 	}
 	else if(sFilter == "Opponent")
 	{
-		m_upActiveFilter = std::make_unique<FilterByOpponent>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){
+			std::string sConcatanatedOpponents;
+			for(const Match& m : t.GetMatches())
+			{
+				sConcatanatedOpponents += m.GetOpponent1() + " ";
+				if(t.IsDoubleTournament())
+				{
+					sConcatanatedOpponents += m.GetOpponent2() + " ";
+				}
+			}
+			return sConcatanatedOpponents;}
+		)>>();
 	}
 	else if(sFilter != "")
 	{
@@ -147,9 +158,9 @@ void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
 {
 	if(m_upActiveFilter)
 	{
-		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(sFilterWord.toStdString());	
+		m_vecDisplayedTournament = m_upActiveFilter->ApplyFilter(m_vecTournament, sFilterWord.toStdString());	
 		LoadDataToTable();
-		m_upActiveFilter->HighlightFilteredColumn(ui.tableWidget);
+		//m_upActiveFilter->HighlightFilteredColumn(ui.tableWidget);
 	}
 	else
 	{
@@ -175,7 +186,6 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 			return !t1.IsEarlier(t2);
 			});
 	}
-	TournamentFilter::SetUnfilteredTournaments(m_vecTournament);
 	on_RemoveFilterButton_clicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
