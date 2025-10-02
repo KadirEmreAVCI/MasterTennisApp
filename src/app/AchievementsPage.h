@@ -23,7 +23,10 @@ private:
 	void UpdateCareerStats(const std::vector<StatReport>&);
 	void UpdateMedalsAndTrophies(const StatReport& rFinalStat, const StatReport& r3rdPlaceGameStat);
 	void AddStatWidget(const std::unique_ptr<StatWidget>& upStatWidget, unsigned idx);
+	void UserLoggedIn(const Profile&);
+	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::AchievementsPageClass ui;
+	unsigned m_uiProfileID = 0;
 	std::unique_ptr<StatWidget> m_upMatchesStatWidget{std::make_unique<StatWidget>(this)};
 	std::unique_ptr<StatWidget> m_upMatchTiebreaksStatWidget{std::make_unique<StatWidget>(this)};
 	std::unique_ptr<StatWidget> m_upSetTiebreaksStatWidget{std::make_unique<StatWidget>(this)};

@@ -2,29 +2,27 @@
 #define STATCONTROLLER_H
 
 #include <vector>
-#include <QObject>
 #include "Profile.h"
 #include "Stat.h"
 
-class StatController : public QObject {
-	Q_OBJECT
+class StatController{
 public:
 	static void create();
 	static StatController& instance();
 	StatController(const StatController&) = delete;
 	StatController& operator=(const StatController&) = delete;
 	~StatController();
-	
+	std::vector<StatReport> GetUpdatedCareerStats(const Profile&);
 private:
 	StatController();
 	static StatController* ms_pStatController;
 	std::vector<Tournament> m_vecTournament;
 	std::vector<Match> m_vecMatch;
 	std::vector<Set> m_vecSet;
-	std::vector<StatReport> UpdateCareerStats();
 	unsigned m_uiProfileID = 0;
 	std::vector<Match> ConcatanateMatches()const;
 	std::vector<Set> ConcetanateSets()const;
+	void UpdateActiveProfileData(const Profile&);
 	Stat<Set, 	decltype([](const Set& s)  {return s.IsTiebreakPlayed();})> m_StatSetTiebreaks;
 	Stat<Match, decltype([](const Match& m){return m.IsValid();})> m_StatMatch;
 	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.IsTiebreakPlayed();})> m_StatMatchTiebreaks;
@@ -32,11 +30,6 @@ private:
 	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "Semi Final";})> m_StatSemiFinals;
 	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "3rd Place Game";})> m_Stat3rdPlaceGames;
 	Stat<Match, decltype([](const Match& m){return m.IsValid() && m.GetStage() == "Final";})> m_StatFinals;
-	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
-public slots:
-	void UpdateActiveProfileData(const Profile&);
-signals:
-	void CareerStatsUpdated(const std::vector<StatReport>&);
 };
 
 #endif

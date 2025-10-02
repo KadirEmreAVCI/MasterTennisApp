@@ -4,7 +4,8 @@
 AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 {
 	ui.setupUi(this);
-	QObject::connect(&StatController::instance(), &StatController::CareerStatsUpdated, this, &AchievementsPage::UpdateCareerStats);
+	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &AchievementsPage::UserLoggedIn);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &AchievementsPage::ChangeInDB);
 	InitPictures();
 	InitStatWidgets();
 }
@@ -73,4 +74,19 @@ void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWi
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRateText(), 	idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRate(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
+}
+void AchievementsPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_uiProfileID;
+		});
+	if (activeProfile != vecProfile.cend())
+	{
+		UpdateCareerStats(StatController::instance().GetUpdatedCareerStats(*activeProfile));
+	}
+}
+void AchievementsPage::UserLoggedIn(const Profile& p)
+{
+	m_uiProfileID = p.GetID();
+	UpdateCareerStats(StatController::instance().GetUpdatedCareerStats(p));
 }
