@@ -12,6 +12,7 @@ enum class Gender
 };
 class Profile : public DBItemWithPicture {
 friend class DatabaseControllerTest;
+friend class StatControllerTest;
 public:
 	explicit Profile(	unsigned uiID = 0, 
 						const std::string& sFullName = "", 

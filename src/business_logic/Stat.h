@@ -14,6 +14,14 @@ public:
 	unsigned m_uiWin = 0;
 	unsigned m_uiLose = 0;
     float m_fWinRatePercentage = 0.0f;
+    friend bool operator==(const StatReport& lhs, const StatReport& rhs)
+    {
+        return lhs.m_uiWin == rhs.m_uiWin && lhs.m_uiLose == rhs.m_uiLose && lhs.m_fWinRatePercentage == rhs.m_fWinRatePercentage;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const StatReport& rStatReport)
+    {
+        return os << "Win = " << rStatReport.m_uiWin << ", Lose = " << rStatReport.m_uiLose << ", Win Rate = " << rStatReport.m_fWinRatePercentage << "\n";
+    }
 };
 
 inline constexpr auto DefaultTrue = [] (auto const&) { return true; };
