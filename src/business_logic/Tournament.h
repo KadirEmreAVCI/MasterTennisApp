@@ -11,6 +11,7 @@ class Organization;
 class Tournament : public DBItem {
 friend class TournamentTest;
 friend class DatabaseControllerTest;
+friend class StatControllerTest;
 public:
 	explicit Tournament(	unsigned uiID = 0, 
 							unsigned uiProfileID = 0, 

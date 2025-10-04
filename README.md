@@ -94,6 +94,10 @@ View your personalized career statistics, including the number of played finals,
 
 ![Achievements](docs/screenshots/achievements.png)
 
+Filter your career statistics by tournament category for more detailed insights.
+
+![Achievements](docs/screenshots/filtered_career_stats.png)
+
 ### Tournament Records
 
 Browse past tournaments, view all match records for tournaments you participate in, and search for details like played opponents, max stages reached, and seasons.

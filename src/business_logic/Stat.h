@@ -9,11 +9,32 @@
 #include <algorithm>
 
 struct StatReport{
-public:
-	StatReport(unsigned uiWin, unsigned uiLose, float fWinRatePercentage) : m_uiWin(uiWin), m_uiLose(uiLose), m_fWinRatePercentage{fWinRatePercentage}{}
+	StatReport(unsigned uiWin, unsigned uiLose) : m_uiWin(uiWin), m_uiLose(uiLose)
+    {
+        m_uiTotal = m_uiWin + m_uiLose;
+        m_fWinRate = (m_uiTotal != 0) ? static_cast<float>(m_uiWin) / m_uiTotal * 100.0f : 0.0f;
+    }
 	unsigned m_uiWin = 0;
 	unsigned m_uiLose = 0;
-    float m_fWinRatePercentage = 0.0f;
+    float GetWinRate()const
+    {
+        return m_fWinRate;
+    }
+    unsigned GetTotal()const
+    {
+        return m_uiTotal;
+    }
+    friend bool operator==(const StatReport& lhs, const StatReport& rhs)
+    {
+        return lhs.m_uiWin == rhs.m_uiWin && lhs.m_uiLose == rhs.m_uiLose;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const StatReport& rStatReport)
+    {
+        return os << "Win = " << rStatReport.m_uiWin << ", Lose = " << rStatReport.m_uiLose << ", Win Rate = " << rStatReport.m_fWinRate << "\n";
+    }
+private:
+    float m_fWinRate = 0.0f;
+    unsigned m_uiTotal = 0;
 };
 
 inline constexpr auto DefaultTrue = [] (auto const&) { return true; };
@@ -24,34 +45,37 @@ public:
     Stat() = default;
 	void AssignDataByFilter(const std::vector<T>& vecData, FuncCond fCond = FuncCond{})
     {
-        m_vecData.clear();
-        std::copy_if(vecData.cbegin(), vecData.cend(), std::back_inserter(m_vecData), fCond);
+        const std::vector<T> vecValidData = FilterValidData(vecData);
+        m_vecValidData.clear();
+        std::copy_if(vecValidData.cbegin(), vecValidData.cend(), std::back_inserter(m_vecValidData), fCond);
     }
     StatReport GetStatReport()const
     {
-        return StatReport(GetWins(), GetLoses(), GetWinRatePercentage());
+        return StatReport(GetWins(), GetLoses());
     }
 private:
+    std::vector<T> FilterValidData(const std::vector<T>& vecData)const
+    {
+        std::vector<T> vecValidData;
+        std::copy_if(vecData.cbegin(), vecData.cend(), std::back_inserter(vecValidData), [](const T& item){
+            return item.IsValid();
+        });
+        return vecValidData;
+    }
 	size_t GetCount()const
     {
-        return m_vecData.size();
+        return m_vecValidData.size();
     }
 	size_t GetWins()const
     {
-        return std::count_if(m_vecData.cbegin(), m_vecData.cend(), [](const T& item){return item.GetOutcome() == Outcome::HomeWin; });
+        return std::count_if(m_vecValidData.cbegin(), m_vecValidData.cend(), [](const T& item){return item.GetOutcome() == common::Outcome::HomeWin; });
     }
 	size_t GetLoses()const
     {
         return GetCount() - GetWins();
     }
-    float GetWinRatePercentage()const
-    {
-        size_t szWin = GetWins();
-        size_t szLose = GetLoses();
-        return (szWin + szLose != 0) ? static_cast<float>(szWin) / (szWin + szLose) * 100.0f : 0.0f;
-    }
 private:
-	std::vector<T> m_vecData;
+	std::vector<T> m_vecValidData;
 };
 
 #endif

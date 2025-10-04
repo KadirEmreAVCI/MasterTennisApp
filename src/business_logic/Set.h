@@ -11,7 +11,7 @@ public:
 	explicit Set(const Score& MajorScore = Score(0,0), std::optional<Score> TBScore = std::nullopt);
 	Score GetMajorScore()const;
 	Score GetTBScore()const;
-	Outcome GetOutcome()const;
+	common::Outcome GetOutcome()const;
 	bool IsTiebreakPlayed()const;
 	bool IsValid()const;
 	std::string ToString()const;

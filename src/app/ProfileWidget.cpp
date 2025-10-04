@@ -3,7 +3,7 @@
 #include "ProfileSelectionDialog.h"
 #include "AppController.h"
 #include "AddEditProfileDialog.h"
-#include "Config.h"
+#include "Common.h"
 #include "Utility.h"
 
 ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p) 
@@ -13,8 +13,8 @@ ProfileWidget::ProfileWidget(QWidget *parent, const Profile& p)
 {
 	ui.setupUi(this);
     m_upAddEditProfileDialog = std::make_unique<AddEditProfileDialog>(this);
-	utility::InitButtonWithPicture(ui.DeleteButton, g_cpDeleteButtonPNG, 0.4f);
-    utility::InitButtonWithPicture(ui.EditButton, g_cpEditButtonPNG, 0.4f);
+	utility::InitButtonWithPicture(ui.DeleteButton, common::g_cpDeleteButtonPNG, 0.4f);
+    utility::InitButtonWithPicture(ui.EditButton, common::g_cpEditButtonPNG, 0.4f);
     FillProfileButton();
 }
 

@@ -49,11 +49,11 @@ void AddEditMatchDialog::FillDialog()
 	utility::InitComboBox(ui.comboBox_Statu, QString::fromStdString(m_EditedItem.GetStatu()));
 	if (m_EditedItem.GetStatu() == "WO")
 	{
-		if (m_EditedItem.GetOutcome() == Outcome::HomeWin)
+		if (m_EditedItem.GetOutcome() == common::Outcome::HomeWin)
 		{
 			ui.radioButton_Win->setChecked(true);
 		}
-		else if (m_EditedItem.GetOutcome() == Outcome::AwayWin)
+		else if (m_EditedItem.GetOutcome() == common::Outcome::AwayWin)
 		{
 			ui.radioButton_Lose->setChecked(true);
 		}

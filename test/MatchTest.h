@@ -38,7 +38,7 @@ protected:
 	std::vector<Match> m_vecMatch;
 };
 
-class MatchOutcomeTest : public MatchTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
+class MatchOutcomeTest : public MatchTest, public ::testing::WithParamInterface<std::tuple<size_t, common::Outcome>> {};
 TEST_P(MatchOutcomeTest, DetermineMatchOutcomes)
 {
 	auto [idx, expected] = GetParam();

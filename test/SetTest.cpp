@@ -1,20 +1,22 @@
 #include "SetTest.h"
 
+using enum common::Outcome;;
+
 INSTANTIATE_TEST_SUITE_P(
     DetermineSetOutcomes,
     SetOutcomeTest,
     ::testing::Values(
-        std::make_tuple(0, Outcome::Tied),
-        std::make_tuple(1, Outcome::Tied),
-        std::make_tuple(2, Outcome::Tied),
-        std::make_tuple(3, Outcome::HomeWin),
-        std::make_tuple(4, Outcome::AwayWin),
-        std::make_tuple(5, Outcome::HomeWin),
-		std::make_tuple(6, Outcome::AwayWin),
-		std::make_tuple(7, Outcome::Tied),
-		std::make_tuple(8, Outcome::HomeWin),
-		std::make_tuple(9, Outcome::AwayWin),
-		std::make_tuple(10, Outcome::AwayWin)
+        std::make_tuple(0, Tied),
+        std::make_tuple(1, Tied),
+        std::make_tuple(2, Tied),
+        std::make_tuple(3, HomeWin),
+        std::make_tuple(4, AwayWin),
+        std::make_tuple(5, HomeWin),
+		std::make_tuple(6, AwayWin),
+		std::make_tuple(7, Tied),
+		std::make_tuple(8, HomeWin),
+		std::make_tuple(9, AwayWin),
+		std::make_tuple(10, AwayWin)
     )
 );
 INSTANTIATE_TEST_SUITE_P(

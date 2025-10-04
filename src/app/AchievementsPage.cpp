@@ -1,15 +1,27 @@
 #include "AchievementsPage.h"
 #include "AppController.h"
+#include "StatController.h"
 #include "Utility.h"
 AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 {
 	ui.setupUi(this);
-	QObject::connect(&StatController::instance(), &StatController::CareerStatsUpdated, this, &AchievementsPage::UpdateCareerStats);
+	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &AchievementsPage::UserLoggedIn);
+	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &AchievementsPage::ChangeInDB);
 	InitPictures();
 	InitStatWidgets();
 }
 AchievementsPage::~AchievementsPage()
 {}
+void AchievementsPage::TournamentCategoryChanged(const std::string& sTournamentCategory)
+{
+	m_sTournamentCategory = sTournamentCategory;
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
+}
+void AchievementsPage::TournamentCategoryCleared()
+{
+	m_sTournamentCategory = "";
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
+}
 void AchievementsPage::InitStatWidgets()
 {
 	const float fStatPictureScale = 1.1f;
@@ -64,13 +76,29 @@ void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWi
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelIcon(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelStatName(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(60, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelTotalText(), 	idxRow, idxColumn++);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelTotal(), 		idxRow, idxColumn++);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinText(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWin(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelLoseText(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelLose(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
-	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRateText(), 	idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRate(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
+}
+void AchievementsPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
+{
+	const auto activeProfile = std::find(vecProfile.cbegin(), vecProfile.cend(), m_rActiveProfile);
+	if (activeProfile != vecProfile.cend())
+	{
+		UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(*activeProfile, m_sTournamentCategory));
+	}
+}
+void AchievementsPage::UserLoggedIn(const Profile& p)
+{
+	m_rActiveProfile = p;
+	ui.itsTournamentCategoryFilterWidget->ClearWidget();
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
 }
