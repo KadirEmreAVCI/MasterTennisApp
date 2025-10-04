@@ -12,6 +12,10 @@ TournamentCategoryFilterWidget::~TournamentCategoryFilterWidget()
 {
 
 }
+void TournamentCategoryFilterWidget::ClearWidget()
+{
+    InitFilterComponents();
+}
 void TournamentCategoryFilterWidget::InitFilterComponents()
 {
     utility::SetComboBoxAlternatives(comboBoxTournamentCategory, m_vecTournamentCategories);

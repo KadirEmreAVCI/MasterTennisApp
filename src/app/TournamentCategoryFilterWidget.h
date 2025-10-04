@@ -10,6 +10,7 @@ class TournamentCategoryFilterWidget : public QWidget, public Ui::TournamentCate
 public:
 	TournamentCategoryFilterWidget(QWidget *parent = nullptr);
 	~TournamentCategoryFilterWidget();
+    void ClearWidget();
 private:
     void InitFilterComponents();
     std::vector<std::string> m_vecTournamentCategories{"Master", "A+", "A", "B", "C", "D", "Ilk Turnuvam"};
