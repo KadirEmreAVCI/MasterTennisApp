@@ -9,7 +9,6 @@
 #include <algorithm>
 
 struct StatReport{
-public:
 	StatReport(unsigned uiWin, unsigned uiLose) : m_uiWin(uiWin), m_uiLose(uiLose)
     {
         m_fWinRate = (m_uiWin + m_uiLose != 0) ? static_cast<float>(m_uiWin) / (m_uiWin + m_uiLose) * 100.0f : 0.0f;
