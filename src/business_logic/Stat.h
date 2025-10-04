@@ -53,7 +53,7 @@ private:
     }
 	size_t GetWins()const
     {
-        return std::count_if(m_vecData.cbegin(), m_vecData.cend(), [](const T& item){return item.GetOutcome() == Outcome::HomeWin; });
+        return std::count_if(m_vecData.cbegin(), m_vecData.cend(), [](const T& item){return item.GetOutcome() == common::Outcome::HomeWin; });
     }
 	size_t GetLoses()const
     {

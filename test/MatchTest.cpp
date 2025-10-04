@@ -4,28 +4,30 @@
 // Test Headers
 #include "MatchTest.h"
 
+using enum common::Outcome;
+
 INSTANTIATE_TEST_SUITE_P(
     DetermineMatchOutcomes,
     MatchOutcomeTest,
     ::testing::Values(
-        std::make_tuple(0, Outcome::HomeWin),
-        std::make_tuple(1, Outcome::HomeWin),
-        std::make_tuple(2, Outcome::AwayWin),
-        std::make_tuple(3, Outcome::AwayWin),
-        std::make_tuple(4, Outcome::HomeWin),
-		std::make_tuple(5, Outcome::HomeWin),
-		std::make_tuple(6, Outcome::HomeWin),
-		std::make_tuple(7, Outcome::HomeWin),
-		std::make_tuple(8, Outcome::AwayWin),
-		std::make_tuple(9, Outcome::HomeWin),
-		std::make_tuple(10, Outcome::AwayWin),
-		std::make_tuple(11, Outcome::Tied),
-		std::make_tuple(12, Outcome::Tied),
-		std::make_tuple(13, Outcome::HomeWin),
-		std::make_tuple(14, Outcome::AwayWin),
-		std::make_tuple(15, Outcome::Tied),
-		std::make_tuple(16, Outcome::AwayWin),
-		std::make_tuple(17, Outcome::Tied)
+        std::make_tuple(0, HomeWin),
+        std::make_tuple(1, HomeWin),
+        std::make_tuple(2, AwayWin),
+        std::make_tuple(3, AwayWin),
+        std::make_tuple(4, HomeWin),
+		std::make_tuple(5, HomeWin),
+		std::make_tuple(6, HomeWin),
+		std::make_tuple(7, HomeWin),
+		std::make_tuple(8, AwayWin),
+		std::make_tuple(9, HomeWin),
+		std::make_tuple(10, AwayWin),
+		std::make_tuple(11, Tied),
+		std::make_tuple(12, Tied),
+		std::make_tuple(13, HomeWin),
+		std::make_tuple(14, AwayWin),
+		std::make_tuple(15, Tied),
+		std::make_tuple(16, AwayWin),
+		std::make_tuple(17, Tied)
     )
 );
 INSTANTIATE_TEST_SUITE_P(

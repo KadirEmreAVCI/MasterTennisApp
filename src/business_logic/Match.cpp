@@ -2,6 +2,9 @@
 #include <sstream>
 #include "Match.h"
 #include "DatabaseController.h"
+
+using namespace common;
+
 Match::Match(unsigned uiID,
 	unsigned uiTournamentID,
 	const std::string& sStatu,

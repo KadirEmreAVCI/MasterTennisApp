@@ -1,6 +1,9 @@
 #include <cmath>
 #include <sstream>
 #include "Score.h"
+
+using namespace common;
+
 Score::Score(unsigned uiHomeScore, unsigned uiAwayScore) : m_Score{std::pair<unsigned, unsigned>(uiHomeScore, uiAwayScore)}
 {
 	

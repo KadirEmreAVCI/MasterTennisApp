@@ -2,7 +2,7 @@
 #include "TournamentCategoryFilterWidget.h"
 #include "AchievementsPage.h"
 #include "Utility.h"
-#include "Config.h"
+#include "Common.h"
 
 // Standard QT Headers
 #include <QStandardItemModel>
@@ -22,7 +22,7 @@ void TournamentCategoryFilterWidget::ClearWidget()
 }
 void TournamentCategoryFilterWidget::InitFilterComponents()
 {
-    utility::SetComboBoxAlternatives(comboBoxTournamentCategory, g_vecTournamentCategories);
+    utility::SetComboBoxAlternatives(comboBoxTournamentCategory, common::g_vecTournamentCategories);
 	if(auto* pModel = qobject_cast<QStandardItemModel*>(comboBoxTournamentCategory->model()); pModel != nullptr)
 	{
 		if(auto* pItem = pModel->item(0); pItem != nullptr)

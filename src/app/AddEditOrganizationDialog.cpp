@@ -3,7 +3,7 @@
 #include "AddEditOrganizationDialog.h"
 #include "AppController.h"
 #include "Utility.h"
-#include "Config.h"
+#include "Common.h"
 
 AddEditOrganizationDialog::AddEditOrganizationDialog(QWidget *parent)
 	: QDialog(parent), AddEditDialog<Organization>(this)
@@ -122,6 +122,7 @@ void AddEditOrganizationDialog::on_ClearButton_clicked()
 }
 void AddEditOrganizationDialog::InitCheckboxes()
 {
+	using namespace common;
 	ui.checkBox_Master->setText(QString::fromStdString(g_vecTournamentCategories[0]));
 	ui.checkBox_Aplus->setText(QString::fromStdString(g_vecTournamentCategories[1]));
 	ui.checkBox_A->setText(QString::fromStdString(g_vecTournamentCategories[2]));

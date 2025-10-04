@@ -6,6 +6,8 @@
 #include "Tournament.h"
 #include "DatabaseController.h"
 
+using namespace common;
+
 Tournament::Tournament(	unsigned uiID,
 						unsigned uiProfileID ,
 						unsigned uiOrgID,

@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include "OrganizationDialog.h"
 #include "AppController.h"
-#include "Config.h"
+#include "Common.h"
 #include "Utility.h"
 
 OrganizationDialog::OrganizationDialog(QWidget *parent)
@@ -49,8 +49,8 @@ void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowI
 	PlaceLabel2TableCellWithImage(ui.tableWidget, org.GetFullPicturePath(), 0.1f, uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(org.GetName()), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(Serialize(org.GetCategories())), uiRowIdx, uiColumnIdx++);
-	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);
-	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, g_cpEditButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::EditOrganization);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);
+	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpEditButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::EditOrganization);
 }
 void OrganizationDialog::on_NewOrganizationButton_clicked()
 {

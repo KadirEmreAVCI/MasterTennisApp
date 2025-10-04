@@ -25,7 +25,7 @@ protected:
 	std::vector<Score> m_vecScore;
 };
 
-class ScoreOutcomeTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, Outcome>> {};
+class ScoreOutcomeTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, common::Outcome>> {};
 TEST_P(ScoreOutcomeTest, DetermineScoreOutcomes)
 {
 	auto [idx, expected] = GetParam();
