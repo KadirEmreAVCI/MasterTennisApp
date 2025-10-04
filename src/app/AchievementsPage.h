@@ -19,6 +19,8 @@ class AchievementsPage : public QWidget{
 public:
 	AchievementsPage(QWidget *parent = nullptr);
 	~AchievementsPage();
+	void TournamentCategoryChanged(const std::string& sTournamentCategory);
+	void TournamentCategoryCleared();
 private:
 	void InitStatWidgets();
 	void InitPictures();
@@ -29,6 +31,7 @@ private:
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::AchievementsPageClass ui;
 	unsigned m_uiProfileID = 0;
+	std::string m_sTournamentCategory;
 	std::unique_ptr<StatController> m_upStatController{std::make_unique<StatController>()};
 	std::unique_ptr<StatWidget> m_upMatchesStatWidget{std::make_unique<StatWidget>(this)};
 	std::unique_ptr<StatWidget> m_upMatchTiebreaksStatWidget{std::make_unique<StatWidget>(this)};

@@ -12,6 +12,14 @@ AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 }
 AchievementsPage::~AchievementsPage()
 {}
+void AchievementsPage::TournamentCategoryChanged(const std::string& sTournamentCategory)
+{
+	m_sTournamentCategory = sTournamentCategory;
+}
+void AchievementsPage::TournamentCategoryCleared()
+{
+	m_sTournamentCategory = "";
+}
 void AchievementsPage::InitStatWidgets()
 {
 	const float fStatPictureScale = 1.1f;
