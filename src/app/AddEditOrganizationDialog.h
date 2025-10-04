@@ -19,6 +19,7 @@ private:
 	virtual void ClearDialog()override;
 	virtual bool IsMandatoryFieldsFilled()const override;
 	virtual bool IsThereAnyUnsavedInfo()const override;
+	void InitCheckboxes();
 	void ClearCategoryCheckboxes();
 	Ui::AddEditOrganizationDialogClass ui;
 	std::vector<QCheckBox*> m_vecCategoryCheckboxes;
