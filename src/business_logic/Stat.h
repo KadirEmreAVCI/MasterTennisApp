@@ -39,10 +39,7 @@ public:
     Stat() = default;
 	void AssignDataByFilter(const std::vector<T>& vecData, FuncCond fCond = FuncCond{})
     {
-        std::vector<T> vecValidData;
-        std::copy_if(vecData.cbegin(), vecData.cend(), std::back_inserter(vecValidData), [](const T& item){
-            return item.IsValid();
-        });
+        const std::vector<T> vecValidData = FilterValidData(vecData);
         m_vecValidData.clear();
         std::copy_if(vecValidData.cbegin(), vecValidData.cend(), std::back_inserter(m_vecValidData), fCond);
     }
@@ -51,6 +48,14 @@ public:
         return StatReport(GetWins(), GetLoses());
     }
 private:
+    std::vector<T> FilterValidData(const std::vector<T>& vecData)const
+    {
+        std::vector<T> vecValidData;
+        std::copy_if(vecData.cbegin(), vecData.cend(), std::back_inserter(vecValidData), [](const T& item){
+            return item.IsValid();
+        });
+        return vecValidData;
+    }
 	size_t GetCount()const
     {
         return m_vecValidData.size();
