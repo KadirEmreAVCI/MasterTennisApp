@@ -30,8 +30,9 @@ private:
 	void UserLoggedIn(const Profile&);
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::AchievementsPageClass ui;
-	unsigned m_uiProfileID = 0;
+	//unsigned m_uiProfileID = 0;
 	std::string m_sTournamentCategory;
+	Profile m_rActiveProfile;
 	std::unique_ptr<StatController> m_upStatController{std::make_unique<StatController>()};
 	std::unique_ptr<StatWidget> m_upMatchesStatWidget{std::make_unique<StatWidget>(this)};
 	std::unique_ptr<StatWidget> m_upMatchTiebreaksStatWidget{std::make_unique<StatWidget>(this)};

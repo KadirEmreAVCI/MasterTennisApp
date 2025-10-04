@@ -71,7 +71,7 @@ protected:
         m_rActiveProfile.SetTournaments(vecTournament);
 
         DatabaseController::instance().m_vecTournament = vecTournament;
-        m_vecStatReport = m_upStatController->GetUpdatedCareerStats(m_rActiveProfile);
+        m_vecStatReport = m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile);
     }
 	Profile m_rActiveProfile;
     std::vector<StatReport> m_vecStatReport;

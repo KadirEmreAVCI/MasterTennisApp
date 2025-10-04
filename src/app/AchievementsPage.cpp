@@ -15,10 +15,12 @@ AchievementsPage::~AchievementsPage()
 void AchievementsPage::TournamentCategoryChanged(const std::string& sTournamentCategory)
 {
 	m_sTournamentCategory = sTournamentCategory;
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
 }
 void AchievementsPage::TournamentCategoryCleared()
 {
 	m_sTournamentCategory = "";
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
 }
 void AchievementsPage::InitStatWidgets()
 {
@@ -86,16 +88,15 @@ void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWi
 }
 void AchievementsPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
 {
-	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
-		return p.GetID() == m_uiProfileID;
-		});
+	const auto activeProfile = std::find(vecProfile.cbegin(), vecProfile.cend(), m_rActiveProfile);
 	if (activeProfile != vecProfile.cend())
 	{
-		UpdateCareerStats(m_upStatController->GetUpdatedCareerStats(*activeProfile));
+		UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(*activeProfile, m_sTournamentCategory));
 	}
 }
 void AchievementsPage::UserLoggedIn(const Profile& p)
 {
-	m_uiProfileID = p.GetID();
-	UpdateCareerStats(m_upStatController->GetUpdatedCareerStats(p));
+	//m_uiProfileID = p.GetID();
+	m_rActiveProfile = p;
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
 }
