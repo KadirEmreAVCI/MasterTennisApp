@@ -100,5 +100,5 @@ void AchievementsPage::UserLoggedIn(const Profile& p)
 {
 	m_rActiveProfile = p;
 	ui.itsTournamentCategoryFilterWidget->ClearWidget();
-	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
+	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile));
 }
