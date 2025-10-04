@@ -1,13 +1,17 @@
 #ifndef SCORE_H
 #define SCORE_H
 
+// Project Headers
+#include "Common.h"
+
+// Standar Headers
 #include <iostream>
 #include <utility>
-enum class Outcome {
-	HomeWin = 0,
-	AwayWin = 1,
-	Tied = 2
-};
+// enum class Outcome {
+// 	HomeWin = 0,
+// 	AwayWin = 1,
+// 	Tied = 2
+// };
 class Score
 {
 public:
@@ -15,7 +19,7 @@ public:
 	std::pair<unsigned, unsigned> GetScore()const;
 	unsigned GetHomeScore()const;
 	unsigned GetAwayScore()const;
-	Outcome GetOutcome()const;
+	common::Outcome GetOutcome()const;
 	std::string ToString()const;
 	static Score FromString(const std::string&);
 	friend bool operator==(const Score& lhs, const Score& rhs)

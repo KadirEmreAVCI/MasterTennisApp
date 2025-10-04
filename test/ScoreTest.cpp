@@ -1,15 +1,17 @@
 #include "ScoreTest.h"
 #include <algorithm>
 
+using enum common::Outcome;
+
 INSTANTIATE_TEST_SUITE_P(
     DetermineScoreOutcomes,
     ScoreOutcomeTest,
     ::testing::Values(
-        std::make_tuple(0, Outcome::Tied),
-        std::make_tuple(1, Outcome::Tied),
-        std::make_tuple(2, Outcome::HomeWin),
-        std::make_tuple(3, Outcome::HomeWin),
-        std::make_tuple(4, Outcome::AwayWin)
+        std::make_tuple(0, Tied),
+        std::make_tuple(1, Tied),
+        std::make_tuple(2, HomeWin),
+        std::make_tuple(3, HomeWin),
+        std::make_tuple(4, AwayWin)
     )
 );
 INSTANTIATE_TEST_SUITE_P(

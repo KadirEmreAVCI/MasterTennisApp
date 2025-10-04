@@ -1,11 +1,11 @@
 #include "NoUpcomingMatch.h"
-#include "Config.h"
+#include "Common.h"
 
 NoUpcomingMatch::NoUpcomingMatch(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	setFixedSize(g_uiUpcomingMatchWidth, g_uiUpcomingMatchHeight);
+	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
 }
 
 NoUpcomingMatch::~NoUpcomingMatch()

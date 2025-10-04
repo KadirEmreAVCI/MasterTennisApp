@@ -1,7 +1,7 @@
 #include <iostream>
 #include <QTimer>
 #include <QDateTime>
-#include "Config.h"
+#include "Common.h"
 #include "Organization.h"
 #include "UpcomingMatch.h"
 #include "MatchesDialog.h"
@@ -15,7 +15,7 @@ UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, QWid
 	m_RootTournament = DatabaseController::instance().FindRootTournament(m_Match);
 	m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
 	QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
-	setFixedSize(g_uiUpcomingMatchWidth, g_uiUpcomingMatchHeight);
+	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
 	InitializeTimer();
 	InitializeCountdown();
 	FillUpcomingMatchButton();
@@ -36,7 +36,7 @@ void UpcomingMatch::InitializeCountdown()
 }
 void UpcomingMatch::FillUpcomingMatchButton()
 {
-	UpcomingMatchButton->setFixedSize(g_uiUpcomingMatchWidth - 200, g_uiUpcomingMatchHeight - 20);
+	UpcomingMatchButton->setFixedSize(common::g_uiUpcomingMatchWidth - 200, common::g_uiUpcomingMatchHeight - 20);
 
 	QWidget* container = new QWidget(UpcomingMatchButton);
 	QVBoxLayout* layout = new QVBoxLayout(container);

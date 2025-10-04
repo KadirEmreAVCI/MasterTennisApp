@@ -59,7 +59,7 @@ protected:
                     });
         vecTournament.push_back(std::move(t));
 
-        t = Tournament{5, 0, 1, "Aselsan", "2025 Summer", "A", "Single Men", "", 4, true, false, 1};
+        t = Tournament{5, 0, 1, "Aselsan", "2025 Summer", "C", "Single Men", "", 4, true, false, 1};
         t.SetMatches({  Match{ 21,5, "U","Quarter Final", "Op", "", QDate{2220, 1, 3}, QTime{0, 0, 0}, {Set{Score(0, 0)}}},
                         Match{ 22,5, "U","Final 16", "Op", "", QDate{2022, 1, 5}, QTime{0, 0, 0}, {Set{Score(0, 0)}, Set{Score(0, 0)}}},
                         Match{ 23,5, "U","Semi Final", "Op", "", QDate{2021, 1, 4}, QTime{0, 0, 0}, {Set{Score(2, 6)}}},
@@ -71,7 +71,6 @@ protected:
         m_rActiveProfile.SetTournaments(vecTournament);
 
         DatabaseController::instance().m_vecTournament = vecTournament;
-        m_vecStatReport = m_upStatController->GetUpdatedCareerStats(m_rActiveProfile);
     }
 	Profile m_rActiveProfile;
     std::vector<StatReport> m_vecStatReport;

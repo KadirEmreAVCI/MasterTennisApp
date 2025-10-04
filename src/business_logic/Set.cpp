@@ -1,6 +1,9 @@
 #include <sstream>
 #include <vector>
 #include "Set.h"
+
+using namespace common;
+
 Set::Set(const Score& MajorScore, std::optional<Score> optTBScore)
 	:m_MajorScore{ MajorScore }, m_optTBScore{ optTBScore }
 {

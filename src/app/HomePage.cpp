@@ -7,7 +7,7 @@
 #include "OrgParticipation.h"
 #include "StatController.h"
 #include "AppController.h"
-#include "Config.h"
+#include "Common.h"
 #include "Utility.h"
 #include "DatabaseController.h"
 HomePage::HomePage(QWidget *parent)
@@ -40,7 +40,7 @@ void HomePage::UpdateUpcomingMatches()
 		InsertUpcomingMatch(new UpcomingMatch(m, this));
 	}
 	FillWithNoUpcomingMatches();
-	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, g_uiUpcomingMatchHeight * g_uiMaxUpcomingMatch + 10);
+	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
 	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
 }
 std::vector<Match> HomePage::FindUpcomingMatches()const
@@ -62,7 +62,7 @@ std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 	{
 		const auto& vecMatch = t.GetMatches();
 		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecStartedUpcomingMatches), [](const Match& m) {
-			return m.GetOutcome() == Outcome::Tied && !m.IsUpcomingMatch();
+			return m.GetOutcome() == common::Outcome::Tied && !m.IsUpcomingMatch();
 			});
 	}
 	return vecStartedUpcomingMatches;
@@ -79,7 +79,7 @@ void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
 void HomePage::FillWithNoUpcomingMatches()
 {
 	const auto& vecUpcomingMatches = FindUpcomingMatches();
-	const int iNoUpcomingMatch = g_uiMaxUpcomingMatch - vecUpcomingMatches.size();
+	const int iNoUpcomingMatch = common::g_uiMaxUpcomingMatch - vecUpcomingMatches.size();
 	for (int i = 0; i < iNoUpcomingMatch; ++i)
 	{
 		InsertNoUpcomingMatch(new NoUpcomingMatch(this));

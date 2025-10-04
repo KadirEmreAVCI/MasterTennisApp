@@ -21,7 +21,7 @@ public:
 	QTime GetTime()const;
 	Score GetScore()const;
 	std::vector<Set> GetSets()const;
-	Outcome GetOutcome()const;
+	common::Outcome GetOutcome()const;
 	std::string GetOutcomePic()const;
 	std::string SetsToString()const;
 	static std::vector<Set> SetsFromString(const std::string& sSets);
