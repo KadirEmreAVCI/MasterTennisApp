@@ -76,13 +76,15 @@ void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWi
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelIcon(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelStatName(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(60, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelTotalText(), 	idxRow, idxColumn++);
+	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelTotal(), 		idxRow, idxColumn++);
+	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinText(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWin(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelLoseText(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelLose(), 			idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
-	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRateText(), 	idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addWidget(upStatWidget->GetLabelWinRate(), 		idxRow, idxColumn++);
 	ui.gridLayout_CareerStats->addItem(new QSpacerItem(15, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, idxColumn++);
 }

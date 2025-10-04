@@ -15,12 +15,13 @@ public:
     void FillWidget(const StatReport& rStatReport);
 	QLabel* GetLabelIcon()const;
 	QLabel* GetLabelStatName()const;
+	QLabel* GetLabelTotalText()const;
+	QLabel* GetLabelTotal()const;
 	QLabel* GetLabelWinText()const;
 	QLabel* GetLabelWin()const;
 	QLabel* GetLabelLoseText()const;
 	QLabel* GetLabelLose()const;
 	QLabel* GetLabelWinRate()const;
-	QLabel* GetLabelWinRateText()const;
 };
 
 #endif  // STATWIDGET_H
