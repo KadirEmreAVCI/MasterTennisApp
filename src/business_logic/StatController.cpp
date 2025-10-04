@@ -1,29 +1,16 @@
 #include <algorithm>
-#include "AppController.h"
 #include "StatController.h"
-StatController* StatController::ms_pStatController = nullptr;
-void StatController::create()
-{
-	static StatController obj;
-	ms_pStatController = &obj;
-}
-StatController& StatController::instance()
-{
-	if (ms_pStatController == nullptr)
-		create();
-	return *ms_pStatController;
-}
 StatController::StatController()
 {
-	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &StatController::UpdateActiveProfileData);
-	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &StatController::ChangeInDB);
+	
 }
 StatController::~StatController()
 {
 
 }
-std::vector<StatReport> StatController::UpdateCareerStats()
+std::vector<StatReport> StatController::GetUpdatedCareerStats(const Profile& p)
 {
+	UpdateActiveProfileData(p);
 	m_StatMatch.AssignDataByFilter(m_vecMatch);
 	m_StatMatchTiebreaks.AssignDataByFilter(m_vecMatch);
 	m_StatSetTiebreaks.AssignDataByFilter(m_vecSet);
@@ -63,22 +50,9 @@ std::vector<Set> StatController::ConcetanateSets()const
 	});
 	return vecAllSets;
 }
-void StatController::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
-{
-	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
-		return p.GetID() == m_uiProfileID;
-		});
-	if (activeProfile != vecProfile.cend())
-	{
-		UpdateActiveProfileData(*activeProfile);
-	}
-}
 void StatController::UpdateActiveProfileData(const Profile& p)
 {
-	m_uiProfileID = p.GetID();
 	m_vecTournament = p.GetTournaments();
 	m_vecMatch = ConcatanateMatches(); 
 	m_vecSet = ConcetanateSets();
-	const auto& vecUpdatedCareerWLStat = UpdateCareerStats();
-	emit CareerStatsUpdated(vecUpdatedCareerWLStat);
 }

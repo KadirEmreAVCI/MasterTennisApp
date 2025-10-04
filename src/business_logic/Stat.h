@@ -9,11 +9,26 @@
 #include <algorithm>
 
 struct StatReport{
-public:
-	StatReport(unsigned uiWin, unsigned uiLose, float fWinRatePercentage) : m_uiWin(uiWin), m_uiLose(uiLose), m_fWinRatePercentage{fWinRatePercentage}{}
+	StatReport(unsigned uiWin, unsigned uiLose) : m_uiWin(uiWin), m_uiLose(uiLose)
+    {
+        m_fWinRate = (m_uiWin + m_uiLose != 0) ? static_cast<float>(m_uiWin) / (m_uiWin + m_uiLose) * 100.0f : 0.0f;
+    }
 	unsigned m_uiWin = 0;
 	unsigned m_uiLose = 0;
-    float m_fWinRatePercentage = 0.0f;
+    float GetWinRate()const
+    {
+        return m_fWinRate;
+    }
+    friend bool operator==(const StatReport& lhs, const StatReport& rhs)
+    {
+        return lhs.m_uiWin == rhs.m_uiWin && lhs.m_uiLose == rhs.m_uiLose && lhs.m_fWinRate == rhs.m_fWinRate;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const StatReport& rStatReport)
+    {
+        return os << "Win = " << rStatReport.m_uiWin << ", Lose = " << rStatReport.m_uiLose << ", Win Rate = " << rStatReport.m_fWinRate << "\n";
+    }
+private:
+    float m_fWinRate = 0.0f;
 };
 
 inline constexpr auto DefaultTrue = [] (auto const&) { return true; };
@@ -29,7 +44,7 @@ public:
     }
     StatReport GetStatReport()const
     {
-        return StatReport(GetWins(), GetLoses(), GetWinRatePercentage());
+        return StatReport(GetWins(), GetLoses());
     }
 private:
 	size_t GetCount()const
@@ -43,12 +58,6 @@ private:
 	size_t GetLoses()const
     {
         return GetCount() - GetWins();
-    }
-    float GetWinRatePercentage()const
-    {
-        size_t szWin = GetWins();
-        size_t szLose = GetLoses();
-        return (szWin + szLose != 0) ? static_cast<float>(szWin) / (szWin + szLose) * 100.0f : 0.0f;
     }
 private:
 	std::vector<T> m_vecData;
