@@ -7,15 +7,10 @@
 
 class StatController{
 public:
-	static void create();
-	static StatController& instance();
-	StatController(const StatController&) = delete;
-	StatController& operator=(const StatController&) = delete;
+	StatController();
 	~StatController();
 	std::vector<StatReport> GetUpdatedCareerStats(const Profile&);
 private:
-	StatController();
-	static StatController* ms_pStatController;
 	std::vector<Tournament> m_vecTournament;
 	std::vector<Match> m_vecMatch;
 	std::vector<Set> m_vecSet;

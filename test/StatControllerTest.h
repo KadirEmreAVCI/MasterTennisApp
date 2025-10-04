@@ -71,10 +71,11 @@ protected:
         m_rActiveProfile.SetTournaments(vecTournament);
 
         DatabaseController::instance().m_vecTournament = vecTournament;
-        m_vecStatReport = StatController::instance().GetUpdatedCareerStats(m_rActiveProfile);
+        m_vecStatReport = m_upStatController->GetUpdatedCareerStats(m_rActiveProfile);
     }
 	Profile m_rActiveProfile;
     std::vector<StatReport> m_vecStatReport;
+    std::unique_ptr<StatController> m_upStatController{std::make_unique<StatController>()};
 };
 
 #endif

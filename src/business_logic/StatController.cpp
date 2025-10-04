@@ -1,19 +1,8 @@
 #include <algorithm>
 #include "StatController.h"
-StatController* StatController::ms_pStatController = nullptr;
-void StatController::create()
-{
-	static StatController obj;
-	ms_pStatController = &obj;
-}
-StatController& StatController::instance()
-{
-	if (ms_pStatController == nullptr)
-		create();
-	return *ms_pStatController;
-}
 StatController::StatController()
 {
+	
 }
 StatController::~StatController()
 {

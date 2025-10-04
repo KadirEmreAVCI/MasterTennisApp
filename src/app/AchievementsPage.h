@@ -11,6 +11,8 @@
 #include <QWidget>
 #include "ui_AchievementsPage.h"
 
+class StatController;
+
 class AchievementsPage : public QWidget{
 	Q_OBJECT
 
@@ -27,6 +29,7 @@ private:
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
 	Ui::AchievementsPageClass ui;
 	unsigned m_uiProfileID = 0;
+	std::unique_ptr<StatController> m_upStatController{std::make_unique<StatController>()};
 	std::unique_ptr<StatWidget> m_upMatchesStatWidget{std::make_unique<StatWidget>(this)};
 	std::unique_ptr<StatWidget> m_upMatchTiebreaksStatWidget{std::make_unique<StatWidget>(this)};
 	std::unique_ptr<StatWidget> m_upSetTiebreaksStatWidget{std::make_unique<StatWidget>(this)};

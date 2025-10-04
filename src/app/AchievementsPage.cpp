@@ -1,5 +1,6 @@
 #include "AchievementsPage.h"
 #include "AppController.h"
+#include "StatController.h"
 #include "Utility.h"
 AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 {
@@ -82,11 +83,11 @@ void AchievementsPage::ChangeInDB(const std::vector<Profile>& vecProfile, const 
 		});
 	if (activeProfile != vecProfile.cend())
 	{
-		UpdateCareerStats(StatController::instance().GetUpdatedCareerStats(*activeProfile));
+		UpdateCareerStats(m_upStatController->GetUpdatedCareerStats(*activeProfile));
 	}
 }
 void AchievementsPage::UserLoggedIn(const Profile& p)
 {
 	m_uiProfileID = p.GetID();
-	UpdateCareerStats(StatController::instance().GetUpdatedCareerStats(p));
+	UpdateCareerStats(m_upStatController->GetUpdatedCareerStats(p));
 }
