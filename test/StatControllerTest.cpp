@@ -8,22 +8,19 @@ float StatControllerTest::GetWinRatePercentage(size_t szWin, size_t szLose)const
 
 TEST_F(StatControllerTest, MatchesStatTest)
 {
-    const unsigned uiWin = 6, uiLose = 6;
-    const StatReport rExpectedStatReport{uiWin, uiLose, GetWinRatePercentage(uiWin, uiLose)};
+    const StatReport rExpectedStatReport{6, 6};
     const StatReport rCalculatedStatReport = m_vecStatReport[0];
     EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
 }
 TEST_F(StatControllerTest, MatchTiebreakStatTest)
 {
-    const unsigned uiWin = 3, uiLose = 0;
-    const StatReport rExpectedStatReport{uiWin, uiLose, GetWinRatePercentage(uiWin, uiLose)};
+    const StatReport rExpectedStatReport{3, 0};
     const StatReport rCalculatedStatReport = m_vecStatReport[1];
     EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
 }
 TEST_F(StatControllerTest, SetTiebreakStatTest)
 {
-    const unsigned uiWin = 0, uiLose = 2;
-    const StatReport rExpectedStatReport{uiWin, uiLose, GetWinRatePercentage(uiWin, uiLose)};
+    const StatReport rExpectedStatReport{0, 2};
     const StatReport rCalculatedStatReport = m_vecStatReport[2];
     EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
 }
