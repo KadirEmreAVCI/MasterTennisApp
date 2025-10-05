@@ -260,7 +260,7 @@ void AddEditTournamentDialog::on_comboBox_OrganizationName_currentTextChanged(co
 		if (iterOrg != m_vecOrganization.end())
 		{
 			m_uiOrgID = iterOrg->GetID();
-			utility::SetComboBoxAlternatives(ui.comboBox_Category, iterOrg->GetCategories());
+			utility::SetComboBoxItems(ui.comboBox_Category, iterOrg->GetCategories());
 		}
 		else
 		{
@@ -289,10 +289,10 @@ void AddEditTournamentDialog::UpdateOrganizations(const std::vector<Organization
 	{
 		vecOrgOptions.insert(vecOrgOptions.cend(), org.GetName());
 	}
-	utility::SetComboBoxAlternatives(ui.comboBox_OrganizationName, vecOrgOptions);
+	utility::SetComboBoxItems(ui.comboBox_OrganizationName, vecOrgOptions);
 }
 void AddEditTournamentDialog::UpdateActiveProfileData(const Profile& p)
 {
 	m_ActiveProfile = p;
-	utility::SetComboBoxAlternatives(ui.comboBox_Type, (m_ActiveProfile.GetGender() == Gender::Male) ? std::vector<std::string>{"Single Men", "Double Men", "Double Mixed"} : std::vector<std::string>{ "Single Women", "Double Women", "Double Mixed" });
+	utility::SetComboBoxItems(ui.comboBox_Type, (m_ActiveProfile.GetGender() == Gender::Male) ? std::vector<std::string>{"Single Men", "Double Men", "Double Mixed"} : std::vector<std::string>{ "Single Women", "Double Women", "Double Mixed" });
 }

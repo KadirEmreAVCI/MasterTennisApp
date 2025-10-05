@@ -39,7 +39,7 @@ void utility::InitComboBox(QComboBox* pComboBox, const QString& sVal)
     const int idx = pComboBox->findText(sVal);
     pComboBox->setCurrentIndex((idx != -1) ? idx : 0);
 }
-void utility::SetComboBoxAlternatives(QComboBox* pComboBox, const std::vector<std::string>& vecAlternatives, bool blStartWithEmptyAlternative)
+void utility::SetComboBoxItems(QComboBox* pComboBox, const std::vector<std::string>& vecAlternatives, bool blStartWithEmptyAlternative)
 {
     pComboBox->clear();
     if (blStartWithEmptyAlternative)

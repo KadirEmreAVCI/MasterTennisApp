@@ -46,7 +46,7 @@ void ProfileDialog::UpdateProfileAlternatives(const std::vector<Profile>& vecPro
 			});
 		if (!vecProfileNames.empty())
 		{
-			utility::SetComboBoxAlternatives(ui.comboBoxProfiles, vecProfileNames, false);
+			utility::SetComboBoxItems(ui.comboBoxProfiles, vecProfileNames, false);
 		}
 	}
 }

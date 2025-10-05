@@ -36,8 +36,8 @@ void AddEditMatchDialog::InitDialog()
 	InitButtonWithPicture(ui.DateButton, ":images/calendar.png", 0.8f);
 	InitButtonWithPicture(ui.AddSetButton, ":images/plus.png", 0.8f);
 	InitButtonWithPicture(ui.RemoveSetButton, ":images/minus.png", 0.8f);
-	SetComboBoxAlternatives(ui.comboBox_Statu, m_vecStatuAlternatives);
-	SetComboBoxAlternatives(ui.comboBox_Stage, m_RootTournament.GetPossibleStages());
+	SetComboBoxItems(ui.comboBox_Statu, m_vecStatuItems);
+	SetComboBoxItems(ui.comboBox_Stage, m_RootTournament.GetPossibleStages());
 	ui.lineEdit__Opponent1->setEnabled(true);
 	ui.lineEdit__Opponent2->setEnabled(m_RootTournament.IsDoubleTournament());
 	SetMatchDate(QDate::currentDate());

@@ -24,7 +24,7 @@ namespace utility{
     
     // Helper functions for QComboBox
     void InitComboBox(QComboBox* pComboBox, const QString& sVal = "");
-    void SetComboBoxAlternatives(QComboBox* pComboBox, const std::vector<std::string>& vecAlternatives, bool blStartWithEmptyAlternative = true);
+    void SetComboBoxItems(QComboBox* pComboBox, const std::vector<std::string>& vecAlternatives, bool blStartWithEmptyAlternative = true);
     void DisableFirstItemOfComboBox(QComboBox* pComboBox);
 
     // Helper functions for QTableWidget

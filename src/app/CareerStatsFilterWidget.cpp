@@ -11,7 +11,7 @@
 CareerStatsFilterWidget::CareerStatsFilterWidget(QWidget *parent) : m_pParentWidget{parent}
 {
     setupUi(this);
-    utility::SetComboBoxAlternatives(comboBoxFilterType, m_vecCareerStatFilters);
+    utility::SetComboBoxItems(comboBoxFilterType, m_vecCareerStatFilters);
 	utility::DisableFirstItemOfComboBox(comboBoxFilterType);
     comboBoxFilteringItem->setFixedWidth(150);
     InitFilterComponents();
@@ -53,7 +53,7 @@ void CareerStatsFilterWidget::on_comboBoxFilterType_currentTextChanged(const QSt
     {
         vecFilteringItems = common::g_vecTournamentCategories;
     }
-    utility::SetComboBoxAlternatives(comboBoxFilteringItem, vecFilteringItems);
+    utility::SetComboBoxItems(comboBoxFilteringItem, vecFilteringItems);
 	utility::DisableFirstItemOfComboBox(comboBoxFilteringItem);
 }
 void CareerStatsFilterWidget::on_comboBoxFilteringItem_currentTextChanged(const QString& sFilteringItem)

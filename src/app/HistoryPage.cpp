@@ -67,7 +67,7 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 }
 void HistoryPage::InitFilterComponents()
 {
-	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
+	utility::SetComboBoxItems(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
 	utility::DisableFirstItemOfComboBox(ui.comboBoxFilter);
 	ui.comboBoxFilter->setCurrentIndex(0);
 	ui.RemoveFilterButton->setVisible(false);
