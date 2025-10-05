@@ -68,13 +68,7 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 void HistoryPage::InitFilterComponents()
 {
 	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
-	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
-	{
-		if(auto* pItem = pModel->item(0); pItem != nullptr)
-		{
-			pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
-		}
-	} 
+	utility::DisableFirstItemOfComboBox(ui.comboBoxFilter);
 	ui.comboBoxFilter->setCurrentIndex(0);
 	ui.RemoveFilterButton->setVisible(false);
 	ui.lineEditSearchBar->clear();

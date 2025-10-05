@@ -1,5 +1,9 @@
 #include <algorithm>
+#include <memory>
 #include "StatController.h"
+#include "DataFilter.h"
+#include "DatabaseController.h"
+
 StatController::StatController()
 {
 
@@ -8,21 +12,19 @@ StatController::~StatController()
 {
 
 }
-std::vector<StatReport> StatController::UpdateCareerStatsByCategory(const Profile& p, const std::string& sCategory)
+std::vector<StatReport> StatController::UpdateCareerStats(const Profile& p, const std::string& sFilterType, const std::string& sFilteringItem)
 {
-	UpdateActiveProfileData(p, sCategory);
+	UpdateActiveProfileData(p, sFilterType, sFilteringItem);
 	return CalculateCareerStats();
 }
-std::vector<Match> StatController::ConcatanateMatchesByCategory(const std::string& sCategory)const
+std::vector<Match> StatController::ConcatanateMatches()const
 {
-	std::vector<Match> vecCompletedMatches;
+	std::vector<Match> vecMatches;
 	std::for_each(m_vecTournament.cbegin(), m_vecTournament.cend(), [&](const auto& t) {
 		const auto& vecMatch = t.GetMatches();
-		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecCompletedMatches), [&](const Match&){
-			return (sCategory == "") || (sCategory == t.GetCategory());
-		});
+		std::copy(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecMatches));
 	});
-	return vecCompletedMatches;
+	return vecMatches;
 }
 std::vector<Set> StatController::ConcetanateSets()const
 {
@@ -36,10 +38,37 @@ std::vector<Set> StatController::ConcetanateSets()const
 	});
 	return vecAllSets;
 }
-void StatController::UpdateActiveProfileData(const Profile& p, const std::string& sCategory)
+void StatController::UpdateActiveProfileData(const Profile& p, const std::string& sFilterType, const std::string& sFilteringItem)
 {
-	m_vecTournament = p.GetTournaments();
-	m_vecMatch = ConcatanateMatchesByCategory(sCategory); 
+	if(sFilterType == "")
+	{
+		m_vecTournament = p.GetTournaments();
+	}
+	else
+	{
+		std::unique_ptr<IDataFilter<Tournament>> upActiveFilter{ nullptr };
+		if(sFilterType == "Organization")
+		{
+			const bool blSearchForExactMatch = true;
+			upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>(blSearchForExactMatch);
+		}
+		else if(sFilterType == "Type")
+		{   
+			const bool blSearchForExactMatch = false;
+			upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>(blSearchForExactMatch);
+		}
+		else if(sFilterType == "Category")
+		{
+			const bool blSearchForExactMatch = true;
+			upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>(blSearchForExactMatch);
+		}
+		else
+		{
+			std::cerr << "StatController::UpdateActiveProfileData::Error! Unknown filter type = " << sFilterType << "\n";
+		}
+		m_vecTournament = upActiveFilter->ApplyFilter(p.GetTournaments(), sFilteringItem);
+	} 
+	m_vecMatch = ConcatanateMatches(); 
 	m_vecSet = ConcetanateSets();
 }
 std::vector<StatReport> StatController::CalculateCareerStats()

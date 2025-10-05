@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QTableWidget> 
 #include <QListWidget>
+#include <QStandardItemModel>
 
 QLabel* utility::CreateLabelWithPicture(const std::string& sPicAddress, float fScale)
 {
@@ -49,6 +50,16 @@ void utility::SetComboBoxAlternatives(QComboBox* pComboBox, const std::vector<st
     {
         pComboBox->addItem(QString::fromStdString(sAlternative));
     }
+}
+void utility::DisableFirstItemOfComboBox(QComboBox* pComboBox)
+{
+	if(auto* pModel = qobject_cast<QStandardItemModel*>(pComboBox->model()); pModel != nullptr)
+	{
+		if(auto* pItem = pModel->item(0); pItem != nullptr)
+		{
+			pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
+		}
+	}
 }
 void utility::PlaceValue2TableCell(QTableWidget* table, QString sVal, unsigned uiRowIdx, unsigned uiColumnIdx)
 {
