@@ -67,16 +67,10 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 }
 void HistoryPage::InitFilterComponents()
 {
-	utility::SetComboBoxAlternatives(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
-	if(auto* pModel = qobject_cast<QStandardItemModel*>(ui.comboBoxFilter->model()); pModel != nullptr)
-	{
-		if(auto* pItem = pModel->item(0); pItem != nullptr)
-		{
-			pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
-		}
-	} 
+	utility::SetComboBoxItems(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
+	utility::DisableFirstItemOfComboBox(ui.comboBoxFilter);
 	ui.comboBoxFilter->setCurrentIndex(0);
-	ui.RemoveFilterButton->setVisible(false);
+	ui.ClearButton->setVisible(false);
 	ui.lineEditSearchBar->clear();
 	ui.lineEditSearchBar->setEnabled(false);
 	ui.tableWidget->clearSelection();
@@ -99,7 +93,7 @@ void HistoryPage::on_NewTournamentButton_clicked()
 {
 	m_upAddEditTournamentDialog->OpenAddDialog();
 }
-void HistoryPage::on_RemoveFilterButton_clicked()
+void HistoryPage::on_ClearButton_clicked()
 {
 	if(nullptr != m_upActiveFilter)
 	{
@@ -112,32 +106,33 @@ void HistoryPage::on_RemoveFilterButton_clicked()
 void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 {
 	ui.lineEditSearchBar->setEnabled(true);
-	ui.RemoveFilterButton->setVisible(true);
+	ui.ClearButton->setVisible(true);
 	m_sFilter = sFilter.toStdString();
 	HighlightFilteredColumn();
+	const bool blSearchForExactMatch = false;
 	if(m_sFilter == "Organization")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Season")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Type")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Category")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Teammate")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Progress")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Opponent")
 	{
@@ -152,7 +147,7 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 				}
 			}
 			return sConcatanatedOpponents;}
-		)>>();
+		)>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter != "")
 	{
@@ -195,7 +190,7 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 			return !t1.IsEarlier(t2);
 			});
 	}
-	on_RemoveFilterButton_clicked();
+	on_ClearButton_clicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {

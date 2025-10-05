@@ -37,7 +37,7 @@ private:
 	std::string m_sFilter = "";
 private slots:
 	void on_NewTournamentButton_clicked();
-	void on_RemoveFilterButton_clicked();
+	void on_ClearButton_clicked();
 	void on_comboBoxFilter_currentTextChanged(const QString& sFilter);
 	void on_lineEditSearchBar_textChanged(const QString& sFilterWord);
 public slots:	
