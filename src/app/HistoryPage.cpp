@@ -70,7 +70,7 @@ void HistoryPage::InitFilterComponents()
 	utility::SetComboBoxItems(ui.comboBoxFilter, {"Organization", "Season", "Type", "Category", "Teammate", "Max. Progress", "Opponent"}, true);
 	utility::DisableFirstItemOfComboBox(ui.comboBoxFilter);
 	ui.comboBoxFilter->setCurrentIndex(0);
-	ui.RemoveFilterButton->setVisible(false);
+	ui.ClearButton->setVisible(false);
 	ui.lineEditSearchBar->clear();
 	ui.lineEditSearchBar->setEnabled(false);
 	ui.tableWidget->clearSelection();
@@ -93,7 +93,7 @@ void HistoryPage::on_NewTournamentButton_clicked()
 {
 	m_upAddEditTournamentDialog->OpenAddDialog();
 }
-void HistoryPage::on_RemoveFilterButton_clicked()
+void HistoryPage::on_ClearButton_clicked()
 {
 	if(nullptr != m_upActiveFilter)
 	{
@@ -106,7 +106,7 @@ void HistoryPage::on_RemoveFilterButton_clicked()
 void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 {
 	ui.lineEditSearchBar->setEnabled(true);
-	ui.RemoveFilterButton->setVisible(true);
+	ui.ClearButton->setVisible(true);
 	m_sFilter = sFilter.toStdString();
 	HighlightFilteredColumn();
 	const bool blSearchForExactMatch = false;
@@ -190,7 +190,7 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 			return !t1.IsEarlier(t2);
 			});
 	}
-	on_RemoveFilterButton_clicked();
+	on_ClearButton_clicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {
