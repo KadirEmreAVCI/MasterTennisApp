@@ -7,15 +7,30 @@
 template <typename T, typename FilterFunc>
 class DataFilter : public IDataFilter<T>{
 public:
+    explicit DataFilter(bool blSearchForExactMatch) : m_blSearchForExactMatch{blSearchForExactMatch}{}
     std::vector<T> ApplyFilter(const std::vector<T>& vecUnfilteredItems, const std::string& sFilteringWord)
     {
         std::vector<T> vecFilteredItems;
         if(sFilteringWord != "")
         {
-            const auto sFilteredWordLower = ToLowerCase(sFilteringWord);
-            std::copy_if(vecUnfilteredItems.cbegin(), vecUnfilteredItems.cend(), std::back_inserter(vecFilteredItems), [this, &sFilteredWordLower](const T& item){
+            const auto sFilteringWordLower = ToLowerCase(sFilteringWord);
+            std::copy_if(vecUnfilteredItems.cbegin(), vecUnfilteredItems.cend(), std::back_inserter(vecFilteredItems), [this, &sFilteringWordLower](const T& item){
                 const auto sFilteredDataLower = ToLowerCase(GetFilteredData(item));
-                return (sFilteredDataLower.find(sFilteredWordLower) != std::string::npos);
+                if(sFilteredDataLower.find(sFilteringWordLower) != std::string::npos)
+                {
+                    if(m_blSearchForExactMatch)
+                    {
+                        return sFilteredDataLower == sFilteringWordLower;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             });
         }
         else
@@ -30,6 +45,7 @@ private:
         return m_FilterFunc(item);
     }
     FilterFunc m_FilterFunc;
+    bool m_blSearchForExactMatch = false;
 protected:
     static std::string ToLowerCase(const std::string& sWord)
     {

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TournamentCategoryFilterWidget</class>
- <widget class="QWidget" name="TournamentCategoryFilterWidget">
+ <class>CareerStatsFilterWidget</class>
+ <widget class="QWidget" name="CareerStatsFilterWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>426</width>
-    <height>68</height>
+    <width>570</width>
+    <height>77</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,17 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QComboBox" name="comboBoxTournamentCategory"/>
+        <widget class="QComboBox" name="comboBoxFilterType"/>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBoxFilteringItem">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="ClearButton">

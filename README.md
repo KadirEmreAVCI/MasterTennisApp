@@ -94,7 +94,7 @@ View your personalized career statistics, including the number of played finals,
 
 ![Achievements](docs/screenshots/achievements.png)
 
-Filter your career statistics by tournament category for more detailed insights.
+Filter your career stats by tournament category, type, or organization for deeper insights.
 
 ![Achievements](docs/screenshots/filtered_career_stats.png)
 

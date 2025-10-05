@@ -19,7 +19,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <widget class="TournamentCategoryFilterWidget" name="itsTournamentCategoryFilterWidget" native="true"/>
+        <widget class="CareerStatsFilterWidget" name="itsCareerStatsFilterWidget" native="true"/>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_CareerStats">
@@ -282,9 +282,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>TournamentCategoryFilterWidget</class>
+   <class>CareerStatsFilterWidget</class>
    <extends>QWidget</extends>
-   <header>TournamentCategoryFilterWidget.h</header>
+   <header>CareerStatsFilterWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

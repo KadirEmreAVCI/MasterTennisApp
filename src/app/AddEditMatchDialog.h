@@ -31,7 +31,7 @@ private:
 	void SetEnableSetList(bool blEnabled);
 	Ui::AddEditMatchDialogClass ui;
 	std::unique_ptr<Calendar> m_upCalendar{ nullptr };
-	std::vector<std::string> m_vecStatuAlternatives = {"U", "WO", "BYE"};
+	std::vector<std::string> m_vecStatuItems = {"U", "WO", "BYE"};
 	QString m_sWL{};
 	unsigned m_uiMinSet{}, m_uiMaxSet{};
 	Tournament m_RootTournament;

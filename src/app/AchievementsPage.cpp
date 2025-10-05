@@ -12,15 +12,15 @@ AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 }
 AchievementsPage::~AchievementsPage()
 {}
-void AchievementsPage::TournamentCategoryChanged(const std::string& sTournamentCategory)
+void AchievementsPage::CareerStatsFilterChanged(const std::string& sFilterType, const std::string& sFilteringItem)
 {
-	m_sTournamentCategory = sTournamentCategory;
-	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
+	m_sFilterType = sFilterType;
+	m_sFilteringItem = sFilteringItem;
+	UpdateCareerStats(m_upStatController->UpdateCareerStats(m_rActiveProfile, m_sFilterType, m_sFilteringItem));
 }
-void AchievementsPage::TournamentCategoryCleared()
+void AchievementsPage::CareerStatsFilterCleared()
 {
-	m_sTournamentCategory = "";
-	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile, m_sTournamentCategory));
+	CareerStatsFilterChanged("", "");
 }
 void AchievementsPage::InitStatWidgets()
 {
@@ -93,12 +93,12 @@ void AchievementsPage::ChangeInDB(const std::vector<Profile>& vecProfile, const 
 	const auto activeProfile = std::find(vecProfile.cbegin(), vecProfile.cend(), m_rActiveProfile);
 	if (activeProfile != vecProfile.cend())
 	{
-		UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(*activeProfile, m_sTournamentCategory));
+		UpdateCareerStats(m_upStatController->UpdateCareerStats(*activeProfile, m_sFilterType, m_sFilteringItem));
 	}
 }
 void AchievementsPage::UserLoggedIn(const Profile& p)
 {
 	m_rActiveProfile = p;
-	ui.itsTournamentCategoryFilterWidget->ClearWidget();
-	UpdateCareerStats(m_upStatController->UpdateCareerStatsByCategory(m_rActiveProfile));
+	ui.itsCareerStatsFilterWidget->ClearWidget();
+	UpdateCareerStats(m_upStatController->UpdateCareerStats(m_rActiveProfile));
 }
