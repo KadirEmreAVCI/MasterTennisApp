@@ -115,29 +115,30 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 	ui.RemoveFilterButton->setVisible(true);
 	m_sFilter = sFilter.toStdString();
 	HighlightFilteredColumn();
+	const bool blSearchForExactMatch = false;
 	if(m_sFilter == "Organization")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Season")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Type")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Category")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Teammate")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Progress")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>();
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter == "Opponent")
 	{
@@ -152,7 +153,7 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 				}
 			}
 			return sConcatanatedOpponents;}
-		)>>();
+		)>>(blSearchForExactMatch);
 	}
 	else if(m_sFilter != "")
 	{
