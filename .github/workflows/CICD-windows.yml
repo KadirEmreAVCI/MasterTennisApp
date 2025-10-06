@@ -1,4 +1,4 @@
-name: CI – Windows Debug Build
+name: CI/CD – Windows Debug Build
 
 on:
   workflow_dispatch:
