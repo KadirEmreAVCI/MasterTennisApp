@@ -79,13 +79,24 @@ jobs:
           cmake -S . -B build -G "Ninja Multi-Config"
           cmake --build build --config Debug --parallel
       
-      - name: Upload Build Artifacts
+      - name: Deploy Qt DLLs with windeployqt
+        run: |
+          windeployqt build/Debug/MasterTennisApp.exe
+      
+      - name: Upload Build Artifacts (Test Executable)
         uses: actions/upload-artifact@v4
         with:
           name: test-exe-debug
           path: build/Debug/MasterTennisApp_test.exe
           if-no-files-found: error
-  
+      
+      - name: Upload Build Artifacts (App Distribution Folder)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MasterTennisApp-debug-dist
+          path: build/Debug/
+          if-no-files-found: error
+
   Test:
     needs: Build 
     runs-on: windows-latest
