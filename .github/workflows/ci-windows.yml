@@ -89,7 +89,8 @@ jobs:
           mkdir dist\build\Debug
           mkdir dist\database
           mkdir dist\src
-          mkdir dist\src\resources
+          mkdir dist\src\app
+          mkdir dist\src\app\resources
 
       - name: Copy Built Files (exe and dlls)
         run: |
@@ -101,8 +102,8 @@ jobs:
 
       - name: Copy Profiles and Organizations Folders
         run: |
-          xcopy /E /I /Y src\resources\profiles dist\src\resources\profiles
-          xcopy /E /I /Y src\resources\organizations dist\src\resources\organizations
+          xcopy /E /I /Y src\app\resources\profiles dist\src\app\resources\profiles
+          xcopy /E /I /Y src\app\resources\organizations dist\src\app\resources\organizations
 
       - name: Upload Distribution Artifact
         uses: actions/upload-artifact@v4
