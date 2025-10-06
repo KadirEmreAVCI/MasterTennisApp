@@ -52,7 +52,7 @@ void ProfileSelectionDialog::UpdateProfiles(const std::vector<Profile>& vecProfi
 		utility::InsertItem2ListWidget(ui.listWidget, pw);
 	}
 }
-void ProfileSelectionDialog::on_NewProfileButton_clicked()
+void ProfileSelectionDialog::on_NewButton_clicked()
 {
 	m_upAddEditProfileDialog->OpenAddDialog();
 }
