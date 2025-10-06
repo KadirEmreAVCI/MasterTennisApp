@@ -127,7 +127,7 @@ Switch to other profiles directly from your profile screen without returning to 
 MasterTennisApp/
   .github
     workflows/
-	  ci-windows.yml	# Sets up a Continuous Integration (CI) process on GitHub
+      CICD-windows.yml   # Sets up a Continuous Integration and Continuous Deployment (CI/CD) process on GitHub
   src/
     app/                # Core application logic, UI code related to Qt, and resource files
       resource/         # UI resource files, including:
@@ -137,14 +137,16 @@ MasterTennisApp/
     utility/            # Helper functions for custom Qt components and STL
   database/             # Application database file
   extern/               # External dependencies (e.g., Googletest repository)
-	googletest/
+    googletest/
   test/                 # Unit test code for business logic
   docs/
-	screenshots/        # Screenshots of the application
+    screenshots/        # Screenshots of the application
   README.md             # Project README file
   CMakeLists.txt        # Main CMake project configuration
   .gitignore            # Git ignore rules for files and directories
 ```
+
+> **Note:** The workflow file under `.github/workflows/cicd-windows.yml` automates both continuous integration (CI) and continuous deployment (CD) steps, covering build, analysis, and test phases on Windows.
 
 ---
 
