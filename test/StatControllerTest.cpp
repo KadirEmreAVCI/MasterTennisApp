@@ -1,6 +1,14 @@
 // Project Headers
 #include "StatControllerTest.h"
 
+class MatchStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(MatchStatTest, MatchStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[0];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     MatchStatTest,
     MatchStatTest,
@@ -15,6 +23,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Type", "Double", StatReport{7, 1})
     )
 );
+class MatchTiebreakStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(MatchTiebreakStatTest, MatchTiebreakStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[1];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     MatchTiebreakStatTest,
     MatchTiebreakStatTest,
@@ -29,6 +45,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Type", "Double", StatReport{2, 0})
     )
 );
+class SetTiebreakStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(SetTiebreakStatTest, SetTiebreakStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[2];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     SetTiebreakStatTest,
     SetTiebreakStatTest,
@@ -43,6 +67,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Type", "Double", StatReport{1, 1})
     )
 );
+class QuarterFinalStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(QuarterFinalStatTest, QuarterFinalStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[3];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     QuarterFinalStatTest,
     QuarterFinalStatTest,
@@ -57,6 +89,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Type", "Double", StatReport{1, 0})
     )
 );
+class SemiFinalStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(SemiFinalStatTest, SemiFinalStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[4];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     SemiFinalStatTest,
     SemiFinalStatTest,
@@ -71,6 +111,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Type", "Double", StatReport{1, 1})
     )
 );
+class ThirdPlaceGameStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(ThirdPlaceGameStatTest, ThirdPlaceGameStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[5];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     ThirdPlaceGameStatTest,
     ThirdPlaceGameStatTest,
@@ -85,6 +133,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Type", "Double", StatReport{0, 0})
     )
 );
+class FinalStatTest : public StatControllerTest, public ::testing::WithParamInterface<std::tuple<std::string, std::string, StatReport>> {};
+TEST_P(FinalStatTest, FinalStatTest)
+{
+	auto [sFilteredType, sFilteringWord, rExpectedStatReport] = GetParam();
+    const std::vector<StatReport> vecStatReport = m_upStatController->UpdateCareerStats(m_rActiveProfile, sFilteredType, sFilteringWord);
+    const StatReport rCalculatedStatReport = vecStatReport[6];    
+    EXPECT_EQ(rCalculatedStatReport, rExpectedStatReport);
+}
 INSTANTIATE_TEST_SUITE_P(
     FinalStatTest,
     FinalStatTest,

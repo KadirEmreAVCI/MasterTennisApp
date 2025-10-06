@@ -25,7 +25,6 @@ void MasterTennisApp::on_StartButton_clicked()
 }
 void MasterTennisApp::on_ManageButton_clicked()
 {
-    std::cout << "MasterTennisApp::on_ManageButton_clicked\n";
     m_upOrganizationDialog->DisplayOrganizations();
     m_upOrganizationDialog->setModal(true);
     m_upOrganizationDialog->exec();

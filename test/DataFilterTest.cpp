@@ -1,6 +1,13 @@
 // Project Headers
 #include "DataFilterTest.h"
 
+class OrganizationNameFiltering : public DataFilterTest, public ::testing::WithParamInterface<std::tuple<std::string, bool, std::vector<unsigned>>> {};
+TEST_P(OrganizationNameFiltering, OrganizationNameFiltering)
+{
+	auto [sFilteringWord, blSearchForExactMatch, vecExpectedTournaments] = GetParam();
+    DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})> rOrganizationNameFilter{blSearchForExactMatch};    
+    EXPECT_EQ(vecExpectedTournaments, GetTournamentIDs(rOrganizationNameFilter.ApplyFilter(m_vecTournament, sFilteringWord)));
+}
 INSTANTIATE_TEST_SUITE_P(
     OrganizationNameFiltering,
     OrganizationNameFiltering,
@@ -15,7 +22,13 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Aselsan Spor Olimpiyatlari", true, std::vector<unsigned>({2, 8}))
     )
 );
-
+class CategoryFiltering : public DataFilterTest, public ::testing::WithParamInterface<std::tuple<std::string, bool, std::vector<unsigned>>> {};
+TEST_P(CategoryFiltering, CategoryFiltering)
+{
+	auto [sFilteringWord, blSearchForExactMatch, vecExpectedTournaments] = GetParam();
+    DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})> rSeasonFilter{blSearchForExactMatch};    
+    EXPECT_EQ(vecExpectedTournaments, GetTournamentIDs(rSeasonFilter.ApplyFilter(m_vecTournament, sFilteringWord)));
+}
 INSTANTIATE_TEST_SUITE_P(
     CategoryFiltering,
     CategoryFiltering,
@@ -31,7 +44,13 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("Ilk Turnuvam", false, std::vector<unsigned>({1, 11}))
     )
 );
-
+class TypeFiltering : public DataFilterTest, public ::testing::WithParamInterface<std::tuple<std::string, bool, std::vector<unsigned>>> {};
+TEST_P(TypeFiltering, TypeFiltering)
+{
+	auto [sFilteringWord, blSearchForExactMatch, vecExpectedTournaments] = GetParam();
+    DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})> rSeasonFilter{blSearchForExactMatch};    
+    EXPECT_EQ(vecExpectedTournaments, GetTournamentIDs(rSeasonFilter.ApplyFilter(m_vecTournament, sFilteringWord)));
+}
 INSTANTIATE_TEST_SUITE_P(
     TypeFiltering,
     TypeFiltering,

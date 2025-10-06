@@ -7,6 +7,9 @@ AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 	ui.setupUi(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &AchievementsPage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &AchievementsPage::ChangeInDB);
+	const unsigned uiGroupBoxWidth = 550;
+	ui.groupBox_CareerStats->setFixedWidth(uiGroupBoxWidth);
+	ui.groupBox_TrophiesAndMedals->setFixedWidth(uiGroupBoxWidth);
 	InitPictures();
 	InitStatWidgets();
 }

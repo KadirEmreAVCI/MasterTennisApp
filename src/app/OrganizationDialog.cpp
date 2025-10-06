@@ -52,7 +52,7 @@ void OrganizationDialog::PlaceOrg2Table(const Organization& org, unsigned uiRowI
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpDeleteButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::DeleteOrganization);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpEditButtonPNG,  0.4f, true), &QPushButton::clicked, this, &OrganizationDialog::EditOrganization);
 }
-void OrganizationDialog::on_NewOrganizationButton_clicked()
+void OrganizationDialog::on_NewButton_clicked()
 {
 	m_upAddEditOrganizationDialog->OpenAddDialog();
 }
@@ -75,7 +75,6 @@ void OrganizationDialog::DeleteOrganization()
 }
 void OrganizationDialog::UpdateOrganizations(const std::vector<Organization>& vecOrganization)
 {
-	std::cout << "OrganizationDialog::UpdateOrganizations!!!!!!!!!!!!!!!\n";
 	m_vecOrganization = vecOrganization;
 	DisplayOrganizations();
 }

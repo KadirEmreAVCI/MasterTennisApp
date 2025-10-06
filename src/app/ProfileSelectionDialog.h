@@ -23,7 +23,7 @@ private:
 	std::unique_ptr<AddEditProfileDialog> m_upAddEditProfileDialog{ nullptr };
 	std::vector<Profile> m_vecProfile;
 private slots:
-	void on_NewProfileButton_clicked();
+	void on_NewButton_clicked();
 };
 
 #endif

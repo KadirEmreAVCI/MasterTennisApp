@@ -89,7 +89,7 @@ void HistoryPage::HighlightFilteredColumn()
 	ui.tableWidget->clearSelection();
 	ui.tableWidget->selectColumn(idx);
 }
-void HistoryPage::on_NewTournamentButton_clicked()
+void HistoryPage::on_NewButton_clicked()
 {
 	m_upAddEditTournamentDialog->OpenAddDialog();
 }
