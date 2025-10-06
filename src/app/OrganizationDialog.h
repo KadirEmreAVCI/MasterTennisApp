@@ -29,7 +29,7 @@ private:
 	std::unique_ptr<AddEditOrganizationDialog> m_upAddEditOrganizationDialog;
 	std::vector<Organization> m_vecOrganization;
 private slots:
-	void on_NewOrganizationButton_clicked();
+	void on_NewButton_clicked();
 public slots:
 	void EditOrganization();
 	void DeleteOrganization();
