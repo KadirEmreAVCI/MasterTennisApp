@@ -82,6 +82,9 @@ jobs:
       - name: Deploy Qt DLLs with windeployqt
         run: |
           windeployqt build/Debug/MasterTennisApp.exe
+
+      - name: Copy database file to build output
+        run: copy database\MasterTennisApp.db build\Debug\
       
       - name: Upload Build Artifacts (Test Executable)
         uses: actions/upload-artifact@v4
