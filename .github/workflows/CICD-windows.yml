@@ -1,4 +1,4 @@
-name: CI – Windows Debug Build
+name: CI/CD – Windows Debug Build
 
 on:
   workflow_dispatch:
@@ -13,18 +13,18 @@ on:
 jobs:
   Analyze:
     runs-on: windows-latest
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
+
       - name: Install Cppcheck
         run: |
           choco install cppcheck -y
           $cppcheckPath = "C:\Program Files\Cppcheck"
           $env:PATH += ";$cppcheckPath"
           Write-Host "Updated PATH: $env:PATH"
-      
+
       - name: Run Cppcheck
         shell: cmd
         run: |
@@ -36,80 +36,111 @@ jobs:
               --suppress=missingIncludeSystem ^
               --output-file=cppcheck-report.txt ^
               src/app src/business_logic test
-      
+
       - name: Display Report
         run: |
           Write-Host "==== Cppcheck output ===="
           Get-Content cppcheck-report.txt
-      
+
       - name: Upload Cppcheck Report
         uses: actions/upload-artifact@v4
         with:
           name: cppcheck-report
           path: cppcheck-report.txt
-  
+
   Build:
     needs: Analyze
     runs-on: windows-latest
     steps:
-      
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
-      
+
       - name: Setup MSVC Environment
         uses: ilammy/msvc-dev-cmd@v1
-      
+
       - name: Install Qt 6.7.0 (MSVC)
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.7.0'
           target: desktop
           arch: win64_msvc2019_64
-      
+
       - name: Install CMake
         run: |
           choco install ninja -y
           choco install cmake --version=4.0.3 -y
-      
+
       - name: Build Debug
-        run: | 
+        run: |
           cmake -S . -B build -G "Ninja Multi-Config"
           cmake --build build --config Debug --parallel
-      
-      - name: Upload Build Artifacts
+
+      - name: Deploy Qt DLLs with windeployqt
+        run: |
+          windeployqt build/Debug/MasterTennisApp.exe
+
+      - name: Prepare Artifact Directory Structure
+        run: |
+          mkdir dist
+          mkdir dist\build
+          mkdir dist\build\Debug
+          mkdir dist\database
+          mkdir dist\src
+          mkdir dist\src\app
+          mkdir dist\src\app\resources
+
+      - name: Copy Built Files (exe and dlls)
+        run: |
+          xcopy /E /I /Y build\Debug dist\build\Debug
+
+      - name: Copy Database File
+        run: |
+          copy database\MasterTennisApp.db dist\database\
+
+      - name: Copy Profiles and Organizations Folders
+        run: |
+          xcopy /E /I /Y src\app\resources\profiles dist\src\app\resources\profiles
+          xcopy /E /I /Y src\app\resources\organizations dist\src\app\resources\organizations
+
+      - name: Upload Distribution Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MasterTennisApp-debug-dist
+          path: dist/
+
+      - name: Upload Build Artifacts (Test Executable)
         uses: actions/upload-artifact@v4
         with:
           name: test-exe-debug
           path: build/Debug/MasterTennisApp_test.exe
           if-no-files-found: error
-  
+
   Test:
-    needs: Build 
+    needs: Build
     runs-on: windows-latest
     steps:
-      
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
-      
+
       - name: Install Qt 6.7.0 (MSVC)
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.7.0'
           target: desktop
           arch: win64_msvc2019_64
-      
+
       - name: Download Test Executable
         uses: actions/download-artifact@v4
         with:
           name: test-exe-debug
           path: tests-run
-      
+
       - name: Run Tests
         shell: cmd
         run: tests-run\MasterTennisApp_test.exe --gtest_color=yes --gtest_output=xml:TEST-debug.xml
