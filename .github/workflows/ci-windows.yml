@@ -13,6 +13,7 @@ on:
 jobs:
   Analyze:
     runs-on: windows-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -77,7 +78,7 @@ jobs:
           cmake -S . -B build -G "Ninja Multi-Config"
           cmake --build build --config Debug --parallel
 
-      - name: Deploy Qt DLLs With Windeployqt
+      - name: Deploy Qt DLLs with windeployqt
         run: |
           windeployqt build/Debug/MasterTennisApp.exe
 
@@ -89,16 +90,19 @@ jobs:
           mkdir dist\database
           mkdir dist\src
           mkdir dist\src\resources
-          mkdir dist\src\resources\profiles
-          mkdir dist\src\resources\organizations
 
       - name: Copy Built Files (exe and dlls)
         run: |
           xcopy /E /I /Y build\Debug dist\build\Debug
 
-      - name: Copy database file
+      - name: Copy Database File
         run: |
           copy database\MasterTennisApp.db dist\database\
+
+      - name: Copy Profiles and Organizations Folders
+        run: |
+          xcopy /E /I /Y src\resources\profiles dist\src\resources\profiles
+          xcopy /E /I /Y src\resources\organizations dist\src\resources\organizations
 
       - name: Upload Distribution Artifact
         uses: actions/upload-artifact@v4
