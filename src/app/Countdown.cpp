@@ -22,7 +22,6 @@ QString Countdown::GetCountdown()
 {
 	if (const std::string& sCountdown = secondsToString(QDateTime::currentDateTime().secsTo(m_MatchDate)).toStdString(); sCountdown == "  0 Days 00:00:00")
 	{
-		std::cout << "Countdown::GetCountdown emit TimeIsUp()\n";
 		emit TimeIsUp();
 	}
 	return secondsToString(QDateTime::currentDateTime().secsTo(m_MatchDate));

@@ -52,6 +52,16 @@ void DatabaseControllerTest::LoadProfileData()
 		p.SetTournaments(DatabaseController::instance().FindTournamentsOfProfile(p.GetID()));
 	}
 }
+class FindMatchesOfTournamentTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
+TEST_P(FindMatchesOfTournamentTest, FindMatchesOfTournament)
+{
+	auto [idx, expected] = GetParam();
+	const auto vecMatch = GetTournamentsFromDB()[idx].GetMatches();
+	for (std::size_t i = 0; i < vecMatch.size(); ++i)
+	{
+		EXPECT_EQ(expected[i], vecMatch[i].GetID());
+	}
+}
 INSTANTIATE_TEST_SUITE_P(
     FindMatchesOfTournament,
     FindMatchesOfTournamentTest,
@@ -64,6 +74,16 @@ INSTANTIATE_TEST_SUITE_P(
 		std::make_tuple(5, std::vector<unsigned>{15, 16, 17})
 	)
 );
+class FindTournamentsOfOrganizationTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
+TEST_P(FindTournamentsOfOrganizationTest, FindTournamentsOfOrganization)
+{
+	auto [idx, expected] = GetParam();
+	const auto vecTournament = GetOrganizationsFromDB()[idx].GetTournaments();
+	for (std::size_t i = 0; i < vecTournament.size(); ++i)
+	{
+		EXPECT_EQ(expected[i], vecTournament[i].GetID());
+	}
+}
 INSTANTIATE_TEST_SUITE_P(
     FindTournamentsOfOrganization,
     FindTournamentsOfOrganizationTest,
@@ -74,6 +94,17 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(3, std::vector<unsigned>{4})
 	)
 );
+class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
+TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
+{
+	auto [idx, expected] = GetParam();
+	const auto vecProfile = GetProfilesFromDB();
+	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
+	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
+	{
+		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
+	}
+}
 INSTANTIATE_TEST_SUITE_P(
     FindTournamentsOfProfile,
     FindTournamentsOfProfileTest,
@@ -82,6 +113,14 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(1, std::vector<unsigned>{1, 4})
 	)
 );
+class FindRootTournamentOfMatchTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(FindRootTournamentOfMatchTest, FindRootTournamentOfMatch)
+{
+	auto [idx, expected] = GetParam();
+	const auto vecMatch = GetMatchesFromDB();
+	const auto rootTournament = DatabaseController::instance().FindRootTournament(vecMatch[idx]);
+	EXPECT_EQ(expected, rootTournament.GetID());
+}
 INSTANTIATE_TEST_SUITE_P(
 	FindRootTournamentOfMatch,
 	FindRootTournamentOfMatchTest,

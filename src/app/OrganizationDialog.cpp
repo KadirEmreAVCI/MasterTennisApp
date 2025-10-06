@@ -75,7 +75,6 @@ void OrganizationDialog::DeleteOrganization()
 }
 void OrganizationDialog::UpdateOrganizations(const std::vector<Organization>& vecOrganization)
 {
-	std::cout << "OrganizationDialog::UpdateOrganizations!!!!!!!!!!!!!!!\n";
 	m_vecOrganization = vecOrganization;
 	DisplayOrganizations();
 }

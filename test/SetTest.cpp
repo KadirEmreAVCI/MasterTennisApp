@@ -2,6 +2,12 @@
 
 using enum common::Outcome;;
 
+class SetOutcomeTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, common::Outcome>> {};
+TEST_P(SetOutcomeTest, DetermineSetOutcomes)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].GetOutcome(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetermineSetOutcomes,
     SetOutcomeTest,
@@ -19,6 +25,12 @@ INSTANTIATE_TEST_SUITE_P(
 		std::make_tuple(10, AwayWin)
     )
 );
+class PlayedTiebreakTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(PlayedTiebreakTest, DetectTiebreakPlayed)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].IsTiebreakPlayed(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectTiebreakPlayed,
     PlayedTiebreakTest,
@@ -36,6 +48,12 @@ INSTANTIATE_TEST_SUITE_P(
 		std::make_tuple(10, true)
     )
 );
+class InvalidSetTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(InvalidSetTest, DetectInvalidSets)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].IsValid(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectInvalidSets,
     InvalidSetTest,
@@ -53,6 +71,12 @@ INSTANTIATE_TEST_SUITE_P(
 		std::make_tuple(10, false)
     )
 );
+class SetToStringTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(SetToStringTest, SetToString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx].ToString(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     SetToString,
     SetToStringTest,
@@ -70,6 +94,12 @@ INSTANTIATE_TEST_SUITE_P(
 		std::make_tuple(10, "6-7(7-2)")
     )
 );
+class SetFromStringTest : public SetTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(SetFromStringTest, SetFromString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecSet[idx], Set::FromString(expected));
+}
 INSTANTIATE_TEST_SUITE_P(
     SetFromString,
     SetFromStringTest,

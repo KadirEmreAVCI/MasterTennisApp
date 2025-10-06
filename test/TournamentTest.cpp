@@ -15,7 +15,12 @@ bool TournamentTest::IsMatchValidForTournament(const Tournament& t, const Match&
 {
 	return t.IsMatchValidForTournament(m);
 }
-
+class DoubleTournamentTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(DoubleTournamentTest, DetectDoubleTournaments)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecTournament[idx].IsDoubleTournament(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectDoubleTournaments,
     DoubleTournamentTest,
@@ -28,7 +33,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(5, false)
     )
 );
-
+class PossibleStagesTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<std::string>>> {};
+TEST_P(PossibleStagesTest, DetectPossibleStages)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecTournament[idx].GetPossibleStages(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectPossibleStages,
     PossibleStagesTest,
@@ -41,7 +51,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(5, std::vector<std::string>{ "Group Stage", "Final" })
     )
 );
-
+class GroupStageExistenceTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, bool>> {};
+TEST_P(GroupStageExistenceTest, DetectExistenceOfGroupStage)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecTournament[idx].IsGroupStageExist(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectExistenceOfGroupStage,
     GroupStageExistenceTest,
@@ -54,7 +69,16 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(5, false)
     )
 );
-
+class ValidMatchStageTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<bool>>> {};
+TEST_P(ValidMatchStageTest, DetectValidMatchStages)
+{
+	auto [idx, expected] = GetParam();
+	const auto& vecMatch = m_vecTournament[idx].GetMatches();
+	for (std::size_t i = 0; i < vecMatch.size(); ++i)
+	{
+		EXPECT_EQ(IsMatchStageValid(m_vecTournament[idx], vecMatch[i]), expected[i]);
+	}
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectValidMatchStages,
     ValidMatchStageTest,
@@ -67,7 +91,16 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(5, std::vector<bool>{false, false})
     )
 );
-
+class MatchExceedingMaxSetTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<bool>>> {};
+TEST_P(MatchExceedingMaxSetTest, DetectMatchesExceedingMaxSet)
+{
+	auto [idx, expected] = GetParam();
+	const auto& vecMatch = m_vecTournament[idx].GetMatches();
+	for (std::size_t i = 0; i < vecMatch.size(); ++i)
+	{
+		EXPECT_EQ(IsMatchExceedingMaxSet(m_vecTournament[idx], vecMatch[i]), expected[i]);
+	}
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectMatchesExceedingMaxSet,
     MatchExceedingMaxSetTest,
@@ -80,7 +113,16 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(5, std::vector<bool>{true, true})
     )
 );
-
+class ValidMatchForTournamentTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<bool>>> {};
+TEST_P(ValidMatchForTournamentTest, DetectValidMatchesForTournament)
+{
+	auto [idx, expected] = GetParam();
+	const auto& vecMatch = m_vecTournament[idx].GetMatches();
+	for (std::size_t i = 0; i < vecMatch.size(); ++i)
+	{
+		EXPECT_EQ(IsMatchValidForTournament(m_vecTournament[idx], vecMatch[i]), expected[i]);
+	}
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectValidMatchesForTournament,
     ValidMatchForTournamentTest,

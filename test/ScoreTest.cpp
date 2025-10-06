@@ -3,6 +3,12 @@
 
 using enum common::Outcome;
 
+class ScoreOutcomeTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, common::Outcome>> {};
+TEST_P(ScoreOutcomeTest, DetermineScoreOutcomes)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].GetOutcome(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetermineScoreOutcomes,
     ScoreOutcomeTest,
@@ -14,6 +20,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(4, AwayWin)
     )
 );
+class HomeScoreTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(HomeScoreTest, DetermineHomeScores)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].GetHomeScore(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetermineHomeScores,
     HomeScoreTest,
@@ -25,6 +37,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(4, 1)
     )
 );
+class AwayScoreTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
+TEST_P(AwayScoreTest, DetermineAwayScores)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].GetAwayScore(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetermineAwayScores,
     AwayScoreTest,
@@ -36,6 +54,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(4, 5)
     )
 );
+class ScoreToStringTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(ScoreToStringTest, ScoreToString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx].ToString(), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     ScoreToString,
     ScoreToStringTest,
@@ -47,6 +71,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(4, "1-5")
     )
 );
+class ScoreFromStringTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, std::string>> {};
+TEST_P(ScoreFromStringTest, ScoreFromString)
+{
+	auto [idx, expected] = GetParam();
+	EXPECT_EQ(m_vecScore[idx], Score::FromString(expected));
+}
 INSTANTIATE_TEST_SUITE_P(
     ScoreFromString,
     ScoreFromStringTest,
@@ -58,6 +88,12 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(4, "1-5")
     )
 );
+class EqualityTest : public ScoreTest, public ::testing::WithParamInterface<std::tuple<size_t, Score, bool>> {};
+TEST_P(EqualityTest, DetectEqualities)
+{
+	auto [idx, comparedScore, expected] = GetParam();
+	EXPECT_EQ((m_vecScore[idx] == comparedScore), expected);
+}
 INSTANTIATE_TEST_SUITE_P(
     DetectEqualities,
     EqualityTest,

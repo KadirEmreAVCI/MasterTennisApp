@@ -73,48 +73,4 @@ private:
 	void LoadOrganizationData();
 	void LoadProfileData();
 };
-
-class FindMatchesOfTournamentTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-TEST_P(FindMatchesOfTournamentTest, FindMatchesOfTournament)
-{
-	auto [idx, expected] = GetParam();
-	const auto vecMatch = GetTournamentsFromDB()[idx].GetMatches();
-	for (std::size_t i = 0; i < vecMatch.size(); ++i)
-	{
-		EXPECT_EQ(expected[i], vecMatch[i].GetID());
-	}
-}
-
-class FindTournamentsOfOrganizationTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-TEST_P(FindTournamentsOfOrganizationTest, FindTournamentsOfOrganization)
-{
-	auto [idx, expected] = GetParam();
-	const auto vecTournament = GetOrganizationsFromDB()[idx].GetTournaments();
-	for (std::size_t i = 0; i < vecTournament.size(); ++i)
-	{
-		EXPECT_EQ(expected[i], vecTournament[i].GetID());
-	}
-}
-
-class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
-TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
-{
-	auto [idx, expected] = GetParam();
-	const auto vecProfile = GetProfilesFromDB();
-	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
-	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
-	{
-		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
-	}
-}
-
-class FindRootTournamentOfMatchTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, unsigned>> {};
-TEST_P(FindRootTournamentOfMatchTest, FindRootTournamentOfMatch)
-{
-	auto [idx, expected] = GetParam();
-	const auto vecMatch = GetMatchesFromDB();
-	const auto rootTournament = DatabaseController::instance().FindRootTournament(vecMatch[idx]);
-	EXPECT_EQ(expected, rootTournament.GetID());
-}
-
 #endif

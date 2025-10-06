@@ -140,7 +140,6 @@ void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vec
 }
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
-	std::cout << "HomePage::UpdateActiveProfileData!!!!!!!!!!!!!!!\n";
 	m_vecTournament = p.GetTournaments();
 	UpdateUpcomingMatches();
 	UpdateTopParticipations();
