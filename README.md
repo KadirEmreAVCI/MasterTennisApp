@@ -1,8 +1,7 @@
-<p align="left">
-  <img src="src/app/resources/Logo1.png" alt="Master Tennis App Logo" width="100"/>
-</p>
-
-# Master Tennis App
+<h1>
+  Master Tennis App
+  <img src="src/app/resources/Logo1.png" alt="Master Tennis App Logo" width="50" align="left" style="margin-left:20px;"/>
+</h1>
 
 MasterTennisApp is a dedicated **desktop application** designed exclusively for tennis players.  
 Multiple users can use the same application by creating their own profiles, making it ideal for shared environments or family computers.  
