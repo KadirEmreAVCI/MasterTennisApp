@@ -51,7 +51,7 @@ To get a local copy up and running, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/KadirEmreAVCI/MasterTennisApp.git
+    git clone git clone --recursive https://github.com/KadirEmreAVCI/MasterTennisApp.git
     cd MasterTennisApp
     ```
 2. Make sure Qt 6.7.0 is installed and available in your PATH.
