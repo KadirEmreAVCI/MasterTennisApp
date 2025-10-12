@@ -1,6 +1,6 @@
 <h1>
   Master Tennis App
-  <img src="src/app/resources/Logo1.png" alt="Master Tennis App Logo" width="50" align="left" style="margin-left:20px;"/>
+  <img src="src/app/resources/Logo1.png" alt="Master Tennis App Logo" width="40" align="left" style="margin-left:20px;"/>
 </h1>
 
 MasterTennisApp is a dedicated **desktop application** designed exclusively for tennis players.  
@@ -51,7 +51,7 @@ To get a local copy up and running, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/KadirEmreAVCI/MasterTennisApp.git
+    git clone --recursive https://github.com/KadirEmreAVCI/MasterTennisApp.git
     cd MasterTennisApp
     ```
 2. Make sure Qt 6.7.0 is installed and available in your PATH.
