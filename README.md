@@ -1,6 +1,6 @@
 <h1>
   Master Tennis App
-  <img src="src/app/resources/Logo1.png" alt="Master Tennis App Logo" width="50" align="left" style="margin-left:20px;"/>
+  <img src="src/app/resources/Logo1.png" alt="Master Tennis App Logo" width="40" align="left" style="margin-left:20px;"/>
 </h1>
 
 MasterTennisApp is a dedicated **desktop application** designed exclusively for tennis players.  
