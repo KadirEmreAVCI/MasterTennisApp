@@ -14,26 +14,26 @@ UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, QWid
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
 	m_RootTournament = DatabaseController::instance().FindRootTournament(m_Match);
 	m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
-	QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
+	//QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
 	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
-	InitializeTimer();
-	InitializeCountdown();
+	// InitializeTimer();
+	// InitializeCountdown();
 	FillUpcomingMatchButton();
 	utility::InitLabelWithPicture(label_OrgImage, m_RootOrganization.GetFullPicturePath(), 1.90f);
 }
 UpcomingMatch::~UpcomingMatch()
 {}
-void UpcomingMatch::InitializeTimer()
-{
-	m_upTimer = std::make_unique<QTimer>(this);
-	connect(m_upTimer.get(), SIGNAL(timeout()), this, SLOT(PrintCountdown()));
-	const unsigned int uiTimeoutDurMs = 1000;
-	m_upTimer->start(uiTimeoutDurMs);
-}
-void UpcomingMatch::InitializeCountdown()
-{
-	m_Countdown.setMatchDate(m_Match.GetDate(), m_Match.GetTime());
-}
+// void UpcomingMatch::InitializeTimer()
+// {
+// 	m_upTimer = std::make_unique<QTimer>(this);
+// 	connect(m_upTimer.get(), SIGNAL(timeout()), this, SLOT(PrintCountdown()));
+// 	const unsigned int uiTimeoutDurMs = 1000;
+// 	m_upTimer->start(uiTimeoutDurMs);
+// }
+// void UpcomingMatch::InitializeCountdown()
+// {
+// 	m_Countdown.setMatchDate(m_Match.GetDate(), m_Match.GetTime());
+// }
 void UpcomingMatch::FillUpcomingMatchButton()
 {
 	UpcomingMatchButton->setFixedSize(common::g_uiUpcomingMatchWidth - 200, common::g_uiUpcomingMatchHeight - 20);
@@ -79,9 +79,16 @@ void UpcomingMatch::FillUpcomingMatchButton()
 	layout->addLayout(hLayout);
 	layout->addStretch();
 }
+QString UpcomingMatch::SecondsToString(int seconds) const
+{
+	constexpr int SEC_PER_DAY = 86400;
+	int days = seconds / SEC_PER_DAY;
+	QTime t = QTime(0, 0).addSecs(seconds % SEC_PER_DAY);
+	return QString("%1 Days %2:%3:%4").arg(days, 3).arg(t.hour(), 2, 10, QChar('0')).arg(t.minute(), 2, 10, QChar('0')).arg(t.second(), 2, 10, QChar('0'));
+}
 void UpcomingMatch::PrintCountdown()
 {
-	label_Countdown->setText(m_Countdown.GetCountdown());
+	label_Countdown->setText(SecondsToString(QDateTime::currentDateTime().secsTo(QDateTime::fromString(m_Match.GetDate().toString("yyyy-MM-dd") + " " + m_Match.GetTime().toString(), m_sFormat))));
 }
 void UpcomingMatch::MatchStarted()
 {

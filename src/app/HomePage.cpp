@@ -10,6 +10,7 @@
 #include "Common.h"
 #include "Utility.h"
 #include "DatabaseController.h"
+#include "Timer.h"	
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
@@ -17,7 +18,11 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
-	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
+	m_upRefreshTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
+		std::for_each(m_vecpUpcomingMatchCards.begin(), m_vecpUpcomingMatchCards.end(), [](UpcomingMatch* pUpcomingMatchCard) {
+			pUpcomingMatchCard->PrintCountdown();
+			});
+		});
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
 }
 
@@ -30,31 +35,40 @@ void HomePage::UpcomingMatchStarted()
 }
 void HomePage::UpdateUpcomingMatches()
 {
+	m_vecpUpcomingMatchCards.clear();
 	ui.listWidget_UpcomingMatches->clear();
-	auto vecUpcomingMatches = FindUpcomingMatches();
-	std::sort(vecUpcomingMatches.begin(), vecUpcomingMatches.end(), [](const Match& m1, const Match& m2) {
+	FindUpcomingMatches();
+	std::sort(m_vecUpcomingMatch.begin(), m_vecUpcomingMatch.end(), [](const Match& m1, const Match& m2) {
 		return m1.IsEarlier(m2);
 		});
-	for (const auto& m : vecUpcomingMatches)
+	for (const auto& m : m_vecUpcomingMatch)
 	{
-		InsertUpcomingMatch(new UpcomingMatch(m, this));
+		m_vecpUpcomingMatchCards.push_back(new UpcomingMatch(m, this));
+		InsertUpcomingMatch(m_vecpUpcomingMatchCards.back());
+	}
+	if(!m_vecpUpcomingMatchCards.empty())
+	{
+		m_upRefreshTimer->Start();
+	}
+	else
+	{
+		m_upRefreshTimer->Stop();
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
 	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
 }
-std::vector<Match> HomePage::FindUpcomingMatches()const
+void HomePage::FindUpcomingMatches()
 {
-	std::vector<Match> vecUpcomingMatches;
+	m_vecUpcomingMatch.clear();
 	for (const auto& t : m_vecTournament)
 	{
 		const auto& vecMatch = t.GetMatches();
-		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecUpcomingMatches), [](const Match& m) {
+		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(m_vecUpcomingMatch), [](const Match& m) {
 			return m.IsUpcomingMatch();
 			});
 	}
-	return vecUpcomingMatches;
-}
+}	
 std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 {
 	std::vector<Match> vecStartedUpcomingMatches;
@@ -78,8 +92,8 @@ void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
 }
 void HomePage::FillWithNoUpcomingMatches()
 {
-	const auto& vecUpcomingMatches = FindUpcomingMatches();
-	const int iNoUpcomingMatch = common::g_uiMaxUpcomingMatch - vecUpcomingMatches.size();
+	FindUpcomingMatches();
+	const int iNoUpcomingMatch = common::g_uiMaxUpcomingMatch - m_vecUpcomingMatch.size();
 	for (int i = 0; i < iNoUpcomingMatch; ++i)
 	{
 		InsertNoUpcomingMatch(new NoUpcomingMatch(this));

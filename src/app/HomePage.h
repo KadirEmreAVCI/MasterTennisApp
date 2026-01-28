@@ -12,6 +12,7 @@
 class UpcomingMatch;
 class NoUpcomingMatch;
 class OrgParticipation;
+class Timer;
 
 class HomePage : public QWidget{
 	Q_OBJECT
@@ -22,7 +23,7 @@ public:
 private:
 	void UpcomingMatchStarted();
 	void UpdateUpcomingMatches();
-	std::vector<Match> FindUpcomingMatches()const;
+	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;
 	void InsertUpcomingMatch(UpcomingMatch*);
 	void InsertNoUpcomingMatch(NoUpcomingMatch*);
@@ -36,6 +37,9 @@ private:
 	void UpdateActiveProfileData(const Profile&);
 	Ui::HomePageClass ui;
 	std::vector<Tournament> m_vecTournament;
+	std::vector<Match> m_vecUpcomingMatch;
+	std::vector<UpcomingMatch*> m_vecpUpcomingMatchCards;
+	std::unique_ptr<Timer> m_upRefreshTimer{ nullptr };
 	unsigned m_uiProfileID = 0;	
 };
 
