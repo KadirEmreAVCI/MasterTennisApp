@@ -57,9 +57,16 @@ void HomePage::UpdateUpcomingMatches()
 			return m.IsUpcomingMatch();
 			});
 	}
-	for(const auto& m : setUpcomingMatches)
+	if(setUpcomingMatches.empty())
 	{
-		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(m, this));
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(this));
+	}
+	else
+	{
+		for(const auto& m : setUpcomingMatches)
+		{
+			utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(m, this));
+		}
 	}
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
 	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);

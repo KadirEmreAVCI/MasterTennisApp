@@ -18,6 +18,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QPushButton" name="UpcomingMatchButton">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -77,6 +80,9 @@
        </item>
        <item>
         <widget class="QLabel" name="label_Countdown">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="font">
           <font>
            <pointsize>15</pointsize>

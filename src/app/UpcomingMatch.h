@@ -15,6 +15,7 @@ class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass{
 	Q_OBJECT
 
 public:
+	UpcomingMatch(QWidget* parent = nullptr);
 	UpcomingMatch(const Match& m, QWidget* parent = nullptr);
 	~UpcomingMatch();
 	void PrintCountdown();

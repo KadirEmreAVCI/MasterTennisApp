@@ -10,6 +10,14 @@
 #include "Timer.h"
 #include "HomePage.h"
 
+UpcomingMatch::UpcomingMatch(QWidget* parent)
+{
+	setupUi(this);
+	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
+	UpcomingMatchButton->hide();
+	label_Countdown->hide();
+	label_OrgImage->hide();
+}
 UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, m_pHomePage{reinterpret_cast<HomePage*>(parent)} 
 {
 	setupUi(this);
@@ -34,7 +42,10 @@ UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, m_pH
 }
 UpcomingMatch::~UpcomingMatch()
 {
-	m_upTimer->Stop();
+	if(m_upTimer)
+	{
+		m_upTimer->Stop();
+	}
 }
 void UpcomingMatch::FillUpcomingMatchButton()
 {
