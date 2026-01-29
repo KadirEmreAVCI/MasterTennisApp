@@ -22,7 +22,7 @@ public:
 	~HomePage();
 	void UpcomingMatchStarted();
 private:
-	void StartTimer();
+	void UpdateCountdowns();
 	void UpdateUpcomingMatches();
 	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;
@@ -35,8 +35,6 @@ private:
 	void UpdateActiveProfileData(const Profile&);
 	Ui::HomePageClass ui;
 	std::vector<Tournament> m_vecTournament;
-	std::vector<Match> m_vecUpcomingMatch;
-	std::vector<UpcomingMatch*> m_vecpUpcomingMatchCards;
 	std::unique_ptr<Timer> m_upCountdownTimer{ nullptr };
 	unsigned m_uiProfileID = 0;	
 };

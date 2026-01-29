@@ -21,7 +21,6 @@ public:
 private:
 	void FillUpcomingMatchButton();
 	QString SecondsToString(int seconds) const;
-	void StartTimer();
 	Organization m_RootOrganization;
 	Tournament m_RootTournament;
 	Match m_Match;

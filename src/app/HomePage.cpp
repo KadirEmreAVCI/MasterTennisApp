@@ -1,5 +1,6 @@
 #include <iostream>
 #include <QFile>
+#include <set>
 #include <QMessageBox>
 #include "HomePage.h"
 #include "UpcomingMatch.h"
@@ -17,56 +18,51 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
-	StartTimer();
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
+	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
+		QMetaObject::invokeMethod(this, [this]() { UpdateCountdowns(); }, Qt::QueuedConnection);
+	});
+	m_upCountdownTimer->Start();
 }
 
 HomePage::~HomePage()
-{}
+{
+	m_upCountdownTimer->Stop();
+}
 void HomePage::UpcomingMatchStarted()
 {
-	if(!m_vecpUpcomingMatchCards.empty() && !m_vecUpcomingMatch.empty())
+	if(ui.listWidget_UpcomingMatches->count() > 0)
 	{
-		m_vecpUpcomingMatchCards.erase(m_vecpUpcomingMatchCards.begin());
 		utility::DeleteItemFromListWidget(ui.listWidget_UpcomingMatches, 0);
-		m_vecUpcomingMatch.erase(m_vecUpcomingMatch.begin());
 	}
 }
-void HomePage::StartTimer()
+void HomePage::UpdateCountdowns()
 {
-	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
-		std::for_each(m_vecpUpcomingMatchCards.begin(), m_vecpUpcomingMatchCards.end(), [](UpcomingMatch* pUpcomingMatchCard) {
-			pUpcomingMatchCard->PrintCountdown();
-			});
-		});
-	m_upCountdownTimer->Start();
+    for(int idx = 0; idx < ui.listWidget_UpcomingMatches->count(); ++idx)
+    {
+        if(auto* pUpcomingMatchCard = qobject_cast<UpcomingMatch*>(ui.listWidget_UpcomingMatches->itemWidget(ui.listWidget_UpcomingMatches->item(idx))))
+        {
+            pUpcomingMatchCard->PrintCountdown();
+        }
+    }
 }
 void HomePage::UpdateUpcomingMatches()
 {
-	m_vecpUpcomingMatchCards.clear();
-	ui.listWidget_UpcomingMatches->clear();
-	FindUpcomingMatches();
-	std::sort(m_vecUpcomingMatch.begin(), m_vecUpcomingMatch.end(), [](const Match& m1, const Match& m2) {
-		return m1.IsEarlier(m2);
-		});
-	for (const auto& m : m_vecUpcomingMatch)
+	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
+	std::multiset<Match, decltype([](const Match& m1, const Match& m2) {return m1.IsEarlier(m2);})> setUpcomingMatches;
+	for(const auto& t : m_vecTournament)
 	{
-		m_vecpUpcomingMatchCards.push_back(new UpcomingMatch(m, this));
-		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, m_vecpUpcomingMatchCards.back());
-	}
-	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
-	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
-}
-void HomePage::FindUpcomingMatches()
-{
-	m_vecUpcomingMatch.clear();
-	for (const auto& t : m_vecTournament)
-	{
-		const auto& vecMatch = t.GetMatches();
-		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(m_vecUpcomingMatch), [](const Match& m) {
+		const auto vecMatches = t.GetMatches();
+		std::copy_if(vecMatches.cbegin(), vecMatches.cend(), std::inserter(setUpcomingMatches, setUpcomingMatches.end()), [](const Match& m) {
 			return m.IsUpcomingMatch();
 			});
 	}
+	for(const auto& m : setUpcomingMatches)
+	{
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(m, this));
+	}
+	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
+	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
 }	
 std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 {
