@@ -26,8 +26,6 @@ private:
 	void UpdateUpcomingMatches();
 	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;
-	void InsertNoUpcomingMatch(NoUpcomingMatch*);
-	void FillWithNoUpcomingMatches();
 	void UpdateTopParticipations();
 	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
 	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);

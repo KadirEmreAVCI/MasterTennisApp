@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include "HomePage.h"
 #include "UpcomingMatch.h"
-#include "NoUpcomingMatch.h"
 #include "OrgParticipation.h"
 #include "StatController.h"
 #include "AppController.h"
@@ -26,8 +25,12 @@ HomePage::~HomePage()
 {}
 void HomePage::UpcomingMatchStarted()
 {
-	UpdateUpcomingMatches();
-	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
+	if(!m_vecpUpcomingMatchCards.empty() && !m_vecUpcomingMatch.empty())
+	{
+		m_vecpUpcomingMatchCards.erase(m_vecpUpcomingMatchCards.begin());
+		utility::DeleteItemFromListWidget(ui.listWidget_UpcomingMatches, 0);
+		m_vecUpcomingMatch.erase(m_vecUpcomingMatch.begin());
+	}
 }
 void HomePage::StartTimer()
 {
@@ -51,7 +54,6 @@ void HomePage::UpdateUpcomingMatches()
 		m_vecpUpcomingMatchCards.push_back(new UpcomingMatch(m, this));
 		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, m_vecpUpcomingMatchCards.back());
 	}
-	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
 	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
 }
@@ -77,19 +79,6 @@ std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 			});
 	}
 	return vecStartedUpcomingMatches;
-}
-void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
-{
-	utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pNoUpcomingMatch);
-}
-void HomePage::FillWithNoUpcomingMatches()
-{
-	FindUpcomingMatches();
-	const int iNoUpcomingMatch = common::g_uiMaxUpcomingMatch - m_vecUpcomingMatch.size();
-	for (int i = 0; i < iNoUpcomingMatch; ++i)
-	{
-		InsertNoUpcomingMatch(new NoUpcomingMatch(this));
-	}
 }
 void HomePage::UpdateTopParticipations()
 {
