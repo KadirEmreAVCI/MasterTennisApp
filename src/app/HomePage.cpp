@@ -18,7 +18,7 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
-	m_upRefreshTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
+	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
 		std::for_each(m_vecpUpcomingMatchCards.begin(), m_vecpUpcomingMatchCards.end(), [](UpcomingMatch* pUpcomingMatchCard) {
 			pUpcomingMatchCard->PrintCountdown();
 			});
@@ -30,8 +30,8 @@ HomePage::~HomePage()
 {}
 void HomePage::UpcomingMatchStarted()
 {
-	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 	UpdateUpcomingMatches();
+	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 }
 void HomePage::UpdateUpcomingMatches()
 {
@@ -48,11 +48,11 @@ void HomePage::UpdateUpcomingMatches()
 	}
 	if(!m_vecpUpcomingMatchCards.empty())
 	{
-		m_upRefreshTimer->Start();
+		m_upCountdownTimer->Start();
 	}
 	else
 	{
-		m_upRefreshTimer->Stop();
+		m_upCountdownTimer->Stop();
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
@@ -84,7 +84,7 @@ std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 void HomePage::InsertUpcomingMatch(UpcomingMatch* pUpcomingMatch)
 {
 	auto pInsertedUpcomingMatch = utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pUpcomingMatch);
-	QObject::connect(&*reinterpret_cast<UpcomingMatch*>(pInsertedUpcomingMatch), &UpcomingMatch::UpcomingMatchStarted, this, &HomePage::UpcomingMatchStarted);
+	//QObject::connect(&*reinterpret_cast<UpcomingMatch*>(pInsertedUpcomingMatch), &UpcomingMatch::UpcomingMatchStarted, this, &HomePage::UpcomingMatchStarted);
 }
 void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
 {

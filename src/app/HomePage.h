@@ -20,8 +20,8 @@ class HomePage : public QWidget{
 public:
 	HomePage(QWidget *parent = nullptr);
 	~HomePage();
-private:
 	void UpcomingMatchStarted();
+private:
 	void UpdateUpcomingMatches();
 	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;
@@ -39,7 +39,7 @@ private:
 	std::vector<Tournament> m_vecTournament;
 	std::vector<Match> m_vecUpcomingMatch;
 	std::vector<UpcomingMatch*> m_vecpUpcomingMatchCards;
-	std::unique_ptr<Timer> m_upRefreshTimer{ nullptr };
+	std::unique_ptr<Timer> m_upCountdownTimer{ nullptr };
 	unsigned m_uiProfileID = 0;	
 };
 

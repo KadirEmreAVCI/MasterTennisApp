@@ -8,8 +8,10 @@
 #include "ui_UpcomingMatch.h"
 //#include "Countdown.h"
 #include "Organization.h"
-//class QTimer;
+
+class Timer;
 class MatchesDialog;
+class HomePage;
 class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass{
 	Q_OBJECT
 
@@ -27,14 +29,17 @@ private:
 	Organization m_RootOrganization;
 	Tournament m_RootTournament;
 	Match m_Match;
+	QDateTime m_MatchStartTime;
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
 	const QString m_sFormat = "yyyy-MM-dd HH:mm:ss";
+	std::unique_ptr<Timer> m_upTimer;
+	HomePage* m_pHomePage{ nullptr };
 private slots:
 	void on_UpcomingMatchButton_clicked();
-public slots:
-	void MatchStarted();
-signals:
-	void UpcomingMatchStarted(const Tournament& t, const Match& m);
+// public slots:
+// 	void MatchStarted();
+// signals:
+	//void UpcomingMatchStarted(const Tournament& t, const Match& m);
 };
 
 #endif

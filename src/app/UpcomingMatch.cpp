@@ -7,8 +7,10 @@
 #include "MatchesDialog.h"
 #include "Utility.h"
 #include "DatabaseController.h"
+#include "Timer.h"
+#include "HomePage.h"
 
-UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, QWidget(parent) 
+UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, m_pHomePage{reinterpret_cast<HomePage*>(parent)} 
 {
 	setupUi(this);
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
@@ -16,6 +18,18 @@ UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, QWid
 	m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
 	//QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
 	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
+	m_MatchStartTime = QDateTime{m_Match.GetDate(), m_Match.GetTime()};
+	m_upTimer = std::make_unique<Timer>(TimerMode::OneShot, std::chrono::seconds(QDateTime::currentDateTime().secsTo(m_MatchStartTime) + 1), [this]() {
+		if(m_pHomePage)
+		{
+			QMetaObject::invokeMethod(m_pHomePage, [this]() {m_pHomePage->UpcomingMatchStarted();}, Qt::QueuedConnection);	// Use QueuedConnection to avoid cross-thread issues
+		}
+		else
+		{
+			std::cout << "UpcomingMatch::m_upTimer lambda: m_pHomePage is nullptr!";
+		}
+	});
+	m_upTimer->Start();
 	// InitializeTimer();
 	// InitializeCountdown();
 	FillUpcomingMatchButton();
@@ -88,12 +102,12 @@ QString UpcomingMatch::SecondsToString(int seconds) const
 }
 void UpcomingMatch::PrintCountdown()
 {
-	label_Countdown->setText(SecondsToString(QDateTime::currentDateTime().secsTo(QDateTime::fromString(m_Match.GetDate().toString("yyyy-MM-dd") + " " + m_Match.GetTime().toString(), m_sFormat))));
+	label_Countdown->setText(SecondsToString(QDateTime::currentDateTime().secsTo(m_MatchStartTime)));
 }
-void UpcomingMatch::MatchStarted()
-{
-	emit UpcomingMatchStarted(m_RootTournament, m_Match);
-}
+// void UpcomingMatch::MatchStarted()
+// {
+// 	emit UpcomingMatchStarted(m_RootTournament, m_Match);
+// }
 void UpcomingMatch::on_UpcomingMatchButton_clicked()
 {
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(m_RootTournament.GetName()));
