@@ -6,7 +6,6 @@
 #include <QWidget>
 #include <QDateTime>
 #include "ui_UpcomingMatch.h"
-//#include "Countdown.h"
 #include "Organization.h"
 
 class Timer;
@@ -20,12 +19,9 @@ public:
 	~UpcomingMatch();
 	void PrintCountdown();
 private:
-	//void InitializeTimer();
-	//void InitializeCountdown();
 	void FillUpcomingMatchButton();
 	QString SecondsToString(int seconds) const;
-	//std::unique_ptr<QTimer> m_upTimer{ nullptr };
-	//Countdown m_Countdown;
+	void StartTimer();
 	Organization m_RootOrganization;
 	Tournament m_RootTournament;
 	Match m_Match;
@@ -36,10 +32,6 @@ private:
 	HomePage* m_pHomePage{ nullptr };
 private slots:
 	void on_UpcomingMatchButton_clicked();
-// public slots:
-// 	void MatchStarted();
-// signals:
-	//void UpcomingMatchStarted(const Tournament& t, const Match& m);
 };
 
 #endif

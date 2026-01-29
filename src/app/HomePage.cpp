@@ -18,11 +18,7 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
-	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
-		std::for_each(m_vecpUpcomingMatchCards.begin(), m_vecpUpcomingMatchCards.end(), [](UpcomingMatch* pUpcomingMatchCard) {
-			pUpcomingMatchCard->PrintCountdown();
-			});
-		});
+	StartTimer();
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
 }
 
@@ -32,6 +28,15 @@ void HomePage::UpcomingMatchStarted()
 {
 	UpdateUpcomingMatches();
 	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
+}
+void HomePage::StartTimer()
+{
+	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
+		std::for_each(m_vecpUpcomingMatchCards.begin(), m_vecpUpcomingMatchCards.end(), [](UpcomingMatch* pUpcomingMatchCard) {
+			pUpcomingMatchCard->PrintCountdown();
+			});
+		});
+	m_upCountdownTimer->Start();
 }
 void HomePage::UpdateUpcomingMatches()
 {
@@ -44,15 +49,7 @@ void HomePage::UpdateUpcomingMatches()
 	for (const auto& m : m_vecUpcomingMatch)
 	{
 		m_vecpUpcomingMatchCards.push_back(new UpcomingMatch(m, this));
-		InsertUpcomingMatch(m_vecpUpcomingMatchCards.back());
-	}
-	if(!m_vecpUpcomingMatchCards.empty())
-	{
-		m_upCountdownTimer->Start();
-	}
-	else
-	{
-		m_upCountdownTimer->Stop();
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, m_vecpUpcomingMatchCards.back());
 	}
 	FillWithNoUpcomingMatches();
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
@@ -80,11 +77,6 @@ std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 			});
 	}
 	return vecStartedUpcomingMatches;
-}
-void HomePage::InsertUpcomingMatch(UpcomingMatch* pUpcomingMatch)
-{
-	auto pInsertedUpcomingMatch = utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pUpcomingMatch);
-	//QObject::connect(&*reinterpret_cast<UpcomingMatch*>(pInsertedUpcomingMatch), &UpcomingMatch::UpcomingMatchStarted, this, &HomePage::UpcomingMatchStarted);
 }
 void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
 {

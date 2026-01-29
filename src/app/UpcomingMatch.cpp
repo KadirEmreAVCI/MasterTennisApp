@@ -16,38 +16,21 @@ UpcomingMatch::UpcomingMatch(const Match& m, QWidget* parent) : m_Match{m}, m_pH
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
 	m_RootTournament = DatabaseController::instance().FindRootTournament(m_Match);
 	m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
-	//QObject::connect(&m_Countdown, &Countdown::TimeIsUp, this, &UpcomingMatch::MatchStarted);
-	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
 	m_MatchStartTime = QDateTime{m_Match.GetDate(), m_Match.GetTime()};
-	m_upTimer = std::make_unique<Timer>(TimerMode::OneShot, std::chrono::seconds(QDateTime::currentDateTime().secsTo(m_MatchStartTime) + 1), [this]() {
-		if(m_pHomePage)
-		{
-			QMetaObject::invokeMethod(m_pHomePage, [this]() {m_pHomePage->UpcomingMatchStarted();}, Qt::QueuedConnection);	// Use QueuedConnection to avoid cross-thread issues
-		}
-		else
-		{
-			std::cout << "UpcomingMatch::m_upTimer lambda: m_pHomePage is nullptr!";
-		}
-	});
-	m_upTimer->Start();
-	// InitializeTimer();
-	// InitializeCountdown();
+	if(m_pHomePage)
+	{
+		StartTimer();
+	}
+	else
+	{
+		std::cout << "UpcomingMatch::UpcomingMatch m_pHomePage is nullptr!";
+	}
+	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
 	FillUpcomingMatchButton();
 	utility::InitLabelWithPicture(label_OrgImage, m_RootOrganization.GetFullPicturePath(), 1.90f);
 }
 UpcomingMatch::~UpcomingMatch()
 {}
-// void UpcomingMatch::InitializeTimer()
-// {
-// 	m_upTimer = std::make_unique<QTimer>(this);
-// 	connect(m_upTimer.get(), SIGNAL(timeout()), this, SLOT(PrintCountdown()));
-// 	const unsigned int uiTimeoutDurMs = 1000;
-// 	m_upTimer->start(uiTimeoutDurMs);
-// }
-// void UpcomingMatch::InitializeCountdown()
-// {
-// 	m_Countdown.setMatchDate(m_Match.GetDate(), m_Match.GetTime());
-// }
 void UpcomingMatch::FillUpcomingMatchButton()
 {
 	UpcomingMatchButton->setFixedSize(common::g_uiUpcomingMatchWidth - 200, common::g_uiUpcomingMatchHeight - 20);
@@ -100,14 +83,17 @@ QString UpcomingMatch::SecondsToString(int seconds) const
 	QTime t = QTime(0, 0).addSecs(seconds % SEC_PER_DAY);
 	return QString("%1 Days %2:%3:%4").arg(days, 3).arg(t.hour(), 2, 10, QChar('0')).arg(t.minute(), 2, 10, QChar('0')).arg(t.second(), 2, 10, QChar('0'));
 }
+void UpcomingMatch::StartTimer()
+{
+	m_upTimer = std::make_unique<Timer>(TimerMode::OneShot, std::chrono::seconds(QDateTime::currentDateTime().secsTo(m_MatchStartTime) + 1), [this]() {
+		QMetaObject::invokeMethod(m_pHomePage, [this]() {m_pHomePage->UpcomingMatchStarted();}, Qt::QueuedConnection);	// Use QueuedConnection to avoid cross-thread issues
+	});
+	m_upTimer->Start();
+}
 void UpcomingMatch::PrintCountdown()
 {
 	label_Countdown->setText(SecondsToString(QDateTime::currentDateTime().secsTo(m_MatchStartTime)));
 }
-// void UpcomingMatch::MatchStarted()
-// {
-// 	emit UpcomingMatchStarted(m_RootTournament, m_Match);
-// }
 void UpcomingMatch::on_UpcomingMatchButton_clicked()
 {
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(m_RootTournament.GetName()));

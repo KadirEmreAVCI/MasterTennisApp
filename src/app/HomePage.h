@@ -22,10 +22,10 @@ public:
 	~HomePage();
 	void UpcomingMatchStarted();
 private:
+	void StartTimer();
 	void UpdateUpcomingMatches();
 	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;
-	void InsertUpcomingMatch(UpcomingMatch*);
 	void InsertNoUpcomingMatch(NoUpcomingMatch*);
 	void FillWithNoUpcomingMatches();
 	void UpdateTopParticipations();
