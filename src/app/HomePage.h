@@ -22,7 +22,7 @@ public:
 	~HomePage();
 	void UpcomingMatchStarted();
 private:
-	void UpdateCountdowns();
+	void DecrementCountdowns();
 	void UpdateUpcomingMatches();
 	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;

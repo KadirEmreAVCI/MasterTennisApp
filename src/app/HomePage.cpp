@@ -19,15 +19,18 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
+	UpcomingMatch::SetHomePage(this);
 	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
-		QMetaObject::invokeMethod(this, [this]() { UpdateCountdowns(); }, Qt::QueuedConnection);
+		QMetaObject::invokeMethod(this, [this]() { DecrementCountdowns(); }, Qt::QueuedConnection);
 	});
 	m_upCountdownTimer->Start();
 }
-
 HomePage::~HomePage()
 {
-	m_upCountdownTimer->Stop();
+	if(m_upCountdownTimer)
+	{
+		m_upCountdownTimer->Stop();
+	}
 }
 void HomePage::UpcomingMatchStarted()
 {
@@ -36,13 +39,13 @@ void HomePage::UpcomingMatchStarted()
 		utility::DeleteItemFromListWidget(ui.listWidget_UpcomingMatches, 0);
 	}
 }
-void HomePage::UpdateCountdowns()
+void HomePage::DecrementCountdowns()
 {
     for(int idx = 0; idx < ui.listWidget_UpcomingMatches->count(); ++idx)
     {
         if(auto* pUpcomingMatchCard = qobject_cast<UpcomingMatch*>(ui.listWidget_UpcomingMatches->itemWidget(ui.listWidget_UpcomingMatches->item(idx))))
         {
-            pUpcomingMatchCard->PrintCountdown();
+            pUpcomingMatchCard->DecrementCountdown();
         }
     }
 }
@@ -59,13 +62,13 @@ void HomePage::UpdateUpcomingMatches()
 	}
 	if(setUpcomingMatches.empty())
 	{
-		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(this));
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch());
 	}
 	else
 	{
 		for(const auto& m : setUpcomingMatches)
 		{
-			utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(m, this));
+			utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(m));
 		}
 	}
 	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);

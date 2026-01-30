@@ -15,21 +15,22 @@ class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass{
 	Q_OBJECT
 
 public:
-	UpcomingMatch(QWidget* parent = nullptr);
-	UpcomingMatch(const Match& m, QWidget* parent = nullptr);
+	UpcomingMatch();
+	UpcomingMatch(const Match& m);
 	~UpcomingMatch();
-	void PrintCountdown();
+	void DecrementCountdown();
+	static void SetHomePage(HomePage* pHomePage);
 private:
+	void ConfigureForMatch(const Match& m);
 	void FillUpcomingMatchButton();
-	QString SecondsToString(int seconds) const;
+	QString SecondsToString(int iSeconds) const;
 	Organization m_RootOrganization;
 	Tournament m_RootTournament;
 	Match m_Match;
-	QDateTime m_MatchStartTime;
 	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
 	const QString m_sFormat = "yyyy-MM-dd HH:mm:ss";
 	std::unique_ptr<Timer> m_upTimer;
-	HomePage* m_pHomePage{ nullptr };
+	static HomePage* ms_pHomePage;
 private slots:
 	void on_UpcomingMatchButton_clicked();
 };
