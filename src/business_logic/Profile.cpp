@@ -41,7 +41,10 @@ bool Profile::InsertToDB()const
 }
 bool Profile::EditInDB()const
 {
-	DeletePreviousPicture();
+	if(IsPictureChanged())
+	{
+		DeletePreviousPicture();
+	}
 	QMap<QString, QVariant> mapColumnValues;
 	mapColumnValues["FullName"] = QString::fromStdString(m_sFullName);
 	mapColumnValues["Gender"] = ((m_Gender == Gender::Male) ? "Male" : "Female");

@@ -21,23 +21,27 @@ void PictureWidget::InitWidget()
 void PictureWidget::ClearWidget()
 {
     lineEdit_PictureFileName->setText("");
-    m_sSourcePictureFullPath = "";
 }
-void PictureWidget::FillWidget(DBItemWithPicture* pDBItemWithPicture)
+void PictureWidget::FillWidget(const DBItemWithPicture* pDBItemWithPicture)
 {
-    lineEdit_PictureFileName->setText(QString::fromStdString(pDBItemWithPicture->GetPictureFileName()));
+    m_bIsPictureChanged = false;
+	lineEdit_PictureFileName->setText(QString::fromStdString(pDBItemWithPicture->GetFullPicturePath()));
 }
 QString PictureWidget::GetSourcePictureFullPath()const
 {
-    return m_sSourcePictureFullPath;
+    return lineEdit_PictureFileName->text();
+}
+bool PictureWidget::IsPictureChanged() const
+{
+	return m_bIsPictureChanged;
 }
 void PictureWidget::on_BrowseButton_clicked()
 {
 	const QString sSourcePictureFullPath = QFileDialog::getOpenFileName(this, "Select the image.", "Images(.png, .jpg, .jpeg)");
 	if (QFileInfo(sSourcePictureFullPath).fileName() != "")
 	{
-		m_sSourcePictureFullPath = sSourcePictureFullPath;
-		lineEdit_PictureFileName->setText(QFileInfo(m_sSourcePictureFullPath).fileName());
+		lineEdit_PictureFileName->setText(QFileInfo(sSourcePictureFullPath).filePath());
+		m_bIsPictureChanged = true;
 	}
 }
 void PictureWidget::on_DefaultPictureButton_clicked()
@@ -48,6 +52,7 @@ void PictureWidget::on_DefaultPictureButton_clicked()
 		if (reply == QMessageBox::Yes)
 		{
 			ClearWidget();
+			m_bIsPictureChanged = true;
 		}
 	}
 }

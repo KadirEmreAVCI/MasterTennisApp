@@ -59,7 +59,7 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 			QFileInfo(sSourcePictureFullPath).fileName().toStdString(),
 			ui.radioButton_Male->isChecked() ? Gender::Male : Gender::Female
 		};
-		if (sSourcePictureFullPath != "")
+		if (ui.ProfilePicWidget->IsPictureChanged() && sSourcePictureFullPath != "")
 		{
 			p.SaveImage(sSourcePictureFullPath.toStdString());
 		}

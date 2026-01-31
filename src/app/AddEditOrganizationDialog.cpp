@@ -53,7 +53,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 			QFileInfo(sSourcePictureFullPath).fileName().toStdString(),
 			m_vecCategories
 		};
-		if (sSourcePictureFullPath != "")
+		if (ui.OrgPicWidget->IsPictureChanged() && sSourcePictureFullPath != "")
 		{
 			org.SaveImage(sSourcePictureFullPath.toStdString());
 		}

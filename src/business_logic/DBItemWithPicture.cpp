@@ -41,6 +41,10 @@ void DBItemWithPicture::DeletePreviousPicture()const
 		QFile::remove(sPreviousPictureFullPath);
 	}
 }
+bool DBItemWithPicture::IsPictureChanged() const
+{
+	return m_sPictureFileName != m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));
+}
 bool DBItemWithPicture::SaveImage(const std::string& sSourcePictureFullPath)const
 {
 	QString sPictureFileName = QFileInfo(QString::fromStdString(sSourcePictureFullPath)).fileName();
