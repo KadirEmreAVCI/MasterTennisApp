@@ -8,9 +8,9 @@
 namespace common{
 
 // Upcoming Match Parameters
-constexpr unsigned int g_uiUpcomingMatchWidth = 500;
-constexpr unsigned int g_uiUpcomingMatchHeight = 120;
-constexpr unsigned int g_uiMaxUpcomingMatch = 2;
+constexpr unsigned int g_uiUpcomingMatchCardWidth = 500;
+constexpr unsigned int g_uiUpcomingMatchCardHeight = 120;
+constexpr unsigned int g_uiMaxUpcomingMatchCards = 2;
 
 // PNG Files
 constexpr const char* g_cpDeleteButtonPNG = ":images/DeleteButton.png";

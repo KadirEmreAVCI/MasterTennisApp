@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UpcomingMatchClass</class>
- <widget class="QWidget" name="UpcomingMatchClass">
+ <class>UpcomingMatchCardClass</class>
+ <widget class="QWidget" name="UpcomingMatchCardClass">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>UpcomingMatch</string>
+   <string>UpcomingMatchCard</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QPushButton" name="UpcomingMatchButton">
+      <widget class="QPushButton" name="CardButton">
        <property name="enabled">
         <bool>true</bool>
        </property>

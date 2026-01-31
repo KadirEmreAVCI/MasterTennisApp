@@ -1,28 +1,28 @@
-#ifndef UPCOMINGMATCH_H
-#define UPCOMINGMATCH_H
+#ifndef UPCOMINGMATCHCARD_H
+#define UPCOMINGMATCHCARD_H
 
 #include <string>
 #include <memory>
 #include <QWidget>
 #include <QDateTime>
-#include "ui_UpcomingMatch.h"
+#include "ui_UpcomingMatchCard.h"
 #include "Organization.h"
 
 class Timer;
 class MatchesDialog;
 class HomePage;
-class UpcomingMatch : public QWidget, public Ui::UpcomingMatchClass{
+class UpcomingMatchCard : public QWidget, public Ui::UpcomingMatchCardClass{
 	Q_OBJECT
 
 public:
-	UpcomingMatch();
-	UpcomingMatch(const Match& m);
-	~UpcomingMatch();
+	UpcomingMatchCard();
+	UpcomingMatchCard(const Match& m);
+	~UpcomingMatchCard();
 	void DecrementCountdown();
 	static void SetHomePage(HomePage* pHomePage);
 private:
 	void ConfigureForMatch(const Match& m);
-	void FillUpcomingMatchButton();
+	void FillCardButton();
 	QString SecondsToString(int iSeconds) const;
 	Organization m_RootOrganization;
 	Tournament m_RootTournament;
@@ -32,7 +32,7 @@ private:
 	std::unique_ptr<Timer> m_upTimer;
 	static HomePage* ms_pHomePage;
 private slots:
-	void on_UpcomingMatchButton_clicked();
+	void on_CardButton_clicked();
 };
 
-#endif
+#endif // UPCOMINGMATCHCARD_H

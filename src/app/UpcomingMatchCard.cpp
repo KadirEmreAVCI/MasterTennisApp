@@ -3,40 +3,40 @@
 #include <QDateTime>
 #include "Common.h"
 #include "Organization.h"
-#include "UpcomingMatch.h"
+#include "UpcomingMatchCard.h"
 #include "MatchesDialog.h"
 #include "Utility.h"
 #include "DatabaseController.h"
 #include "Timer.h"
 #include "HomePage.h"
 
-HomePage* UpcomingMatch::ms_pHomePage{ nullptr };
-UpcomingMatch::UpcomingMatch()
+HomePage* UpcomingMatchCard::ms_pHomePage{ nullptr };
+UpcomingMatchCard::UpcomingMatchCard()
 {
 	setupUi(this);
-	setFixedSize(common::g_uiUpcomingMatchWidth, common::g_uiUpcomingMatchHeight);
-	UpcomingMatchButton->hide();
+	setFixedSize(common::g_uiUpcomingMatchCardWidth, common::g_uiUpcomingMatchCardHeight);
+	CardButton->hide();
 	label_Countdown->hide();
 	label_OrgImage->hide();
 }
-UpcomingMatch::UpcomingMatch(const Match& m) : UpcomingMatch()
+UpcomingMatchCard::UpcomingMatchCard(const Match& m) : UpcomingMatchCard()
 {
 	ConfigureForMatch(m);
 }
-UpcomingMatch::~UpcomingMatch()
+UpcomingMatchCard::~UpcomingMatchCard()
 {
 	if(m_upTimer)
 	{
 		m_upTimer->Stop();
 	}
 }
-void UpcomingMatch::ConfigureForMatch(const Match& m)
+void UpcomingMatchCard::ConfigureForMatch(const Match& m)
 {
 	m_Match = m;
     m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
     m_RootTournament = DatabaseController::instance().FindRootTournament(m_Match);
     m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
-    FillUpcomingMatchButton();
+    FillCardButton();
     utility::InitLabelWithPicture(label_OrgImage, m_RootOrganization.GetFullPicturePath(), 1.90f);
     if (ms_pHomePage)
     {
@@ -46,15 +46,15 @@ void UpcomingMatch::ConfigureForMatch(const Match& m)
             });
         m_upTimer->Start();
     }
-	UpcomingMatchButton->show();
+	CardButton->show();
 	label_Countdown->show();
 	label_OrgImage->show();
 }
-void UpcomingMatch::FillUpcomingMatchButton()
+void UpcomingMatchCard::FillCardButton()
 {
-	UpcomingMatchButton->setFixedSize(common::g_uiUpcomingMatchWidth - 200, common::g_uiUpcomingMatchHeight - 20);
+	CardButton->setFixedSize(common::g_uiUpcomingMatchCardWidth - 200, common::g_uiUpcomingMatchCardHeight - 20);
 
-	QWidget* container = new QWidget(UpcomingMatchButton);
+	QWidget* container = new QWidget(CardButton);
 	QVBoxLayout* layout = new QVBoxLayout(container);
 	layout->setContentsMargins(5, 5, 5, 5);
 
@@ -95,25 +95,25 @@ void UpcomingMatch::FillUpcomingMatchButton()
 	layout->addLayout(hLayout);
 	layout->addStretch();
 }
-QString UpcomingMatch::SecondsToString(int iSeconds) const
+QString UpcomingMatchCard::SecondsToString(int iSeconds) const
 {
 	constexpr int SEC_PER_DAY = 86400;
 	const int iDays = iSeconds / SEC_PER_DAY;
 	const QTime t = QTime(0, 0).addSecs(iSeconds % SEC_PER_DAY);
 	return QString("%1 Days %2:%3:%4").arg(iDays, 3).arg(t.hour(), 2, 10, QChar('0')).arg(t.minute(), 2, 10, QChar('0')).arg(t.second(), 2, 10, QChar('0'));
 }
-void UpcomingMatch::SetHomePage(HomePage* pHomePage)
+void UpcomingMatchCard::SetHomePage(HomePage* pHomePage)
 {
 	ms_pHomePage = pHomePage;
 }
-void UpcomingMatch::DecrementCountdown()
+void UpcomingMatchCard::DecrementCountdown()
 {
 	if(m_Match.IsUpcomingMatch())
 	{
 		label_Countdown->setText(SecondsToString(QDateTime::currentDateTime().secsTo(QDateTime{m_Match.GetDate(), m_Match.GetTime()})));
 	}
 }
-void UpcomingMatch::on_UpcomingMatchButton_clicked()
+void UpcomingMatchCard::on_CardButton_clicked()
 {
 	m_upMatchesDialog->setWindowTitle(QString::fromStdString(m_RootTournament.GetName()));
 	const auto& vecMatches = m_RootTournament.GetMatches();

@@ -3,7 +3,7 @@
 #include <set>
 #include <QMessageBox>
 #include "HomePage.h"
-#include "UpcomingMatch.h"
+#include "UpcomingMatchCard.h"
 #include "OrgParticipation.h"
 #include "StatController.h"
 #include "AppController.h"
@@ -19,7 +19,7 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
-	UpcomingMatch::SetHomePage(this);
+	UpcomingMatchCard::SetHomePage(this);
 	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
 		QMetaObject::invokeMethod(this, [this]() { DecrementCountdowns(); }, Qt::QueuedConnection);
 	});
@@ -34,45 +34,45 @@ HomePage::~HomePage()
 }
 void HomePage::UpcomingMatchStarted()
 {
-	if(ui.listWidget_UpcomingMatches->count() > 0)
+	if(ui.listWidget_UpcomingMatchCards->count() > 0)
 	{
-		utility::DeleteItemFromListWidget(ui.listWidget_UpcomingMatches, 0);
+		utility::DeleteItemFromListWidget(ui.listWidget_UpcomingMatchCards, 0);
 	}
 }
 void HomePage::DecrementCountdowns()
 {
-    for(int idx = 0; idx < ui.listWidget_UpcomingMatches->count(); ++idx)
+    for(int idx = 0; idx < ui.listWidget_UpcomingMatchCards->count(); ++idx)
     {
-        if(auto* pUpcomingMatchCard = qobject_cast<UpcomingMatch*>(ui.listWidget_UpcomingMatches->itemWidget(ui.listWidget_UpcomingMatches->item(idx))))
+        if(auto* pUpcomingMatchCard = qobject_cast<UpcomingMatchCard*>(ui.listWidget_UpcomingMatchCards->itemWidget(ui.listWidget_UpcomingMatchCards->item(idx))))
         {
             pUpcomingMatchCard->DecrementCountdown();
         }
     }
 }
-void HomePage::UpdateUpcomingMatches()
+void HomePage::UpdateUpcomingMatchCards()
 {
-	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
-	std::multiset<Match, decltype([](const Match& m1, const Match& m2) {return m1.IsEarlier(m2);})> setUpcomingMatches;
+	utility::ClearListWidget(ui.listWidget_UpcomingMatchCards);
+	std::multiset<Match, decltype([](const Match& m1, const Match& m2) {return m1.IsEarlier(m2);})> setUpcomingMatchCards;
 	for(const auto& t : m_vecTournament)
 	{
 		const auto vecMatches = t.GetMatches();
-		std::copy_if(vecMatches.cbegin(), vecMatches.cend(), std::inserter(setUpcomingMatches, setUpcomingMatches.end()), [](const Match& m) {
+		std::copy_if(vecMatches.cbegin(), vecMatches.cend(), std::inserter(setUpcomingMatchCards, setUpcomingMatchCards.end()), [](const Match& m) {
 			return m.IsUpcomingMatch();
 			});
 	}
-	if(setUpcomingMatches.empty())
+	if(setUpcomingMatchCards.empty())
 	{
-		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch());
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard());
 	}
 	else
 	{
-		for(const auto& m : setUpcomingMatches)
+		for(const auto& m : setUpcomingMatchCards)
 		{
-			utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, new UpcomingMatch(m));
+			utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard(m));
 		}
 	}
-	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
-	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
+	ui.listWidget_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchCardHeight * common::g_uiMaxUpcomingMatchCards + 10);
+	ui.groupBox_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->width() + 20, ui.listWidget_UpcomingMatchCards->height() + 50);
 }	
 std::vector<Match> HomePage::FindStartedUpcomingMatches()const
 {
@@ -127,7 +127,7 @@ void HomePage::UserLoggedIn(const Profile& p)
 void HomePage::UserLoggedOut()
 {
 	utility::ClearListWidget(ui.listWidget_TopParticipations);
-	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
+	utility::ClearListWidget(ui.listWidget_UpcomingMatchCards);
 }
 void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
 {	
@@ -142,6 +142,6 @@ void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vec
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
 	m_vecTournament = p.GetTournaments();
-	UpdateUpcomingMatches();
+	UpdateUpcomingMatchCards();
 	UpdateTopParticipations();
 }

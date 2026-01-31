@@ -9,11 +9,8 @@
 #include "ui_HomePage.h"
 #include "Profile.h"
 
-class UpcomingMatch;
-class NoUpcomingMatch;
 class OrgParticipation;
 class Timer;
-
 class HomePage : public QWidget{
 	Q_OBJECT
 
@@ -23,7 +20,7 @@ public:
 	void UpcomingMatchStarted();
 private:
 	void DecrementCountdowns();
-	void UpdateUpcomingMatches();
+	void UpdateUpcomingMatchCards();
 	void FindUpcomingMatches();
 	std::vector<Match> FindStartedUpcomingMatches()const;
 	void UpdateTopParticipations();
