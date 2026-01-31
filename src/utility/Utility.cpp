@@ -122,7 +122,7 @@ QWidget* utility::InsertItem2ListWidget(QListWidget* pListWidget, QWidget* pWidg
 void utility::DeleteItemFromListWidget(QListWidget* pListWidget, unsigned uiItemIdx)
 {
     if (pListWidget->count() > uiItemIdx)
-	{
+    {
 		QListWidgetItem* pItem = pListWidget->item(uiItemIdx);
 		pListWidget->removeItemWidget(pItem);
 		delete pItem;

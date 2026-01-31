@@ -37,9 +37,6 @@ void MatchesDialog::DisplayMatches(const Tournament& rootTournament)
 {
 	m_RootTournament = rootTournament;
 	m_vecMatch = m_RootTournament.GetMatches();
-	std::sort(m_vecMatch.begin(), m_vecMatch.end(), [](const auto& m1, const auto& m2) {
-		return !m1.IsEarlier(m2);
-		});
 	if (m_RootTournament.IsLocked())
 	{
 		ui.NewMatchButton->setEnabled(false);

@@ -29,7 +29,7 @@ Gender Profile::GetGender()const
 }
 std::vector<Tournament> Profile::GetTournaments()const
 {
-	return m_vecTournament;
+	return std::vector<Tournament>(m_setTournament.begin(), m_setTournament.end());
 }
 bool Profile::InsertToDB()const
 {
@@ -58,7 +58,7 @@ void Profile::LoadFromDB(unsigned ID)
 }
 bool Profile::DeleteFromDB()const
 {
-	for(const auto& t : m_vecTournament)
+	for(const auto& t : m_setTournament)
 	{
 		if (!t.DeleteFromDB())
 		{
@@ -69,8 +69,9 @@ bool Profile::DeleteFromDB()const
 }
 void Profile::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
-	m_vecTournament = vecTournament;
-	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
-		return t1.IsEarlier(t2);
-		});
+	m_setTournament.clear();
+	for(const auto& t : vecTournament)
+	{
+		m_setTournament.insert(t);
+	}
 }

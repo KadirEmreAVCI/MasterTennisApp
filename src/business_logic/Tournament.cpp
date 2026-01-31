@@ -143,24 +143,32 @@ std::vector<std::string> Tournament::GetPossibleStages()const
 }
 std::vector<Match> Tournament::GetMatches()const
 {
-	return m_vecMatch;
+	return std::vector<Match>(m_setMatch.begin(), m_setMatch.end());
 }
 void Tournament::SetMatches(const std::vector<Match>& vecMatch)
 {
-	m_vecMatch = vecMatch;
-	std::sort(m_vecMatch.begin(), m_vecMatch.end(), [](const Match& m1, const Match& m2) {
-		return m1.IsEarlier(m2);
-		});
+	m_setMatch.clear();
+	for(const auto& m : vecMatch)
+	{
+		m_setMatch.insert(m);
+	}
 }
 bool Tournament::IsGroupStageExist()const
 {
-	return std::any_of(m_vecMatch.cbegin(), m_vecMatch.cend(), [](const auto& m) {
+	return std::any_of(m_setMatch.cbegin(), m_setMatch.cend(), [](const auto& m) {
 		return m.GetStage() == "Group Stage";
 		});
 }
 std::optional<Match> Tournament::GetLastMatch()const
 {
-	return !m_vecMatch.empty() ? std::optional<Match>(m_vecMatch.back()) : std::nullopt;
+	if(m_setMatch.empty())
+	{
+		return std::nullopt;
+	}
+	else
+	{
+		return *std::prev(m_setMatch.end());
+	}
 }
 bool Tournament::IsMatchValidForTournament(const Match& m)const
 {
@@ -169,22 +177,22 @@ bool Tournament::IsMatchValidForTournament(const Match& m)const
 bool Tournament::IsValid()const
 {
 	bool blAllMatchesAreValid = true;
-	if (!m_vecMatch.empty())
+	if (!m_setMatch.empty())
 	{
-		blAllMatchesAreValid = std::all_of(m_vecMatch.cbegin(), m_vecMatch.cend(), [this](const Match& m){
+		blAllMatchesAreValid = std::all_of(m_setMatch.cbegin(), m_setMatch.cend(), [this](const Match& m){
 			return IsMatchValidForTournament(m);
 			});
 	}
 	const bool blTournamentTypeCompatible = ((m_sType.find("Double") != std::string::npos) == IsDoubleTournament());
 	return blAllMatchesAreValid && blTournamentTypeCompatible;
 }
-bool Tournament::IsEarlier(const Tournament& other)const
+bool Tournament::operator<(const Tournament& other)const
 {
-	if (!m_vecMatch.empty() && !other.m_vecMatch.empty())
+	if(!m_setMatch.empty() && !other.m_setMatch.empty())
 	{
-		return m_vecMatch.front().IsEarlier(other.m_vecMatch.front());
+		return *m_setMatch.begin() < *other.m_setMatch.begin();
 	}
-	else if (!other.m_vecMatch.empty())
+	else if(!other.m_setMatch.empty())
 	{
 		return false;
 	}
@@ -192,6 +200,18 @@ bool Tournament::IsEarlier(const Tournament& other)const
 	{
 		return true;
 	}
+}
+bool Tournament::operator>(const Tournament& other)const
+{
+	return other < *this;
+}
+bool Tournament::operator<=(const Tournament& other)const
+{
+	return !(*this > other);
+}
+bool Tournament::operator>=(const Tournament& other)const
+{
+	return !(*this < other);
 }
 bool Tournament::IsMatchStageValid(const Match& m)const
 {
@@ -208,7 +228,7 @@ bool Tournament::IsMatchExceedingMaxSet(const Match& m)const
 }
 bool Tournament::DeleteFromDB()const
 {
-	for(const auto& m : m_vecMatch)
+	for(const auto& m : m_setMatch)
 	{
 		if (!m.DeleteFromDB())
 		{

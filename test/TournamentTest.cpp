@@ -83,11 +83,11 @@ INSTANTIATE_TEST_SUITE_P(
     DetectValidMatchStages,
     ValidMatchStageTest,
     ::testing::Values(
-        std::make_tuple(0, std::vector<bool>{true, true, false, false}),
-        std::make_tuple(1, std::vector<bool>{true, true, true, true, true, false }),
-        std::make_tuple(2, std::vector<bool>{true, true, true, true, true }),
-        std::make_tuple(3, std::vector<bool>{false, false, false, false, true, true, true, true }),
-        std::make_tuple(4, std::vector<bool>{true, true, true, false, false, false, true}),
+        std::make_tuple(0, std::vector<bool>{false, false, true, true}),
+        std::make_tuple(1, std::vector<bool>{false, true, true, true, true, true}),
+        std::make_tuple(2, std::vector<bool>{true, true, true, true, true}),
+        std::make_tuple(3, std::vector<bool>{true, true, true, true, false, false, false, false}),
+        std::make_tuple(4, std::vector<bool>{true, false, false, false, true, true, true}),
         std::make_tuple(5, std::vector<bool>{false, false})
     )
 );
@@ -105,11 +105,11 @@ INSTANTIATE_TEST_SUITE_P(
     DetectMatchesExceedingMaxSet,
     MatchExceedingMaxSetTest,
     ::testing::Values(
-        std::make_tuple(0, std::vector<bool>{true, false, false, false}),
-        std::make_tuple(1, std::vector<bool>{true, false, false, false, false, false }),
+        std::make_tuple(0, std::vector<bool>{false, false, false, true}),
+        std::make_tuple(1, std::vector<bool>{false, false, false, false, false, true}),
         std::make_tuple(2, std::vector<bool>{false, false, false, false, false}),
-        std::make_tuple(3, std::vector<bool>{false, false, false, false, false, false, false, false }),
-        std::make_tuple(4, std::vector<bool>{true, false, false, false, false, false, false}),
+        std::make_tuple(3, std::vector<bool>{false, false, false, false, false, false, false, false}),
+        std::make_tuple(4, std::vector<bool>{false, false, false, false, false, false, true}),
         std::make_tuple(5, std::vector<bool>{true, true})
     )
 );
@@ -127,20 +127,17 @@ INSTANTIATE_TEST_SUITE_P(
     DetectValidMatchesForTournament,
     ValidMatchForTournamentTest,
     ::testing::Values(
-        std::make_tuple(0, std::vector<bool>{false, true, false, false}),
-        std::make_tuple(1, std::vector<bool>{false, true, true, true, true, false }),
+        std::make_tuple(0, std::vector<bool>{false, false, true, false}),
+        std::make_tuple(1, std::vector<bool>{false, true, true, true, true, false}),
         std::make_tuple(2, std::vector<bool>{true, true, true, true, true}),
-        std::make_tuple(3, std::vector<bool>{false, false, false, false, true, true, true, true }),
-        std::make_tuple(4, std::vector<bool>{false, true, true, false, false, false, true}),
+        std::make_tuple(3, std::vector<bool>{true, true, true, true, false, false, false, false}),
+        std::make_tuple(4, std::vector<bool>{true, false, false, false, true, true, false}),
         std::make_tuple(5, std::vector<bool>{false, false})
     )
 );
-
 TEST_F(TournamentTest, SortTournamentsByStartTime) 
 {
-	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2){
-		return t1.IsEarlier(t2);
-		});
+	std::sort(m_vecTournament.begin(), m_vecTournament.end());
 	const std::vector vecExpected{0, 1, 2, 4, 3, 5};
 	for (std::size_t idx = 0; idx < m_vecTournament.size(); ++idx)
 	{

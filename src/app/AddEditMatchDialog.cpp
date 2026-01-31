@@ -217,7 +217,6 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		}
 		else
 		{
-			close();
 			switch (m_DialogMode)
 			{
 			case DialogMode::eAddDialog:
@@ -249,6 +248,7 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 			default:
 				std::cerr << "AddEditMatchDialog::on_SaveButton_clicked Unknown DialogMode!\n";
 			}
+			close();
 		}
 	}
 	else
