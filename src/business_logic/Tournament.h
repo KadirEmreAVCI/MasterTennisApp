@@ -46,7 +46,7 @@ public:
 	std::optional<Match> GetLastMatch()const;
 	bool IsMatchValidForTournament(const Match&)const;
 	bool IsValid()const;
-	bool IsEarlier(const Tournament& other)const;
+	bool operator<(const Tournament& other)const;
 	friend bool operator==(const Tournament& lhs, const Tournament& rhs)
 	{
 		return	lhs.m_uiID == rhs.m_uiID &&

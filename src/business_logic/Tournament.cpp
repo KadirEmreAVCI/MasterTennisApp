@@ -178,13 +178,13 @@ bool Tournament::IsValid()const
 	const bool blTournamentTypeCompatible = ((m_sType.find("Double") != std::string::npos) == IsDoubleTournament());
 	return blAllMatchesAreValid && blTournamentTypeCompatible;
 }
-bool Tournament::IsEarlier(const Tournament& other)const
+bool Tournament::operator<(const Tournament& other)const
 {
-	if (!m_vecMatch.empty() && !other.m_vecMatch.empty())
+	if(!m_vecMatch.empty() && !other.m_vecMatch.empty())
 	{
-		return m_vecMatch.front().IsEarlier(other.m_vecMatch.front());
+		return m_vecMatch.front() < other.m_vecMatch.front();
 	}
-	else if (!other.m_vecMatch.empty())
+	else if(!other.m_vecMatch.empty())
 	{
 		return false;
 	}

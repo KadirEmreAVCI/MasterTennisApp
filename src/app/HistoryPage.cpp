@@ -186,9 +186,7 @@ void HistoryPage::UpdateActiveProfileData(const Profile& p)
 	m_vecTournament = p.GetTournaments();
 	if (m_vecTournament.size() > 1)
 	{
-		std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const auto& t1, const auto& t2) {
-			return !t1.IsEarlier(t2);
-			});
+		std::sort(m_vecTournament.begin(), m_vecTournament.end());
 	}
 	on_ClearButton_clicked();
 }

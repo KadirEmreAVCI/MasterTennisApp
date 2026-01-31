@@ -5,7 +5,6 @@
 #include "HomePage.h"
 #include "UpcomingMatchCard.h"
 #include "OrgParticipation.h"
-#include "StatController.h"
 #include "AppController.h"
 #include "Common.h"
 #include "Utility.h"
@@ -52,7 +51,7 @@ void HomePage::DecrementCountdowns()
 void HomePage::UpdateUpcomingMatchCards()
 {
 	utility::ClearListWidget(ui.listWidget_UpcomingMatchCards);
-	std::multiset<Match, decltype([](const Match& m1, const Match& m2) {return m1.IsEarlier(m2);})> setUpcomingMatchCards;
+	std::set<Match> setUpcomingMatchCards;
 	for(const auto& t : m_vecTournament)
 	{
 		const auto vecMatches = t.GetMatches();

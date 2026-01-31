@@ -70,7 +70,5 @@ bool Profile::DeleteFromDB()const
 void Profile::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
 	m_vecTournament = vecTournament;
-	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
-		return t1.IsEarlier(t2);
-		});
+	std::sort(m_vecTournament.begin(), m_vecTournament.end());
 }

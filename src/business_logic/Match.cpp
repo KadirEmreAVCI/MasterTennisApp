@@ -144,6 +144,18 @@ bool Match::IsTiebreakPlayed()const
 	const Tournament rRootTournament = DatabaseController::instance().FindRootTournament(*this);
 	return rRootTournament.GetSetsBestOf() != 1 && rRootTournament.GetSetsBestOf() == GetSets().size();
 }
+bool Match::operator<(const Match& other)const
+{
+	if(IsEarlier(other))
+	{
+		return true;
+	}
+	if(other.IsEarlier(*this))
+	{
+		return false;
+	}
+    return GetID() < other.GetID();
+}
 bool Match::InsertToDB()const
 {
 	std::string sDBValues{ "'" + std::to_string(GetTournamentID()) +
