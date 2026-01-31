@@ -156,6 +156,18 @@ bool Match::operator<(const Match& other)const
 	}
     return GetID() < other.GetID();
 }
+bool Match::operator>(const Match& other)const
+{
+	return other < *this;
+}
+bool Match::operator<=(const Match& other)const
+{
+	return !(*this > other);
+}
+bool Match::operator>=(const Match& other)const
+{
+	return !(*this < other);
+}
 bool Match::InsertToDB()const
 {
 	std::string sDBValues{ "'" + std::to_string(GetTournamentID()) +

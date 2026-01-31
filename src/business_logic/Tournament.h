@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 #include <optional>
 #include "DBItem.h"
 #include "Match.h"
@@ -47,6 +48,9 @@ public:
 	bool IsMatchValidForTournament(const Match&)const;
 	bool IsValid()const;
 	bool operator<(const Tournament& other)const;
+	bool operator>(const Tournament& other)const;
+	bool operator<=(const Tournament& other)const;
+	bool operator>=(const Tournament& other)const;
 	friend bool operator==(const Tournament& lhs, const Tournament& rhs)
 	{
 		return	lhs.m_uiID == rhs.m_uiID &&
@@ -94,7 +98,7 @@ private:
 	bool m_blIsLocked{ false };
 	bool m_bl3rdPlaceGameAvailable{};
 	unsigned m_uiBestOfSets{};
-	std::vector<Match> m_vecMatch;
+	std::set<Match, std::greater<Match>> m_setMatch;
 	static std::vector<std::string> ms_vecPossiblePlayoffStages;
 };
 

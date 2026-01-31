@@ -30,6 +30,9 @@ public:
 	bool IsEarlier(const Match& other)const;
 	bool IsTiebreakPlayed()const;
 	bool operator<(const Match& other)const;
+	bool operator>(const Match& other)const;
+	bool operator<=(const Match& other)const;
+	bool operator>=(const Match& other)const;
 	friend bool operator==(const Match& lhs, const Match& rhs)
 	{
 		return	lhs.m_uiID == rhs.m_uiID &&

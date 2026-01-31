@@ -29,12 +29,15 @@ std::vector<std::string> Organization::GetCategories()const
 }
 std::vector<Tournament> Organization::GetTournaments()const
 {
-	return m_vecTournament;
+	return std::vector<Tournament>(m_setTournament.begin(), m_setTournament.end());
 }
 void Organization::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
-	m_vecTournament = vecTournament;
-	std::sort(m_vecTournament.begin(), m_vecTournament.end());
+	m_setTournament.clear();
+	for(const auto& t : vecTournament)
+	{
+		m_setTournament.insert(t);
+	}
 }
 bool Organization::InsertToDB()const
 {
@@ -63,7 +66,7 @@ void Organization::LoadFromDB(unsigned ID)
 }
 bool Organization::DeleteFromDB()const
 {
-	for(const auto& t : m_vecTournament)
+	for(const auto& t : m_setTournament)
 	{
 		if (!t.DeleteFromDB())
 		{
