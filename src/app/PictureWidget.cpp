@@ -25,8 +25,7 @@ void PictureWidget::ClearWidget()
 }
 void PictureWidget::FillWidget(DBItemWithPicture* pDBItemWithPicture)
 {
-	m_pDBItemWithPicture = pDBItemWithPicture;
-    lineEdit_PictureFileName->setText(QString::fromStdString(m_pDBItemWithPicture->GetPictureFileName()));
+    lineEdit_PictureFileName->setText(QString::fromStdString(pDBItemWithPicture->GetPictureFileName()));
 }
 QString PictureWidget::GetSourcePictureFullPath()const
 {

@@ -254,18 +254,18 @@ bool Tournament::InsertToDB()const
 }
 bool Tournament::EditInDB()const
 {
-	QMap<QString, QVariant> columnValues;
-	columnValues["ProfileID"] = QString::fromStdString(std::to_string(m_uiProfileID));
-	columnValues["OrganizationID"] = QString::fromStdString(std::to_string(m_uiOrgID));
-	columnValues["Season"] = QString::fromStdString(m_sSeason);
-	columnValues["Category"] = QString::fromStdString(m_sCategory);
-	columnValues["Type"] = QString::fromStdString(m_sType);
-	columnValues["Teammate"] = QString::fromStdString(GetTeammate());
-	columnValues["Participant"] = QString::fromStdString(std::to_string(m_uiParticipant));
-	columnValues["Locked"] = QString::fromStdString(std::to_string(m_blIsLocked));
-	columnValues["ThirdPlaceGameAvailable"] = QString::fromStdString(std::to_string(m_bl3rdPlaceGameAvailable));
-	columnValues["SetsBestOf"] = QString::fromStdString(std::to_string(m_uiBestOfSets));
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["ProfileID"] = QString::fromStdString(std::to_string(m_uiProfileID));
+	mapColumnValues["OrganizationID"] = QString::fromStdString(std::to_string(m_uiOrgID));
+	mapColumnValues["Season"] = QString::fromStdString(m_sSeason);
+	mapColumnValues["Category"] = QString::fromStdString(m_sCategory);
+	mapColumnValues["Type"] = QString::fromStdString(m_sType);
+	mapColumnValues["Teammate"] = QString::fromStdString(GetTeammate());
+	mapColumnValues["Participant"] = QString::fromStdString(std::to_string(m_uiParticipant));
+	mapColumnValues["Locked"] = QString::fromStdString(std::to_string(m_blIsLocked));
+	mapColumnValues["ThirdPlaceGameAvailable"] = QString::fromStdString(std::to_string(m_bl3rdPlaceGameAvailable));
+	mapColumnValues["SetsBestOf"] = QString::fromStdString(std::to_string(m_uiBestOfSets));
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Tournament::LoadFromDB(unsigned ID)
 {

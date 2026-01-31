@@ -19,7 +19,6 @@ public:
     QString GetSourcePictureFullPath()const;
 private:
 	QString m_sSourcePictureFullPath{};
-    DBItemWithPicture* m_pDBItemWithPicture{nullptr};
 private slots:
 	void on_BrowseButton_clicked();
 	void on_DefaultPictureButton_clicked();
