@@ -9,11 +9,13 @@
 MatchesDialog::MatchesDialog(QWidget *parent)
 	: 
 	QDialog(parent),
+	m_upAddEditMatchDialog{std::make_unique<AddEditMatchDialog>(this)},
 	TableWidgetUser{{ " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" }}
 {
 	ui.setupUi(this);
-	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &MatchesDialog::ChangeInDB);
+	QObject::connect(m_upAddEditMatchDialog.get(), &AddEditMatchDialog::NewMatchAdded, this, &MatchesDialog::NewMatchAdded);
+	QObject::connect(m_upAddEditMatchDialog.get(), &AddEditMatchDialog::MatchEdited, this, &MatchesDialog::MatchEdited);
 	setFixedSize(750, 600);
 	InitTable(ui.tableWidget);
 }
@@ -117,6 +119,16 @@ void MatchesDialog::DeleteMatch()
 		AppController::instance().DeleteItem(SignalingMatch);
 		QMessageBox::information(this, "Information", "The match deleted successfully");
 	}
+}
+void MatchesDialog::NewMatchAdded()
+{
+	m_upAddEditMatchDialog->close();
+	QMessageBox::information(this, "Information", "New match is added successfully");
+}
+void MatchesDialog::MatchEdited()
+{
+	m_upAddEditMatchDialog->close();
+	QMessageBox::information(this, "Information", "The match is edited successfully");
 }
 void MatchesDialog::on_NewMatchButton_clicked()
 {

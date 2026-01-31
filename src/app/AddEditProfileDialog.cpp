@@ -52,7 +52,6 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
-		close();
 		const QString sSourcePictureFullPath = ui.ProfilePicWidget->GetSourcePictureFullPath(); 
 		Profile p{
 			m_EditedItem.GetID(),
@@ -69,7 +68,9 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 			case DialogMode::eAddDialog:
 			{
 				if (AppController::instance().AddNewItem(p))
-					QMessageBox::information(this, "Information", "New profile is added successfully");
+				{
+					emit NewProfileAdded();
+				}
 				break;
 			}
 			case DialogMode::eEditDialog:
@@ -81,7 +82,9 @@ void AddEditProfileDialog::on_SaveButton_clicked()
 				else
 				{
 					if (AppController::instance().EditItem(p))
-						QMessageBox::information(this, "Information", "The profile is edited successfully");
+					{
+						emit ProfileEdited();
+					}
 				}
 				break;
 			}
