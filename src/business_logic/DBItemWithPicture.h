@@ -19,6 +19,7 @@ protected:
     virtual bool DeleteFromDB()const override;
     void LoadPictureFileName();
     void DeletePreviousPicture()const;
+    bool IsPictureChanged() const;
 private:
     std::string m_sPictureFileName{};
     std::string m_sPictureRootPath{};

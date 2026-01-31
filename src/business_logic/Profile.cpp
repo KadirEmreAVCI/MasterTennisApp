@@ -41,12 +41,15 @@ bool Profile::InsertToDB()const
 }
 bool Profile::EditInDB()const
 {
-	DeletePreviousPicture();
-	QMap<QString, QVariant> columnValues;
-	columnValues["FullName"] = QString::fromStdString(m_sFullName);
-	columnValues["Gender"] = ((m_Gender == Gender::Male) ? "Male" : "Female");
-	columnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	if(IsPictureChanged())
+	{
+		DeletePreviousPicture();
+	}
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["FullName"] = QString::fromStdString(m_sFullName);
+	mapColumnValues["Gender"] = ((m_Gender == Gender::Male) ? "Male" : "Female");
+	mapColumnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Profile::LoadFromDB(unsigned ID)
 {

@@ -49,12 +49,15 @@ bool Organization::InsertToDB()const
 }
 bool Organization::EditInDB()const
 {
-	DeletePreviousPicture();
-	QMap<QString, QVariant> columnValues;
-	columnValues["Name"] = QString::fromStdString(m_sName);
-	columnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
-	columnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	if(IsPictureChanged())
+	{
+		DeletePreviousPicture();
+	}
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["Name"] = QString::fromStdString(m_sName);
+	mapColumnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
+	mapColumnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Organization::LoadFromDB(unsigned ID)
 {
