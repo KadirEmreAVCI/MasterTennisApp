@@ -24,12 +24,14 @@ private:
 	Ui::AddEditOrganizationDialogClass ui;
 	std::vector<QCheckBox*> m_vecCategoryCheckboxes;
 	std::vector<std::string> m_vecCategories;
-	
 private slots:
 	void on_SaveButton_clicked();
 	void on_CancelButton_clicked();
 	void on_ApplyButton_clicked();
 	void on_ClearButton_clicked();
+signals:
+	void NewOrganizationAdded();
+	void OrganizationEdited();
 };
 
 #endif

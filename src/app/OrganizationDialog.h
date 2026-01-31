@@ -33,6 +33,8 @@ private slots:
 public slots:
 	void EditOrganization();
 	void DeleteOrganization();
+	void NewOrganizationAdded();
+	void OrganizationEdited();
 };
 
 #endif
