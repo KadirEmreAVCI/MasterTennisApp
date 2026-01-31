@@ -21,11 +21,8 @@ public:
 private:
 	void DecrementCountdowns();
 	void UpdateUpcomingMatchCards();
-	void FindUpcomingMatches();
-	std::vector<Match> FindStartedUpcomingMatches()const;
 	void UpdateTopParticipations();
 	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
-	void InsertOrgParticipation(OrgParticipation* pOrgParticipation);
 	void UserLoggedIn(const Profile& p);
 	void UserLoggedOut();
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);

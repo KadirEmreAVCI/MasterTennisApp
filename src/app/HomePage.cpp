@@ -74,18 +74,6 @@ void HomePage::UpdateUpcomingMatchCards()
 	ui.listWidget_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchCardHeight * common::g_uiMaxUpcomingMatchCards + 10);
 	ui.groupBox_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->width() + 20, ui.listWidget_UpcomingMatchCards->height() + 50);
 }	
-std::vector<Match> HomePage::FindStartedUpcomingMatches()const
-{
-	std::vector<Match> vecStartedUpcomingMatches;
-	for (const auto& t : m_vecTournament)
-	{
-		const auto& vecMatch = t.GetMatches();
-		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecStartedUpcomingMatches), [](const Match& m) {
-			return m.GetOutcome() == common::Outcome::Tied && !m.IsUpcomingMatch();
-			});
-	}
-	return vecStartedUpcomingMatches;
-}
 void HomePage::UpdateTopParticipations()
 {
 	ui.listWidget_TopParticipations->clear();
@@ -95,7 +83,7 @@ void HomePage::UpdateTopParticipations()
 		const auto& t = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [prParticipation](const Tournament& t){
 			return prParticipation.first == t.GetOrgID();
 		});
-		InsertOrgParticipation(new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
+		utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
 	}
 	ui.listWidget_TopParticipations->setFixedHeight(280);
 }
@@ -111,15 +99,23 @@ std::vector<std::pair<unsigned, unsigned>> HomePage::FindTopParticipations()cons
 	});
 	return vecTopParticipations;
 }
-void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
-{
-	utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, pOrgParticipation);
-}
 void HomePage::UserLoggedIn(const Profile& p)
 {
 	m_uiProfileID = p.GetID();
 	UpdateActiveProfileData(p);
-	if (!FindStartedUpcomingMatches().empty())
+	bool blOngoingMatchExist = false;
+	for (const auto& t : m_vecTournament)
+	{
+		const auto& vecMatch = t.GetMatches();
+		blOngoingMatchExist = std::any_of(vecMatch.cbegin(), vecMatch.cend(), [](const Match& m) {
+			return m.GetOutcome() == common::Outcome::Tied && !m.IsUpcomingMatch();
+			});
+		if (blOngoingMatchExist)
+		{
+			break;
+		}
+	}
+	if (blOngoingMatchExist)
 	{
 		QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 	}
