@@ -30,6 +30,8 @@ private slots:
 public slots:
 	void EditMatch();
 	void DeleteMatch();
+	void NewMatchAdded();
+	void MatchEdited();
 };
 
 #endif

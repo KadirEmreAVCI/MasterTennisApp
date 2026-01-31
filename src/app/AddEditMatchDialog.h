@@ -47,6 +47,9 @@ private slots:
 	void on_comboBox_Statu_currentTextChanged(const QString& statu);
 public slots:
 	void SetMatchDate(const QDate& date);
+signals:
+	void NewMatchAdded();
+	void MatchEdited();
 };
 
 #endif
