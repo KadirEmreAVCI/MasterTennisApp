@@ -8,11 +8,11 @@
 OrganizationDialog::OrganizationDialog(QWidget *parent)
 	: 
 	QDialog(parent),
+	m_upAddEditOrganizationDialog{std::make_unique<AddEditOrganizationDialog>(this)},
 	TableWidgetUser{{ "", " Organization ", " Categories " , "", ""}}
 {
 	ui.setupUi(this);
 	InitTable(ui.tableWidget);
-	m_upAddEditOrganizationDialog = std::make_unique<AddEditOrganizationDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &OrganizationDialog::DBInitialized);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &OrganizationDialog::ChangeInDB);
 	QObject::connect(m_upAddEditOrganizationDialog.get(), &AddEditOrganizationDialog::NewOrganizationAdded, this, &OrganizationDialog::NewOrganizationAdded);

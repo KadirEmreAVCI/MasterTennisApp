@@ -4,13 +4,14 @@
 #include "AppController.h"
 #include "Utility.h"
 ProfileSelectionDialog::ProfileSelectionDialog(QWidget* parent)
-	: QDialog(parent)
+	: QDialog(parent), m_upAddEditProfileDialog(std::make_unique<AddEditProfileDialog>(this))
 {
 	ui.setupUi(this);
 	QObject::connect(&AppController::instance(), &AppController::DBInitialized, this, &ProfileSelectionDialog::DBInitialized);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &ProfileSelectionDialog::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &ProfileSelectionDialog::close);
-	m_upAddEditProfileDialog = std::make_unique<AddEditProfileDialog>(this);
+	QObject::connect(m_upAddEditProfileDialog.get(), &AddEditProfileDialog::NewProfileAdded, this, &ProfileSelectionDialog::NewProfileAdded);
+	QObject::connect(m_upAddEditProfileDialog.get(), &AddEditProfileDialog::ProfileEdited, this, &ProfileSelectionDialog::ProfileEdited);
 	setFixedSize(400, 500);
 	setWindowTitle("");
 }
@@ -55,4 +56,14 @@ void ProfileSelectionDialog::UpdateProfiles(const std::vector<Profile>& vecProfi
 void ProfileSelectionDialog::on_NewButton_clicked()
 {
 	m_upAddEditProfileDialog->OpenAddDialog();
+}
+void ProfileSelectionDialog::NewProfileAdded()
+{
+	m_upAddEditProfileDialog->close();
+	QMessageBox::information(this, "Information", "New profile is added successfully");
+}
+void ProfileSelectionDialog::ProfileEdited()
+{
+	m_upAddEditProfileDialog->close();
+	QMessageBox::information(this, "Information", "The profile is edited successfully");
 }

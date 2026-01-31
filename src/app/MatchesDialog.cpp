@@ -9,10 +9,10 @@
 MatchesDialog::MatchesDialog(QWidget *parent)
 	: 
 	QDialog(parent),
+	m_upAddEditMatchDialog{std::make_unique<AddEditMatchDialog>(this)},
 	TableWidgetUser{{ " Statu ", " Outcome ", " Stage ", " Score ", " Sets ", " Opponent 1 ", " Opponent 2 ", " Date ", " Time ", "", "" }}
 {
 	ui.setupUi(this);
-	m_upAddEditMatchDialog = std::make_unique<AddEditMatchDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &MatchesDialog::ChangeInDB);
 	QObject::connect(m_upAddEditMatchDialog.get(), &AddEditMatchDialog::NewMatchAdded, this, &MatchesDialog::NewMatchAdded);
 	QObject::connect(m_upAddEditMatchDialog.get(), &AddEditMatchDialog::MatchEdited, this, &MatchesDialog::MatchEdited);

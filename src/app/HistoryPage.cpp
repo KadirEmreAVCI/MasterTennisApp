@@ -14,11 +14,11 @@
 HistoryPage::HistoryPage(QWidget *parent)
 	: 
 	QWidget(parent),
+	m_upAddEditTournamentDialog{std::make_unique<AddEditTournamentDialog>(this)},
+	m_upMatchesDialog{std::make_unique<MatchesDialog>(this)},
 	TableWidgetUser{{ "", "Organization", "Season", "Type", "Category", "Teammate", "Participant", "Max. Progress", "Trophy", "", "", "", "" }}
 {
 	ui.setupUi(this);
-	m_upAddEditTournamentDialog = std::make_unique<AddEditTournamentDialog>(this);
-	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HistoryPage::ChangeInDB);
 	QObject::connect(m_upAddEditTournamentDialog.get(), &AddEditTournamentDialog::NewTournamentAdded, this, &HistoryPage::NewTournamentAdded);

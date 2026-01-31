@@ -23,6 +23,9 @@ private:
 private slots:
 	void on_SaveButton_clicked();
 	void on_CancelButton_clicked();
+signals:
+	void NewProfileAdded();
+	void ProfileEdited();
 };
 
 #endif

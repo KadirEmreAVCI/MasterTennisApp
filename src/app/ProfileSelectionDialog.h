@@ -24,6 +24,9 @@ private:
 	std::vector<Profile> m_vecProfile;
 private slots:
 	void on_NewButton_clicked();
+public slots:
+	void NewProfileAdded();
+	void ProfileEdited();
 };
 
 #endif
