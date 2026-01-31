@@ -21,6 +21,8 @@ HistoryPage::HistoryPage(QWidget *parent)
 	m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HistoryPage::ChangeInDB);
+	QObject::connect(m_upAddEditTournamentDialog.get(), &AddEditTournamentDialog::NewTournamentAdded, this, &HistoryPage::NewTournamentAdded);
+	QObject::connect(m_upAddEditTournamentDialog.get(), &AddEditTournamentDialog::TournamentEdited, this, &HistoryPage::TournamentEdited);
 	InitFilterComponents();
 	InitTable(ui.tableWidget);
 }
@@ -260,4 +262,14 @@ void HistoryPage::DeleteTournament()
 			QMessageBox::information(this, "Information", "The tournament deleted successfully");
 		}
 	}
+}
+void HistoryPage::NewTournamentAdded()
+{
+	m_upAddEditTournamentDialog->close();
+	QMessageBox::information(this, "Information", "New tournament is added successfully");
+}
+void HistoryPage::TournamentEdited()
+{
+	m_upAddEditTournamentDialog->close();
+	QMessageBox::information(this, "Information", "The tournament is edited successfully");
 }

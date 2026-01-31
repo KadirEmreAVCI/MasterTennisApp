@@ -45,6 +45,8 @@ public slots:
 	void LockUnlockTournament();
 	void EditTournament();
 	void DeleteTournament();
+	void NewTournamentAdded();
+	void TournamentEdited();
 };
 
 #endif
