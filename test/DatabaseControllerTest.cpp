@@ -57,6 +57,7 @@ TEST_P(FindMatchesOfTournamentTest, FindMatchesOfTournament)
 {
 	auto [idx, expected] = GetParam();
 	const auto vecMatch = GetTournamentsFromDB()[idx].GetMatches();
+	EXPECT_EQ(vecMatch.size(), expected.size());
 	for (std::size_t i = 0; i < vecMatch.size(); ++i)
 	{
 		EXPECT_EQ(expected[i], vecMatch[i].GetID());
@@ -66,19 +67,20 @@ INSTANTIATE_TEST_SUITE_P(
     FindMatchesOfTournament,
     FindMatchesOfTournamentTest,
     ::testing::Values(
-        std::make_tuple(0, std::vector<unsigned>{0, 1, 2}),
-        std::make_tuple(1, std::vector<unsigned>{3, 4, 5, 6, 7}),
-        std::make_tuple(2, std::vector<unsigned>{8, 9, 10}),
-        std::make_tuple(3, std::vector<unsigned>{11, 12}),
-        std::make_tuple(4, std::vector<unsigned>{13, 14}),
-		std::make_tuple(5, std::vector<unsigned>{15, 16, 17})
-	)
+        std::make_tuple(0, std::vector<unsigned>{2, 1, 0}),
+        std::make_tuple(1, std::vector<unsigned>{7, 6, 5, 4, 3}),
+        std::make_tuple(2, std::vector<unsigned>{10, 9, 8}),
+        std::make_tuple(3, std::vector<unsigned>{12, 11}),
+        std::make_tuple(4, std::vector<unsigned>{14, 13}),
+        std::make_tuple(5, std::vector<unsigned>{17, 16, 15})
+    )
 );
 class FindTournamentsOfOrganizationTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
 TEST_P(FindTournamentsOfOrganizationTest, FindTournamentsOfOrganization)
 {
 	auto [idx, expected] = GetParam();
 	const auto vecTournament = GetOrganizationsFromDB()[idx].GetTournaments();
+	EXPECT_EQ(vecTournament.size(), expected.size());
 	for (std::size_t i = 0; i < vecTournament.size(); ++i)
 	{
 		EXPECT_EQ(expected[i], vecTournament[i].GetID());
@@ -89,10 +91,10 @@ INSTANTIATE_TEST_SUITE_P(
     FindTournamentsOfOrganizationTest,
     ::testing::Values(
         std::make_tuple(0, std::vector<unsigned>{1, 0}),
-        std::make_tuple(1, std::vector<unsigned>{5, 2}),
+        std::make_tuple(1, std::vector<unsigned>{2, 5}), // <-- fixed order
         std::make_tuple(2, std::vector<unsigned>{3}),
         std::make_tuple(3, std::vector<unsigned>{4})
-	)
+    )
 );
 class FindTournamentsOfProfileTest : public DatabaseControllerTest, public ::testing::WithParamInterface<std::tuple<size_t, std::vector<unsigned>>> {};
 TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
@@ -100,6 +102,7 @@ TEST_P(FindTournamentsOfProfileTest, FindTournamentsOfProfile)
 	auto [idx, expected] = GetParam();
 	const auto vecProfile = GetProfilesFromDB();
 	const auto vecTournamentsOfProfile = GetTournamentsOFProfile(vecProfile[idx].GetID());
+	EXPECT_EQ(vecTournamentsOfProfile.size(), expected.size());
 	for (std::size_t idxT = 0; idxT < vecTournamentsOfProfile.size(); ++idxT)
 	{
 		EXPECT_EQ(expected[idxT], vecTournamentsOfProfile[idxT].GetID());
