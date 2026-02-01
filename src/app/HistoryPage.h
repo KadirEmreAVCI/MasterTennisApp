@@ -39,12 +39,12 @@ private:
 	unsigned m_uiProfileID = 0;
 	std::string m_sFilter = "";
 private slots:
-	void on_NewButton_clicked();
-	void on_ClearButton_clicked();
 	void on_comboBoxFilter_currentTextChanged(const QString& sFilter);
 	void on_lineEditSearchBar_textChanged(const QString& sFilterWord);
 public slots:	
-	void ShowMatchesButtonClicked();
+	void onNewButtonClicked();
+	void onClearButtonClicked();
+	void onShowMatchesButtonClicked();
 	void ShowMatches(const Tournament& t);
 	void LockUnlockTournament();
 	void EditTournament();

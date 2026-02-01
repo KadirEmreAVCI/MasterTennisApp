@@ -24,6 +24,8 @@ HistoryPage::HistoryPage(QWidget *parent)
 	TableWidgetUser{{ "", "Organization", "Season", "Type", "Category", "Teammate", "Participant", "Max. Progress", "Trophy", "", "", "", "" }}
 {
 	ui.setupUi(this);
+	QObject::connect(ui.ClearButton, &QPushButton::clicked, this, &HistoryPage::onClearButtonClicked);
+	QObject::connect(ui.NewButton, &QPushButton::clicked, this, &HistoryPage::onNewButtonClicked);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HistoryPage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HistoryPage::ChangeInDB);
 	QObject::connect(m_upAddEditTournamentDialog.get(), &AddEditTournamentDialog::NewTournamentAdded, this, &HistoryPage::NewTournamentAdded);
@@ -67,7 +69,7 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
 	PlaceLabel2TableCellWithImage(ui.tableWidget, t.GetTrophyPic(), 0.085f, uiRowIdx, uiColumnIdx++);
-	QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatchesButtonClicked);
+	QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::onShowMatchesButtonClicked);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpDeleteButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::DeleteTournament);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
@@ -96,20 +98,6 @@ void HistoryPage::HighlightFilteredColumn()
 	ui.tableWidget->clearSelection();
 	ui.tableWidget->selectColumn(idx);
 }
-void HistoryPage::on_NewButton_clicked()
-{
-	m_upAddEditTournamentDialog->OpenAddDialog();
-}
-void HistoryPage::on_ClearButton_clicked()
-{
-	if(nullptr != m_upActiveFilter)
-	{
-		m_upActiveFilter.reset();
-	}
-	InitFilterComponents();
-	m_vecDisplayedTournament = m_vecTournament;
-	LoadDataToTable();
-}
 void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 {
 	ui.lineEditSearchBar->setEnabled(true);
@@ -137,7 +125,7 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 	{
 		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>(blSearchForExactMatch);
 	}
-	else if(m_sFilter == "Progress")
+	else if(m_sFilter == "Max. Progress")
 	{
 		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetLastMatch().has_value() ? t.GetLastMatch().value().GetStage() : "";})>>(blSearchForExactMatch);
 	}
@@ -173,10 +161,6 @@ void HistoryPage::on_lineEditSearchBar_textChanged(const QString& sFilterWord)
 		LoadDataToTable();
 		HighlightFilteredColumn();
 	}
-	else
-	{
-		std::cerr << "on_lineEditSearchBar_textChanged m_upActiveFilter is nullptr!\n";
-	}
 }
 void HistoryPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
 {
@@ -191,7 +175,7 @@ void HistoryPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::
 void HistoryPage::UpdateActiveProfileData(const Profile& p)
 {
 	m_vecTournament = p.GetTournaments();
-	on_ClearButton_clicked();
+	onClearButtonClicked();
 }
 void HistoryPage::UserLoggedIn(const Profile& p)
 {
@@ -203,7 +187,21 @@ void HistoryPage::UserLoggedIn(const Profile& p)
 	}
 	UpdateActiveProfileData(p);
 }
-void HistoryPage::ShowMatchesButtonClicked()
+void HistoryPage::onNewButtonClicked()
+{
+	m_upAddEditTournamentDialog->OpenAddDialog();
+}
+void HistoryPage::onClearButtonClicked()
+{
+	if(nullptr != m_upActiveFilter)
+	{
+		m_upActiveFilter.reset();
+	}
+	InitFilterComponents();
+	m_vecDisplayedTournament = m_vecTournament;
+	LoadDataToTable();
+}
+void HistoryPage::onShowMatchesButtonClicked()
 {
 	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
 	ShowMatches(SignalingTournament);
