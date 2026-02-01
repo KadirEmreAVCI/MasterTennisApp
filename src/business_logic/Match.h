@@ -10,17 +10,17 @@
 #include "DBItem.h"
 class Match : public DBItem {
 public:
-	explicit Match(unsigned uiID = 0, unsigned uiTournamentID = 0, const std::string& sStatu = "", const std::string& sStage = "", const std::string& sOpponent1 = "", const std::optional<std::string>& sOpponent2 = "", const QDate& rDate = QDate{}, const QTime& rTime = {}, const std::vector<Set>& vecSet = {});
+	explicit Match(unsigned uiID = 0, unsigned uiTournamentID = 0, const std::string& sStatu = "", const std::string& sStage = "", const std::string& sOpponent1 = "", const std::optional<std::string>& soptOpponent2 = "", const QDate& rDate = QDate{}, const QTime& rTime = {}, const std::vector<Set>& vecSet = {});
 	unsigned GetID()const;
 	unsigned GetTournamentID()const;
-	std::string GetStatu()const;
-	std::string GetStage()const;
-	std::string GetOpponent1()const;
+	const std::string& GetStatu()const;
+	const std::string& GetStage()const;
+	const std::string& GetOpponent1()const;
 	std::string GetOpponent2()const;
 	QDate GetDate()const;
 	QTime GetTime()const;
 	Score GetScore()const;
-	std::vector<Set> GetSets()const;
+	const std::vector<Set>& GetSets()const;
 	common::Outcome GetOutcome()const;
 	std::string GetOutcomePic()const;
 	std::string SetsToString()const;
@@ -29,6 +29,10 @@ public:
 	bool IsValid()const;
 	bool IsEarlier(const Match& other)const;
 	bool IsTiebreakPlayed()const;
+	bool operator<(const Match& other)const;
+	bool operator>(const Match& other)const;
+	bool operator<=(const Match& other)const;
+	bool operator>=(const Match& other)const;
 	friend bool operator==(const Match& lhs, const Match& rhs)
 	{
 		return	lhs.m_uiID == rhs.m_uiID &&

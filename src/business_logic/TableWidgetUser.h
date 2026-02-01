@@ -6,7 +6,7 @@
 #include <QTableWidget>
 class TableWidgetUser{
 protected:
-	explicit TableWidgetUser(std::vector<std::string> vecColumnNames);
+	explicit TableWidgetUser(const std::vector<std::string>& vecColumnNames);
 	void InitTable(QTableWidget* pTableWidget);
 	void ClearTable();
 	virtual void LoadDataToTable()=0;

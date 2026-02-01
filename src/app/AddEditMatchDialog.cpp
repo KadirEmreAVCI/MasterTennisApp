@@ -217,13 +217,14 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 		}
 		else
 		{
-			close();
 			switch (m_DialogMode)
 			{
 			case DialogMode::eAddDialog:
 			{
 				if (AppController::instance().AddNewItem(m))
-					QMessageBox::information(this, "Information", "New match is added successfully");
+				{
+					emit NewMatchAdded();
+				}
 				break;
 			}
 			case DialogMode::eEditDialog:
@@ -237,7 +238,9 @@ void AddEditMatchDialog::on_SaveButton_clicked()
 					if (m_RootTournament.IsMatchValidForTournament(m))
 					{
 						if (AppController::instance().EditItem(m))
-							QMessageBox::information(this, "Information", "The match is edited successfully");
+						{
+							emit MatchEdited();
+						}
 					}
 					else
 					{

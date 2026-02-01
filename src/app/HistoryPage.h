@@ -14,9 +14,12 @@ class HistoryPage : public QWidget, public TableWidgetUser
 {
 	Q_OBJECT
 public:
-	HistoryPage(QWidget *parent = nullptr);
+	static HistoryPage& instance();
+	HistoryPage(const HistoryPage&) = delete;
+	HistoryPage& operator=(const HistoryPage&) = delete;
 	~HistoryPage();
 private:
+	HistoryPage(QWidget *parent = nullptr);
 	// TableWidgetUser
 	virtual void FillTable()override;
 	virtual void LoadDataToTable()override;
@@ -36,15 +39,18 @@ private:
 	unsigned m_uiProfileID = 0;
 	std::string m_sFilter = "";
 private slots:
-	void on_NewButton_clicked();
-	void on_ClearButton_clicked();
 	void on_comboBoxFilter_currentTextChanged(const QString& sFilter);
 	void on_lineEditSearchBar_textChanged(const QString& sFilterWord);
 public slots:	
-	void ShowMatches();
+	void onNewButtonClicked();
+	void onClearButtonClicked();
+	void onShowMatchesButtonClicked();
+	void ShowMatches(const Tournament& t);
 	void LockUnlockTournament();
 	void EditTournament();
 	void DeleteTournament();
+	void NewTournamentAdded();
+	void TournamentEdited();
 };
 
 #endif

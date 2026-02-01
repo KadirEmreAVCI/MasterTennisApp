@@ -9,7 +9,7 @@ class StatWidget : public QWidget, public Ui::StatWidget
 	Q_OBJECT
 
 public:
-	StatWidget(QWidget *parent = nullptr);
+	explicit StatWidget(QWidget *parent = nullptr);
 	~StatWidget() = default;
     void InitWidget(const std::string& sStatName, const std::string& sPicturePath, float fPictureScale);
     void FillWidget(const StatReport& rStatReport);

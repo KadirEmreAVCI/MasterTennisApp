@@ -1,15 +1,22 @@
 #include <iostream>
 #include <QFile>
+#include <set>
 #include <QMessageBox>
 #include "HomePage.h"
-#include "UpcomingMatch.h"
-#include "NoUpcomingMatch.h"
+#include "UpcomingMatchCard.h"
 #include "OrgParticipation.h"
-#include "StatController.h"
 #include "AppController.h"
 #include "Common.h"
 #include "Utility.h"
 #include "DatabaseController.h"
+#include "Timer.h"	
+#include "HistoryPage.h"
+
+HomePage& HomePage::instance()
+{
+	static HomePage instance;
+	return instance;
+}
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {
@@ -17,72 +24,62 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedIn, this, &HomePage::UserLoggedIn);
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
-	Countdown::setDateFormat("yyyy-MM-dd HH:mm:ss");
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
+	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
+		QMetaObject::invokeMethod(this, [this]() { DecrementCountdowns(); }, Qt::QueuedConnection);
+	});
+	m_upCountdownTimer->Start();
 }
-
 HomePage::~HomePage()
-{}
+{
+	if(m_upCountdownTimer)
+	{
+		m_upCountdownTimer->Stop();
+	}
+}
 void HomePage::UpcomingMatchStarted()
 {
-	QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
-	UpdateUpcomingMatches();
+	UpdateUpcomingMatchCards();
 }
-void HomePage::UpdateUpcomingMatches()
+void HomePage::DecrementCountdowns()
 {
-	ui.listWidget_UpcomingMatches->clear();
-	auto vecUpcomingMatches = FindUpcomingMatches();
-	std::sort(vecUpcomingMatches.begin(), vecUpcomingMatches.end(), [](const Match& m1, const Match& m2) {
-		return m1.IsEarlier(m2);
-		});
-	for (const auto& m : vecUpcomingMatches)
-	{
-		InsertUpcomingMatch(new UpcomingMatch(m, this));
-	}
-	FillWithNoUpcomingMatches();
-	ui.listWidget_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchHeight * common::g_uiMaxUpcomingMatch + 10);
-	ui.groupBox_UpcomingMatches->setFixedSize(ui.listWidget_UpcomingMatches->width() + 20, ui.listWidget_UpcomingMatches->height() + 50);
+    for(int idx = 0; idx < ui.listWidget_UpcomingMatchCards->count(); ++idx)
+    {
+        if(auto* pUpcomingMatchCard = qobject_cast<UpcomingMatchCard*>(ui.listWidget_UpcomingMatchCards->itemWidget(ui.listWidget_UpcomingMatchCards->item(idx))))
+        {
+            pUpcomingMatchCard->DecrementCountdown();
+        }
+    }
 }
-std::vector<Match> HomePage::FindUpcomingMatches()const
+void HomePage::UpdateUpcomingMatchCards()
 {
-	std::vector<Match> vecUpcomingMatches;
-	for (const auto& t : m_vecTournament)
+	m_upCountdownTimer->Stop();
+	utility::ClearListWidget(ui.listWidget_UpcomingMatchCards);
+	std::set<Match> setUpcomingMatchCards;
+	for(const auto& t : m_vecTournament)
 	{
-		const auto& vecMatch = t.GetMatches();
-		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecUpcomingMatches), [](const Match& m) {
+		const auto vecMatches = t.GetMatches();
+		std::copy_if(vecMatches.cbegin(), vecMatches.cend(), std::inserter(setUpcomingMatchCards, setUpcomingMatchCards.end()), [](const Match& m) {
 			return m.IsUpcomingMatch();
 			});
 	}
-	return vecUpcomingMatches;
-}
-std::vector<Match> HomePage::FindStartedUpcomingMatches()const
-{
-	std::vector<Match> vecStartedUpcomingMatches;
-	for (const auto& t : m_vecTournament)
+	for(const auto& m : setUpcomingMatchCards)
 	{
-		const auto& vecMatch = t.GetMatches();
-		std::copy_if(vecMatch.cbegin(), vecMatch.cend(), std::back_inserter(vecStartedUpcomingMatches), [](const Match& m) {
-			return m.GetOutcome() == common::Outcome::Tied && !m.IsUpcomingMatch();
-			});
+		UpcomingMatchCard* const pUpcomingMatchCard = new UpcomingMatchCard(m);
+		QObject::connect(pUpcomingMatchCard, &UpcomingMatchCard::UpcomingMatchCardClicked, &HistoryPage::instance(), &HistoryPage::ShowMatches);
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, pUpcomingMatchCard);
 	}
-	return vecStartedUpcomingMatches;
-}
-void HomePage::InsertUpcomingMatch(UpcomingMatch* pUpcomingMatch)
+	FillEmptyCardSlots();
+	ui.listWidget_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchCardHeight * common::g_uiMaxUpcomingMatchCards + 10);
+	ui.groupBox_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->width() + 20, ui.listWidget_UpcomingMatchCards->height() + 50);
+	m_upCountdownTimer->Restart();
+}	
+void HomePage::FillEmptyCardSlots()
 {
-	auto pInsertedUpcomingMatch = utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pUpcomingMatch);
-	QObject::connect(&*reinterpret_cast<UpcomingMatch*>(pInsertedUpcomingMatch), &UpcomingMatch::UpcomingMatchStarted, this, &HomePage::UpcomingMatchStarted);
-}
-void HomePage::InsertNoUpcomingMatch(NoUpcomingMatch* pNoUpcomingMatch)
-{
-	utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatches, pNoUpcomingMatch);
-}
-void HomePage::FillWithNoUpcomingMatches()
-{
-	const auto& vecUpcomingMatches = FindUpcomingMatches();
-	const int iNoUpcomingMatch = common::g_uiMaxUpcomingMatch - vecUpcomingMatches.size();
-	for (int i = 0; i < iNoUpcomingMatch; ++i)
+	const unsigned int uiCurrentCount = ui.listWidget_UpcomingMatchCards->count();
+	for(int iSlotIdx = uiCurrentCount; iSlotIdx < common::g_uiMaxUpcomingMatchCards; ++iSlotIdx)
 	{
-		InsertNoUpcomingMatch(new NoUpcomingMatch(this));
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard());
 	}
 }
 void HomePage::UpdateTopParticipations()
@@ -94,7 +91,7 @@ void HomePage::UpdateTopParticipations()
 		const auto& t = std::find_if(m_vecTournament.cbegin(), m_vecTournament.cend(), [prParticipation](const Tournament& t){
 			return prParticipation.first == t.GetOrgID();
 		});
-		InsertOrgParticipation(new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
+		utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, new OrgParticipation(DatabaseController::instance().FindRootOrganization(*t), prParticipation.second, this));
 	}
 	ui.listWidget_TopParticipations->setFixedHeight(280);
 }
@@ -110,15 +107,23 @@ std::vector<std::pair<unsigned, unsigned>> HomePage::FindTopParticipations()cons
 	});
 	return vecTopParticipations;
 }
-void HomePage::InsertOrgParticipation(OrgParticipation* pOrgParticipation)
-{
-	utility::InsertItem2ListWidget(ui.listWidget_TopParticipations, pOrgParticipation);
-}
 void HomePage::UserLoggedIn(const Profile& p)
 {
 	m_uiProfileID = p.GetID();
 	UpdateActiveProfileData(p);
-	if (!FindStartedUpcomingMatches().empty())
+	bool blOngoingMatchExist = false;
+	for (const auto& t : m_vecTournament)
+	{
+		const auto& vecMatch = t.GetMatches();
+		blOngoingMatchExist = std::any_of(vecMatch.cbegin(), vecMatch.cend(), [](const Match& m) {
+			return m.GetOutcome() == common::Outcome::Tied && !m.IsUpcomingMatch();
+			});
+		if (blOngoingMatchExist)
+		{
+			break;
+		}
+	}
+	if (blOngoingMatchExist)
 	{
 		QMessageBox::warning(this, "Started Upcoming Match", "An upcoming match which is already started has been detected. Please edit this match.");
 	}
@@ -126,7 +131,7 @@ void HomePage::UserLoggedIn(const Profile& p)
 void HomePage::UserLoggedOut()
 {
 	utility::ClearListWidget(ui.listWidget_TopParticipations);
-	utility::ClearListWidget(ui.listWidget_UpcomingMatches);
+	utility::ClearListWidget(ui.listWidget_UpcomingMatchCards);
 }
 void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
 {	
@@ -141,6 +146,6 @@ void HomePage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vec
 void HomePage::UpdateActiveProfileData(const Profile& p)
 {
 	m_vecTournament = p.GetTournaments();
-	UpdateUpcomingMatches();
+	UpdateUpcomingMatchCards();
 	UpdateTopParticipations();
 }

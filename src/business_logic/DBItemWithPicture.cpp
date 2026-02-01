@@ -9,12 +9,12 @@
 DBItemWithPicture::DBItemWithPicture(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns, const std::string& sPictureRootPath, const std::string& sPictureFileName) 
 	: 
 	DBItem(uiID, sDBTable, m_sDBColumns), 
-	m_sPictureRootPath{sPictureRootPath},
-	m_sPictureFileName{sPictureFileName}
+	m_sPictureFileName{sPictureFileName},
+	m_sPictureRootPath{sPictureRootPath}
 {
 
 }
-std::string DBItemWithPicture::GetPictureFileName()const
+const std::string& DBItemWithPicture::GetPictureFileName()const
 {
 	return m_sPictureFileName;
 }
@@ -30,7 +30,7 @@ void DBItemWithPicture::LoadPictureFileName()
 std::string DBItemWithPicture::GetFullPicturePath()const
 {
 	const std::string sPictureFileName = (m_sPictureFileName == "") ? "default.png" : m_sPictureFileName;
-	return m_sPictureRootPath + m_sPictureFileName;
+	return m_sPictureRootPath + sPictureFileName;
 }
 void DBItemWithPicture::DeletePreviousPicture()const
 {
@@ -40,6 +40,10 @@ void DBItemWithPicture::DeletePreviousPicture()const
 	{
 		QFile::remove(sPreviousPictureFullPath);
 	}
+}
+bool DBItemWithPicture::IsPictureChanged() const
+{
+	return m_sPictureFileName != m_spIDatabase->RetrieveValue(m_sDBTable, "PictureFileName", "ID", std::to_string(m_uiID));
 }
 bool DBItemWithPicture::SaveImage(const std::string& sSourcePictureFullPath)const
 {

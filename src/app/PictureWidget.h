@@ -15,11 +15,11 @@ public:
 	~PictureWidget();
     void InitWidget();
     void ClearWidget();
-    void FillWidget(DBItemWithPicture* pDBItemWithPicture);
+    void FillWidget(const DBItemWithPicture* pDBItemWithPicture);
     QString GetSourcePictureFullPath()const;
+	bool IsPictureChanged() const;
 private:
-	QString m_sSourcePictureFullPath{};
-    DBItemWithPicture* m_pDBItemWithPicture{nullptr};
+	bool m_bIsPictureChanged{ false };
 private slots:
 	void on_BrowseButton_clicked();
 	void on_DefaultPictureButton_clicked();

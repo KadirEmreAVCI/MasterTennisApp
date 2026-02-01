@@ -14,19 +14,19 @@ void DatabaseController::LoadDataFromDB()
 	m_vecOrganization = LoadDBItems<Organization>();
 	m_vecProfile = LoadDBItems<Profile>();
 }
-std::vector<Profile> DatabaseController::GetProfiles()const
+const std::vector<Profile>& DatabaseController::GetProfiles()const
 {
 	return m_vecProfile;
 }
-std::vector<Organization> DatabaseController::GetOrganizations()const
+const std::vector<Organization>& DatabaseController::GetOrganizations()const
 {
 	return m_vecOrganization;
 }
-std::vector<Tournament> DatabaseController::GetTournaments()const
+const std::vector<Tournament>& DatabaseController::GetTournaments()const
 {
 	return m_vecTournament;
 }
-std::vector<Match> DatabaseController::GetMatches()const
+const std::vector<Match>& DatabaseController::GetMatches()const
 {
 	return m_vecMatch;
 }

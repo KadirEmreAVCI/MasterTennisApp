@@ -18,7 +18,6 @@ private:
 	// TableWidgetUser
 	virtual void LoadDataToTable()override;
 	virtual void FillTable()override;
-	
 	void PlaceMatch2Table(const Match& m, unsigned uiRowIdx);
 	void UpdateActiveProfileData(const Profile& p);
 	void ChangeInDB(const std::vector<Profile>&, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&);
@@ -31,6 +30,8 @@ private slots:
 public slots:
 	void EditMatch();
 	void DeleteMatch();
+	void NewMatchAdded();
+	void MatchEdited();
 };
 
 #endif

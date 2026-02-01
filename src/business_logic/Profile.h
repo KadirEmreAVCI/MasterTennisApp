@@ -19,7 +19,7 @@ public:
 						const std::string& sPictureFileName = "", 
 						Gender gen = Gender::Male);
 	unsigned int GetID()const;
-	std::string GetFullName()const;
+	const std::string& GetFullName()const;
 	Gender GetGender()const;
 	std::vector<Tournament> GetTournaments()const;
 	friend bool operator==(const Profile& lhs, const Profile& rhs)
@@ -43,7 +43,7 @@ public:
 	virtual bool DeleteFromDB()const override;
 private:
 	void SetTournaments(const std::vector<Tournament>&);
-	std::vector<Tournament> m_vecTournament;
+	std::set<Tournament, std::greater<Tournament>> m_setTournament;
 	std::string m_sFullName{};
 	Gender m_Gender{};
 };

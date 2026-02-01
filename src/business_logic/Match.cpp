@@ -34,7 +34,7 @@ unsigned Match::GetTournamentID()const
 {
 	return m_uiTournamentID;
 }
-std::string Match::GetStatu()const
+const std::string& Match::GetStatu()const
 {
 	return m_sStatu;
 }
@@ -63,11 +63,11 @@ std::string Match::GetOutcomePic()const
 	}
 	return sOutcomePic;
 }
-std::string Match::GetStage()const
+const std::string& Match::GetStage()const
 {
 	return m_sStage;
 }
-std::string Match::GetOpponent1()const
+const std::string& Match::GetOpponent1()const
 {
 	return m_sOpponent1;
 }
@@ -92,7 +92,7 @@ void Match::SetScore()
 	m_Score = Score(std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::HomeWin; }), 
 					std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::AwayWin; }));
 }
-std::vector<Set> Match::GetSets()const
+const std::vector<Set>& Match::GetSets()const
 {
 	return m_vecSet;
 }
@@ -144,6 +144,30 @@ bool Match::IsTiebreakPlayed()const
 	const Tournament rRootTournament = DatabaseController::instance().FindRootTournament(*this);
 	return rRootTournament.GetSetsBestOf() != 1 && rRootTournament.GetSetsBestOf() == GetSets().size();
 }
+bool Match::operator<(const Match& other)const
+{
+	if(IsEarlier(other))
+	{
+		return true;
+	}
+	if(other.IsEarlier(*this))
+	{
+		return false;
+	}
+    return GetID() < other.GetID();
+}
+bool Match::operator>(const Match& other)const
+{
+	return other < *this;
+}
+bool Match::operator<=(const Match& other)const
+{
+	return !(*this > other);
+}
+bool Match::operator>=(const Match& other)const
+{
+	return !(*this < other);
+}
 bool Match::InsertToDB()const
 {
 	std::string sDBValues{ "'" + std::to_string(GetTournamentID()) +
@@ -160,17 +184,17 @@ bool Match::InsertToDB()const
 }
 bool Match::EditInDB()const
 {
-	QMap<QString, QVariant> columnValues;
-	columnValues["TournamentID"] = QString::fromStdString(std::to_string(m_uiTournamentID));
-	columnValues["Statu"] = QString::fromStdString(m_sStatu);
-	columnValues["Stage"] = QString::fromStdString(m_sStage);
-	columnValues["Opponent1"] = QString::fromStdString(m_sOpponent1);
-	columnValues["Opponent2"] = QString::fromStdString(GetOpponent2());
-	columnValues["Date"] = m_Date.toString();
-	columnValues["Time"] = m_Time.toString();
-	columnValues["Score"] = QString::fromStdString(m_Score.ToString());
-	columnValues["Sets"] = QString::fromStdString(SetsToString());
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["TournamentID"] = QString::fromStdString(std::to_string(m_uiTournamentID));
+	mapColumnValues["Statu"] = QString::fromStdString(m_sStatu);
+	mapColumnValues["Stage"] = QString::fromStdString(m_sStage);
+	mapColumnValues["Opponent1"] = QString::fromStdString(m_sOpponent1);
+	mapColumnValues["Opponent2"] = QString::fromStdString(GetOpponent2());
+	mapColumnValues["Date"] = m_Date.toString();
+	mapColumnValues["Time"] = m_Time.toString();
+	mapColumnValues["Score"] = QString::fromStdString(m_Score.ToString());
+	mapColumnValues["Sets"] = QString::fromStdString(SetsToString());
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Match::LoadFromDB(unsigned ID)
 {

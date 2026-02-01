@@ -19,24 +19,25 @@ unsigned Organization::GetID()const
 {
 	return m_uiID;
 }
-std::string Organization::GetName()const
+const std::string& Organization::GetName()const
 {
 	return m_sName;
 }
-std::vector<std::string> Organization::GetCategories()const
+const std::vector<std::string>& Organization::GetCategories()const
 {
 	return m_vecCategories;
 }
 std::vector<Tournament> Organization::GetTournaments()const
 {
-	return m_vecTournament;
+	return std::vector<Tournament>(m_setTournament.begin(), m_setTournament.end());
 }
 void Organization::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
-	m_vecTournament = vecTournament;
-	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
-		return t1.IsEarlier(t2);
-		});
+	m_setTournament.clear();
+	for(const auto& t : vecTournament)
+	{
+		m_setTournament.insert(t);
+	}
 }
 bool Organization::InsertToDB()const
 {
@@ -48,12 +49,15 @@ bool Organization::InsertToDB()const
 }
 bool Organization::EditInDB()const
 {
-	DeletePreviousPicture();
-	QMap<QString, QVariant> columnValues;
-	columnValues["Name"] = QString::fromStdString(m_sName);
-	columnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
-	columnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	if(IsPictureChanged())
+	{
+		DeletePreviousPicture();
+	}
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["Name"] = QString::fromStdString(m_sName);
+	mapColumnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
+	mapColumnValues["Categories"] = QString::fromStdString(utility::Serialize(m_vecCategories));
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Organization::LoadFromDB(unsigned ID)
 {
@@ -65,7 +69,7 @@ void Organization::LoadFromDB(unsigned ID)
 }
 bool Organization::DeleteFromDB()const
 {
-	for(const auto& t : m_vecTournament)
+	for(const auto& t : m_setTournament)
 	{
 		if (!t.DeleteFromDB())
 		{

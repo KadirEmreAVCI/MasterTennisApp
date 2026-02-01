@@ -53,7 +53,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 			QFileInfo(sSourcePictureFullPath).fileName().toStdString(),
 			m_vecCategories
 		};
-		if (sSourcePictureFullPath != "")
+		if (ui.OrgPicWidget->IsPictureChanged() && sSourcePictureFullPath != "")
 		{
 			org.SaveImage(sSourcePictureFullPath.toStdString());
 		}
@@ -63,8 +63,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		{
 			if (AppController::instance().AddNewItem(org))
 			{
-				close();
-				QMessageBox::information(this, "Information", "New organization is added successfully");
+				emit NewOrganizationAdded();
 			}
 			break;
 		}
@@ -72,8 +71,7 @@ void AddEditOrganizationDialog::on_SaveButton_clicked()
 		{
 			if (AppController::instance().EditItem(org))
 			{
-				close();
-				QMessageBox::information(this, "Information", "The organization is edited successfully");
+				emit OrganizationEdited();
 			}
 			break;
 		}

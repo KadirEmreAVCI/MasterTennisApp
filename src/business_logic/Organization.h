@@ -16,8 +16,8 @@ public:
 							const std::string& sPictureFileName = "", 
 							const std::vector<std::string>& vecCategories = {});
 	unsigned GetID()const;
-	std::string GetName()const;
-	std::vector<std::string> GetCategories()const;
+	const std::string& GetName()const;
+	const std::vector<std::string>& GetCategories()const;
 	std::vector<Tournament> GetTournaments()const;
 	void SetTournaments(const std::vector<Tournament>&);
 	friend bool operator==(const Organization& lhs, const Organization& rhs)
@@ -41,7 +41,7 @@ public:
 private:
 	std::string m_sName;
 	std::vector<std::string> m_vecCategories;
-	std::vector<Tournament> m_vecTournament;
+	std::set<Tournament, std::greater<Tournament>> m_setTournament;
 };
 
 #endif

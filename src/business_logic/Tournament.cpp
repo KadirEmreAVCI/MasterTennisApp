@@ -52,7 +52,7 @@ unsigned Tournament::GetOrgID()const
 {
 	return m_uiOrgID;
 }
-std::string Tournament::GetType()const
+const std::string& Tournament::GetType()const
 {
 	return m_sType;
 }
@@ -60,15 +60,15 @@ bool Tournament::IsDoubleTournament()const
 {
 	return m_soptTeammate.has_value() && m_soptTeammate.value() != "";
 }
-std::string Tournament::GetTeammate()const
+const std::string& Tournament::GetTeammate()const
 {
 	return m_soptTeammate.value_or("");
 }
-std::string Tournament::GetCategory()const
+const std::string& Tournament::GetCategory()const
 {
 	return m_sCategory;
 }
-std::string Tournament::GetSeason()const
+const std::string& Tournament::GetSeason()const
 {
 	return m_sSeason;
 }
@@ -91,20 +91,20 @@ bool Tournament::Get3rdPlaceGameAvailable()const
 std::string Tournament::GetTrophyPic()const
 {
 	std::string sTrophyPic = "";
-	if (const auto& lastMatch = GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsValid())
+	if (const auto& rMostRecentMatch = GetMostRecentMatch(); rMostRecentMatch.has_value() && rMostRecentMatch.value().IsValid())
 	{
-		if (lastMatch.value().GetStage() == "Final")
+		if (rMostRecentMatch.value().GetStage() == "Final")
 		{
-			if (lastMatch.value().GetOutcome() == Outcome::HomeWin)
+			if (rMostRecentMatch.value().GetOutcome() == Outcome::HomeWin)
 			{
 				sTrophyPic = ":images/first_place.png";
 			}
-			else if(lastMatch.value().GetOutcome() == Outcome::AwayWin)
+			else if(rMostRecentMatch.value().GetOutcome() == Outcome::AwayWin)
 			{
 				sTrophyPic = ":images/second_place.png";
 			}
 		}
-		else if (lastMatch.value().GetStage() == "3rd Place Game" && lastMatch.value().GetOutcome() == Outcome::HomeWin)
+		else if (rMostRecentMatch.value().GetStage() == "3rd Place Game" && rMostRecentMatch.value().GetOutcome() == Outcome::HomeWin)
 		{
 			sTrophyPic = ":images/third_place.png";
 		}
@@ -143,24 +143,32 @@ std::vector<std::string> Tournament::GetPossibleStages()const
 }
 std::vector<Match> Tournament::GetMatches()const
 {
-	return m_vecMatch;
+	return std::vector<Match>(m_setMatch.begin(), m_setMatch.end());
 }
 void Tournament::SetMatches(const std::vector<Match>& vecMatch)
 {
-	m_vecMatch = vecMatch;
-	std::sort(m_vecMatch.begin(), m_vecMatch.end(), [](const Match& m1, const Match& m2) {
-		return m1.IsEarlier(m2);
-		});
+	m_setMatch.clear();
+	for(const auto& m : vecMatch)
+	{
+		m_setMatch.insert(m);
+	}
 }
 bool Tournament::IsGroupStageExist()const
 {
-	return std::any_of(m_vecMatch.cbegin(), m_vecMatch.cend(), [](const auto& m) {
+	return std::any_of(m_setMatch.cbegin(), m_setMatch.cend(), [](const auto& m) {
 		return m.GetStage() == "Group Stage";
 		});
 }
-std::optional<Match> Tournament::GetLastMatch()const
+std::optional<Match> Tournament::GetMostRecentMatch()const
 {
-	return !m_vecMatch.empty() ? std::optional<Match>(m_vecMatch.back()) : std::nullopt;
+	if(m_setMatch.empty())
+	{
+		return std::nullopt;
+	}
+	else
+	{
+		return *m_setMatch.begin();
+	}
 }
 bool Tournament::IsMatchValidForTournament(const Match& m)const
 {
@@ -169,22 +177,22 @@ bool Tournament::IsMatchValidForTournament(const Match& m)const
 bool Tournament::IsValid()const
 {
 	bool blAllMatchesAreValid = true;
-	if (!m_vecMatch.empty())
+	if (!m_setMatch.empty())
 	{
-		blAllMatchesAreValid = std::all_of(m_vecMatch.cbegin(), m_vecMatch.cend(), [this](const Match& m){
+		blAllMatchesAreValid = std::all_of(m_setMatch.cbegin(), m_setMatch.cend(), [this](const Match& m){
 			return IsMatchValidForTournament(m);
 			});
 	}
 	const bool blTournamentTypeCompatible = ((m_sType.find("Double") != std::string::npos) == IsDoubleTournament());
 	return blAllMatchesAreValid && blTournamentTypeCompatible;
 }
-bool Tournament::IsEarlier(const Tournament& other)const
+bool Tournament::operator<(const Tournament& other)const
 {
-	if (!m_vecMatch.empty() && !other.m_vecMatch.empty())
+	if(!m_setMatch.empty() && !other.m_setMatch.empty())
 	{
-		return m_vecMatch.front().IsEarlier(other.m_vecMatch.front());
+		return *m_setMatch.begin() < *other.m_setMatch.begin();
 	}
-	else if (!other.m_vecMatch.empty())
+	else if(!other.m_setMatch.empty())
 	{
 		return false;
 	}
@@ -192,6 +200,18 @@ bool Tournament::IsEarlier(const Tournament& other)const
 	{
 		return true;
 	}
+}
+bool Tournament::operator>(const Tournament& other)const
+{
+	return other < *this;
+}
+bool Tournament::operator<=(const Tournament& other)const
+{
+	return !(*this > other);
+}
+bool Tournament::operator>=(const Tournament& other)const
+{
+	return !(*this < other);
 }
 bool Tournament::IsMatchStageValid(const Match& m)const
 {
@@ -208,7 +228,7 @@ bool Tournament::IsMatchExceedingMaxSet(const Match& m)const
 }
 bool Tournament::DeleteFromDB()const
 {
-	for(const auto& m : m_vecMatch)
+	for(const auto& m : m_setMatch)
 	{
 		if (!m.DeleteFromDB())
 		{
@@ -234,18 +254,18 @@ bool Tournament::InsertToDB()const
 }
 bool Tournament::EditInDB()const
 {
-	QMap<QString, QVariant> columnValues;
-	columnValues["ProfileID"] = QString::fromStdString(std::to_string(m_uiProfileID));
-	columnValues["OrganizationID"] = QString::fromStdString(std::to_string(m_uiOrgID));
-	columnValues["Season"] = QString::fromStdString(m_sSeason);
-	columnValues["Category"] = QString::fromStdString(m_sCategory);
-	columnValues["Type"] = QString::fromStdString(m_sType);
-	columnValues["Teammate"] = QString::fromStdString(GetTeammate());
-	columnValues["Participant"] = QString::fromStdString(std::to_string(m_uiParticipant));
-	columnValues["Locked"] = QString::fromStdString(std::to_string(m_blIsLocked));
-	columnValues["ThirdPlaceGameAvailable"] = QString::fromStdString(std::to_string(m_bl3rdPlaceGameAvailable));
-	columnValues["SetsBestOf"] = QString::fromStdString(std::to_string(m_uiBestOfSets));
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["ProfileID"] = QString::fromStdString(std::to_string(m_uiProfileID));
+	mapColumnValues["OrganizationID"] = QString::fromStdString(std::to_string(m_uiOrgID));
+	mapColumnValues["Season"] = QString::fromStdString(m_sSeason);
+	mapColumnValues["Category"] = QString::fromStdString(m_sCategory);
+	mapColumnValues["Type"] = QString::fromStdString(m_sType);
+	mapColumnValues["Teammate"] = QString::fromStdString(GetTeammate());
+	mapColumnValues["Participant"] = QString::fromStdString(std::to_string(m_uiParticipant));
+	mapColumnValues["Locked"] = QString::fromStdString(std::to_string(m_blIsLocked));
+	mapColumnValues["ThirdPlaceGameAvailable"] = QString::fromStdString(std::to_string(m_bl3rdPlaceGameAvailable));
+	mapColumnValues["SetsBestOf"] = QString::fromStdString(std::to_string(m_uiBestOfSets));
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Tournament::LoadFromDB(unsigned ID)
 {

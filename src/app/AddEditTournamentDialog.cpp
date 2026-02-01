@@ -179,7 +179,6 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 {
 	if (IsMandatoryFieldsFilled())
 	{
-		close();
 		Tournament t{
 			m_EditedItem.GetID(),
 			m_ActiveProfile.GetID(),
@@ -199,12 +198,16 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 			if (m_DialogMode == DialogMode::eAddDialog)
 			{
 				if (AppController::instance().AddNewItem(t))
-					QMessageBox::information(this, "Information", "New tournament is added successfully");
+				{
+					emit NewTournamentAdded();
+				}
 			}
 			else if (m_DialogMode == DialogMode::eEditDialog)
 			{
 				if (AppController::instance().EditItem(t))
-					QMessageBox::information(this, "Information", "Tournament edited successfully");
+				{
+					emit TournamentEdited();
+				}
 			}
 			else
 			{
@@ -270,7 +273,9 @@ void AddEditTournamentDialog::on_comboBox_OrganizationName_currentTextChanged(co
 }
 void AddEditTournamentDialog::on_comboBox_SetsBestOf_currentTextChanged(const QString& setsbestof)
 {
-	if (setsbestof == "Best Of 1")
+	if(setsbestof == "")
+		m_uiSetsBestOf = 0;
+	else if (setsbestof == "Best Of 1")
 		m_uiSetsBestOf = 1;
 	else if (setsbestof == "Best Of 3")
 		m_uiSetsBestOf = 3;

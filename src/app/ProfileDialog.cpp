@@ -31,9 +31,9 @@ void ProfileDialog::CreateTabWidget()
 	{
 		ui.tabWidget->removeTab(0);
 	}
-	ui.tabWidget->addTab(new HomePage(), QString("Home"));
-	ui.tabWidget->addTab(new AchievementsPage(), QString("Achievements"));
-	ui.tabWidget->addTab(new HistoryPage(), QString("History"));
+	ui.tabWidget->addTab(&HomePage::instance(), QString("Home"));
+	ui.tabWidget->addTab(&AchievementsPage::instance(), QString("Achievements"));
+	ui.tabWidget->addTab(&HistoryPage::instance(), QString("History"));
 }
 void ProfileDialog::UpdateProfileAlternatives(const std::vector<Profile>& vecProfiles)
 {

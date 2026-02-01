@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 #include <optional>
 #include "DBItem.h"
 #include "Match.h"
@@ -29,10 +30,10 @@ public:
 	unsigned GetID()const;
 	unsigned GetProfileID()const;
 	unsigned GetOrgID()const;
-	std::string GetType()const;
-	std::string GetTeammate()const;
-	std::string GetCategory()const;
-	std::string GetSeason()const;
+	const std::string& GetType()const;
+	const std::string& GetTeammate()const;
+	const std::string& GetCategory()const;
+	const std::string& GetSeason()const;
 	unsigned GetParticipant()const;
 	bool IsLocked()const;
 	void SetLocked(bool);
@@ -43,10 +44,13 @@ public:
 	bool IsDoubleTournament()const;
 	std::vector<Match> GetMatches()const;
 	bool IsGroupStageExist()const;
-	std::optional<Match> GetLastMatch()const;
+	std::optional<Match> GetMostRecentMatch()const;
 	bool IsMatchValidForTournament(const Match&)const;
 	bool IsValid()const;
-	bool IsEarlier(const Tournament& other)const;
+	bool operator<(const Tournament& other)const;
+	bool operator>(const Tournament& other)const;
+	bool operator<=(const Tournament& other)const;
+	bool operator>=(const Tournament& other)const;
 	friend bool operator==(const Tournament& lhs, const Tournament& rhs)
 	{
 		return	lhs.m_uiID == rhs.m_uiID &&
@@ -86,15 +90,15 @@ private:
 	bool IsMatchExceedingMaxSet(const Match&)const;
 	unsigned m_uiProfileID{};
 	unsigned m_uiOrgID{};
+	std::string m_sSeason{};
+	std::string m_sCategory{};
 	std::string m_sType{};
 	std::optional<std::string> m_soptTeammate{};
-	std::string m_sCategory{};
-	std::string m_sSeason{};
 	unsigned m_uiParticipant{};
 	bool m_blIsLocked{ false };
 	bool m_bl3rdPlaceGameAvailable{};
 	unsigned m_uiBestOfSets{};
-	std::vector<Match> m_vecMatch;
+	std::set<Match, std::greater<Match>> m_setMatch;
 	static std::vector<std::string> ms_vecPossiblePlayoffStages;
 };
 

@@ -19,7 +19,7 @@ unsigned int Profile::GetID()const
 {
 	return m_uiID;
 }
-std::string Profile::GetFullName()const
+const std::string& Profile::GetFullName()const
 {
 	return m_sFullName;
 }
@@ -29,7 +29,7 @@ Gender Profile::GetGender()const
 }
 std::vector<Tournament> Profile::GetTournaments()const
 {
-	return m_vecTournament;
+	return std::vector<Tournament>(m_setTournament.begin(), m_setTournament.end());
 }
 bool Profile::InsertToDB()const
 {
@@ -41,12 +41,15 @@ bool Profile::InsertToDB()const
 }
 bool Profile::EditInDB()const
 {
-	DeletePreviousPicture();
-	QMap<QString, QVariant> columnValues;
-	columnValues["FullName"] = QString::fromStdString(m_sFullName);
-	columnValues["Gender"] = ((m_Gender == Gender::Male) ? "Male" : "Female");
-	columnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
-	return m_spIDatabase->EditItem(m_sDBTable, columnValues, m_uiID);
+	if(IsPictureChanged())
+	{
+		DeletePreviousPicture();
+	}
+	QMap<QString, QVariant> mapColumnValues;
+	mapColumnValues["FullName"] = QString::fromStdString(m_sFullName);
+	mapColumnValues["Gender"] = ((m_Gender == Gender::Male) ? "Male" : "Female");
+	mapColumnValues["PictureFileName"] = QString::fromStdString(GetPictureFileName());
+	return m_spIDatabase->EditItem(m_sDBTable, mapColumnValues, m_uiID);
 }
 void Profile::LoadFromDB(unsigned ID)
 {
@@ -58,7 +61,7 @@ void Profile::LoadFromDB(unsigned ID)
 }
 bool Profile::DeleteFromDB()const
 {
-	for(const auto& t : m_vecTournament)
+	for(const auto& t : m_setTournament)
 	{
 		if (!t.DeleteFromDB())
 		{
@@ -69,8 +72,9 @@ bool Profile::DeleteFromDB()const
 }
 void Profile::SetTournaments(const std::vector<Tournament>& vecTournament)
 {
-	m_vecTournament = vecTournament;
-	std::sort(m_vecTournament.begin(), m_vecTournament.end(), [](const Tournament& t1, const Tournament& t2) {
-		return t1.IsEarlier(t2);
-		});
+	m_setTournament.clear();
+	for(const auto& t : vecTournament)
+	{
+		m_setTournament.insert(t);
+	}
 }

@@ -44,6 +44,9 @@ private slots:
 	void on_comboBox_Season_currentTextChanged(const QString& season);
 	void on_comboBox_OrganizationName_currentTextChanged(const QString& org);
 	void on_comboBox_SetsBestOf_currentTextChanged(const QString& setsbestof);	
+signals:
+	void NewTournamentAdded();
+	void TournamentEdited();
 };
 
 #endif
