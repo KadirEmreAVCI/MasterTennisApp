@@ -11,6 +11,11 @@
 #include "Common.h"
 #include "Utility.h"
 
+HistoryPage& HistoryPage::instance()
+{
+	static HistoryPage instance;
+	return instance;
+}
 HistoryPage::HistoryPage(QWidget *parent)
 	: 
 	QWidget(parent),
@@ -62,7 +67,7 @@ void HistoryPage::PlaceTournament2Table(const Tournament& t, unsigned uiRowIdx)
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(std::to_string(t.GetParticipant())), uiRowIdx, uiColumnIdx++);
 	PlaceValue2TableCell(ui.tableWidget, QString::fromStdString(t.GetLastMatch().value_or(Match{}).GetStage()), uiRowIdx, uiColumnIdx++);
 	PlaceLabel2TableCellWithImage(ui.tableWidget, t.GetTrophyPic(), 0.085f, uiRowIdx, uiColumnIdx++);
-	QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatches);
+	QObject::connect(PlaceButton2TableCell(ui.tableWidget, uiRowIdx, uiColumnIdx++, std::string(" Match History ")), &QPushButton::clicked, this, &HistoryPage::ShowMatchesButtonClicked);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpDeleteButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::DeleteTournament);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, common::g_cpEditButtonPNG,  0.4f, (t.IsLocked()) ? false : true), &QPushButton::clicked, this, &HistoryPage::EditTournament);
 	QObject::connect(PlaceButton2TableCellWithImage(ui.tableWidget, uiRowIdx, uiColumnIdx++, (t.IsLocked()) ? ":images/lock.png" : ":images/unlock.png",  0.04f, true), &QPushButton::clicked, this, &HistoryPage::LockUnlockTournament);
@@ -198,12 +203,16 @@ void HistoryPage::UserLoggedIn(const Profile& p)
 	}
 	UpdateActiveProfileData(p);
 }
-void HistoryPage::ShowMatches()
+void HistoryPage::ShowMatchesButtonClicked()
 {
 	const auto SignalingTournament = utility::GetSignalingItem<Tournament>(m_vecDisplayedTournament, ui.tableWidget, sender());
-	m_upMatchesDialog->setWindowTitle(QString::fromStdString(SignalingTournament.GetName()));
-	const auto vecMatches = SignalingTournament.GetMatches();
-	m_upMatchesDialog->DisplayMatches(SignalingTournament);
+	ShowMatches(SignalingTournament);
+}
+void HistoryPage::ShowMatches(const Tournament& t)
+{
+	m_upMatchesDialog->setWindowTitle(QString::fromStdString(t.GetName()));
+	const auto vecMatches = t.GetMatches();
+	m_upMatchesDialog->DisplayMatches(t);
 	m_upMatchesDialog->setModal(true);
 	m_upMatchesDialog->exec();
 }

@@ -2,6 +2,11 @@
 #include "AppController.h"
 #include "StatController.h"
 #include "Utility.h"
+AchievementsPage& AchievementsPage::instance()
+{
+	static AchievementsPage instance;
+	return instance;
+}
 AchievementsPage::AchievementsPage(QWidget *parent) : QWidget(parent)
 {
 	ui.setupUi(this);

@@ -56,16 +56,25 @@ TEST_F(DBItemTest, EditTournamentInDB)
     
     EXPECT_TRUE(m_Tournament.EditInDB());
 }
-TEST_F(DBItemTest, EditOrganizationInDB)
+TEST_F(DBItemTest, EditOrganizationInDBWithoutChangingPicture)
 {
-    m_Organization = Organization{m_Organization.GetID(), "Karayollari", "/pp_addr_new", std::vector<std::string>{"A", "B", "C"}};
+    m_Organization = Organization{m_Organization.GetID(), "Aselsan", "/pp_addr", std::vector<std::string>{"A", "B", "C"}};
     
     EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "PictureFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(1).WillOnce(testing::Return("/pp_addr"));
     EXPECT_CALL(*m_spMockDatabase, EditItem("Organization", testing::_, 3)).Times(1).WillOnce(testing::Return(true));
     
     EXPECT_TRUE(m_Organization.EditInDB());
 }
-TEST_F(DBItemTest, EditProfileInDB)
+TEST_F(DBItemTest, EditOrganizationInDBByChangingPicture)
+{
+    m_Organization = Organization{m_Organization.GetID(), "Karayollari", "/pp_addr_new", std::vector<std::string>{"A", "B", "C"}};
+    
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Organization", "PictureFileName", "ID", std::to_string(m_Organization.GetID()), 0)).Times(2).WillOnce(testing::Return("/pp_addr"));
+    EXPECT_CALL(*m_spMockDatabase, EditItem("Organization", testing::_, 3)).Times(1).WillOnce(testing::Return(true));
+    
+    EXPECT_TRUE(m_Organization.EditInDB());
+}
+TEST_F(DBItemTest, EditProfileInDBWithoutChangingPicture)
 {
     m_Profile = Profile{ m_Profile.GetID(), "Emre Avci", "/pp_addr", Gender::Male};
     
@@ -74,6 +83,15 @@ TEST_F(DBItemTest, EditProfileInDB)
     
     EXPECT_TRUE(m_Profile.EditInDB());
 }
+TEST_F(DBItemTest, EditProfileInDBByChangingPicture)
+{
+    m_Profile = Profile{ m_Profile.GetID(), "Kadir Emre Avci", "/pp_addr_new", Gender::Male};
+    
+    EXPECT_CALL(*m_spMockDatabase, RetrieveValue("Profile", "PictureFileName", "ID", std::to_string(m_Profile.GetID()), 0)).Times(2).WillOnce(testing::Return("/pp_addr"));
+    EXPECT_CALL(*m_spMockDatabase, EditItem("Profile", testing::_, 2)).Times(1).WillOnce(testing::Return(true));
+    
+    EXPECT_TRUE(m_Profile.EditInDB());
+}   
 TEST_F(DBItemTest, LoadMatchFromDB)
 {
     Match m{};

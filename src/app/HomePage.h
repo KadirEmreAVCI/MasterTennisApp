@@ -13,14 +13,17 @@ class OrgParticipation;
 class Timer;
 class HomePage : public QWidget{
 	Q_OBJECT
-
 public:
-	HomePage(QWidget *parent = nullptr);
 	~HomePage();
+	static HomePage& instance();
+	HomePage(const HomePage&) = delete;
+	HomePage& operator=(const HomePage&) = delete;
 	void UpcomingMatchStarted();
 private:
+	HomePage(QWidget *parent = nullptr);
 	void DecrementCountdowns();
 	void UpdateUpcomingMatchCards();
+	void FillEmptyCardSlots();
 	void UpdateTopParticipations();
 	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
 	void UserLoggedIn(const Profile& p);

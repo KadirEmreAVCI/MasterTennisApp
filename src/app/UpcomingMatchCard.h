@@ -19,7 +19,6 @@ public:
 	UpcomingMatchCard(const Match& m);
 	~UpcomingMatchCard();
 	void DecrementCountdown();
-	static void SetHomePage(HomePage* pHomePage);
 private:
 	void ConfigureForMatch(const Match& m);
 	void FillCardButton();
@@ -27,12 +26,13 @@ private:
 	Organization m_RootOrganization;
 	Tournament m_RootTournament;
 	Match m_Match;
-	std::unique_ptr<MatchesDialog> m_upMatchesDialog;
+	//std::unique_ptr<MatchesDialog> m_upMatchesDialog;
 	const QString m_sFormat = "yyyy-MM-dd HH:mm:ss";
 	std::unique_ptr<Timer> m_upTimer;
-	static HomePage* ms_pHomePage;
 private slots:
 	void on_CardButton_clicked();
+signals:
+	void UpcomingMatchCardClicked(const Tournament& t);
 };
 
 #endif // UPCOMINGMATCHCARD_H
