@@ -115,7 +115,7 @@ void MatchesDialog::DeleteMatch()
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", "Are you sure you want delete this item permanently?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		const auto& SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());
+		const auto SignalingMatch = utility::GetSignalingItem<Match>(m_vecMatch, ui.tableWidget, sender());  // Make a COPY, not a reference
 		AppController::instance().DeleteItem(SignalingMatch);
 		QMessageBox::information(this, "Information", "The match deleted successfully");
 	}

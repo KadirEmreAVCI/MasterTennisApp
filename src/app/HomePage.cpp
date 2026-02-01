@@ -33,10 +33,7 @@ HomePage::~HomePage()
 }
 void HomePage::UpcomingMatchStarted()
 {
-	if(ui.listWidget_UpcomingMatchCards->count() > 0)
-	{
-		utility::DeleteItemFromListWidget(ui.listWidget_UpcomingMatchCards, 0);
-	}
+	UpdateUpcomingMatchCards();
 }
 void HomePage::DecrementCountdowns()
 {
@@ -50,6 +47,7 @@ void HomePage::DecrementCountdowns()
 }
 void HomePage::UpdateUpcomingMatchCards()
 {
+	m_upCountdownTimer->Stop();
 	utility::ClearListWidget(ui.listWidget_UpcomingMatchCards);
 	std::set<Match> setUpcomingMatchCards;
 	for(const auto& t : m_vecTournament)
@@ -59,20 +57,23 @@ void HomePage::UpdateUpcomingMatchCards()
 			return m.IsUpcomingMatch();
 			});
 	}
-	if(setUpcomingMatchCards.empty())
+	for(const auto& m : setUpcomingMatchCards)
+	{
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard(m));
+	}
+	FillEmptyCardSlots();
+	ui.listWidget_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchCardHeight * common::g_uiMaxUpcomingMatchCards + 10);
+	ui.groupBox_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->width() + 20, ui.listWidget_UpcomingMatchCards->height() + 50);
+	m_upCountdownTimer->Restart();
+}	
+void HomePage::FillEmptyCardSlots()
+{
+	const unsigned int uiCurrentCount = ui.listWidget_UpcomingMatchCards->count();
+	for(int iSlotIdx = uiCurrentCount; iSlotIdx < common::g_uiMaxUpcomingMatchCards; ++iSlotIdx)
 	{
 		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard());
 	}
-	else
-	{
-		for(const auto& m : setUpcomingMatchCards)
-		{
-			utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard(m));
-		}
-	}
-	ui.listWidget_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchCardHeight * common::g_uiMaxUpcomingMatchCards + 10);
-	ui.groupBox_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->width() + 20, ui.listWidget_UpcomingMatchCards->height() + 50);
-}	
+}
 void HomePage::UpdateTopParticipations()
 {
 	ui.listWidget_TopParticipations->clear();

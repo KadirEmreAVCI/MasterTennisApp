@@ -21,6 +21,7 @@ public:
 private:
 	void DecrementCountdowns();
 	void UpdateUpcomingMatchCards();
+	void FillEmptyCardSlots();
 	void UpdateTopParticipations();
 	std::vector<std::pair<unsigned, unsigned>> FindTopParticipations()const;
 	void UserLoggedIn(const Profile& p);
