@@ -30,10 +30,10 @@ public:
 	unsigned GetID()const;
 	unsigned GetProfileID()const;
 	unsigned GetOrgID()const;
-	std::string GetType()const;
-	std::string GetTeammate()const;
-	std::string GetCategory()const;
-	std::string GetSeason()const;
+	const std::string& GetType()const;
+	const std::string& GetTeammate()const;
+	const std::string& GetCategory()const;
+	const std::string& GetSeason()const;
 	unsigned GetParticipant()const;
 	bool IsLocked()const;
 	void SetLocked(bool);
@@ -90,10 +90,10 @@ private:
 	bool IsMatchExceedingMaxSet(const Match&)const;
 	unsigned m_uiProfileID{};
 	unsigned m_uiOrgID{};
+	std::string m_sSeason{};
+	std::string m_sCategory{};
 	std::string m_sType{};
 	std::optional<std::string> m_soptTeammate{};
-	std::string m_sCategory{};
-	std::string m_sSeason{};
 	unsigned m_uiParticipant{};
 	bool m_blIsLocked{ false };
 	bool m_bl3rdPlaceGameAvailable{};

@@ -9,13 +9,12 @@
 
 class DBItemWithPicture : public DBItem{
 public:
-    
     std::string GetFullPicturePath()const;
-    std::string GetPictureFileName()const;
+    const std::string& GetPictureFileName()const;
     bool SaveImage(const std::string& sSourcePictureFullPath)const;
 protected: 
     DBItemWithPicture(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns, const std::string& sPictureRootPath, const std::string& sPictureFileName);
-    ~DBItemWithPicture() = default;
+    virtual ~DBItemWithPicture()override = default;
     virtual bool DeleteFromDB()const override;
     void LoadPictureFileName();
     void DeletePreviousPicture()const;

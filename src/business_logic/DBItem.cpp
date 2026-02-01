@@ -15,7 +15,7 @@ bool DBItem::DeleteFromDB()const
 {
 	return m_spIDatabase->DeleteItem(m_sDBTable, "ID", std::to_string(m_uiID));
 }
-std::string DBItem::GetDBTable()const
+const std::string& DBItem::GetDBTable()const
 {
 	return m_sDBTable;
 }

@@ -19,7 +19,7 @@ public:
 						const std::string& sPictureFileName = "", 
 						Gender gen = Gender::Male);
 	unsigned int GetID()const;
-	std::string GetFullName()const;
+	const std::string& GetFullName()const;
 	Gender GetGender()const;
 	std::vector<Tournament> GetTournaments()const;
 	friend bool operator==(const Profile& lhs, const Profile& rhs)

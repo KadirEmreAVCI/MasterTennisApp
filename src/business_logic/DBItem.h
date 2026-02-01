@@ -6,13 +6,13 @@
 class DBItem {
 friend class DBItemTest;
 public:
-	DBItem(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns);
+	DBItem(unsigned uiID, const std::string& sDBTable, const std::string& sDBColumns);
 	virtual ~DBItem();
 	virtual bool InsertToDB()const = 0;
 	virtual bool EditInDB()const = 0;
 	virtual bool DeleteFromDB()const;
 	virtual void LoadFromDB(unsigned ID)=0;
-	std::string GetDBTable()const;
+	const std::string& GetDBTable()const;
 	static void SetDatabase(std::shared_ptr<IDatabase> spDatabase);
 protected:
 	static std::shared_ptr<IDatabase> m_spIDatabase;

@@ -19,7 +19,7 @@ unsigned int Profile::GetID()const
 {
 	return m_uiID;
 }
-std::string Profile::GetFullName()const
+const std::string& Profile::GetFullName()const
 {
 	return m_sFullName;
 }

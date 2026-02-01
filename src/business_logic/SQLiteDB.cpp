@@ -114,7 +114,7 @@ bool SQLiteDB::EditItem(const std::string& sTable, const QMap<QString, QVariant>
 	CloseConn();
 	return blEdition;
 }
-bool SQLiteDB::DeleteItem(const std::string& sTable, std::string sColumn, std::string sVal) const
+bool SQLiteDB::DeleteItem(const std::string& sTable, const std::string& sColumn, std::string sVal) const
 {
 	bool blDeletion = false;
 	if (OpenConn())

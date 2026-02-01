@@ -34,7 +34,7 @@ unsigned Match::GetTournamentID()const
 {
 	return m_uiTournamentID;
 }
-std::string Match::GetStatu()const
+const std::string& Match::GetStatu()const
 {
 	return m_sStatu;
 }
@@ -63,11 +63,11 @@ std::string Match::GetOutcomePic()const
 	}
 	return sOutcomePic;
 }
-std::string Match::GetStage()const
+const std::string& Match::GetStage()const
 {
 	return m_sStage;
 }
-std::string Match::GetOpponent1()const
+const std::string& Match::GetOpponent1()const
 {
 	return m_sOpponent1;
 }
@@ -92,7 +92,7 @@ void Match::SetScore()
 	m_Score = Score(std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::HomeWin; }), 
 					std::count_if(m_vecSet.cbegin(), m_vecSet.cend(), [](const Set& s) {return s.GetOutcome() == Outcome::AwayWin; }));
 }
-std::vector<Set> Match::GetSets()const
+const std::vector<Set>& Match::GetSets()const
 {
 	return m_vecSet;
 }

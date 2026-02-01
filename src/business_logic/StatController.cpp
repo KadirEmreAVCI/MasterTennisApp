@@ -50,17 +50,17 @@ void StatController::UpdateActiveProfileData(const Profile& p, const std::string
 		if(sFilterType == "Organization")
 		{
 			const bool blSearchForExactMatch = true;
-			upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>(blSearchForExactMatch);
+			upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();});
 		}
 		else if(sFilterType == "Type")
 		{   
 			const bool blSearchForExactMatch = false;
-			upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>(blSearchForExactMatch);
+			upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.GetType();});
 		}
 		else if(sFilterType == "Category")
 		{
 			const bool blSearchForExactMatch = true;
-			upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>(blSearchForExactMatch);
+			upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.GetCategory();});
 		}
 		else
 		{

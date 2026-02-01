@@ -19,11 +19,11 @@ unsigned Organization::GetID()const
 {
 	return m_uiID;
 }
-std::string Organization::GetName()const
+const std::string& Organization::GetName()const
 {
 	return m_sName;
 }
-std::vector<std::string> Organization::GetCategories()const
+const std::vector<std::string>& Organization::GetCategories()const
 {
 	return m_vecCategories;
 }

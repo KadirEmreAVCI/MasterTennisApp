@@ -4,10 +4,11 @@
 #include <QTableWidget>
 #include "IDataFilter.h"
 
-template <typename T, typename FilterFunc>
+template <typename T>
 class DataFilter : public IDataFilter<T>{
 public:
-    explicit DataFilter(bool blSearchForExactMatch) : m_blSearchForExactMatch{blSearchForExactMatch}{}
+    using FilterFunc = std::function<std::string(const T&)>;
+    explicit DataFilter(bool blSearchForExactMatch, FilterFunc funcFilter) : m_blSearchForExactMatch{blSearchForExactMatch}, m_FilterFunc{funcFilter}{}
     std::vector<T> ApplyFilter(const std::vector<T>& vecUnfilteredItems, const std::string& sFilteringWord)
     {
         std::vector<T> vecFilteredItems;
