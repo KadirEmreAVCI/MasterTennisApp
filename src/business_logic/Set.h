@@ -8,7 +8,7 @@
 
 class Set{
 public:
-	explicit Set(const Score& MajorScore = Score(0,0), std::optional<Score> TBScore = std::nullopt);
+	explicit Set(const Score& MajorScore = Score(0,0), std::optional<Score> optTBScore = std::nullopt);
 	Score GetMajorScore()const;
 	Score GetTBScore()const;
 	common::Outcome GetOutcome()const;

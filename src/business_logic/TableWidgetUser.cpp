@@ -7,7 +7,7 @@
 #include <QLabel>
 #include "TableWidgetUser.h"
 #include "Utility.h"
-TableWidgetUser::TableWidgetUser(std::vector<std::string> vecColumnNames) : m_pTableWidget{nullptr}, m_vecColumnNames{vecColumnNames}
+TableWidgetUser::TableWidgetUser(const std::vector<std::string>& vecColumnNames) : m_vecColumnNames{vecColumnNames}, m_pTableWidget{nullptr}
 {
 	
 }

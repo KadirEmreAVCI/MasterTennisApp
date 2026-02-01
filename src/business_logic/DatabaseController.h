@@ -17,10 +17,10 @@ public:
 	DatabaseController(const DatabaseController&) = delete;
 	DatabaseController& operator=(const DatabaseController&) = delete;
 	void InitDatabase(std::shared_ptr<IDatabase> spDatabase);
-	std::vector<Profile> GetProfiles()const;
-	std::vector<Organization> GetOrganizations()const;
-	std::vector<Tournament> GetTournaments()const;
-	std::vector<Match> GetMatches()const;
+	const std::vector<Profile>& GetProfiles()const;
+	const std::vector<Organization>& GetOrganizations()const;
+	const std::vector<Tournament>& GetTournaments()const;
+	const std::vector<Match>& GetMatches()const;
 	std::vector<Match> FindMatchesOfTournament(unsigned uiTournamentID)const;
 	std::vector<Tournament> FindTournamentsOfOrganization(unsigned uiOrgID)const;
 	std::vector<Tournament> FindTournamentsOfProfile(unsigned uiProfileID)const;

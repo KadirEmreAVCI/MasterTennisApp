@@ -9,12 +9,12 @@
 DBItemWithPicture::DBItemWithPicture(unsigned uiID, const std::string& sDBTable, const std::string& m_sDBColumns, const std::string& sPictureRootPath, const std::string& sPictureFileName) 
 	: 
 	DBItem(uiID, sDBTable, m_sDBColumns), 
-	m_sPictureRootPath{sPictureRootPath},
-	m_sPictureFileName{sPictureFileName}
+	m_sPictureFileName{sPictureFileName},
+	m_sPictureRootPath{sPictureRootPath}
 {
 
 }
-std::string DBItemWithPicture::GetPictureFileName()const
+const std::string& DBItemWithPicture::GetPictureFileName()const
 {
 	return m_sPictureFileName;
 }
@@ -30,7 +30,7 @@ void DBItemWithPicture::LoadPictureFileName()
 std::string DBItemWithPicture::GetFullPicturePath()const
 {
 	const std::string sPictureFileName = (m_sPictureFileName == "") ? "default.png" : m_sPictureFileName;
-	return m_sPictureRootPath + m_sPictureFileName;
+	return m_sPictureRootPath + sPictureFileName;
 }
 void DBItemWithPicture::DeletePreviousPicture()const
 {

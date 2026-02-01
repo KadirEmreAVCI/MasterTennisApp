@@ -107,31 +107,31 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 	const bool blSearchForExactMatch = false;
 	if(m_sFilter == "Organization")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();})>>(blSearchForExactMatch);
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return DatabaseController::instance().FindRootOrganization(t).GetName();});
 	}
 	else if(m_sFilter == "Season")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetSeason();})>>(blSearchForExactMatch);
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.GetSeason();});
 	}
 	else if(m_sFilter == "Type")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetType();})>>(blSearchForExactMatch);
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.GetType();});
 	}
 	else if(m_sFilter == "Category")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetCategory();})>>(blSearchForExactMatch);
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.GetCategory();});
 	}
 	else if(m_sFilter == "Teammate")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";})>>(blSearchForExactMatch);
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.IsDoubleTournament() ? t.GetTeammate() : "";});
 	}
 	else if(m_sFilter == "Max. Progress")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){return t.GetMostRecentMatch().has_value() ? t.GetMostRecentMatch().value().GetStage() : "";})>>(blSearchForExactMatch);
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){return t.GetMostRecentMatch().has_value() ? t.GetMostRecentMatch().value().GetStage() : "";});
 	}
 	else if(m_sFilter == "Opponent")
 	{
-		m_upActiveFilter = std::make_unique<DataFilter<Tournament, decltype([](const Tournament& t){
+		m_upActiveFilter = std::make_unique<DataFilter<Tournament>>(blSearchForExactMatch, [](const Tournament& t){
 			std::string sConcatanatedOpponents;
 			for(const Match& m : t.GetMatches())
 			{
@@ -142,7 +142,7 @@ void HistoryPage::on_comboBoxFilter_currentTextChanged(const QString& sFilter)
 				}
 			}
 			return sConcatanatedOpponents;}
-		)>>(blSearchForExactMatch);
+		);
 	}
 	else if(m_sFilter != "")
 	{

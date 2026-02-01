@@ -52,7 +52,7 @@ unsigned Tournament::GetOrgID()const
 {
 	return m_uiOrgID;
 }
-std::string Tournament::GetType()const
+const std::string& Tournament::GetType()const
 {
 	return m_sType;
 }
@@ -60,15 +60,15 @@ bool Tournament::IsDoubleTournament()const
 {
 	return m_soptTeammate.has_value() && m_soptTeammate.value() != "";
 }
-std::string Tournament::GetTeammate()const
+const std::string& Tournament::GetTeammate()const
 {
 	return m_soptTeammate.value_or("");
 }
-std::string Tournament::GetCategory()const
+const std::string& Tournament::GetCategory()const
 {
 	return m_sCategory;
 }
-std::string Tournament::GetSeason()const
+const std::string& Tournament::GetSeason()const
 {
 	return m_sSeason;
 }

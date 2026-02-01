@@ -23,7 +23,7 @@ public:
     MOCK_METHOD(unsigned, GetItemCount, (const std::string& sTable), (const, override));
     MOCK_METHOD(bool, InsertItem, (const std::string& sTable, const std::string& sColumnNames, const std::string& sValues), (const, override));
     MOCK_METHOD(bool, EditItem, (const std::string& sTable, (const QMap<QString, QVariant>& columnValues), unsigned uiID), (const, override));
-    MOCK_METHOD(bool, DeleteItem, (const std::string& sTable, std::string Column, std::string sVal), (const, override));
+    MOCK_METHOD(bool, DeleteItem, (const std::string& sTable, const std::string& sColumn, std::string sVal), (const, override));
     MOCK_METHOD(std::string, RetrieveValue, (const std::string& sTable, const std::string& sColumn, unsigned uiRowIdx), (const, override));
     MOCK_METHOD(std::string, RetrieveValue, (const std::string& sTable, const std::string& sColumn, const std::string& sCondColumn, const std::string& sCond, unsigned uiRowIdx), (const, override));
 };
