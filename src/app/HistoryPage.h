@@ -14,9 +14,12 @@ class HistoryPage : public QWidget, public TableWidgetUser
 {
 	Q_OBJECT
 public:
-	HistoryPage(QWidget *parent = nullptr);
+	static HistoryPage& instance();
+	HistoryPage(const HistoryPage&) = delete;
+	HistoryPage& operator=(const HistoryPage&) = delete;
 	~HistoryPage();
 private:
+	HistoryPage(QWidget *parent = nullptr);
 	// TableWidgetUser
 	virtual void FillTable()override;
 	virtual void LoadDataToTable()override;

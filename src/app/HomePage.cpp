@@ -10,6 +10,11 @@
 #include "Utility.h"
 #include "DatabaseController.h"
 #include "Timer.h"	
+HomePage& HomePage::instance()
+{
+	static HomePage instance;
+	return instance;
+}
 HomePage::HomePage(QWidget *parent)
 	: QWidget(parent)
 {

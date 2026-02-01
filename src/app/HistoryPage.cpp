@@ -11,6 +11,11 @@
 #include "Common.h"
 #include "Utility.h"
 
+HistoryPage& HistoryPage::instance()
+{
+	static HistoryPage instance;
+	return instance;
+}
 HistoryPage::HistoryPage(QWidget *parent)
 	: 
 	QWidget(parent),

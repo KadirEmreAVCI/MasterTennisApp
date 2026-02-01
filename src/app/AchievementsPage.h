@@ -7,21 +7,21 @@
 
 // Standard Headers
 #include <memory>
-
 #include <QWidget>
 #include "ui_AchievementsPage.h"
 
 class StatController;
-
 class AchievementsPage : public QWidget{
 	Q_OBJECT
-
 public:
-	AchievementsPage(QWidget *parent = nullptr);
+	static AchievementsPage& instance();
+	AchievementsPage(const AchievementsPage&) = delete;
+	AchievementsPage& operator=(const AchievementsPage&) = delete;
 	~AchievementsPage();
 	void CareerStatsFilterChanged(const std::string& sFilterType, const std::string& sFilteringItem);
 	void CareerStatsFilterCleared();
 private:
+	AchievementsPage(QWidget *parent = nullptr);
 	void InitStatWidgets();
 	void InitPictures();
 	void UpdateCareerStats(const std::vector<StatReport>&);
