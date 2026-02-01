@@ -144,3 +144,22 @@ TEST_F(TournamentTest, SortTournamentsByStartTime)
 		EXPECT_EQ(m_vecTournament[idx].GetID(), vecExpected[idx]);
 	}
 }
+class MostRecentMatchTest : public TournamentTest, public ::testing::WithParamInterface<std::tuple<size_t, Match>> {};
+TEST_P(MostRecentMatchTest, DetectMostRecentMatch)
+{
+    auto [idx, expected] = GetParam();
+    const auto optMostRecentMatch = m_vecTournament[idx].GetMostRecentMatch();
+    ASSERT_TRUE(optMostRecentMatch.has_value());
+    EXPECT_EQ(optMostRecentMatch.value(), expected);
+}
+INSTANTIATE_TEST_SUITE_P(
+    DetectMostRecentMatches,
+    MostRecentMatchTest,
+    ::testing::Values(
+        std::make_tuple(0, Match{ 3, 0, "U", "Final 32", "Op1", "", QDate{2022, 1, 10}, QTime{9, 0, 0}, {Set{Score(6, 1)}, Set{Score(6, 7), Score(5, 7)}, Set{Score(10, 4)}}}),
+        std::make_tuple(1, Match{ 5, 1, "U", "3rd Place Game", "Op1", "Op2", QDate{2023, 6, 12}, QTime{7, 0, 0}, {Set{Score(1, 6)}, Set{Score(3, 6)}}}),
+        std::make_tuple(2, Match{ 4, 2, "U", "Final", "Op1", "", QDate{2024, 10, 18}, QTime{7, 0, 0}, {Set{Score(1, 6)}, Set{Score(3, 6)}}}),
+        std::make_tuple(3, Match{ 7, 3, "U", "3rd Place Game", "Op1", "Op2", QDate{2025, 4, 21}, QTime{7, 0, 0}, {Set{Score(7, 5)}, Set{Score(6, 2)}}}),
+        std::make_tuple(4, Match{ 6, 4, "U", "Semi Final", "Op1", "Op2", QDate{2025, 2, 13}, QTime{7, 0, 0}, {Set{Score(1, 6)}, Set{Score(0, 6)}}})
+    )
+);

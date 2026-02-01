@@ -44,7 +44,7 @@ public:
 	bool IsDoubleTournament()const;
 	std::vector<Match> GetMatches()const;
 	bool IsGroupStageExist()const;
-	std::optional<Match> GetLastMatch()const;
+	std::optional<Match> GetMostRecentMatch()const;
 	bool IsMatchValidForTournament(const Match&)const;
 	bool IsValid()const;
 	bool operator<(const Tournament& other)const;
