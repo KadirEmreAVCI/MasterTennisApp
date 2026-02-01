@@ -91,20 +91,20 @@ bool Tournament::Get3rdPlaceGameAvailable()const
 std::string Tournament::GetTrophyPic()const
 {
 	std::string sTrophyPic = "";
-	if (const auto& lastMatch = GetLastMatch(); lastMatch.has_value() && lastMatch.value().IsValid())
+	if (const auto& rMostRecentMatch = GetMostRecentMatch(); rMostRecentMatch.has_value() && rMostRecentMatch.value().IsValid())
 	{
-		if (lastMatch.value().GetStage() == "Final")
+		if (rMostRecentMatch.value().GetStage() == "Final")
 		{
-			if (lastMatch.value().GetOutcome() == Outcome::HomeWin)
+			if (rMostRecentMatch.value().GetOutcome() == Outcome::HomeWin)
 			{
 				sTrophyPic = ":images/first_place.png";
 			}
-			else if(lastMatch.value().GetOutcome() == Outcome::AwayWin)
+			else if(rMostRecentMatch.value().GetOutcome() == Outcome::AwayWin)
 			{
 				sTrophyPic = ":images/second_place.png";
 			}
 		}
-		else if (lastMatch.value().GetStage() == "3rd Place Game" && lastMatch.value().GetOutcome() == Outcome::HomeWin)
+		else if (rMostRecentMatch.value().GetStage() == "3rd Place Game" && rMostRecentMatch.value().GetOutcome() == Outcome::HomeWin)
 		{
 			sTrophyPic = ":images/third_place.png";
 		}
@@ -159,7 +159,7 @@ bool Tournament::IsGroupStageExist()const
 		return m.GetStage() == "Group Stage";
 		});
 }
-std::optional<Match> Tournament::GetLastMatch()const
+std::optional<Match> Tournament::GetMostRecentMatch()const
 {
 	if(m_setMatch.empty())
 	{
@@ -167,7 +167,7 @@ std::optional<Match> Tournament::GetLastMatch()const
 	}
 	else
 	{
-		return *std::prev(m_setMatch.end());
+		return *m_setMatch.begin();
 	}
 }
 bool Tournament::IsMatchValidForTournament(const Match& m)const
