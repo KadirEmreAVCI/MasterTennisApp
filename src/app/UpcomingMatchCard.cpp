@@ -10,7 +10,6 @@
 #include "Timer.h"
 #include "HomePage.h"
 
-HomePage* UpcomingMatchCard::ms_pHomePage{ nullptr };
 UpcomingMatchCard::UpcomingMatchCard()
 {
 	setupUi(this);
@@ -33,19 +32,15 @@ UpcomingMatchCard::~UpcomingMatchCard()
 void UpcomingMatchCard::ConfigureForMatch(const Match& m)
 {
 	m_Match = m;
-    m_upMatchesDialog = std::make_unique<MatchesDialog>(this);
     m_RootTournament = DatabaseController::instance().FindRootTournament(m_Match);
     m_RootOrganization = DatabaseController::instance().FindRootOrganization(m_RootTournament);
     FillCardButton();
     utility::InitLabelWithPicture(label_OrgImage, m_RootOrganization.GetFullPicturePath(), 1.90f);
-    if (ms_pHomePage)
-    {
-        m_upTimer = std::make_unique<Timer>(TimerMode::OneShot, std::chrono::seconds(QDateTime::currentDateTime().secsTo(QDateTime{m_Match.GetDate(), m_Match.GetTime()}) + 1),
-            [this]() {
-                QMetaObject::invokeMethod(ms_pHomePage, [this]() { ms_pHomePage->UpcomingMatchStarted(); }, Qt::QueuedConnection);
-            });
-        m_upTimer->Start();
-    }
+	m_upTimer = std::make_unique<Timer>(TimerMode::OneShot, std::chrono::seconds(QDateTime::currentDateTime().secsTo(QDateTime{m_Match.GetDate(), m_Match.GetTime()}) + 1),
+		[this]() {
+			QMetaObject::invokeMethod(&HomePage::instance(), [this]() { HomePage::instance().UpcomingMatchStarted(); }, Qt::QueuedConnection);
+		});
+	m_upTimer->Start();
 	CardButton->show();
 	label_Countdown->show();
 	label_OrgImage->show();
@@ -102,10 +97,6 @@ QString UpcomingMatchCard::SecondsToString(int iSeconds) const
 	const QTime t = QTime(0, 0).addSecs(iSeconds % SEC_PER_DAY);
 	return QString("%1 Days %2:%3:%4").arg(iDays, 3).arg(t.hour(), 2, 10, QChar('0')).arg(t.minute(), 2, 10, QChar('0')).arg(t.second(), 2, 10, QChar('0'));
 }
-void UpcomingMatchCard::SetHomePage(HomePage* pHomePage)
-{
-	ms_pHomePage = pHomePage;
-}
 void UpcomingMatchCard::DecrementCountdown()
 {
 	if(m_Match.IsUpcomingMatch())
@@ -115,9 +106,5 @@ void UpcomingMatchCard::DecrementCountdown()
 }
 void UpcomingMatchCard::on_CardButton_clicked()
 {
-	m_upMatchesDialog->setWindowTitle(QString::fromStdString(m_RootTournament.GetName()));
-	const auto& vecMatches = m_RootTournament.GetMatches();
-	m_upMatchesDialog->DisplayMatches(m_RootTournament);
-	m_upMatchesDialog->setModal(true);
-	m_upMatchesDialog->exec();
+	emit UpcomingMatchCardClicked(m_RootTournament);
 }

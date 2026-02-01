@@ -44,7 +44,8 @@ private slots:
 	void on_comboBoxFilter_currentTextChanged(const QString& sFilter);
 	void on_lineEditSearchBar_textChanged(const QString& sFilterWord);
 public slots:	
-	void ShowMatches();
+	void ShowMatchesButtonClicked();
+	void ShowMatches(const Tournament& t);
 	void LockUnlockTournament();
 	void EditTournament();
 	void DeleteTournament();

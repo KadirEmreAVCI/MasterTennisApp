@@ -10,6 +10,8 @@
 #include "Utility.h"
 #include "DatabaseController.h"
 #include "Timer.h"	
+#include "HistoryPage.h"
+
 HomePage& HomePage::instance()
 {
 	static HomePage instance;
@@ -23,7 +25,6 @@ HomePage::HomePage(QWidget *parent)
 	QObject::connect(&AppController::instance(), &AppController::ChangeInDB, this, &HomePage::ChangeInDB);
 	QObject::connect(&AppController::instance(), &AppController::UserLoggedOut, this, &HomePage::UserLoggedOut);
 	utility::InitLabelWithPicture(ui.label_IconHomePage, ":images/home_page.png", 12.0f);
-	UpcomingMatchCard::SetHomePage(this);
 	m_upCountdownTimer = std::make_unique<Timer>(TimerMode::Periodic, std::chrono::seconds(1), [this]() {
 		QMetaObject::invokeMethod(this, [this]() { DecrementCountdowns(); }, Qt::QueuedConnection);
 	});
@@ -64,7 +65,9 @@ void HomePage::UpdateUpcomingMatchCards()
 	}
 	for(const auto& m : setUpcomingMatchCards)
 	{
-		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, new UpcomingMatchCard(m));
+		UpcomingMatchCard* const pUpcomingMatchCard = new UpcomingMatchCard(m);
+		QObject::connect(pUpcomingMatchCard, &UpcomingMatchCard::UpcomingMatchCardClicked, &HistoryPage::instance(), &HistoryPage::ShowMatches);
+		utility::InsertItem2ListWidget(ui.listWidget_UpcomingMatchCards, pUpcomingMatchCard);
 	}
 	FillEmptyCardSlots();
 	ui.listWidget_UpcomingMatchCards->setFixedSize(ui.listWidget_UpcomingMatchCards->sizeHintForColumn(0) + 15, common::g_uiUpcomingMatchCardHeight * common::g_uiMaxUpcomingMatchCards + 10);
