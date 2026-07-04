@@ -199,6 +199,7 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 			{
 				if (AppController::instance().AddNewItem(t))
 				{
+					ClearDialog();
 					emit NewTournamentAdded();
 				}
 			}
@@ -206,14 +207,14 @@ void AddEditTournamentDialog::on_SaveButton_clicked()
 			{
 				if (AppController::instance().EditItem(t))
 				{
+					ClearDialog();
 					emit TournamentEdited();
 				}
 			}
 			else
 			{
-				std::cout << "AddTournamentDialog::on_SaveButton_clicked unknown DialogMode!\n";
+				std::cout << "AddEditTournamentDialog::on_SaveButton_clicked unknown DialogMode!\n";
 			}
-			ClearDialog();
 		}
 		else
 		{
