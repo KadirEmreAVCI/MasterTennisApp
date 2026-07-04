@@ -188,18 +188,22 @@ bool Tournament::IsValid()const
 }
 bool Tournament::operator<(const Tournament& other)const
 {
-	if(!m_setMatch.empty() && !other.m_setMatch.empty())
-	{
-		return *m_setMatch.begin() < *other.m_setMatch.begin();
-	}
-	else if(!other.m_setMatch.empty())
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+    if(!m_setMatch.empty() && !other.m_setMatch.empty())
+    {
+        return *m_setMatch.begin() < *other.m_setMatch.begin();
+    }
+    else if(!m_setMatch.empty())
+    {
+        return true;  
+    }
+    else if(!other.m_setMatch.empty())
+    {
+        return false;
+    }
+    else
+    {
+        return m_uiID < other.m_uiID;
+    }
 }
 bool Tournament::operator>(const Tournament& other)const
 {
@@ -239,18 +243,31 @@ bool Tournament::DeleteFromDB()const
 }
 bool Tournament::InsertToDB()const
 {
-	std::string sDBValues{	"'" + std::to_string(m_uiProfileID) +
-							"','" + std::to_string(m_uiOrgID) +
-							"','" + m_sSeason +
-							"','" + m_sCategory +
-							"','" + m_sType +
-							"','" + GetTeammate() +
-							"','" + std::to_string(m_uiParticipant) +
-							"','" + std::to_string(m_blIsLocked) +
-							"','" + std::to_string(m_bl3rdPlaceGameAvailable) +
-							"','" + std::to_string(m_uiBestOfSets) +
-							"'" };
-	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);;
+	std::string sDBValues;
+	sDBValues.reserve(256);
+	sDBValues.append("'");
+	sDBValues.append(std::to_string(m_uiProfileID));
+	sDBValues.append("','");
+	sDBValues.append(std::to_string(m_uiOrgID));
+	sDBValues.append("','");
+	sDBValues.append(m_sSeason);
+	sDBValues.append("','");
+	sDBValues.append(m_sCategory);
+	sDBValues.append("','");
+	sDBValues.append(m_sType);
+	sDBValues.append("','");
+	sDBValues.append(GetTeammate());
+	sDBValues.append("','");
+	sDBValues.append(std::to_string(m_uiParticipant));
+	sDBValues.append("','");
+	sDBValues.append(std::to_string(m_blIsLocked));
+	sDBValues.append("','");
+	sDBValues.append(std::to_string(m_bl3rdPlaceGameAvailable));
+	sDBValues.append("','");
+	sDBValues.append(std::to_string(m_uiBestOfSets));
+	sDBValues.append("'");
+
+	return m_spIDatabase->InsertItem(m_sDBTable, m_sDBColumns, sDBValues);
 }
 bool Tournament::EditInDB()const
 {
