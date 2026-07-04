@@ -71,7 +71,7 @@ jobs:
       - name: Install CMake
         run: |
           choco install ninja -y
-          choco install cmake --version=4.0.3 -y
+          choco install ninja cmake -y
 
       - name: Build Debug
         run: |
