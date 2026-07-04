@@ -98,10 +98,13 @@ void AchievementsPage::AddStatWidget(const std::unique_ptr<StatWidget>& upStatWi
 }
 void AchievementsPage::ChangeInDB(const std::vector<Profile>& vecProfile, const std::vector<Organization>&, const std::vector<Tournament>&, const std::vector<Match>&)
 {
-	const auto activeProfile = std::find(vecProfile.cbegin(), vecProfile.cend(), m_rActiveProfile);
+	const auto activeProfile = std::find_if(vecProfile.cbegin(), vecProfile.cend(), [this](const Profile& p) {
+		return p.GetID() == m_rActiveProfile.GetID();
+	});
 	if (activeProfile != vecProfile.cend())
 	{
-		UpdateCareerStats(m_upStatController->UpdateCareerStats(*activeProfile, m_sFilterType, m_sFilteringItem));
+		m_rActiveProfile = *activeProfile;
+		UpdateCareerStats(m_upStatController->UpdateCareerStats(m_rActiveProfile, m_sFilterType, m_sFilteringItem));
 	}
 }
 void AchievementsPage::UserLoggedIn(const Profile& p)
